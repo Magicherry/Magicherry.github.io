@@ -17,7 +17,7 @@ function Home2() {
         <Row>
           <Col md={8} className="home-about-description">
             <h1 style={{ fontSize: "2.6em" }}>
-              LET ME <span className="purple"> INTRODUCE </span> MYSELF
+              LET ME <span className="blue"> INTRODUCE </span> MYSELF
             </h1>
             <p className="home-about-body">
             I fell in love with programming and have been exploring it ever since.
@@ -25,25 +25,25 @@ function Home2() {
               <br />
               <br />I am fluent in classics like
               <i>
-                <b className="purple"> C++, Java and Python. </b>
+                <b className="blue"> C++, Java and Python. </b>
               </i>
               <br />
               <br />
               My expertise includes {" "}
-              <b className="purple">
+              <b className="blue">
                 front-end technologies {" "}
               </b>
               like {" "}
               <i>
-                <b className="purple">HTML, CSS, JavaScript, Vue.js, React.js,{" "}</b> 
+                <b className="blue">HTML, CSS, JavaScript, Vue.js, React.js,{" "}</b>
               </i>
                 and also in areas related to{" "}
-                <b className="purple">
+                <b className="blue">
                 back-end frameworks{" "} 
                 </b>
                 such as{" "} 
               <i>
-                <b className="purple">
+                <b className="blue">
                 Spring, SpringBoot and SpringCloud Microservices.
                 </b>
               </i>
@@ -62,7 +62,7 @@ function Home2() {
           <Col md={12} className="home-about-social">
             <h1>FIND ME ON</h1>
             <p>
-              Feel free to <span className="purple">connect </span>with me
+              Feel free to <span className="blue">connect </span>with me
             </p>
             <ul className="home-about-social-links">
               <li className="social-icons">

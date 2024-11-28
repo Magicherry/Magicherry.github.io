@@ -14,7 +14,7 @@ html {
   --imp-text-color: #70b2f0;
 }
 
-.purple {
+.blue {
   color: var(--imp-text-color) !important;
 }
 
@@ -155,7 +155,7 @@ button:focus {
   font-size: 1.4rem !important; /* 调整字体大小 */
   font-weight: bold !important; /* 设置字体加粗 */
   color: rgb(3, 211, 248) !important; /* 确保颜色生效 */
-  transition: color 0.3s ease-out; /* 添加平滑过渡效果 */
+  transition: color 0.5s ease-out !important; /* 添加平滑过渡效果 */
 }
 
 .navbar-brand:hover {
