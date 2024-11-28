@@ -4,7 +4,6 @@ import ProjectCard from "./ProjectCards";
 import Particle from "../Particle";
 import KOF from "../../Assets/Projects/KOF.png";
 import AYE from "../../Assets/Projects/AYE.png";
-import editor from "../../Assets/Projects/codeEditor.png";
 import Movenet from "../../Assets/Projects/Movenet.png";
 import Management from "../../Assets/Projects/Management.png";
 import Cider from "../../Assets/Projects/Cider.png";
@@ -28,7 +27,7 @@ function Projects() {
               isBlog={false}
               title="AyeNote Online Cloud Notes"
               description="Designed web crawler and data mining functions, built the front-end with Vue3, and developed back-end management system using Django. Utilized Python libraries for user data mining."
-              ghLink="hhttps://github.com/Magicherry/AyeNote"
+              ghLink="https://github.com/Magicherry/AyeNote"
               demoLink="https://github.com/Magicherry/AyeNote"
             />
           </Col>
@@ -50,8 +49,8 @@ function Projects() {
               isBlog={false}
               title="Real-time Pose Estimation"
               description="Utilized the Google Movenet model to detect skeletal points of the human body in the video and extract key information. Displayed real-time scores and best scores based on the movement accuracy evaluation result."
-              ghLink="https://github.com/soumyajit4419/Editor.io"
-              demoLink="https://editor.soumya-jit.tech/"              
+              ghLink="https://git.acwing.com/Magicherry/pose_estimation"
+              demoLink="https://git.acwing.com/Magicherry/pose_estimation"              
             />
           </Col>
 
@@ -62,7 +61,7 @@ function Projects() {
               title="Management Web System"
               description="Separation of Front-end and Back-end; used SpringBoot to implement the back-end, used MyBatis and MySQL to achieve database management, interactedwith the front-end through the controller, used MD5 algorithm to encrypt database with salt."
               ghLink="https://github.com/Magicherry/Library_management"
-              demoLink="https://plant49-ai.herokuapp.com/"
+              demoLink="https://github.com/Magicherry/Library_management"
             />
           </Col>
 

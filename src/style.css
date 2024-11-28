@@ -80,6 +80,7 @@ button:focus {
   transition: all 0.3s ease-out 0s !important;
   box-shadow: 0px 10px 10px 0px rgba(9, 5, 29, 0.171) !important;
   backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important; /* For Safari */
 }
 
 .navbar {
@@ -450,6 +451,18 @@ button:focus {
   padding: 0 !important;
 }
 
+.email-link {
+  color: white; /* 默认颜色 */
+  text-decoration: none; /* 去掉下划线 */
+  transition: color 0.3s ease; /* 添加平滑过渡效果 */
+}
+
+.email-link:hover {
+  color: #3de8ff; /* 悬浮时亮蓝色 */
+  text-decoration: underline; /* 悬浮时可选的下划线效果 */
+}
+
+
 .blockquote-footer {
   color: #88b3c0 !important;
 }
@@ -470,6 +483,8 @@ button:focus {
   padding-right: 25px !important;
   height: auto !important;
   border-radius: 10px !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important; /* For Safari */
 }
 
 .project-card-view {
@@ -575,6 +590,8 @@ button:focus {
   box-shadow: 4px 5px 4px 3px rgba(4, 108, 168, 0.137) !important;
   overflow: hidden !important;
   transition: transform 0.3s ease, border 0.3s ease !important; /* 只平滑需要的属性 */
+  backdrop-filter: blur(10px) !important; /* Standard syntax */
+  -webkit-backdrop-filter: blur(10px) !important; /* For Safari */
   
   /* 使用 Flexbox 居中 */
   display: flex !important;
@@ -592,7 +609,7 @@ button:focus {
 
 .tech-icons:hover {
   transform: scale(1.1) !important; /* 更明显的放大效果 */
-  border: 2.2px solid rgba(115, 194, 230, 0.883) !important; /* 增强悬停边框 */
+  border: 2.2px solid rgba(115, 230, 230, 0.883) !important; /* 增强悬停边框 */
 }
 
 /* 用于 .tech-icon-images 内的内容 */

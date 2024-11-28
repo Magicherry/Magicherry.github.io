@@ -15,7 +15,12 @@ function Footer() {
     <Container fluid className="footer">
       <Row>
         <Col md="4" className="footer-copywright">
-          <h3 href="mailto:zyt680129@example.com" >Email: zyt680129@gmail.com</h3>
+          <a
+            href="mailto:zyt680129@gmail.com"
+            className="email-link"
+          >
+            <h3>Email: zyt680129@gmail.com</h3>
+          </a>
         </Col>
         <Col md="4" className="footer-copywright">
           <h3>Copyright © {year} Yuting Zhou</h3>
