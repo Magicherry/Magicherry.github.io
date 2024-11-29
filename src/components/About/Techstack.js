@@ -14,10 +14,7 @@ import { IoLogoVue } from "react-icons/io5";
 import { SiSpringboot } from "react-icons/si";
 import {
   SiRedis,
-  SiFirebase,
-  SiNextdotjs,
-  SiSolidity,
-  SiBilibili
+  SiNextdotjs
 
 } from "react-icons/si";
 import { TbBrandGolang } from "react-icons/tb";
