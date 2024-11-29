@@ -17,8 +17,8 @@ function Projects() {
         <h1 className="project-heading">
           My Recent <strong className="blue">Works </strong>
         </h1>
-        <p style={{ color: "white" }}>
-          Here are a few projects I've worked on recently.
+        <p style={{ color: "white", fontSize: "1.5rem" }}>
+          My works make use of a vast variety of the latest technology tools.
         </p>
         <Row style={{ justifyContent: "center", paddingBottom: "10px" }}>
           <Col md={4} className="project-card">
