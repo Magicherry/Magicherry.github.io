@@ -2,7 +2,13 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import { ImPointRight } from "react-icons/im";
 
-function AboutCard() {
+const activities = [
+  "Playing Games",
+  "Writing Tech Blogs",
+  "Evaluating Digital Products",
+];
+
+const AboutCard = () => {
   return (
     <Card className="quote-card-view">
       <Card.Body>
@@ -11,23 +17,21 @@ function AboutCard() {
             Hello Guys, I am <span className="blue">Yuting Zhou</span> from{" "}
             <span className="blue">Shanghai, China.</span>
             <br />
-            I am currently pursuing a Master’s degree in Computer Science at Rutgers University–New Brunswick, NJ, US.
+            I am currently pursuing a Master’s degree in Computer Science at
+            Rutgers University–New Brunswick, NJ, US.
             <br />
-            I am actively seeking research opportunities and internships to enhance my skills and gain hands-on experience.
+            I am actively seeking research opportunities and internships to
+            enhance my skills and gain hands-on experience.
             <br />
             <br />
             Apart from coding, here are some activities I love:
           </p>
           <ul>
-            <li className="about-activity">
-              <ImPointRight /> Playing Games
-            </li>
-            <li className="about-activity">
-              <ImPointRight /> Writing Tech Blogs
-            </li>
-            <li className="about-activity">
-              <ImPointRight /> Evaluating Digital Products
-            </li>
+            {activities.map((activity, index) => (
+              <li className="about-activity" key={index}>
+                <ImPointRight /> {activity}
+              </li>
+            ))}
           </ul>
 
           <p style={{ color: "rgb(3, 232, 248)" }}>
@@ -38,6 +42,6 @@ function AboutCard() {
       </Card.Body>
     </Card>
   );
-}
+};
 
 export default AboutCard;

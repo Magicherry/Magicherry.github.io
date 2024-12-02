@@ -11,24 +11,22 @@ import {
   SiJetbrains,
 } from "react-icons/si";
 
+const toolStackIcons = [
+  { icon: <SiWindows11 />, name: "Windows 11" },
+  { icon: <SiMacos />, name: "MacOS" },
+  { icon: <SiLinux />, name: "Linux" },
+  { icon: <SiVisualstudiocode />, name: "Visual Studio Code" },
+  { icon: <SiJetbrains />, name: "JetBrains" },
+];
+
 function Toolstack() {
   return (
     <Row style={{ justifyContent: "center", paddingBottom: "50px" }}>
-      <Col xs={4} md={2} className="tech-icons">
-        <SiWindows11 />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <SiMacos />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <SiLinux />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <SiVisualstudiocode />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <SiJetbrains />
-      </Col>
+      {toolStackIcons.map((tool, index) => (
+        <Col key={index} xs={4} md={2} className="tech-icons">
+          {tool.icon}
+        </Col>
+      ))}
     </Row>
   );
 }

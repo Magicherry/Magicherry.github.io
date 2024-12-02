@@ -1,6 +1,5 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import { CgCPlusPlus } from "react-icons/cg";
 import {
   DiJavascript1,
   DiReact,
@@ -11,53 +10,32 @@ import {
   DiJava,
 } from "react-icons/di";
 import { IoLogoVue } from "react-icons/io5";
-import { SiSpringboot } from "react-icons/si";
-import {
-  SiRedis,
-  SiNextdotjs
+import { SiSpringboot, SiRedis, SiNextdotjs } from "react-icons/si";
+import { CgCPlusPlus } from "react-icons/cg"; // 正确的导入路径
 
-} from "react-icons/si";
-import { TbBrandGolang } from "react-icons/tb";
+const techStackIcons = [
+  { icon: <CgCPlusPlus />, name: "C++" },
+  { icon: <DiJava />, name: "Java" },
+  { icon: <DiJavascript1 />, name: "JavaScript" },
+  { icon: <DiPython />, name: "Python" },
+  { icon: <DiNodejs />, name: "Node.js" },
+  { icon: <DiReact />, name: "React" },
+  { icon: <IoLogoVue />, name: "Vue.js" },
+  { icon: <SiSpringboot />, name: "Spring Boot" },
+  { icon: <DiMongodb />, name: "MongoDB" },
+  { icon: <SiNextdotjs />, name: "Next.js" },
+  { icon: <DiGit />, name: "Git" },
+  { icon: <SiRedis />, name: "Redis" },
+];
 
 function Techstack() {
   return (
     <Row style={{ justifyContent: "center", paddingBottom: "50px" }}>
-      <Col xs={4} md={2} className="tech-icons">
-        <CgCPlusPlus />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <DiJava />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <DiJavascript1 />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <DiPython />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <DiNodejs />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <DiReact />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <IoLogoVue />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <SiSpringboot />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <DiMongodb />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <SiNextdotjs />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <DiGit />
-      </Col>
-      <Col xs={4} md={2} className="tech-icons">
-        <SiRedis />
-      </Col>
+      {techStackIcons.map((tech, index) => (
+        <Col key={index} xs={4} md={2} className="tech-icons">
+          {tech.icon}
+        </Col>
+      ))}
     </Row>
   );
 }
