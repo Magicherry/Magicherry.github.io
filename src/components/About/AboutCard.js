@@ -35,7 +35,7 @@ const AboutCard = () => {
           </ul>
 
           <p style={{ color: "rgb(3, 232, 248)" }}>
-            "Strive to build things that make a difference!"
+            "If it's what you long for, a passionate response awaits!"
           </p>
           <footer className="blockquote-footer">Yuting Zhou</footer>
         </blockquote>
