@@ -495,13 +495,54 @@ button:focus {
   border-radius: 15px !important;
   backdrop-filter: blur(15px) !important;
   -webkit-backdrop-filter: blur(15px) !important; /* For Safari */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 保证内容布局紧凑 */
 }
+
 .project-card-view:hover {
   transform: scale(1.03) !important;
   overflow: hidden !important;
   box-shadow: 0 4px 4px 5px rgba(0, 247, 255, 0.856) !important;
   border-radius: 15px !important;
 }
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* 让文本内容区域填充剩余空间 */
+}
+
+.card-description {
+  text-align: justify; /* 两端对齐文字描述 */
+}
+
+.project-button-group {
+  margin-top: auto; /* 将按钮组固定在底部 */
+  /*margin-bottom: 5px; !* 增加按钮组和卡片底部的距离 *!*/
+  display: flex;
+  justify-content: center; /* 水平居中按钮 */
+  gap: 10px; /* 按钮之间的间距 */
+}
+
+.custom-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px !important;
+  padding: 12px 30px; /* 增大按钮内部填充，增加宽度 */
+  font-size: 16px; /* 确保文字大小一致 */
+  text-align: center; /* 确保文字水平居中 */
+}
+
+.button-icon {
+  font-size: 1.2em; /* 图标大小 */
+  line-height: 1;
+  vertical-align: middle;
+  margin-right: 8px; /* 图标和文字间距 */
+}
+
+
 
 .blog-card {
   padding-top: 50px !important;
@@ -581,12 +622,12 @@ button:focus {
 }
 
 .tech-icons {
-  font-size: 4.5em !important; /* 图标大小 */
+  font-size: 4.8em !important; /* 图标大小 */
   margin: 15px !important;
-  padding: 15px !important;
+  padding: 25px !important;
   opacity: 0.93 !important;
   border: 1.7px solid rgba(137, 204, 230, 0.637) !important;
-  border-radius: 10px !important;
+  border-radius: 15px !important;
   box-shadow: 4px 5px 4px 3px rgba(4, 108, 168, 0.137) !important;
   overflow: hidden !important;
   transition: transform 0.3s ease, border 0.3s ease !important; /* 只平滑需要的属性 */
@@ -764,6 +805,8 @@ button:focus {
 .fork-btn {
   font-size: 1.1em !important;
   padding-top: 10px !important;
+  
+  border-radius: 10px !important;
 }
 
 .fork-btn-inner {

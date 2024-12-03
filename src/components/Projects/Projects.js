@@ -27,7 +27,7 @@ const projects = [
     demoLink: "https://git.acwing.com/Magicherry/pose_estimation",
   },
   {
-    imgPath: require("../../Assets/Projects/Management.png"),
+    imgPath: require("../../Assets/Projects/Book.png"),
     title: "Management Web System",
     description: "Separation of Front-end and Back-end; used SpringBoot to implement the back-end, used MyBatis and MySQL to achieve database management, interacted with the front-end through the controller, used MD5 algorithm to encrypt database with salt.",
     ghLink: "https://github.com/Magicherry/Library_management",
@@ -38,11 +38,11 @@ const projects = [
     title: "MusicApp UX Design",
     description: "Designed third-party streaming music application UX interface inspired by Apple Music using Axure RP 9.",
     ghLink: "https://github.com/Magicherry/Music-App-Ui-Design",
-    demoLink: "", // Add demo link if available
+    demoLink: "https://github.com/Magicherry/Music-App-Ui-Design", // Add demo link if available
   },
   {
     imgPath: require("../../Assets/Projects/KOF.png"),
-    title: "King of Fighters (Local Game Design)",
+    title: "King of Fighters",
     description: "Front-end HTML; built webpack using Vue3; implemented logic control with JavaScript, stored control information, enabling both players to use the keyboard to control their character duels (running system Microservice).",
     ghLink: "https://git.acwing.com/Magicherry/kof",
     demoLink: "https://git.acwing.com/Magicherry/kof",
