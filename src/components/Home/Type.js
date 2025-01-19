@@ -9,6 +9,7 @@ function Type() {
           "Software Developer",
           "Front-end Developer",
           "Back-end Developer",
+            "Test Engineer",
         ],
         autoStart: true,
         loop: true,
