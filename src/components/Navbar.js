@@ -35,12 +35,15 @@ function NavBar() {
     >
       <Container>
         <Navbar.Brand
-          href="/"
-          className="d-flex"
-          style={{ color: "#00aaff", marginBottom: "2px" }}
+            href="/"
+            className="d-flex"
+            style={{ color: "#00aaff", marginBottom: "2px" }}
         >
-          Magicherry's Website
+          Magicherry
+          <span style={{ color: "#ffffff", margin: "0 8px" }}>|</span>
+          Portfolio
         </Navbar.Brand>
+
 
         <Navbar.Toggle aria-controls="responsive-navbar-nav" onClick={toggleNavbar}>
           <span></span>

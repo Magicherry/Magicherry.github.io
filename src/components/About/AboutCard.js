@@ -14,13 +14,13 @@ const AboutCard = () => {
       <Card.Body>
         <blockquote className="blockquote mb-0">
           <p style={{ textAlign: "justify" }}>
-            Hello Guys, I am <span className="blue">Yuting Zhou</span> from{" "}
+            - Hello Guys, I am <span className="blue" >Yuting Zhou</span> from{" "}
             <span className="blue">Shanghai, China.</span>
             <br />
-            I am currently pursuing a Master’s degree in Computer Science at
+            - I am currently pursuing a Master’s degree in Computer Science at
             Rutgers University–New Brunswick, NJ, US.
             <br />
-            I am actively seeking research opportunities and internships to
+            - I am actively seeking research opportunities and internships to
             enhance my skills and gain hands-on experience.
             <br />
             <br />
@@ -34,8 +34,8 @@ const AboutCard = () => {
             ))}
           </ul>
 
-          <p style={{ color: "rgb(3, 232, 248)" }}>
-            "If it's what you long for, a passionate response awaits!"
+          <p className="blue">
+            "If it's what you strive for, a passionate response awaits!"
           </p>
           <footer className="blockquote-footer">Yuting Zhou</footer>
         </blockquote>
