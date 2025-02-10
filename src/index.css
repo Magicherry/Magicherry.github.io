@@ -4,7 +4,6 @@ body {
   font-family: "Raleway", serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* background-image: linear-gradient(to left, rgb(36, 150, 158), rgb(15, 28, 35)); */
   background-image: linear-gradient(to right, rgb(15, 28, 35) 0%, rgb(25, 85, 93) 50%, rgb(15, 28, 35) 100%);
-
+  z-index: -1; /* 置于底层 */
 }

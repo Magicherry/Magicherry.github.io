@@ -47,6 +47,27 @@ const projects = [
     ghLink: "https://git.acwing.com/Magicherry/kof",
     demoLink: "https://git.acwing.com/Magicherry/kof",
   },
+  {
+    imgPath: require("../../Assets/Projects/KOF.png"),
+    title: "King of Fighters",
+    description: "Front-end HTML; built webpack using Vue3; implemented logic control with JavaScript, stored control information, enabling both players to use the keyboard to control their character duels (running system Microservice).",
+    ghLink: "https://git.acwing.com/Magicherry/kof",
+    demoLink: "https://git.acwing.com/Magicherry/kof",
+  },
+  {
+    imgPath: require("../../Assets/Projects/KOF.png"),
+    title: "King of Fighters",
+    description: "Front-end HTML; built webpack using Vue3; implemented logic control with JavaScript, stored control information, enabling both players to use the keyboard to control their character duels (running system Microservice).",
+    ghLink: "https://git.acwing.com/Magicherry/kof",
+    demoLink: "https://git.acwing.com/Magicherry/kof",
+  },
+  {
+    imgPath: require("../../Assets/Projects/KOF.png"),
+    title: "King of Fighters",
+    description: "Front-end HTML; built webpack using Vue3; implemented logic control with JavaScript, stored control information, enabling both players to use the keyboard to control their character duels (running system Microservice).",
+    ghLink: "https://git.acwing.com/Magicherry/kof",
+    demoLink: "https://git.acwing.com/Magicherry/kof",
+  },
 ];
 
 const Projects = () => (

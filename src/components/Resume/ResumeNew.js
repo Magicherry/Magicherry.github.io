@@ -6,42 +6,57 @@ import pdf from "../../Assets/../Assets/CV-Yuting Zhou.pdf";
 import { AiOutlineDownload } from "react-icons/ai";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 function ResumeNew() {
   const [width, setWidth] = useState(1200);
+  const [numPages, setNumPages] = useState(null); // 总页数
 
   useEffect(() => {
     setWidth(window.innerWidth);
   }, []);
 
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+
   return (
-    <div>
-      <Container fluid className="resume-section">
-        <Particle />
-        <Row style={{ justifyContent: "center", position: "relative" }}>
-          <Button
-            style={{
-              borderRadius: "20px",
-              maxWidth: "250px",
-            }}
-            variant="primary"
-            href={pdf}
-            target="_blank"
-          >
-            <AiOutlineDownload />
-            &nbsp;Download CV
-          </Button>
+      <div>
+        <Container fluid className="resume-section">
+          <Particle />
+          <Row style={{ justifyContent: "center", position: "relative" }}>
+            <Button
+                style={{ borderRadius: "20px", maxWidth: "250px" }}
+                variant="primary"
+                href={pdf}
+                target="_blank"
+            >
+              <AiOutlineDownload />
+              &nbsp;Download CV
+            </Button>
+          </Row>
 
-        </Row>
-
-        <Row className="resume">
-          <Document file={pdf} className="d-flex justify-content-center">
-            <Page pageNumber={1} scale={width > 786 ? 1.7 : 0.6} />
-          </Document>
-        </Row>
-      </Container>
-    </div>
+          <Row className="resume d-flex flex-column align-items-center">
+            {/* PDF 文档，渲染所有页面 */}
+            <Document
+                file={pdf}
+                onLoadSuccess={onDocumentLoadSuccess}
+                className="d-flex justify-content-center flex-column align-items-center"
+            >
+              {numPages &&
+                  Array.from({ length: numPages }, (_, index) => (
+                      <div key={index + 1} style={{ marginBottom: "20px" }}>
+                        <Page
+                            pageNumber={index + 1}
+                            scale={width > 786 ? 1.5 : 0.8}
+                        />
+                      </div>
+                  ))}
+            </Document>
+          </Row>
+        </Container>
+      </div>
   );
 }
 
