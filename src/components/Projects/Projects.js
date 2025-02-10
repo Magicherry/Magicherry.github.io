@@ -34,7 +34,7 @@ const projects = [
     demoLink: "https://github.com/Magicherry/Library_management",
   },
   {
-    imgPath: require("../../Assets/Projects/Cider.png"),
+    imgPath: require("../../Assets/Projects/music.png"),
     title: "MusicApp UX Design",
     description: "Designed third-party streaming music application UX interface inspired by Apple Music using Axure RP 9.",
     ghLink: "https://github.com/Magicherry/Music-App-Ui-Design",
@@ -47,27 +47,27 @@ const projects = [
     ghLink: "https://git.acwing.com/Magicherry/kof",
     demoLink: "https://git.acwing.com/Magicherry/kof",
   },
-  {
-    imgPath: require("../../Assets/Projects/KOF.png"),
-    title: "King of Fighters",
-    description: "Front-end HTML; built webpack using Vue3; implemented logic control with JavaScript, stored control information, enabling both players to use the keyboard to control their character duels (running system Microservice).",
-    ghLink: "https://git.acwing.com/Magicherry/kof",
-    demoLink: "https://git.acwing.com/Magicherry/kof",
-  },
-  {
-    imgPath: require("../../Assets/Projects/KOF.png"),
-    title: "King of Fighters",
-    description: "Front-end HTML; built webpack using Vue3; implemented logic control with JavaScript, stored control information, enabling both players to use the keyboard to control their character duels (running system Microservice).",
-    ghLink: "https://git.acwing.com/Magicherry/kof",
-    demoLink: "https://git.acwing.com/Magicherry/kof",
-  },
-  {
-    imgPath: require("../../Assets/Projects/KOF.png"),
-    title: "King of Fighters",
-    description: "Front-end HTML; built webpack using Vue3; implemented logic control with JavaScript, stored control information, enabling both players to use the keyboard to control their character duels (running system Microservice).",
-    ghLink: "https://git.acwing.com/Magicherry/kof",
-    demoLink: "https://git.acwing.com/Magicherry/kof",
-  },
+  // {
+  //   imgPath: require("../../Assets/Projects/KOF.png"),
+  //   title: "King of Fighters",
+  //   description: "Front-end HTML; built webpack using Vue3; implemented logic control with JavaScript, stored control information, enabling both players to use the keyboard to control their character duels (running system Microservice).",
+  //   ghLink: "https://git.acwing.com/Magicherry/kof",
+  //   demoLink: "https://git.acwing.com/Magicherry/kof",
+  // },
+  // {
+  //   imgPath: require("../../Assets/Projects/KOF.png"),
+  //   title: "King of Fighters",
+  //   description: "Front-end HTML; built webpack using Vue3; implemented logic control with JavaScript, stored control information, enabling both players to use the keyboard to control their character duels (running system Microservice).",
+  //   ghLink: "https://git.acwing.com/Magicherry/kof",
+  //   demoLink: "https://git.acwing.com/Magicherry/kof",
+  // },
+  // {
+  //   imgPath: require("../../Assets/Projects/KOF.png"),
+  //   title: "King of Fighters",
+  //   description: "Front-end HTML; built webpack using Vue3; implemented logic control with JavaScript, stored control information, enabling both players to use the keyboard to control their character duels (running system Microservice).",
+  //   ghLink: "https://git.acwing.com/Magicherry/kof",
+  //   demoLink: "https://git.acwing.com/Magicherry/kof",
+  // },
 ];
 
 const Projects = () => (
