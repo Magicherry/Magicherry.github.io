@@ -85,7 +85,7 @@ button:focus {
   height: 100%;
   z-index: 999999;
   background-color: var(--preloader-bg-color);
-  background-image: url(./Assets/pre.svg);
+  background-image: url(../Assets/preloading/pre.svg);
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -271,7 +271,7 @@ button:focus {
 }
 
 /* --------- */
-/* Home section */
+/* Home_1 section */
 /* --------- */
 .wave {
   animation-name: wave-animation; /* Refers to the name of your @keyframes element below */
@@ -322,7 +322,7 @@ button:focus {
 .home-section {
   position: relative;
   z-index: -1;
-  background-image: var(--image-gradient), url(./Assets/home-bg.jpg);
+  background-image: var(--image-gradient), url(../Assets/home/home-bg.jpg);
   background-position: top center;
   background-repeat: no-repeat;
   padding-bottom: 30px !important;
@@ -519,7 +519,7 @@ button:focus {
   color: var(--blockquote-footer-color) !important;
 }
 /* --------- */
-/* Projects */
+/* projects */
 /* --------- */
 .project-section {
   position: relative !important;
@@ -622,13 +622,13 @@ button:focus {
 }
 
 .blog-card-view:hover {
-  transform: scale(1.02) !important;
+  transform: scale(1.00) !important;
   overflow: hidden !important;
-  box-shadow: 0 3px 3px 5px var(--blog-card-hover-shadow) !important;
+  box-shadow: 0 3px 3px 2px var(--blog-card-hover-shadow) !important;
 }
 
 .card-img-top {
-  padding: 20px !important;
+  padding: 30px !important;
   opacity: 0.8 !important;
   border-radius: 10px !important;
 }

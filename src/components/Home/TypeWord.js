@@ -1,7 +1,7 @@
 import React from "react";
 import Typewriter from "typewriter-effect";
 
-function Type() {
+function TypeWord() {
   return (
     <Typewriter
       options={{
@@ -19,4 +19,4 @@ function Type() {
   );
 }
 
-export default Type;
+export default TypeWord;

@@ -1,13 +1,13 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import myImg from "../../Assets/avatar.png";
+import myImg from "../../Assets/avatar/avatar.png";
 import Tilt from "react-parallax-tilt";
 import { AiFillGithub } from "react-icons/ai";
 import { SiBilibili } from "react-icons/si";
 import { FaLinkedinIn } from "react-icons/fa";
 import { FaXTwitter} from "react-icons/fa6";
 
-function Home2() {
+function Home_2() {
   // 社交链接数组
   const socialLinks = [
     {
@@ -111,4 +111,4 @@ function Home2() {
   );
 }
 
-export default Home2;
+export default Home_2;

@@ -23,7 +23,7 @@ const Footer = () => {
           </a>
         </Col>
         <Col md={4} className="footer-copywright">
-          <h3>Copyright © {year} Yuting Zhou</h3>
+          <h3>Copyright © Yuting Zhou {year} </h3>
         </Col>
         <Col md={4} className="footer-body">
           <ul className="footer-icons">

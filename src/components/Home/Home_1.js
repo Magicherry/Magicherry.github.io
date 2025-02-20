@@ -1,11 +1,11 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import homeLogo from "../../Assets/home-main.svg";
-import Particle from "../Particle";
-import Home2 from "./Home2";
-import Type from "./Type";
+import homeLogo from "../../Assets/home/home-main.svg";
+import Particle from "../MainFrame/Particle";
+import Home_2 from "./Home_2";
+import TypeWord from "./TypeWord";
 
-function Home() {
+function Home_1() {
   return (
     <section>
       <Container fluid className="home-section" id="home">
@@ -27,7 +27,7 @@ function Home() {
               </h1>
 
               <div style={{ padding: 50, textAlign: "left" }}>
-                <Type />
+                <TypeWord />
               </div>
             </Col>
 
@@ -42,9 +42,9 @@ function Home() {
           </Row>
         </Container>
       </Container>
-      <Home2 />
+      <Home_2 />
     </section>
   );
 }
 
-export default Home;
+export default Home_1;
