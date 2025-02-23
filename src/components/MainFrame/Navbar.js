@@ -37,11 +37,8 @@ function NavBar() {
         <Navbar.Brand
             href="/"
             className="d-flex"
-            style={{ color: "#00aaff", marginBottom: "2px" }}
         >
-          MAGICHERRY
-          <span style={{ color: "#ffffff", margin: "0 8px" }}>×</span>
-          ZYT
+          MAGICHERRY.
         </Navbar.Brand>
 
 
@@ -84,7 +81,7 @@ function NavBar() {
             </Nav.Item> */}
             <Nav.Item className="fork-btn">
               <Button
-                href="https://github.com/Magicherry"
+                href="https://github.com/Magicherry/peronsalwebsite"
                 target="_blank"
                 className="fork-btn-inner"
               >

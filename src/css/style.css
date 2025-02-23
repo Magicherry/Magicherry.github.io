@@ -8,7 +8,7 @@
   --scrollbar-thumb-hover-bg: rgba(213, 232, 235, 0.91);
   --navbar-bg-color: #1a1f2ea9;
   --navbar-toggler-color: #50c0f4;
-  --navbar-brand-color: rgb(3, 211, 248);
+  --navbar-brand-color: rgb(16, 227, 246);
   --navbar-brand-hover-color: rgb(3, 248, 248);
   --nav-item-hover-bg: #5bdef5;
   --home-main-name-color: #5fe1f8;
@@ -130,7 +130,7 @@ button:focus {
 .sticky {
   background-color: var(--navbar-bg-color) !important;
   transition: all 0.3s ease-out 0s !important;
-  box-shadow: 0px 10px 10px 0px rgba(5, 18, 29, 0.17) !important;
+  box-shadow: 0 10px 10px 0 rgba(5, 18, 29, 0.17) !important;
   backdrop-filter: blur(15px) !important;
   -webkit-backdrop-filter: blur(15px) !important; /* For Safari */
 }
@@ -140,6 +140,8 @@ button:focus {
   transition: all 0.3s ease-out 0s !important;
   padding: 0.3rem 2rem !important;
   font-size: 1.2rem !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important; /* For Safari */
 }
 
 .navbar-toggler {
@@ -203,12 +205,23 @@ button:focus {
     display: none !important;
   }
 }
+
+/*@keyframes glow {*/
+/*  0% { text-shadow: 0 0 2px rgba(255, 255, 255, 0.8); }*/
+/*  50% { text-shadow: 0 0 6px rgba(255, 255, 255, 1); }*/
+/*  100% { text-shadow: 0 0 4px rgba(255, 255, 255, 0.8); }*/
+/*}*/
+
 .navbar-brand {
-  font-size: 1.4rem !important; /* 调整字体大小 */
-  font-weight: bold !important; /* 设置字体加粗 */
-  color: var(--navbar-brand-color) !important; /* 确保颜色生效 */
-  transition: color 0.5s ease-out !important; /* 添加平滑过渡效果 */
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  color: var(--navbar-brand-color) !important;
+  transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+  text-shadow: 0 0 2px rgba(2, 255, 217, 0.84); /* 增加光晕效果 */
+  /*animation: glow 3s infinite alternate;*/
 }
+
+
 
 .navbar-brand:hover {
   transform: translateY(-2px) !important;
@@ -256,13 +269,15 @@ button:focus {
   content: "";
   position: relative;
   display: block;
-  height: 5px;
+  height: 4px;
   width: 0;
   border-radius: 16px;
   background: var(--nav-item-hover-bg);
   bottom: 1px;
-  left: 0;
+  /*left: 0;*/
   z-index: -1;
+  left: 50%;
+  transform: translateX(-50%);
   transition: all 0.3s ease-out 0s;
 }
 
@@ -375,6 +390,7 @@ button:focus {
   padding-top: 9em !important;
 }
 
+
 @media (max-width: 767px) {
   .myAvtar {
     padding-top: 2em !important;
@@ -443,9 +459,11 @@ button:focus {
 }
 
 .home-social-icons:hover::before {
-  transform: scale(1.1);
-  box-shadow: 0 0 15px var(--social-icon-hover-shadow);
+  transform: scale(1.3);
+  box-shadow: 0 0 10px var(--social-icon-hover-shadow);
+  filter: blur(5px);
 }
+
 
 .home-social-icons:hover {
   color: var(--social-icon-hover-color);
