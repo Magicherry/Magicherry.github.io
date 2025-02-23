@@ -693,8 +693,8 @@ button:focus {
 
 .tech-icons {
   font-size: 4.8em !important; /* 图标大小 */
-  margin: 15px !important;
-  padding: 25px !important;
+  margin: 10px !important;
+  padding: 10px !important;
   opacity: 0.93 !important;
   border: 1.7px solid var(--tech-icon-border) !important;
   border-radius: 15px !important;
@@ -703,7 +703,7 @@ button:focus {
   transition: transform 0.3s ease, border 0.3s ease !important; /* 只平滑需要的属性 */
   backdrop-filter: blur(10px) !important; /* Standard syntax */
   -webkit-backdrop-filter: blur(10px) !important; /* For Safari */
-  
+
   /* 使用 Flexbox 居中 */
   display: flex !important;
   justify-content: center !important;
