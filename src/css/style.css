@@ -217,7 +217,7 @@ button:focus {
   font-weight: bold !important;
   color: var(--navbar-brand-color) !important;
   transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
-  text-shadow: 0 0 2px rgba(2, 255, 217, 0.84); /* 增加光晕效果 */
+  /*text-shadow: 0 0 2px rgba(2, 255, 217, 0.84); !* 增加光晕效果 *!*/
   /*animation: glow 3s infinite alternate;*/
 }
 
