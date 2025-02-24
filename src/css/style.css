@@ -712,9 +712,9 @@ button:focus {
 
 @media (max-width: 767px) {
   .tech-icons {
-    margin: 10px !important; /* 缩小间距以适应小屏幕 */
+    margin: 0 !important; /* 缩小间距以适应小屏幕 */
     font-size: 4em !important; /* 调整字体大小 */
-    padding: 8px !important; /* 调整内部间距 */
+    padding: 15px !important; /* 调整内部间距 */
   }
 }
 
