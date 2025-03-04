@@ -11,7 +11,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 function ResumeNew(iterable) {
   const [width, setWidth] = useState(1200);
-  const [numPages, setNumPages] = useState(null); // 总页数
+  const [numPages, setNumPages] = useState(null);
 
   useEffect(() => {
     setWidth(window.innerWidth);
@@ -38,7 +38,6 @@ function ResumeNew(iterable) {
           </Row>
 
           <Row className="resume d-flex flex-column align-items-center">
-            {/* PDF 文档，渲染所有页面 */}
             <Document
                 file={pdf}
                 onLoadSuccess={onDocumentLoadSuccess}
@@ -46,7 +45,14 @@ function ResumeNew(iterable) {
             >
               {numPages &&
                   Array.from({ length: numPages }, (_, index) => (
-                      <div key={index + 1} style={{ marginBottom: "20px" }}>
+                      <div
+                          key={index + 1}
+                          style={{
+                            marginBottom: "20px",
+                            borderRadius: "5px",
+                            overflow: "hidden"
+                          }}
+                      >
                         <Page
                             pageNumber={index + 1}
                             scale={width > 786 ? 1.5 : 0.8}
