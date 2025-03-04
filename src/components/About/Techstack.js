@@ -32,8 +32,7 @@ function Techstack() {
   return (
       <Row style={{ justifyContent: "center", paddingBottom: "50px" }}>
         {techStackIcons.map((tech, index) => (
-            <Col key={index}
-                 xs={4} md={2} style={{ padding: "10px" }}>
+            <Col key={index} xs={4} md={2} style={{ padding: "10px" }}>
               <a
                   className="tech-icons"
                   href={tech.link}
