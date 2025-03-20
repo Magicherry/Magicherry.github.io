@@ -3,9 +3,10 @@ import Card from "react-bootstrap/Card";
 import { ImPointRight } from "react-icons/im";
 
 const activities = [
-  "Playing Games",
   "Writing Tech Blogs",
-  "Evaluating Digital Products",
+  "Experiencing Games",
+  "Browsing Tech | Movie & TV Reviews",
+  "Photography & Videography"
 ];
 
 const AboutCard = () => {
@@ -34,10 +35,10 @@ const AboutCard = () => {
             ))}
           </ul>
 
-          <p className="blue">
-            "If it's what you strive for, a passionate response awaits!"
+          <p className="blue" style={{ marginTop: "40px" }}>
+            <em>"No matter what your dream is, you have to dedicate yourself entirely to it"</em>
           </p>
-          <footer className="blockquote-footer">Yuting Zhou</footer>
+          <footer className="blockquote-footer">AYRTON SENNA</footer>
         </blockquote>
       </Card.Body>
     </Card>
