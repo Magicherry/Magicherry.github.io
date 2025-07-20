@@ -489,6 +489,8 @@ button:focus {
   bottom: 0 !important;
   padding-top: 10px !important;
   padding-bottom: 8px !important ;
+  position: relative; /* Add relative positioning */
+  z-index: 10;       /* Ensure footer is above other content */
 }
 .footer-copywright {
   text-align: center !important;
