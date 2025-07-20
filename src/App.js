@@ -16,6 +16,7 @@ import ScrollToTop from "./components/MainFrame/ScrollToTop";
 import "./css/style.css";
 import "./css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./css/responsive.css";
 
 function App() {
   const [load, upadateLoad] = useState(true);

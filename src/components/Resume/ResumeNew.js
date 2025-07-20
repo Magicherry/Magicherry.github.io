@@ -9,12 +9,16 @@ import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-function ResumeNew(iterable) {
+function ResumeNew() {
   const [width, setWidth] = useState(1200);
   const [numPages, setNumPages] = useState(null);
 
   useEffect(() => {
-    setWidth(window.innerWidth);
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Set initial width
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
@@ -55,7 +59,7 @@ function ResumeNew(iterable) {
                       >
                         <Page
                             pageNumber={index + 1}
-                            scale={width > 786 ? 1.5 : 0.8}
+                            width={width > 786 ? 900 : width - 50}
                         />
                       </div>
                   ))}
