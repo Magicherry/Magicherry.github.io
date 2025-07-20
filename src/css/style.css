@@ -336,7 +336,6 @@ button:focus {
 
 .home-section {
   position: relative;
-  z-index: -1;
   background-image: var(--image-gradient), url(../Assets/home/home-bg.jpg);
   background-position: top center;
   background-repeat: no-repeat;
@@ -348,6 +347,8 @@ button:focus {
   padding: 9rem 0 2rem !important;
   color: whitesmoke;
   text-align: left;
+  position: relative;
+  z-index: 2;
 }
 
 .heading {
@@ -543,6 +544,7 @@ button:focus {
 /* --------- */
 .project-section {
   position: relative !important;
+  z-index: 1;
   padding-top: 150px !important;
   padding-bottom: 30px !important;
   background-image: var(--section-background-color) !important;
@@ -687,6 +689,7 @@ button:focus {
 
 .about-section {
   position: relative !important;
+  z-index: 1;
   padding-top: 150px !important;
   padding-bottom: 30px !important;
   background-image: var(--section-background-color) !important;
@@ -758,6 +761,7 @@ button:focus {
 
 .resume-section {
   position: relative !important;
+  z-index: 1;
   padding-top: 110px !important;
   padding-bottom: 30px !important;
   background-image: var(--section-background-color) !important;
