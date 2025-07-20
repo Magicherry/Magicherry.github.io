@@ -581,6 +581,11 @@ button:focus {
   border-radius: 15px !important;
 }
 
+.project-card-view:active {
+  transform: scale(0.98) !important;
+  transition: transform 0.1s ease !important;
+}
+
 .card-body {
   display: flex;
   flex-direction: column;
@@ -726,6 +731,11 @@ button:focus {
 .tech-icons:hover {
   transform: scale(1.1) !important; /* 更明显的放大效果 */
   border: 2.2px solid var(--tech-icon-hover-border) !important; /* 增强悬停边框 */
+}
+
+.tech-icons:active {
+  transform: scale(0.95) !important;
+  transition: transform 0.1s ease !important;
 }
 
 /* 用于 .tech-icon-images 内的内容 */
