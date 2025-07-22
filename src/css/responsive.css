@@ -59,12 +59,15 @@
     left: 0;
     right: 0;
     width: 100%;
-    height: 60px;
+    height: 70px;
     background-color: var(--navbar-bg-mobile);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 1000;
+    /* 新增安全区底部内边距，兼容无 safe-area-inset-bottom 的设备 */
+    padding-bottom: constant(safe-area-inset-bottom, 0px) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important
   }
 
   .bottom-nav {
@@ -73,7 +76,8 @@
     justify-content: space-around !important;
     align-items: center;
     height: 100%;
-    padding: 0 !important;
+    padding: 0 ;
+    padding-bottom: 20px;
     margin: 0 !important;
   }
 
