@@ -72,27 +72,27 @@ function NavBar() {
             {/* This part is for desktop view */}
             <Nav className="ms-auto d-none d-md-flex" defaultActiveKey="#home">
               <Nav.Item>
-                <Nav.Link as={Link} to="/" onClick={closeNavbar}>
+                <Nav.Link as={NavLink} to="/" onClick={closeNavbar}>
                   <AiOutlineHome className="navbar-icon" /> HOME
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link as={Link} to="/about" onClick={closeNavbar}>
+                <Nav.Link as={NavLink} to="/about" onClick={closeNavbar}>
                   <AiOutlineUser className="navbar-icon" /> ABOUT
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link as={Link} to="/experiences" onClick={closeNavbar}>
+                <Nav.Link as={NavLink} to="/experiences" onClick={closeNavbar}>
                   <MdWorkOutline className="navbar-icon" /> EXPERIENCES
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link as={Link} to="/project" onClick={closeNavbar}>
+                <Nav.Link as={NavLink} to="/project" onClick={closeNavbar}>
                   <AiOutlineFundProjectionScreen className="navbar-icon" /> PROJECTS
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link as={Link} to="/resume" onClick={closeNavbar}>
+                <Nav.Link as={NavLink} to="/resume" onClick={closeNavbar}>
                   <CgFileDocument className="navbar-icon" /> RESUME
                 </Nav.Link>
               </Nav.Item>
