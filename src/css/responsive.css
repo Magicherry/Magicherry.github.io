@@ -1,19 +1,26 @@
 @media (max-width: 767px) {
-  /* Hide desktop-only elements */
+  /*================================================================
+    Generic Mobile Adjustments
+  ================================================================*/
+  body {
+    padding-bottom: 60px; /* Space for the bottom nav */
+  }
+
   .fork-btn {
     display: none !important;
   }
 
-  /* --- Top Navbar (Logo) --- */
+  /*================================================================
+    Top Navbar (Logo)
+  ================================================================*/
   .navbar {
     transition: top 0.3s ease-in-out;
-    height: 60px; /* Set a fixed height for the top bar */
-    background-color: rgba(24, 28, 39, 0.9) !important;
+    height: 60px;
+    background-color: var(--navbar-bg-mobile) !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
   }
 
-  /* Use Flexbox on the container to robustly center the brand */
   .navbar .container {
     display: flex !important;
     justify-content: center !important;
@@ -25,13 +32,12 @@
     top: -80px;
   }
 
-  /* Reset brand positioning to let flexbox handle it */
   .navbar-brand {
     position: static !important;
     transform: none !important;
     margin: 0 !important;
-    padding: 0 !important; /* Remove any padding */
-    line-height: 1 !important; /* Ensure line height doesn't add space */
+    padding: 0 !important;
+    line-height: 1 !important;
   }
 
   .navbar-brand:focus,
@@ -44,7 +50,9 @@
     display: none !important;
   }
 
-  /* --- Bottom Tab Bar --- */
+  /*================================================================
+    Bottom Tab Bar
+  ================================================================*/
   .bottom-nav-container {
     position: fixed;
     bottom: 0;
@@ -52,7 +60,7 @@
     right: 0;
     width: 100%;
     height: 60px;
-    background-color: rgba(24, 28, 39, 0.9);
+    background-color: var(--navbar-bg-mobile);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -82,13 +90,13 @@
     justify-content: center;
     font-size: 0.75rem !important;
     padding: 8px 0 !important;
-    color: #ffffff !important; /* Default color for inactive tabs */
+    color: var(--color-text) !important;
     height: 100%;
     transition: color 0.2s ease-in-out;
   }
 
   .bottom-nav .nav-link.active {
-    color: #5fe1f8 !important; /* Brand color for the active tab */
+    color: var(--home-color-name) !important;
   }
 
   .bottom-nav .nav-link svg {
@@ -100,12 +108,9 @@
     display: none !important;
   }
 
-  /* Adjust main content padding to avoid overlap */
-  body {
-    padding-bottom: 60px; /* Space for the bottom nav */
-  }
-
-  /* Unify top padding for all main sections to clear the fixed navbar */
+  /*================================================================
+    Section Padding Adjustments
+  ================================================================*/
   .project-section,
   .about-section,
   .resume-section {
@@ -114,15 +119,12 @@
 
   .home-content {
     padding-top: 80px !important;
-    padding-bottom: 4rem !important; /* Retain original bottom padding */
+    padding-bottom: 4rem !important;
   }
 
-  /* --- Resume Page Optimization --- */
-  .resume .react-pdf__Page__canvas {
-    width: 100% !important;
-    height: auto !important;
-  }
-
+  /*================================================================
+    Resume Page Optimization
+  ================================================================*/
   .resume .react-pdf__Page__canvas {
     width: 100% !important;
     height: auto !important;

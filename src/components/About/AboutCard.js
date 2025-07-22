@@ -14,7 +14,7 @@ const AboutCard = () => {
     <Card className="quote-card-view">
       <Card.Body>
         <blockquote className="blockquote mb-0">
-          <p style={{ textAlign: "justify" }}>
+          <p className="about-card__paragraph">
             - Hello Guys, I am <span className="blue" >Yuting Zhou</span> from{" "}
             <span className="blue">Shanghai, China.</span>
             <br />
@@ -35,7 +35,7 @@ const AboutCard = () => {
             ))}
           </ul>
 
-          <p className="blue" style={{ marginTop: "40px" }}>
+          <p className="blue about-card__quote">
             <em>"No matter what your dream is, you have to dedicate yourself entirely to it"</em>
           </p>
           <footer className="blockquote-footer">AYRTON SENNA</footer>

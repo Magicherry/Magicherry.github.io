@@ -30,24 +30,15 @@ const techStackIcons = [
 
 function Techstack() {
   return (
-      <Row style={{ justifyContent: "center", paddingBottom: "50px" }}>
+      <Row className="tech-stack__row">
         {techStackIcons.map((tech, index) => (
-            <Col key={index} xs={4} md={2} style={{ padding: "10px" }}>
+            <Col key={index} xs={4} md={2} className="tech-stack__col">
               <a
-                  className="tech-icons"
+                  className="tech-icons tech-stack__icon-link"
                   href={tech.link}
                   target="_blank"
                   rel="noopener noreferrer"
                   title={tech.name} // 悬停显示技能名称
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: "100%",
-                    height: "100%",
-                    textDecoration: "none",
-                    color: "inherit"
-                  }}
               >
                 {tech.icon}
               </a>

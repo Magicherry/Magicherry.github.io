@@ -29,16 +29,18 @@ function ResumeNew() {
       <div>
         <Container fluid className="resume-section">
           <Particle />
-          <Row style={{ justifyContent: "center", position: "relative" }}>
-            <Button
-                style={{ borderRadius: "20px", maxWidth: "250px" }}
-                variant="primary"
-                href={pdf}
-                target="_blank"
-            >
-              <AiOutlineDownload />
-              &nbsp;Download CV
-            </Button>
+          <Row className="resume__row">
+            <div className="d-flex justify-content-center">
+              <Button
+                  className="resume__download-button"
+                  variant="primary"
+                  href={pdf}
+                  target="_blank"
+              >
+                <AiOutlineDownload />
+                &nbsp;Download CV
+              </Button>
+            </div>
           </Row>
 
           <Row className="resume d-flex flex-column align-items-center">
@@ -51,11 +53,7 @@ function ResumeNew() {
                   Array.from({ length: numPages }, (_, index) => (
                       <div
                           key={index + 1}
-                          style={{
-                            marginBottom: "20px",
-                            borderRadius: "5px",
-                            overflow: "hidden"
-                          }}
+                          className="resume__page-container"
                       >
                         <Page
                             pageNumber={index + 1}

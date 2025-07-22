@@ -31,7 +31,7 @@ const Footer = () => {
               <li className="social-icons" key={index}>
                 <a
                   href={link.href}
-                  style={{ color: "white" }}
+                  className="footer__social-link"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

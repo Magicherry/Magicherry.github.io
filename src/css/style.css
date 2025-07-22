@@ -1,82 +1,102 @@
 :root {
-  --section-bg-gradient: linear-gradient(to bottom left, rgba(17, 16, 16, 0.582), rgba(8, 19, 24, 0.904));
-  --image-gradient: linear-gradient(to bottom left, rgba(17, 16, 16, 0.678), rgba(10, 14, 22, 0.863));
-  --important-text-color: rgb(3, 232, 248);
-  --preloader-bg-color: #050b13;
-  --scrollbar-track-bg: #192850;
-  --scrollbar-thumb-bg: rgba(121, 205, 216, 0.959);
-  --scrollbar-thumb-hover-bg: rgba(213, 232, 235, 0.91);
-  --navbar-bg-color: #1a1f2ea9;
-  --navbar-toggler-color: #50c0f4;
-  --navbar-brand-color: rgb(16, 227, 246);
-  --navbar-brand-hover-color: rgb(3, 248, 248);
-  --nav-item-hover-bg: #5bdef5;
-  --home-main-name-color: #5fe1f8;
-  --typewriter-color: #6acedf;
-  --typewriter-cursor-color: #6abedf;
-  --social-icon-hover-bg: rgba(255, 255, 255, 0.972);
-  --social-icon-hover-shadow: #1f7d95;
-  --social-icon-hover-color: #208b9e;
-  --footer-bg-color: rgb(4, 16, 22);
-  --footer-email-hover-color: #3de8ff;
-  --blockquote-footer-color: #88b3c0;
-  --project-card-shadow: rgba(53, 117, 136, 0.562);
-  --project-card-hover-shadow: rgba(0, 247, 255, 0.856);
-  --blog-card-shadow: rgba(77, 144, 161, 0.459);
-  --blog-card-hover-shadow: rgba(88, 160, 173, 0.65);
-  --button-primary-bg: #367386;
-  --button-primary-hover-bg: #209fc5d7;
-  --resume-item-border: #498da8;
-  --resume-item-bg: #3475795d;
-  --tech-icon-border: rgba(137, 204, 230, 0.637);
-  --tech-icon-hover-border: rgba(115, 230, 230, 0.883);
-  --like-btn-bg: #4cb4ce5e;
-  --like-btn-hover-bg: #4dbfd386;
-  --fork-btn-bg: #4cb0ce5e;
-  --fork-btn-hover-bg: #4dc3d386;
-  --shadow-color-light-blue: rgba(4, 108, 168, 0.137);
-  --social-icon-before-color: #186b7a;
-  --icon-color-dark-blue: #0e2972;
-  --white-color: #fff;
-  --section-bg-end-color: rgba(8, 19, 24, 0.904);
-  --navbar-mobile-bg-color: #181c27;
-  --resume-item-before-border-color: #4992a8;
-  --section-bg-start-color: rgba(17, 16, 16, 0.582);
-  --image-bg-start-color: rgba(17, 16, 16, 0.678);
-  --button-hover-border-color: #20a4c5;
-  --navbar-shadow-color: rgba(5, 18, 29, 0.17);
-  --social-icon-hover-highlight-color: #208f9e;
-  --image-bg-end-color: rgba(10, 14, 22, 0.863);
-  --button-border-color: #368686;
-}
+  /*====================
+      Base & Typography
+  ====================*/
+  --color-text: #fff;
+  --color-text-accent: rgb(3, 232, 248);
+  --color-blockquote-footer: #88b3c0;
 
-html {
-  --section-background-color: linear-gradient(
-    to bottom left,
-    rgba(17, 16, 16, 0.582),
-    rgba(8, 19, 24, 0.904)
-  );
+  /*====================
+      Backgrounds
+  ====================*/
+  --bg-gradient-section: linear-gradient(to bottom left, rgba(17, 16, 16, 0.582), rgba(8, 19, 24, 0.904));
+  --bg-gradient-image: linear-gradient(to bottom left, rgba(17, 16, 16, 0.678), rgba(10, 14, 22, 0.863));
+  --bg-body: linear-gradient(to right, rgb(15, 28, 35) 0%, rgb(25, 85, 93) 50%, rgb(15, 28, 35) 100%);
+  --bg-preloader: #050b13;
+  --bg-footer: rgb(4, 16, 22);
 
-  --image-gradient: linear-gradient(
-    to bottom left,
-    rgba(17, 16, 16, 0.678),
-    rgba(10, 14, 22, 0.863)
-  );
+  /*====================
+      Scrollbar
+  ====================*/
+  --scrollbar-bg-track: #192850;
+  --scrollbar-bg-thumb: rgba(121, 205, 216, 0.959);
+  --scrollbar-bg-thumb-hover: rgba(213, 232, 235, 0.91);
 
-  --imp-text-color: var(--important-text-color);
+  /*====================
+      Navbar
+  ====================*/
+  --navbar-bg: #1a1f2ea9;
+  --navbar-bg-mobile: #181c27;
+  --navbar-color-brand: rgb(16, 227, 246);
+  --navbar-color-brand-hover: rgb(3, 248, 248);
+  --navbar-color-toggler: #50c0f4;
+  --navbar-bg-item-hover: #5bdef5;
+  --navbar-shadow: rgba(5, 18, 29, 0.17);
+
+  /*====================
+      Home Section
+  ====================*/
+  --home-color-name: #5fe1f8;
+  --home-color-typewriter: #6acedf;
+  --home-color-typewriter-cursor: #6abedf;
+
+  /*====================
+      Buttons
+  ====================*/
+  --button-bg-primary: #367386;
+  --button-bg-primary-hover: #209fc5d7;
+  --button-border-primary: #368686;
+  --button-border-primary-hover: #20a4c5;
+  --button-bg-like: #4cb4ce5e;
+  --button-bg-like-hover: #4dbfd386;
+  --button-bg-fork: #4cb0ce5e;
+  --button-bg-fork-hover: #4dc3d386;
+
+  /*====================
+      Cards & Icons
+  ====================*/
+  --card-shadow-project: rgba(53, 117, 136, 0.562);
+  --card-shadow-project-hover: rgba(0, 247, 255, 0.856);
+  --card-shadow-blog: rgba(77, 144, 161, 0.459);
+  --card-shadow-blog-hover: rgba(88, 160, 173, 0.65);
+  --icon-border-tech: rgba(137, 204, 230, 0.637);
+  --icon-border-tech-hover: rgba(115, 230, 230, 0.883);
+  --icon-shadow-tech: rgba(4, 108, 168, 0.137);
+  --icon-color-social: #0e2972;
+
+  /*====================
+      Social Icons
+  ====================*/
+  --social-icon-bg-hover: rgba(255, 255, 255, 0.972);
+  --social-icon-bg-before: #186b7a;
+  --social-icon-shadow-hover: #1f7d95;
+  --social-icon-color-hover: #208b9e;
+  --social-icon-highlight-hover: #208f9e;
+
+  /*====================
+      Resume
+  ====================*/
+  --resume-border-item: #498da8;
+  --resume-bg-item: #3475795d;
+  --resume-border-item-before: #4992a8;
+
+  /*====================
+      Footer
+  ====================*/
+  --footer-color-email-hover: #3de8ff;
 }
 
 .blue {
-  color: var(--imp-text-color) !important;
+  color: var(--color-text-accent) !important;
 }
 
 button:focus {
   box-shadow: none !important;
 }
 
-/* --------- */
-/*  Preloader */
-/* --------- */
+/*================================================================
+  1. Preloader
+================================================================*/
 #preloader {
   position: fixed;
   top: 0;
@@ -84,7 +104,7 @@ button:focus {
   width: 100%;
   height: 100%;
   z-index: 999999;
-  background-color: var(--preloader-bg-color);
+  background-color: var(--bg-preloader);
   background-image: url(../Assets/preloading/pre.svg);
   background-repeat: no-repeat;
   background-position: center;
@@ -99,40 +119,48 @@ button:focus {
   height: 100vh;
 }
 
-/* --------- */
-/*Scrollbar   */
-/* --------- */
-
+/*================================================================
+  2. Scrollbar
+================================================================*/
 ::-webkit-scrollbar {
   width: 7px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
-  background: var(--scrollbar-track-bg);
+  background: var(--scrollbar-bg-track);
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb-bg);
+  background: var(--scrollbar-bg-thumb);
   border-radius: 12px;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-hover-bg);
+  background: var(--scrollbar-bg-thumb-hover);
   border-radius: 12px;
 }
 
-/* --------- */
-/* Navbar Section  */
-/* --------- */
+/*================================================================
+  3. Navbar
+================================================================*/
 .sticky {
-  background-color: var(--navbar-bg-color) !important;
+  background-color: var(--navbar-bg) !important;
   transition: all 0.3s ease-out 0s !important;
-  box-shadow: 0 10px 10px 0 rgba(5, 18, 29, 0.17) !important;
+  box-shadow: 0 10px 10px 0 var(--navbar-shadow) !important;
   backdrop-filter: blur(15px) !important;
   -webkit-backdrop-filter: blur(15px) !important; /* For Safari */
+}
+
+.navbar-icon {
+  margin-bottom: 2px;
+}
+
+.navbar-fork-icon {
+  font-size: 1.2em;
+}
+
+.navbar-star-icon {
+  font-size: 1.1em;
 }
 
 .navbar {
@@ -152,7 +180,7 @@ button:focus {
 
 .navbar-toggler span {
   display: block !important;
-  background-color: var(--navbar-toggler-color) !important;
+  background-color: var(--navbar-color-toggler) !important;
   height: 4px !important;
   width: 27px !important;
   margin-top: 5px !important;
@@ -169,7 +197,6 @@ button:focus {
 
 .navbar-toggler span:nth-child(1),
 .navbar-toggler span:nth-child(3) {
-  transition: transform 0.35s ease-in-out !important;
   transition: transform 0.35s ease-in-out !important;
 }
 
@@ -199,33 +226,23 @@ button:focus {
   .navbar {
     padding: 1rem 2rem !important;
     font-size: 1.4rem !important;
-    background-color: var(--navbar-mobile-bg-color) !important;
+    background-color: var(--navbar-bg-mobile) !important;
   }
   .navbar-nav .nav-item a::after {
     display: none !important;
   }
 }
 
-/*@keyframes glow {*/
-/*  0% { text-shadow: 0 0 2px rgba(255, 255, 255, 0.8); }*/
-/*  50% { text-shadow: 0 0 6px rgba(255, 255, 255, 1); }*/
-/*  100% { text-shadow: 0 0 4px rgba(255, 255, 255, 0.8); }*/
-/*}*/
-
 .navbar-brand {
   font-size: 1.5rem !important;
   font-weight: bold !important;
-  color: var(--navbar-brand-color) !important;
+  color: var(--navbar-color-brand) !important;
   transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
-  /*text-shadow: 0 0 2px rgba(2, 255, 217, 0.84); !* 增加光晕效果 *!*/
-  /*animation: glow 3s infinite alternate;*/
 }
-
-
 
 .navbar-brand:hover {
   transform: translateY(-2px) !important;
-  color: var(--navbar-brand-hover-color) !important;
+  color: var(--navbar-color-brand-hover) !important;
 }
 
 .navbar-brand::after {
@@ -238,7 +255,7 @@ button:focus {
 }
 
 .navbar-nav .nav-link {
-  color: var(--white-color) !important;
+  color: var(--color-text) !important;
   padding-right: 1rem !important;
   padding-left: 1rem !important;
 }
@@ -272,9 +289,8 @@ button:focus {
   height: 4px;
   width: 0;
   border-radius: 16px;
-  background: var(--nav-item-hover-bg);
+  background: var(--navbar-bg-item-hover);
   bottom: 1px;
-  /*left: 0;*/
   z-index: -1;
   left: 50%;
   transform: translateX(-50%);
@@ -285,14 +301,35 @@ button:focus {
   width: 100%;
 }
 
-/* --------- */
-/* Home_1 section */
-/* --------- */
+/*================================================================
+  4. Home Section
+================================================================*/
+.home__title {
+  padding-bottom: 15px;
+}
+
+.home__typewriter-container {
+  padding: 50px;
+  text-align: left;
+}
+
+.home__image-col {
+  padding-bottom: 20px;
+}
+
+.home__image {
+  max-height: 450px;
+}
+
+.home-about__title {
+  font-size: 2.6em;
+}
+
 .wave {
-  animation-name: wave-animation; /* Refers to the name of your @keyframes element below */
-  animation-duration: 2.1s; /* Change to speed up or slow down */
-  animation-iteration-count: infinite; /* Never stop waving :) */
-  transform-origin: 70% 70%; /* Pivot around the bottom-left palm */
+  animation-name: wave-animation;
+  animation-duration: 2.1s;
+  animation-iteration-count: infinite;
+  transform-origin: 70% 70%;
   display: inline-block;
 }
 
@@ -302,7 +339,7 @@ button:focus {
   }
   10% {
     transform: rotate(14deg);
-  } /* The following five values can be played with to make the waving more or less extreme */
+  }
   20% {
     transform: rotate(-8deg);
   }
@@ -317,11 +354,12 @@ button:focus {
   }
   60% {
     transform: rotate(0deg);
-  } /* Reset for the last half to pause */
+  }
   100% {
     transform: rotate(0deg);
   }
 }
+
 #tsparticles {
   position: fixed !important;
   background-repeat: no-repeat !important;
@@ -336,7 +374,7 @@ button:focus {
 
 .home-section {
   position: relative;
-  background-image: var(--image-gradient), url(../Assets/home/home-bg.jpg);
+  background-image: var(--bg-gradient-image), url(../Assets/home/home-bg.jpg);
   background-position: top center;
   background-repeat: no-repeat;
   padding-bottom: 30px !important;
@@ -362,17 +400,17 @@ button:focus {
 }
 
 .main-name {
-  color: var(--home-main-name-color);
+  color: var(--home-color-name);
 }
 
 .Typewriter__wrapper {
   font-size: 2.2em !important;
-  color: var(--typewriter-color) !important;
+  color: var(--home-color-typewriter) !important;
   font-weight: 600 !important;
 }
 .Typewriter__cursor {
   font-size: 2.4em !important;
-  color: var(--typewriter-cursor-color) !important;
+  color: var(--home-color-typewriter-cursor) !important;
 }
 
 @media (max-width: 767px) {
@@ -391,7 +429,6 @@ button:focus {
   padding-top: 9em !important;
 }
 
-
 @media (max-width: 767px) {
   .myAvtar {
     padding-top: 2em !important;
@@ -406,7 +443,7 @@ button:focus {
 }
 
 .home-about-description {
-  color: var(--white-color) !important;
+  color: var(--color-text) !important;
   padding-top: 100px !important;
   padding-bottom: 20px !important;
   text-align: center;
@@ -421,7 +458,7 @@ button:focus {
 .home-about-social {
   text-align: center !important;
   padding-top: 25px;
-  color: var(--white-color) !important;
+  color: var(--color-text) !important;
 }
 
 .home-about-social-links {
@@ -434,15 +471,15 @@ button:focus {
 
 .home-social-icons {
   position: relative !important;
-  display: flex !important; /* 使用 Flexbox */
-  justify-content: center !important; /* 水平居中 */
-  align-items: center !important; /* 垂直居中 */
-  width: 40px !important; /* 容器宽度 */
-  height: 40px !important; /* 容器高度 */
-  font-size: 1.5em !important; /* 图标大小 */
-  background: var(--social-icon-hover-bg) !important; /* 背景色 */
-  border-radius: 50% !important; /* 圆形容器 */
-  transition: 0.5s !important; /* 平滑过渡 */
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 40px !important;
+  height: 40px !important;
+  font-size: 1.5em !important;
+  background: var(--social-icon-bg-hover) !important;
+  border-radius: 50% !important;
+  transition: 0.5s !important;
 }
 
 .home-social-icons::before {
@@ -453,7 +490,7 @@ button:focus {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: var(--social-icon-before-color);
+  background: var(--social-icon-bg-before);
   transition: 0.5s;
   transform: scale(0.9);
   z-index: -1;
@@ -461,15 +498,14 @@ button:focus {
 
 .home-social-icons:hover::before {
   transform: scale(1.3);
-  box-shadow: 0 0 10px var(--social-icon-hover-shadow);
+  box-shadow: 0 0 10px var(--social-icon-shadow-hover);
   filter: blur(5px);
 }
 
-
 .home-social-icons:hover {
-  color: var(--social-icon-hover-color);
-  box-shadow: 0 0 5px var(--social-icon-hover-highlight-color);
-  text-shadow: 0 0 2px var(--social-icon-hover-highlight-color);
+  color: var(--social-icon-color-hover);
+  box-shadow: 0 0 5px var(--social-icon-highlight-hover);
+  text-shadow: 0 0 2px var(--social-icon-highlight-hover);
 }
 
 .social-icons {
@@ -479,19 +515,23 @@ button:focus {
 }
 
 .icon-colour {
-  color: var(--icon-color-dark-blue) !important;
+  color: var(--icon-color-social) !important;
 }
 
-/* --------- */
-/* Footer */
-/* --------- */
+/*================================================================
+  5. Footer
+================================================================*/
+.footer__social-link {
+  color: white;
+}
+
 .footer {
-  background-color: var(--footer-bg-color);
+  background-color: var(--bg-footer);
   bottom: 0 !important;
   padding-top: 10px !important;
   padding-bottom: 8px !important ;
-  position: relative; /* Add relative positioning */
-  z-index: 10;       /* Ensure footer is above other content */
+  position: relative;
+  z-index: 10;
 }
 .footer-copywright {
   text-align: center !important;
@@ -514,7 +554,7 @@ button:focus {
 
 .footer h3 {
   font-size: 1em;
-  color: var(--white-color) !important;
+  color: var(--color-text) !important;
   margin-top: 0.5em !important;
   margin-bottom: 0.5em !important;
 }
@@ -525,29 +565,39 @@ button:focus {
 }
 
 .email-link {
-  color: var(--white-color) !important;
-  text-decoration: none; /* 去掉下划线 */
-  transition: color 0.3s ease; /* 添加平滑过渡效果 */
+  color: var(--color-text) !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 .email-link:hover {
-  color: var(--footer-email-hover-color); /* 悬浮时亮蓝色 */
-  text-decoration: underline; /* 悬浮时可选的下划线效果 */
+  color: var(--footer-color-email-hover);
+  text-decoration: underline;
 }
-
 
 .blockquote-footer {
-  color: var(--blockquote-footer-color) !important;
+  color: var(--color-blockquote-footer) !important;
 }
-/* --------- */
-/* projects */
-/* --------- */
+
+/*================================================================
+  6. Projects
+================================================================*/
+.projects__paragraph {
+  color: white;
+  font-size: 1.5rem;
+}
+
+.projects__row {
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
 .project-section {
   position: relative !important;
   z-index: 1;
   padding-top: 150px !important;
   padding-bottom: 30px !important;
-  background-image: var(--section-background-color) !important;
+  background-image: var(--bg-gradient-section) !important;
 }
 
 .project-card {
@@ -560,24 +610,24 @@ button:focus {
 }
 
 .project-card-view {
-  box-shadow: 0 4px 5px 3px var(--project-card-shadow) !important;
-  color: var(--white-color) !important;
+  box-shadow: 0 4px 5px 3px var(--card-shadow-project) !important;
+  color: var(--color-text) !important;
   background-color: transparent !important;
   opacity: 0.9 !important;
   transition: all 0.4s ease 0s !important;
   height: 100% !important;
   border-radius: 15px !important;
   backdrop-filter: blur(15px) !important;
-  -webkit-backdrop-filter: blur(15px) !important; /* For Safari */
+  -webkit-backdrop-filter: blur(15px) !important;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* 保证内容布局紧凑 */
+  justify-content: space-between;
 }
 
 .project-card-view:hover {
   transform: scale(1.03) !important;
   overflow: hidden !important;
-  box-shadow: 0 4px 4px 5px var(--project-card-hover-shadow) !important;
+  box-shadow: 0 4px 4px 5px var(--card-shadow-project-hover) !important;
   border-radius: 15px !important;
 }
 
@@ -589,19 +639,18 @@ button:focus {
 .card-body {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* 让文本内容区域填充剩余空间 */
+  flex-grow: 1;
 }
 
 .card-description {
-  text-align: justify; /* 两端对齐文字描述 */
+  text-align: justify;
 }
 
 .project-button-group {
-  margin-top: auto; /* 将按钮组固定在底部 */
-  /*margin-bottom: 5px; !* 增加按钮组和卡片底部的距离 *!*/
+  margin-top: auto;
   display: flex;
-  justify-content: center; /* 水平居中按钮 */
-  gap: 10px; /* 按钮之间的间距 */
+  justify-content: center;
+  gap: 10px;
 }
 
 .custom-button {
@@ -609,19 +658,17 @@ button:focus {
   align-items: center;
   justify-content: center;
   border-radius: 5px !important;
-  padding: 12px 30px; /* 增大按钮内部填充，增加宽度 */
-  font-size: 16px; /* 确保文字大小一致 */
-  text-align: center; /* 确保文字水平居中 */
+  padding: 12px 30px;
+  font-size: 16px;
+  text-align: center;
 }
 
 .button-icon {
-  font-size: 1.2em; /* 图标大小 */
+  font-size: 1.2em;
   line-height: 1;
   vertical-align: middle;
-  margin-right: 8px; /* 图标和文字间距 */
+  margin-right: 8px;
 }
-
-
 
 .blog-card {
   padding-top: 50px !important;
@@ -633,14 +680,14 @@ button:focus {
 
 .blog-card-view {
   background-color: transparent !important;
-  box-shadow: 0 3px 3px 2px var(--blog-card-shadow) !important;
-  color: var(--white-color) !important;
+  box-shadow: 0 3px 3px 2px var(--card-shadow-blog) !important;
+  color: var(--color-text) !important;
   transition: all 0.5s ease 0s !important;
   height: 100% !important;
 }
 
 .blog-link {
-  color: var(--white-color) !important;
+  color: var(--color-text) !important;
   text-decoration: none !important;
 }
 
@@ -651,7 +698,7 @@ button:focus {
 .blog-card-view:hover {
   transform: scale(1.00) !important;
   overflow: hidden !important;
-  box-shadow: 0 3px 3px 2px var(--blog-card-hover-shadow) !important;
+  box-shadow: 0 3px 3px 2px var(--card-shadow-blog-hover) !important;
 }
 
 .card-img-top {
@@ -667,15 +714,15 @@ button:focus {
 }
 
 .btn-primary {
-  color: var(--white-color) !important;
-  background-color: var(--button-primary-bg) !important;
-  border-color: var(--button-border-color) !important;
+  color: var(--color-text) !important;
+  background-color: var(--button-bg-primary) !important;
+  border-color: var(--button-border-primary) !important;
 }
 
 .btn-primary:hover {
-  color: var(--white-color) !important;
-  background-color: var(--button-primary-hover-bg) !important;
-  border-color: var(--button-hover-border-color)d7 !important;
+  color: var(--color-text) !important;
+  background-color: var(--button-bg-primary-hover) !important;
+  border-color: var(--button-border-primary-hover)d7 !important;
 }
 .btn:focus {
   outline: none !important;
@@ -688,33 +735,87 @@ button:focus {
   padding-top: 10px !important;
 }
 
-/* --------- */
-/* About */
-/* --------- */
-
+/*================================================================
+  7. About Section
+================================================================*/
 .about-section {
   position: relative !important;
   z-index: 1;
   padding-top: 150px !important;
   padding-bottom: 30px !important;
-  background-image: var(--section-background-color) !important;
+  background-image: var(--bg-gradient-section) !important;
   color: white !important;
 }
 
+.about__row {
+  justify-content: center;
+  padding: 10px;
+}
+
+.about__content-col {
+  justify-content: center;
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
+
+.about__title {
+  font-size: 2.1em;
+  padding-bottom: 20px;
+}
+
+.about__image-col {
+  padding-top: 120px;
+  padding-bottom: 50px;
+}
+
+.about-card__paragraph {
+  text-align: justify;
+}
+
+.about-card__quote {
+  margin-top: 40px;
+}
+
+.github__row {
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.github__title {
+  padding-bottom: 20px;
+}
+
+.tech-stack__row {
+  justify-content: center;
+  padding-bottom: 50px;
+}
+
+.tech-stack__col {
+  padding: 10px;
+}
+
+.tech-stack__icon-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
 .tech-icons {
-  font-size: 4.8em !important; /* 图标大小 */
+  font-size: 4.8em !important;
   margin: 10px !important;
   padding: 10px !important;
   opacity: 0.93 !important;
-  border: 1.7px solid var(--tech-icon-border) !important;
+  border: 1.7px solid var(--icon-border-tech) !important;
   border-radius: 15px !important;
-  box-shadow: 4px 5px 4px 3px rgba(4, 108, 168, 0.137) !important;
+  box-shadow: 4px 5px 4px 3px var(--icon-shadow-tech) !important;
   overflow: hidden !important;
-  transition: transform 0.3s ease, border 0.3s ease !important; /* 只平滑需要的属性 */
-  backdrop-filter: blur(10px) !important; /* Standard syntax */
-  -webkit-backdrop-filter: blur(10px) !important; /* For Safari */
-
-  /* 使用 Flexbox 居中 */
+  transition: transform 0.3s ease, border 0.3s ease !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
@@ -722,15 +823,16 @@ button:focus {
 
 @media (max-width: 767px) {
   .tech-icons {
-    margin: 0 !important; /* 缩小间距以适应小屏幕 */
-    font-size: 4em !important; /* 调整字体大小 */
-    padding: 15px !important; /* 调整内部间距 */
+    margin: 0 !important;
+    font-size: 4em !important;
+    padding: 15px !important;
   }
 }
 
 .tech-icons:hover {
-  transform: scale(1.1) !important; /* 更明显的放大效果 */
-  border: 2.2px solid var(--tech-icon-hover-border) !important; /* 增强悬停边框 */
+  transform: scale(1.1) !important;
+  border: 2.2px solid var(--icon-border-tech-hover) !important;
+  color: inherit !important;
 }
 
 .tech-icons:active {
@@ -738,12 +840,11 @@ button:focus {
   transition: transform 0.1s ease !important;
 }
 
-/* 用于 .tech-icon-images 内的内容 */
 .tech-icon-images {
-  padding: 20px !important; /* 调整内部间距 */
-  line-height: 1.6 !important; /* 提高可读性 */
-  display: flex; /* 确保布局灵活 */
-  flex-direction: column; /* 垂直排列内容 */
+  padding: 20px !important;
+  line-height: 1.6 !important;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -765,17 +866,43 @@ button:focus {
     padding-top: 0 !important;
   }
 }
-/* --------- */
-/* Resume */
-/* --------- */
 
+/*================================================================
+  8. Resume
+================================================================*/
 .resume-section {
   position: relative !important;
   z-index: 1;
   padding-top: 110px !important;
   padding-bottom: 30px !important;
-  background-image: var(--section-background-color) !important;
+  background-image: var(--bg-gradient-section) !important;
   color: white !important;
+}
+
+.resume__row {
+  justify-content: center;
+  position: relative;
+}
+
+.resume__download-button {
+  border-radius: 20px;
+  max-width: 250px;
+  color: var(--color-text) !important;
+  background-color: var(--button-bg-primary) !important;
+  border-color: var(--button-border-primary) !important;
+  padding: 6px 30px !important;
+}
+
+.resume__download-button:hover {
+  color: var(--color-text) !important;
+  background-color: var(--button-bg-primary-hover) !important;
+  border-color: var(--button-border-primary-hover) !important;
+}
+
+.resume__page-container {
+  margin-bottom: 20px;
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 .resume {
@@ -813,14 +940,14 @@ button:focus {
 .resume .resume-item {
   padding: 0 0 10px 25px;
   margin-top: -2px;
-  border-left: 2px solid var(--resume-item-border);
+  border-left: 2px solid var(--resume-border-item);
   position: relative;
 }
 
 .resume .resume-item .resume-title {
   line-height: 18px;
   font-size: 0.9em;
-  background: var(--resume-item-bg);
+  background: var(--resume-bg-item);
   padding: 8px 15px;
   display: inline-block;
   font-weight: 600;
@@ -849,8 +976,8 @@ button:focus {
   border-radius: 50px;
   left: -9px;
   top: 0;
-  background: var(--white-color);
-  border: 2px solid var(--resume-item-before-border-color);
+  background: var(--color-text);
+  border: 2px solid var(--resume-border-item-before);
 }
 
 .like-item {
@@ -860,8 +987,8 @@ button:focus {
 }
 
 .like-btn {
-  background-color: var(--like-btn-bg) !important;
-  border-color: var(--like-btn-bg) !important;
+  background-color: var(--button-bg-like) !important;
+  border-color: var(--button-bg-like) !important;
   padding: 0.25rem 0.98rem !important;
   border-radius: 5px !important;
   line-height: 1.4 !important;
@@ -870,8 +997,8 @@ button:focus {
 
 .like-btn:hover {
   transform: translateY(-2px) !important;
-  background-color: var(--like-btn-hover-bg) !important;
-  border-color: var(--like-btn-hover-bg) !important;
+  background-color: var(--button-bg-like-hover) !important;
+  border-color: var(--button-bg-like-hover) !important;
 }
 
 .animate-like {
@@ -896,7 +1023,7 @@ button:focus {
 
 .fork-btn-inner {
   line-height: 1.4em !important;
-  background-color: var(--fork-btn-bg) !important;
+  background-color: var(--button-bg-fork) !important;
   padding: 0.25rem 1.1rem !important;
   vertical-align: middle !important;
   text-align: center !important;
@@ -904,8 +1031,8 @@ button:focus {
 
 .fork-btn-inner:hover {
   transform: translateY(-2px) !important;
-  background-color: var(--fork-btn-hover-bg) !important;
-  border-color: var(--fork-btn-hover-bg) !important;
+  background-color: var(--button-bg-fork-hover) !important;
+  border-color: var(--button-bg-fork-hover) !important;
 }
 
 .fork-btn-inner::after {

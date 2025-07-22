@@ -1,9 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap");
 body {
   margin: 0;
   font-family: "Raleway", serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: linear-gradient(to right, rgb(15, 28, 35) 0%, rgb(25, 85, 93) 50%, rgb(15, 28, 35) 100%);
-  z-index: -1; /* 置于底层 */
+  background-image: var(--bg-body);
 }

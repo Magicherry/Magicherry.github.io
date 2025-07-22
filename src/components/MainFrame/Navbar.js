@@ -72,22 +72,22 @@ function NavBar() {
             <Nav className="ms-auto d-none d-md-flex" defaultActiveKey="#home">
               <Nav.Item>
                 <Nav.Link as={Link} to="/" onClick={closeNavbar}>
-                  <AiOutlineHome style={{ marginBottom: "2px" }} /> HOME
+                  <AiOutlineHome className="navbar-icon" /> HOME
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link as={Link} to="/about" onClick={closeNavbar}>
-                  <AiOutlineUser style={{ marginBottom: "2px" }} /> ABOUT
+                  <AiOutlineUser className="navbar-icon" /> ABOUT
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link as={Link} to="/project" onClick={closeNavbar}>
-                  <AiOutlineFundProjectionScreen style={{ marginBottom: "2px" }} /> PROJECTS
+                  <AiOutlineFundProjectionScreen className="navbar-icon" /> PROJECTS
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link as={Link} to="/resume" onClick={closeNavbar}>
-                  <CgFileDocument style={{ marginBottom: "2px" }} /> RESUME
+                  <CgFileDocument className="navbar-icon" /> RESUME
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item className="fork-btn">
@@ -96,8 +96,8 @@ function NavBar() {
                   target="_blank"
                   className="fork-btn-inner"
                 >
-                  <CgGitFork style={{ fontSize: "1.2em" }} />{" "}
-                  <AiFillStar style={{ fontSize: "1.1em" }} />
+                  <CgGitFork className="navbar-fork-icon" />{" "}
+                  <AiFillStar className="navbar-star-icon" />
                 </Button>
               </Nav.Item>
             </Nav>

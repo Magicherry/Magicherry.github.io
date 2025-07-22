@@ -77,10 +77,10 @@ const Projects = () => (
       <h1 className="project-heading">
         My Recent <strong className="blue">Works</strong>
       </h1>
-      <p style={{ color: "white", fontSize: "1.5rem" }}>
+      <p className="projects__paragraph">
         My works make use of a vast variety of the latest technology tools.
       </p>
-      <Row style={{ justifyContent: "center", paddingBottom: "10px" }}>
+      <Row className="projects__row">
         {projects.map((project, index) => (
           <Col md={4} className="project-card" key={index}>
             <ProjectCard

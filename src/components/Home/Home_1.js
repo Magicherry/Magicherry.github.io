@@ -13,7 +13,7 @@ function Home_1() {
         <Container className="home-content">
           <Row>
             <Col md={7} className="home-header">
-              <h1 style={{ paddingBottom: 15 }} className="heading">
+              <h1 className="heading home__title">
                 Hi There!{" "}
                 <span className="wave" role="img" aria-labelledby="wave">
                   👋🏻
@@ -26,17 +26,16 @@ function Home_1() {
                 .
               </h1>
 
-              <div style={{ padding: 50, textAlign: "left" }}>
+              <div className="home__typewriter-container">
                 <TypeWord />
               </div>
             </Col>
 
-            <Col md={5} style={{ paddingBottom: 20 }}>
+            <Col md={5} className="home__image-col">
               <img
                 src={homeLogo}
                 alt="home pic"
-                className="img-fluid"
-                style={{ maxHeight: "450px" }}
+                className="img-fluid home__image"
               />
             </Col>
           </Row>

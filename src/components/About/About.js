@@ -12,24 +12,19 @@ function About() {
     <Container fluid className="about-section">
       <Particle />
       <Container >
-        <Row style={{ justifyContent: "center", padding: "10px" }}>
+        <Row className="about__row">
           <Col
             md={7}
-            style={{
-              justifyContent: "center",
-              paddingTop: "30px",
-              paddingBottom: "50px",
-            }}
+            className="about__content-col"
           >
-            <h1 style={{ fontSize: "2.1em", paddingBottom: "20px" }}>
+            <h1 className="about__title">
               Know Who <strong className="blue">I'M</strong>
             </h1>
             <Aboutcard />
           </Col>
           <Col
             md={5}
-            style={{ paddingTop: "120px", paddingBottom: "50px" }}
-            className="about-img"
+            className="about__image-col about-img"
           >
             <img src={laptopImg} alt="about" className="img-fluid" />
           </Col>
