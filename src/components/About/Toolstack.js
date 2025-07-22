@@ -1,5 +1,6 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
+import FadeInOnScroll from "../MainFrame/FadeInOnScroll";
 import {
     SiVisualstudiocode,
     SiMacos,
@@ -20,21 +21,23 @@ const toolStackIcons = [
 
 function Toolstack() {
     return (
-        <Row className="tech-stack__row">
-            {toolStackIcons.map((tool, index) => (
-                <Col key={index} xs={4} md={2} className="tech-stack__col">
-                    <a
-                        className="tech-icons tech-stack__icon-link"
-                        href={tool.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        title={tool.name} // 悬停时显示工具名称
-                    >
-                        {tool.icon}
-                    </a>
-                </Col>
-            ))}
-        </Row>
+        <FadeInOnScroll>
+            <Row className="tech-stack__row">
+                {toolStackIcons.map((tool, index) => (
+                    <Col key={index} xs={4} md={2} className="tech-stack__col">
+                        <a
+                            className="tech-icons tech-stack__icon-link"
+                            href={tool.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title={tool.name} // 悬停时显示工具名称
+                        >
+                            {tool.icon}
+                        </a>
+                    </Col>
+                ))}
+            </Row>
+        </FadeInOnScroll>
     );
 }
 

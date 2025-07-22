@@ -1,5 +1,6 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
+import FadeInOnScroll from "../MainFrame/FadeInOnScroll";
 import {
   DiJavascript1,
   DiReact,
@@ -11,7 +12,7 @@ import {
 } from "react-icons/di";
 import { IoLogoVue } from "react-icons/io5";
 import { SiSpringboot, SiRedis, SiNextdotjs } from "react-icons/si";
-import { CgCPlusPlus } from "react-icons/cg"; // 正确的导入路径
+import { CgCPlusPlus } from "react-icons/cg";
 
 const techStackIcons = [
   { icon: <CgCPlusPlus />, name: "C++", link: "https://isocpp.org/" },
@@ -30,21 +31,23 @@ const techStackIcons = [
 
 function Techstack() {
   return (
+    <FadeInOnScroll>
       <Row className="tech-stack__row">
         {techStackIcons.map((tech, index) => (
             <Col key={index} xs={4} md={2} className="tech-stack__col">
-              <a
-                  className="tech-icons tech-stack__icon-link"
-                  href={tech.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={tech.name} // 悬停显示技能名称
-              >
-                {tech.icon}
-              </a>
+                <a
+                    className="tech-icons tech-stack__icon-link"
+                    href={tech.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={tech.name} // 悬停显示技能名称
+                >
+                  {tech.icon}
+                </a>
             </Col>
         ))}
       </Row>
+    </FadeInOnScroll>
   );
 }
 
