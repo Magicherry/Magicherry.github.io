@@ -1,7 +1,8 @@
 export const researchExperience = [
     {
         title: "Research Assistant",
-        company: "RUTGERS NJT GROUP, RUTGERS Center for Advanced Infrastructure and Transportation (CAIT)",
+        department: "Rail Network Modelling Project",
+        company: "RUTGERS Center for Advanced Infrastructure and Transportation (CAIT)",
         duration: "06/2025 - Present",
         description: [
             "Assisted with the preparation of data for the rail network modelling project.",
@@ -12,7 +13,8 @@ export const researchExperience = [
 
 export const internshipExperience = [
     {
-        title: "Front-end Engineer, Product Technology Department",
+        title: "Front-end Engineer",
+        department: "Product Technology Department",
         company: "Shanghai Tenchii Digital Tech Co., Ltd. (Tencent x Shentong Metro Group)",
         duration: "06/2023 - 08/2023",
         description: [
@@ -24,7 +26,8 @@ export const internshipExperience = [
         ]
     },
     {
-        title: "Software Test Engineer, Quality Assurance Department",
+        title: "Software Test Engineer",
+        department: "Quality Assurance Department",
         company: "Shanghai Spacecraft Electromechanical Equipment Co., Ltd.",
         duration: "06/2022 - 09/2022",
         description: [
