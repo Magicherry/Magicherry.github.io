@@ -3,6 +3,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import ProjectCard from "./ProjectCards";
 import Particle from "../MainFrame/Particle";
 import { BsGridFill, BsListUl } from "react-icons/bs";
+import { Slide } from "react-awesome-reveal";
 
 // 项目数据
 const projects = [
@@ -92,10 +93,12 @@ const Projects = () => {
               className="project-card"
               key={index}
             >
-              <ProjectCard
-                {...project}
-                viewMode={viewMode}
-              />
+              <Slide direction="up" duration={500} delay={index * 30} triggerOnce>
+                <ProjectCard
+                  {...project}
+                  viewMode={viewMode}
+                />
+              </Slide>
             </Col>
           ))}
         </Row>

@@ -1,0 +1,58 @@
+.experience-section {
+    position: relative !important;
+    padding-top: 150px !important;
+    padding-bottom: 100px !important;
+    background-image: var(--section-background-url) !important;
+  }
+  
+  .vertical-timeline-element-title {
+    color: var(--color-text-accent) !important;
+    margin-bottom: 0.5rem;
+  }
+  
+  .vertical-timeline-element-subtitle {
+    color: rgba(255, 255, 255, 0.9) !important;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .experience-description {
+    text-align: left;
+    padding-left: 20px;
+    color: rgba(255, 255, 255, 0.85) !important;
+    line-height: 1.4;
+    font-size: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 15px;
+    margin-top: 15px;
+  }
+
+  .experience-description li {
+    padding-bottom: 8px;
+  }
+
+  .experience-description li::marker {
+    color: var(--color-text-accent);
+  }
+
+  .vertical-timeline-element-content {
+    background-color: rgba(54, 115, 134, 0.5) !important; /* Derived from --button-bg-primary and made transparent */
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important; /* For Safari */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    transition: transform 0.3s ease, border 0.3s ease !important;
+  }
+
+  .vertical-timeline-element-content:hover {
+    transform: scale(1.05) !important;
+  }
+
+  .vertical-timeline-element-content:active {
+    transform: scale(0.98) !important;
+    transition: transform 0.1s ease !important;
+  }
+
+  .vertical-timeline-element-content .vertical-timeline-element-date {
+    color: #fff !important;
+  }
+  

@@ -6,6 +6,7 @@ import About from "./components/About/About";
 import Projects from "./components/Projects/Projects";
 import Footer from "./components/MainFrame/Footer";
 import Resume from "./components/Resume/ResumeNew";
+import Experiences from "./components/Experiences/Experiences";
 import {
   BrowserRouter as Router,
   Route,
@@ -17,6 +18,7 @@ import "./css/style.css";
 import "./css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./css/responsive.css";
+import "./components/Experiences/Experiences.css";
 
 function App() {
   const [load, upadateLoad] = useState(true);
@@ -40,6 +42,7 @@ function App() {
           <Route path="/project" element={<Projects />} />
           <Route path="/about" element={<About />} />
           <Route path="/resume" element={<Resume />} />
+          <Route path="/experiences" element={<Experiences />} />
           <Route path="*" element={<Navigate to="/"/>} />
         </Routes>
         <Footer />

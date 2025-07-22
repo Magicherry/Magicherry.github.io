@@ -10,6 +10,7 @@ function TypeWord() {
           "Front-end Developer",
           "Back-end Developer",
             "Test Engineer",
+            "Data Analysis",
         ],
         autoStart: true,
         loop: true,

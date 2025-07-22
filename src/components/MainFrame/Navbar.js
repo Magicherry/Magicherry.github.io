@@ -8,6 +8,7 @@ import {
   AiOutlineFundProjectionScreen,
   AiOutlineUser,
 } from "react-icons/ai";
+import { MdWorkOutline } from "react-icons/md";
 
 function NavBar() {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -81,6 +82,11 @@ function NavBar() {
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
+                <Nav.Link as={Link} to="/experiences" onClick={closeNavbar}>
+                  <MdWorkOutline className="navbar-icon" /> EXPERIENCES
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
                 <Nav.Link as={Link} to="/project" onClick={closeNavbar}>
                   <AiOutlineFundProjectionScreen className="navbar-icon" /> PROJECTS
                 </Nav.Link>
@@ -118,6 +124,12 @@ function NavBar() {
             <Nav.Link as={NavLink} to="/about" onClick={closeNavbar}>
               <AiOutlineUser />
               <span>ABOUT</span>
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link as={NavLink} to="/experiences" onClick={closeNavbar}>
+              <MdWorkOutline />
+              <span>EXPERIENCES</span>
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
