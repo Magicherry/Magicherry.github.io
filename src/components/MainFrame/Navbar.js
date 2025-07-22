@@ -15,36 +15,36 @@ function NavBar() {
   const [isNavbarHidden, setIsNavbarHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  // const controlNavbar = () => {
-  //   if (typeof window !== 'undefined') {
-  //     if (window.scrollY > lastScrollY && window.scrollY > 80) { // if scroll down hide the navbar
-  //       setIsNavbarHidden(true);
-  //     } else { // if scroll up show the navbar
-  //       setIsNavbarHidden(false);
-  //     }
-  //     setLastScrollY(window.scrollY);
-  //   }
-  // };
-  //
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     window.addEventListener('scroll', controlNavbar);
-  //
-  //     return () => {
-  //       window.removeEventListener('scroll', controlNavbar);
-  //     };
-  //   }
-  // }, [lastScrollY]);
-  //
-  //
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     setIsScrolled(window.scrollY >= 20);
-  //   };
-  //
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, []);
+  const controlNavbar = () => {
+    if (typeof window !== 'undefined') {
+      if (window.scrollY > lastScrollY && window.scrollY > 80) { // if scroll down hide the navbar
+        setIsNavbarHidden(true);
+      } else { // if scroll up show the navbar
+        setIsNavbarHidden(false);
+      }
+      setLastScrollY(window.scrollY);
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', controlNavbar);
+
+      return () => {
+        window.removeEventListener('scroll', controlNavbar);
+      };
+    }
+  }, [lastScrollY]);
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY >= 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const closeNavbar = () => setIsExpanded(false);
 
