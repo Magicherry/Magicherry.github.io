@@ -84,6 +84,7 @@
       Footer
   ====================*/
   --footer-color-email-hover: #3de8ff;
+  --footer-social-link-icon-hover: #5bdef5;
 }
 
 .blue {
@@ -542,6 +543,10 @@ body.homepage .home-about-section {
   color: white;
 }
 
+.footer__social-link:hover {
+  color: var(--footer-social-link-icon-hover);
+}
+
 .footer {
   background-color: var(--bg-footer);
   bottom: 0 !important;
@@ -580,6 +585,8 @@ body.homepage .home-about-section {
   margin-bottom: 0.5em !important;
   padding: 0 !important;
 }
+
+
 
 .email-link {
   color: var(--color-text) !important;
