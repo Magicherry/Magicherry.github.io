@@ -135,3 +135,23 @@
     font-size: 0.9rem;
   }
 }
+
+@media (max-width: 991px) {
+  .project-card-list-view {
+    flex-direction: column !important;
+  }
+
+  .project-card-list-view__image-container {
+    width: 100%;
+    max-width: 400px; /* Constrain the image width on smaller screens */
+    margin: 0 auto 20px auto; /* Center the container */
+  }
+
+  .project-card-list-view__content {
+    text-align: center;
+  }
+
+  .project-card-list-view__description {
+    text-align: left;
+  }
+}

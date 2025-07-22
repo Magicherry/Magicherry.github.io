@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import homeLogo from "../../Assets/home/home-main.svg";
 import Particle from "../MainFrame/Particle";
@@ -6,6 +6,13 @@ import Home_2 from "./Home_2";
 import TypeWord from "./TypeWord";
 
 function Home_1() {
+  useEffect(() => {
+    document.body.classList.add("homepage");
+    return () => {
+      document.body.classList.remove("homepage");
+    };
+  }, []);
+
   return (
     <section>
       <Container fluid className="home-section" id="home">

@@ -304,6 +304,22 @@ button:focus {
 /*================================================================
   4. Home Section
 ================================================================*/
+body.homepage::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: var(--bg-gradient-section);
+  z-index: -1;
+}
+
+body.homepage .home-section,
+body.homepage .home-about-section {
+  background: transparent !important;
+}
+
 .home__title {
   padding-bottom: 15px;
 }
@@ -366,6 +382,7 @@ button:focus {
   background-size: cover !important;
   width: 100%;
   height: 100%;
+  z-index: -1;
 }
 
 .home-header {
@@ -439,7 +456,7 @@ button:focus {
 .home-about-section {
   position: relative;
   padding-bottom: 70px !important;
-  padding-top: 70px !important;
+  padding-top: 10px !important;
 }
 
 .home-about-description {
@@ -582,6 +599,32 @@ button:focus {
 /*================================================================
   6. Projects
 ================================================================*/
+.view-switcher__button {
+  background-color: transparent !important;
+  border: 1px solid var(--button-border-primary) !important;
+  color: var(--color-text-accent) !important;
+  margin-left: 10px !important;
+  transition: all 0.3s ease !important;
+}
+
+.view-switcher__button:hover {
+  background-color: var(--button-bg-primary-hover, rgba(46, 109, 255, 0.08)) !important;
+  border-color: var(--button-border-primary) !important;
+  color: var(--color-text-accent) !important;
+  /* 保持和普通态风格一致，只是弱化变化 */
+  box-shadow: 0 2px 8px 0 rgba(46, 109, 255, 0.08);
+  cursor: pointer;
+}
+
+.view-switcher__button--active {
+  background-color: var(--button-bg-primary) !important;
+  color: var(--color-text) !important;
+}
+
+.view-switcher__button--active svg {
+  color: var(--color-text) !important;
+}
+
 .projects__paragraph {
   color: white;
   font-size: 1.5rem;
@@ -590,6 +633,11 @@ button:focus {
 .projects__row {
   justify-content: center;
   padding-bottom: 10px;
+}
+
+.projects__row.list .project-card {
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
 }
 
 .project-section {
@@ -601,28 +649,312 @@ button:focus {
 }
 
 .project-card {
-  padding-top: 50px !important;
-  padding-bottom: 50px !important;
+  padding-top: 30px !important;
+  padding-bottom: 30px !important;
   padding-left: 25px !important;
   padding-right: 25px !important;
   height: auto !important;
   border-radius: 10px !important;
 }
 
+.project-card-wrapper {
+  text-align: center;
+}
+
+.project-card__static-title {
+  margin-top: 25px;
+  color: var(--color-text-accent);
+  font-size: 1.6rem;
+  font-weight: normal;
+}
+
 .project-card-view {
   box-shadow: 0 4px 5px 3px var(--card-shadow-project) !important;
   color: var(--color-text) !important;
   background-color: transparent !important;
-  opacity: 0.9 !important;
   transition: all 0.4s ease 0s !important;
   height: 100% !important;
   border-radius: 15px !important;
-  backdrop-filter: blur(15px) !important;
-  -webkit-backdrop-filter: blur(15px) !important;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
+  overflow: hidden;
 }
+
+.project-card__image-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.project-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease-in-out;
+}
+
+.project-card-view:hover .project-card__image {
+  transform: scale(1.1);
+}
+
+.project-card__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /*background-color: rgba(0, 0, 0, 0.6);*/
+  background-color: rgba(13, 22, 26, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.project-card-view:hover .project-card__overlay {
+  opacity: 1;
+}
+
+.project-card__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.project-card__tags {
+  margin-bottom: 15px;
+}
+
+.project-card__tag {
+  background-color: var(--button-bg-primary);
+  color: var(--color-text);
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin: 0 5px;
+  font-size: 0.8rem;
+}
+
+.project-card__description {
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.project-card__buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.project-card__button {
+  background-color: var(--button-bg-primary-hover) !important;
+  border-color: var(--button-border-primary-hover) !important;
+}
+
+/*================================================================
+  Projects - List View
+================================================================*/
+.project-card-list-view {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important; /* Force items to stretch to equal height */
+  background: transparent !important;
+  box-shadow: 0 4px 5px 3px var(--card-shadow-project) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 15px !important;
+  padding: 20px !important;
+  margin-bottom: 5px !important; /* Further minimized margin */
+  border: 1px solid rgba(137, 204, 230, 0.2);
+  transition: all 0.3s ease-in-out;
+  color: var(--color-text) !important;
+  text-align: left;
+}
+
+.project-card-list-view:hover {
+  transform: scale(1.03) !important;
+  box-shadow: 0 4px 4px 5px var(--card-shadow-project-hover) !important;
+}
+
+.project-card-list-view:active {
+  transform: scale(0.98) !important;
+  transition: transform 0.1s ease !important;
+}
+
+.project-card-list-view__image-container {
+  width: 220px;
+  flex-shrink: 0;
+  margin-right: 25px;
+}
+
+.project-card-list-view__image {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.project-card-list-view__content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.project-card-list-view__title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--color-text-accent);
+}
+
+.project-card-list-view__tags {
+  margin-bottom: 15px;
+}
+
+.project-card-list-view__tag {
+  background-color: var(--button-bg-primary);
+  color: var(--color-text);
+  padding: 4px 12px;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 0.8rem;
+}
+
+.project-card-list-view__description {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex-grow: 1;
+  color: var(--color-text);
+}
+
+.project-card-list-view__buttons {
+  margin-top: auto;
+}
+
+.project-card-list-view:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-color: rgba(137, 204, 230, 0.5);
+}
+
+.project-card-list-view__image-container {
+  width: 220px;
+  flex-shrink: 0;
+  margin-right: 25px;
+}
+
+.project-card-list-view__image {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.project-card-list-view__content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.project-card-list-view__title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--color-text-accent);
+}
+
+.project-card-list-view__tags {
+  margin-bottom: 15px;
+}
+
+.project-card-list-view__tag {
+  background-color: var(--button-bg-primary);
+  color: var(--color-text);
+  padding: 4px 12px;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 0.8rem;
+}
+
+.project-card-list-view__description {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex-grow: 1;
+  color: var(--color-text) !important;
+}
+
+.project-card-list-view__buttons {
+  margin-top: auto;
+}
+
+.project-card-list-view:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-color: rgba(137, 204, 230, 0.5);
+}
+
+.project-card-list-view__image-container {
+  width: 220px;
+  flex-shrink: 0;
+  margin-right: 25px;
+}
+
+.project-card-list-view__image {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.project-card-list-view__content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%; /* Ensure content takes full height to align buttons at bottom */
+}
+
+.project-card-list-view__title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--color-text-accent);
+}
+
+.project-card-list-view__tags {
+  margin-bottom: 15px;
+}
+
+.project-card-list-view__tag {
+  background-color: var(--button-bg-primary);
+  color: var(--color-text);
+  padding: 4px 12px;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 0.8rem;
+}
+
+.project-card-list-view__description {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex-grow: 1;
+  color: var(--color-text) !important;
+}
+
+.project-card-list-view__buttons .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-card-list-view__buttons {
+  margin-top: auto; /* Pushes buttons to the bottom */
+}
+
+
 
 .project-card-view:hover {
   transform: scale(1.03) !important;
