@@ -1073,12 +1073,17 @@ body.homepage .home-about-section {
   color: var(--color-text) !important;
   background-color: var(--button-bg-primary) !important;
   border-color: var(--button-border-primary) !important;
+  transition: all 0.3s ease !important;
 }
 
 .btn-primary:hover {
   color: var(--color-text) !important;
   background-color: var(--button-bg-primary-hover) !important;
   border-color: var(--button-border-primary-hover)d7 !important;
+}
+
+.btn-primary:active {
+  transform: translateY(2px) scale(0.98) !important;
 }
 .btn:focus {
   outline: none !important;
