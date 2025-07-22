@@ -36,7 +36,7 @@ const projects = [
     description: "A comprehensive management system built with SpringBoot and MyBatis. Features a secure database with MD5 encryption and a clear separation of front-end and back-end concerns.",
     ghLink: "https://github.com/Magicherry/Management_Web_System",
     demoLink: "https://github.com/Magicherry/Management_Web_System",
-    tags: ["SpringBoot", "MyBatis", "Vue3", "MySQL"],
+    tags: ["SpringBoot", "MyBatis", "MySQL"],
   },
   {
     imgPath: require("../../Assets/projects/music.png"),
