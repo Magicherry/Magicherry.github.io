@@ -116,6 +116,7 @@
   .about-section,
   .resume-section {
     padding-top: 80px !important;
+    padding-bottom: 60px !important;
   }
 
   .home-content {

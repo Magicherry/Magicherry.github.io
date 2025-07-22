@@ -5,6 +5,8 @@ import Particle from "../MainFrame/Particle";
 import { BsGridFill, BsListUl } from "react-icons/bs";
 import { Slide } from "react-awesome-reveal";
 
+import FadeInOnScroll from "../MainFrame/FadeInOnScroll";
+
 // 项目数据
 const projects = [
   {
@@ -93,12 +95,12 @@ const Projects = () => {
               className="project-card"
               key={index}
             >
-              <Slide direction="up" duration={500} delay={index * 30} triggerOnce>
+              <FadeInOnScroll delay={index * 100}>
                 <ProjectCard
                   {...project}
                   viewMode={viewMode}
                 />
-              </Slide>
+              </FadeInOnScroll>
             </Col>
           ))}
         </Row>
