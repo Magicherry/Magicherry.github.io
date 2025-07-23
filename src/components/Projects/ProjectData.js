@@ -1,11 +1,19 @@
 export const projects = [
     {
+        imgPath: require("../../Assets/projects/NJT Graph Processor.png"),
+        title: "NJT Graph Processor",
+        description: "A Qt native application converting raw train data into intuitive and visual graphs. Helps researcher easily understand and analyze train activity for a specific day and location.",
+        tags: ["Python", "Matplotlab", "QT Native"],
+        type: "Company Internal"
+    },
+    {
         imgPath: require("../../Assets/projects/AYE.png"),
         title: "AyeNote Online Cloud Notes",
         description: "A full-stack note-taking application featuring a Vue3 front-end and a Django back-end. Includes web scraping and data mining capabilities to analyze user data.",
         ghLink: "https://github.com/Magicherry/AyeNote",
         demoLink: "https://github.com/Magicherry/AyeNote",
         tags: ["Python", "Django", "Vue3"],
+        type: "Personal"
     },
     {
         imgPath: require("../../Assets/projects/KOB.png"),
@@ -14,6 +22,7 @@ export const projects = [
         ghLink: "https://github.com/Magicherry/King-of-Bots",
         demoLink: "https://github.com/Magicherry/King-of-Bots",
         tags: ["Java", "SpringBoot", "Vue3", "MySQL"],
+        type: "Personal"
     },
     {
         imgPath: require("../../Assets/projects/Movenet.png"),
@@ -22,6 +31,7 @@ export const projects = [
         ghLink: "https://github.com/Magicherry/Pose_Estimation",
         demoLink: "https://github.com/Magicherry/Pose_Estimation",
         tags: ["Computer Vision", "Python", "Movenet"],
+        type: "Personal"
     },
     {
         imgPath: require("../../Assets/projects/Book.png"),
@@ -30,6 +40,7 @@ export const projects = [
         ghLink: "https://github.com/Magicherry/Management_Web_System",
         demoLink: "https://github.com/Magicherry/Management_Web_System",
         tags: ["SpringBoot", "MyBatis", "MySQL"],
+        type: "Personal"
     },
     {
         imgPath: require("../../Assets/projects/music.png"),
@@ -38,6 +49,7 @@ export const projects = [
         ghLink: "https://github.com/Magicherry/Music-App-Ui-Design",
         demoLink: "https://github.com/Magicherry/Music-App-Ui-Design",
         tags: ["Axure RP"],
+        type: "Personal"
     },
     {
         imgPath: require("../../Assets/projects/KOF.png"),
@@ -46,5 +58,6 @@ export const projects = [
         ghLink: "https://github.com/Magicherry/King-of-Fighters",
         demoLink: "https://github.com/Magicherry/King-of-Fighters",
         tags: ["HTML", "JavaScript"],
+        type: "Personal"
     },
 ];

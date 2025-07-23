@@ -623,6 +623,46 @@ body.homepage .home-about-section {
 /*================================================================
   6. Projects
 ================================================================*/
+.project-card-list-view__type-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.project-card__type-container {
+    margin-bottom: 15px;
+}
+
+.project-card-list-view__type,
+.project-card__type {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.project-card-list-view__type,
+.project-card__type {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.project-card-list-view__type.company,
+.project-card__type.company {
+  background-color: #ffc107; /* Amber */
+  color: #000;
+}
+
+.project-card-list-view__type.personal,
+.project-card__type.personal {
+  background-color: #28a745; /* Green */
+  color: #fff;
+}
+
 .view-switcher__button {
   background-color: transparent !important;
   border: 1px solid var(--button-border-primary) !important;
@@ -655,7 +695,7 @@ body.homepage .home-about-section {
 }
 
 .projects__row {
-  justify-content: center;
+  justify-content: flex-start;
   padding-bottom: 10px;
 }
 
@@ -754,7 +794,23 @@ body.homepage .home-about-section {
 }
 
 .project-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
   margin-bottom: 15px;
+}
+
+.project-card-list-view__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 767px) {
+    .project-card-list-view__tags {
+        justify-content: center;
+    }
 }
 
 .project-card__tag {
@@ -786,6 +842,7 @@ body.homepage .home-about-section {
   Projects - List View
 ================================================================*/
 .project-card-list-view {
+  position: relative !important;
   display: flex !important;
   flex-direction: row !important;
   align-items: stretch !important; /* Force items to stretch to equal height */

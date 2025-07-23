@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import { CgWebsite } from "react-icons/cg";
 import { BsGithub } from "react-icons/bs";
 
-const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, viewMode }) => {
+const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, viewMode, type }) => {
     if (viewMode === "list") {
         return (
             <Card className="project-card-list-view">
@@ -13,6 +13,11 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                 </div>
                 <div className="project-card-list-view__content">
                     <Card.Title className="project-card-list-view__title">{title}</Card.Title>
+                    <div className="project-card-list-view__type-container">
+                        <span className={`project-card-list-view__type ${type === 'Company Internal' ? 'company' : 'personal'}`}>
+                            {type}
+                        </span>
+                    </div>
                     <div className="project-card-list-view__tags">
                         {tags.map((tag, index) => (
                             <span key={index} className="project-card-list-view__tag">
@@ -22,9 +27,9 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                     </div>
                     <Card.Text className="project-card-list-view__description">{description}</Card.Text>
                     <div className="project-card-list-view__buttons">
-                        <Button variant="primary" href={ghLink} target="_blank">
+                        {ghLink && (<Button variant="primary" href={ghLink} target="_blank">
                             <BsGithub /> &nbsp; GitHub
-                        </Button>
+                        </Button>)}
                         {demoLink && (
                             <Button variant="primary" href={demoLink} target="_blank" className="ms-2">
                                 <CgWebsite /> &nbsp; Demo
@@ -43,6 +48,11 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                     <Card.Img variant="top" src={imgPath} alt="Project preview" className="project-card__image" />
                 </div>
                 <div className="project-card__overlay">
+                    <div className="project-card__type-container">
+                        <span className={`project-card__type ${type === 'Company Internal' ? 'company' : 'personal'}`}>
+                            {type}
+                        </span>
+                    </div>
                     <div className="project-card__tags">
                         {tags.map((tag, index) => (
                             <span key={index} className="project-card__tag">
@@ -52,7 +62,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                     </div>
                     <Card.Text className="project-card__description">{description}</Card.Text>
                     <div className="project-card__buttons">
-                        <Button
+                        {ghLink && (<Button
                             variant="primary"
                             href={ghLink}
                             target="_blank"
@@ -60,7 +70,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                         >
                             <BsGithub /> &nbsp;
                             GitHub
-                        </Button>
+                        </Button>)}
                         {demoLink && (
                             <Button
                                 variant="primary"
