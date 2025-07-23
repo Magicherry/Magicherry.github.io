@@ -1399,3 +1399,49 @@ body.homepage .home-about-section {
 .fork-btn-inner::after {
   display: none !important;
 }
+
+/*================================================================
+  Bottom Navbar For Mobile
+================================================================*/
+.bottom-nav-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--navbar-bg-mobile);
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+  transform: translateY(0);
+}
+
+.bottom-nav-hidden {
+  transform: translateY(100%);
+}
+
+.bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+}
+
+.bottom-nav .nav-item {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.bottom-nav .nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--color-text);
+  font-size: 0.7rem;
+}
+
+.bottom-nav .nav-link.active {
+  color: var(--navbar-color-brand);
+}
+
+.bottom-nav .nav-link span {
+  margin-top: 4px;
+}

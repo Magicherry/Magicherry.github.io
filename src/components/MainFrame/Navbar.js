@@ -112,7 +112,7 @@ function NavBar() {
       </Navbar>
 
       {/* This part is for mobile view bottom bar */}
-      <div className="d-md-none bottom-nav-container">
+      <div className={`d-md-none bottom-nav-container ${isNavbarHidden ? "bottom-nav-hidden" : ""}`}>
         <Nav className="bottom-nav">
           <Nav.Item>
             <Nav.Link as={NavLink} to="/" end onClick={closeNavbar}>
