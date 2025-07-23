@@ -1,0 +1,41 @@
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-item {
+    opacity: 0;
+    animation-name: fadeInUp;
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1);
+    animation-fill-mode: forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.15s; }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.pdf-page-fade-in {
+    animation: fadeIn 0.5s ease-in;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(80, 192, 244, 0.25);
+}
+
+.resume-pdf-container {
+    min-height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

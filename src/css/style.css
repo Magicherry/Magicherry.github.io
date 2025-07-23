@@ -1246,12 +1246,12 @@ body.homepage .home-about-section {
 }
 
 .resume__download-button {
-  border-radius: 20px;
-  max-width: 250px;
+  border-radius: 5px !important;
+  max-width: 260px;
   color: var(--color-text) !important;
   background-color: var(--button-bg-primary) !important;
   border-color: var(--button-border-primary) !important;
-  padding: 6px 30px !important;
+  padding: 6px 60px;
 }
 
 .resume__download-button:hover {

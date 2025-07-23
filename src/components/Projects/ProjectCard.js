@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import { CgWebsite } from "react-icons/cg";
 import { BsGithub } from "react-icons/bs";
 
-const ProjectCards = ({ imgPath, title, description, ghLink, demoLink, tags, viewMode }) => {
+const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, viewMode }) => {
     if (viewMode === "list") {
         return (
             <Card className="project-card-list-view">
@@ -80,4 +80,4 @@ const ProjectCards = ({ imgPath, title, description, ghLink, demoLink, tags, vie
     );
 };
 
-export default ProjectCards;
+export default ProjectCard;
