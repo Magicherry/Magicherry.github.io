@@ -18,7 +18,12 @@ function NavBar() {
 
   const controlNavbar = () => {
     if (typeof window !== 'undefined') {
-      if (window.scrollY > lastScrollY && window.scrollY > 80) { // if scroll down hide the navbar
+      // Check if the user has scrolled to the bottom of the page
+      const isAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 10; // 10px buffer
+
+      if (isAtBottom) {
+        setIsNavbarHidden(false); // Always show navbar at the bottom
+      } else if (window.scrollY > lastScrollY && window.scrollY > 80) { // if scroll down hide the navbar
         setIsNavbarHidden(true);
       } else { // if scroll up show the navbar
         setIsNavbarHidden(false);
@@ -37,6 +42,14 @@ function NavBar() {
     }
   }, [lastScrollY]);
 
+  useEffect(() => {
+    if (isNavbarHidden) {
+      document.body.classList.add("bottom-nav-is-hidden");
+    } else {
+      document.body.classList.remove("bottom-nav-is-hidden");
+    }
+  }, [isNavbarHidden]);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,7 +67,7 @@ function NavBar() {
       <Navbar
         expanded={isExpanded}
         fixed="top"
-        expand="md"
+        expand="lg"
         className={`${isScrolled ? "sticky" : "navbar"} ${isNavbarHidden ? "navbar-hidden" : ""}`}
       >
         <Container>
@@ -70,7 +83,7 @@ function NavBar() {
 
           <Navbar.Collapse id="responsive-navbar-nav">
             {/* This part is for desktop view */}
-            <Nav className="ms-auto d-none d-md-flex" defaultActiveKey="#home">
+            <Nav className="ms-auto d-none d-lg-flex" defaultActiveKey="#home">
               <Nav.Item>
                 <Nav.Link as={NavLink} to="/" onClick={closeNavbar}>
                   <AiOutlineHome className="navbar-icon" /> HOME
@@ -112,7 +125,7 @@ function NavBar() {
       </Navbar>
 
       {/* This part is for mobile view bottom bar */}
-      <div className={`d-md-none bottom-nav-container ${isNavbarHidden ? "bottom-nav-hidden" : ""}`}>
+      <div className={`d-lg-none bottom-nav-container ${isNavbarHidden ? "bottom-nav-hidden" : ""}`}>
         <Nav className="bottom-nav">
           <Nav.Item>
             <Nav.Link as={NavLink} to="/" end onClick={closeNavbar}>

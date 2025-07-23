@@ -1,10 +1,7 @@
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   /*================================================================
     Generic Mobile Adjustments
   ================================================================*/
-  body {
-    padding-bottom: 60px; /* Space for the bottom nav */
-  }
 
   .fork-btn {
     display: none !important;
@@ -137,9 +134,20 @@
     max-width: 200px !important;
     font-size: 0.9rem;
   }
-}
 
-@media (max-width: 991px) {
+  .footer {
+    padding-bottom: 80px !important; /* Increased padding for mobile view */
+  }
+
+  .footer {
+    padding-bottom: 70px; /* Space for the bottom nav */
+    transition: padding-bottom 0.3s ease-in-out;
+  }
+
+  body.bottom-nav-is-hidden .footer {
+    padding-bottom: 0;
+  }
+
   .project-card-list-view {
     flex-direction: column !important;
   }
