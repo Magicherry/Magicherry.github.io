@@ -713,8 +713,8 @@ body.homepage .home-about-section {
 }
 
 .project-card {
-  padding-top: 30px !important;
-  padding-bottom: 30px !important;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
   padding-left: 25px !important;
   padding-right: 25px !important;
   height: auto !important;
@@ -1302,13 +1302,17 @@ body.homepage .home-about-section {
   position: relative;
 }
 
-.resume__download-button {
-  border-radius: 5px !important;
-  max-width: 260px;
+.resume__row .resume__download-button {
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  white-space: nowrap;
+  width: auto;
   color: var(--color-text) !important;
   background-color: var(--button-bg-primary) !important;
   border-color: var(--button-border-primary) !important;
-  padding: 6px 60px;
+  padding: 12px 40px !important;
+  border-radius: 5px !important;
 }
 
 .resume__download-button:hover {
