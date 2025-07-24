@@ -36,7 +36,7 @@ const AboutCard = () => {
           </ul>
 
           <p className="blue about-card__quote">
-            <em>"No matter what your dream is, you have to dedicate yourself entirely to it"</em>
+            <em>"No matter what your dream is, you have to dedicate yourself entirely to it."</em>
           </p>
           <footer className="blockquote-footer">AYRTON SENNA</footer>
         </blockquote>
