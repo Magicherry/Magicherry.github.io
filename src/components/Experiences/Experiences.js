@@ -3,7 +3,6 @@ import { Container } from "react-bootstrap";
 import Particle from "../MainFrame/Particle";
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-import "./Experiences.css";
 import { researchExperience, internshipExperience } from "./ExperienceData";
 import { FaBriefcase, FaFlask } from 'react-icons/fa';
 
