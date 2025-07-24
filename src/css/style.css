@@ -709,7 +709,7 @@ body.homepage .home-about-section {
   z-index: 1;
   padding-top: 150px !important;
   padding-bottom: 30px !important;
-  background-image: var(--bg-gradient-section) !important;
+  /*background-image: var(--bg-gradient-section) !important;*/
 }
 
 .project-card {
@@ -1161,7 +1161,7 @@ body.homepage .home-about-section {
   z-index: 1;
   padding-top: 150px !important;
   padding-bottom: 30px !important;
-  background-image: var(--bg-gradient-section) !important;
+  /*background-image: var(--bg-gradient-section) !important;*/
   color: white !important;
 }
 
@@ -1293,7 +1293,7 @@ body.homepage .home-about-section {
   z-index: 1;
   padding-top: 110px !important;
   padding-bottom: 30px !important;
-  background-image: var(--bg-gradient-section) !important;
+  /*background-image: var(--bg-gradient-section) !important;*/
   color: white !important;
 }
 

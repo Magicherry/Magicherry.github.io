@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Preloader from "./components/MainFrame/Pre";
 import Navbar from "./components/MainFrame/Navbar";
-import Home_1 from "./components/Home/Home_1";
+import Home from "./components/Home/Home";
 import About from "./components/About/About";
 import Projects from "./components/Projects/Projects";
 import Footer from "./components/MainFrame/Footer";
@@ -24,6 +24,10 @@ function App() {
   const [load, upadateLoad] = useState(true);
 
   useEffect(() => {
+    document.body.classList.add("homepage");
+  }, []);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       upadateLoad(false);
     }, 1200);
@@ -39,7 +43,7 @@ function App() {
         <ScrollToTop />
         <div className="content-wrap">
           <Routes>
-            <Route path="/" element={<Home_1 />} />
+            <Route path="/" element={<Home />} />
             <Route path="/project" element={<Projects />} />
             <Route path="/about" element={<About />} />
             <Route path="/resume" element={<Resume />} />

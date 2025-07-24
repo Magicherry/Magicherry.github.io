@@ -7,7 +7,7 @@ import { SiBilibili } from "react-icons/si";
 import { FaLinkedinIn } from "react-icons/fa";
 import { FaXTwitter} from "react-icons/fa6";
 
-function Home_2() {
+function Home2() {
   // 社交链接数组
   const socialLinks = [
     {
@@ -111,4 +111,4 @@ function Home_2() {
   );
 }
 
-export default Home_2;
+export default Home2;

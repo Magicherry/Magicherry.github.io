@@ -1,17 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import homeLogo from "../../Assets/home/home-main.svg";
 import Particle from "../MainFrame/Particle";
-import Home_2 from "./Home_2";
+
 import TypeWord from "./TypeWord";
 
-function Home_1() {
-  useEffect(() => {
-    document.body.classList.add("homepage");
-    return () => {
-      document.body.classList.remove("homepage");
-    };
-  }, []);
+function Home1() {
+  
 
   return (
     <section>
@@ -48,9 +43,9 @@ function Home_1() {
           </Row>
         </Container>
       </Container>
-      <Home_2 />
+      
     </section>
   );
 }
 
-export default Home_1;
+export default Home1;
