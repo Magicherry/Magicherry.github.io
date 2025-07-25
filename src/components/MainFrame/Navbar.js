@@ -15,6 +15,8 @@ function NavBar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isNavbarHidden, setIsNavbarHidden] = useState(false);
   const lastScrollYRef = useRef(0);
+  // 用于避免多次 setTimeout 导致多次关闭
+  const scrollTimeoutRef = useRef(null);
 
   useEffect(() => {
     function handleScroll() {
@@ -22,7 +24,14 @@ function NavBar() {
       const atBottom = window.innerHeight + scrollY >= document.body.offsetHeight - 10;
       setIsScrolled(scrollY >= 20);
 
-      // 滚动向下隐藏，滚动向上显示
+      // 滚动时延迟自动关闭展开的汉堡菜单
+      if (isExpanded) {
+        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = setTimeout(() => {
+          setIsExpanded(false);
+        }, 0);
+      }
+
       if (atBottom) {
         setIsNavbarHidden(false);
       } else if (scrollY > lastScrollYRef.current && scrollY > 80) {
@@ -34,8 +43,11 @@ function NavBar() {
     }
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
+  }, [isExpanded]);
 
   const closeNavbar = () => setIsExpanded(false);
 
