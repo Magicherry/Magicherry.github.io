@@ -29,7 +29,7 @@
 
 .pdf-page-fade-in {
     animation: fadeIn 0.5s ease-in;
-    border-radius: 10px;
+    border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 6px 20px rgba(80, 192, 244, 0.25);
 }

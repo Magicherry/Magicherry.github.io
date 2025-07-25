@@ -66,6 +66,14 @@ function ResumeNew() {
                         ))}
                     </Document>
                 </Row>
+                <Row className="resume__row animate-item delay-1">
+                    <div className="d-flex justify-content-center">
+                        <Button className="resume__download-button" variant="primary" href={pdf} target="_blank">
+                            <AiOutlineDownload />
+                            &nbsp;Download CV
+                        </Button>
+                    </div>
+                </Row>
             </Container>
         </div>
     );
