@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Button, Spinner } from "react-bootstrap";
-import Particle from "../MainFrame/Particle";
+
 import pdf from "../../Assets/cv/CV-Yuting Zhou.pdf";
 import { AiOutlineDownload } from "react-icons/ai";
 import { Document, Page, pdfjs } from "react-pdf";
@@ -37,7 +37,7 @@ function ResumeNew() {
     return (
         <div>
             <Container fluid className="resume-section">
-                <Particle />
+                
 
                 <Row className="resume__row animate-item delay-1">
                     <div className="d-flex justify-content-center">
