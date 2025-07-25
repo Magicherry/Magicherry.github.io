@@ -3,5 +3,6 @@ body {
   font-family: "Raleway", serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #0f1c23;
   background-image: var(--bg-body);
 }
