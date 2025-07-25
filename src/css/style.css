@@ -16,7 +16,7 @@ body {
   ====================*/
   --bg-gradient-section: linear-gradient(to bottom left, rgba(17, 16, 16, 0.582), rgba(8, 19, 24, 0.904));
   --bg-gradient-image: linear-gradient(to bottom left, rgba(17, 16, 16, 0.678), rgba(10, 14, 22, 0.863));
-  --bg-body: linear-gradient(to right, rgb(15, 28, 35) 0%, rgb(25, 85, 93) 50%, rgb(15, 28, 35) 100%);
+  
   --bg-preloader: #050b13;
   --bg-footer: rgb(4, 16, 22);
 
@@ -322,16 +322,9 @@ button:focus {
 /*================================================================
   4. Home Section
 ================================================================*/
-body.homepage::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: var(--bg-gradient-section);
-  z-index: -1;
-}
+
+
+
 
 body.homepage .home-section,
 body.homepage .home-about-section {
@@ -401,6 +394,7 @@ body.homepage .home-about-section {
   width: 100%;
   height: 100%;
   z-index: -1;
+  pointer-events: none;
 }
 
 .home-header {
@@ -409,7 +403,7 @@ body.homepage .home-about-section {
 
 .home-section {
   position: relative;
-  background-image: var(--bg-gradient-image), url(../Assets/home/home-bg.jpg);
+  
   background-position: top center;
   background-repeat: no-repeat;
   padding-bottom: 30px !important;
