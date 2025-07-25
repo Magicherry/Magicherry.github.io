@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import Particle from "../MainFrame/Particle";
+
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import { timelines } from "./ExperienceData";
@@ -39,7 +39,7 @@ function ExperienceTimeline({ title, subtitle, data, icon: Icon }) {
 function Experiences() {
     return (
         <Container fluid className="experience-section">
-            <Particle />
+            
             <Container>
                 {timelines.map((props, idx) => (
                     <ExperienceTimeline key={idx} {...props} />
