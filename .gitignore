@@ -1,2 +1,70 @@
-node_modules
+# Bytecode and cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Virtual environments
+env/
+venv/
+ENV/
+.venv/
+
+# IDE and editor settings
 .idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# System files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+
+# Python distribution and packaging
+build/
+node_modules/
+dist/
+*.egg-info/
+*.egg
+*.manifest
+*.spec
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*.bak
+
+# Custom output folders
+Output_Schedule/
+Output_Actual/
+image/
+
+# Unit test / coverage results
+htmlcov/
+.tox/
+.coverage
+.cache/
+.pytest_cache/
+
+# MyPy and Pyre type checker
+.mypy_cache/
+.pyre/
+
+# Profile and test result files
+prof/
+*.prof
+*.pid
+
+# Others (optional, safe to exclude)
+*.sqlite3
+*.db
+*.lock
+*.tgz
+*.tar.gz
+*.zip
+*.orig

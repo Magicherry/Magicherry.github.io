@@ -11,7 +11,11 @@ function Particle() {
     <Particles
       id="tsparticles"
       init={particlesInit}
-      params={{
+      options={{
+        fullScreen: {
+          enable: true,
+          zIndex: -1
+        },
         particles: {
           number: {
             value: 220,
