@@ -3,47 +3,71 @@
     Generic Mobile Adjustments
   ================================================================*/
 
-  .fork-btn {
-    display: none !important;
-  }
+  /*.fork-btn {*/
+  /*  display: none !important;*/
+  /*}*/
 
   /*================================================================
-    Top Navbar (Logo)
-  ================================================================*/
+      Top Navbar (Logo)
+    ================================================================*/
   .navbar {
     transition: top 0.3s ease-in-out;
-    height: 60px;
+    height: 60px; /* Fixed height for stable alignment */
     background-color: var(--navbar-bg-mobile) !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
+    padding: 0 1rem !important;
+    font-size: 1.2rem !important;
+    min-width: 320px; /* Prevent wrapping on very narrow screens */
   }
 
   .navbar .container {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     height: 100%;
-  }
-
-  .navbar-hidden {
-    top: -80px;
+    width: 100%;
+    gap: 1rem; /* Add a small gap between items */
   }
 
   .navbar-brand {
-    position: static !important;
-    transform: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    line-height: 1 !important;
-  }
-
-  .navbar-brand:focus,
-  .navbar-brand:active {
-    outline: none !important;
-    box-shadow: none !important;
+    /* Allow the brand to shrink and truncate if space is tight */
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .navbar-toggler {
+    /* Ensure the hamburger button never shrinks */
+    flex-shrink: 0;
+  }
+
+  /* Position the dropdown menu absolutely to prevent layout shifts */
+  .navbar-collapse.show,
+  .navbar-collapse.collapsing {
+    position: absolute;
+    top: 60px; /* Place it below the 60px navbar */
+    left: 1rem;
+    right: 1rem;
+    width: calc(100% - 2rem);
+    background-color: #1c2634e6;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+  }
+
+  /* Center the items within the collapsed mobile menu */
+  .navbar-collapse .navbar-nav {
+    align-items: center;
+  }
+
+  /* Hide the long underline indicator in the mobile dropdown menu */
+  .navbar-nav .nav-item a::after {
     display: none !important;
   }
 
@@ -112,13 +136,14 @@
   ================================================================*/
   .project-section,
   .about-section,
-  .resume-section {
-    padding-top: 80px !important;
+  .resume-section,
+  .experience-section {
+    padding-top: 100px !important;
     padding-bottom: 60px !important;
   }
 
   .home-content {
-    padding-top: 80px !important;
+    padding-top: 100px !important;
     padding-bottom: 4rem !important;
   }
 

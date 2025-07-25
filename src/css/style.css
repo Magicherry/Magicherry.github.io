@@ -31,7 +31,7 @@ body {
       Navbar
   ====================*/
   --navbar-bg: #1a1f2ea9;
-  --navbar-bg-mobile: #181c27;
+  --navbar-bg-mobile: rgba(24, 28, 39, 0.7);
   --navbar-color-brand: rgb(16, 227, 246);
   --navbar-color-brand-hover: rgb(3, 248, 248);
   --navbar-color-toggler: #50c0f4;
@@ -239,16 +239,7 @@ button:focus {
   opacity: 0.9 !important;
 }
 
-@media (max-width: 767px) {
-  .navbar {
-    padding: 1rem 2rem !important;
-    font-size: 1.4rem !important;
-    background-color: var(--navbar-bg-mobile) !important;
-  }
-  .navbar-nav .nav-item a::after {
-    display: none !important;
-  }
-}
+
 
 .navbar-brand {
   font-size: 1.5rem !important;
