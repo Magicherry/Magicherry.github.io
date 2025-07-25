@@ -50,9 +50,6 @@
             rgba(60, 135, 150, 0.22) 50%,
             rgba(71, 169, 179, 0.25) 100%
     ) !important;
-
-
-
     backdrop-filter: blur(12px) brightness(1.05) !important;
     -webkit-backdrop-filter: blur(12px) brightness(1.05) !important;
     border: 1px solid rgba(255, 255, 255, 0.18) !important;

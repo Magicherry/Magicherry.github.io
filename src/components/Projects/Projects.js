@@ -4,7 +4,7 @@ import ProjectCard from "./ProjectCard";
 import Particle from "../MainFrame/Particle";
 import FadeInOnScroll from "../MainFrame/FadeInOnScroll";
 import { BsGridFill, BsListUl } from "react-icons/bs";
-import { projects } from "./ProjectData"; // <-- Import the project data
+import { projects } from "./ProjectData";
 
 const Projects = () => {
   const [viewMode, setViewMode] = useState("list");
