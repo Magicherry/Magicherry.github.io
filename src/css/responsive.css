@@ -13,9 +13,6 @@
   .navbar {
     transition: top 0.3s ease-in-out;
     height: 60px; /* Fixed height for stable alignment */
-    background-color: var(--navbar-bg-mobile) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
     padding: 0 1rem !important;
     font-size: 1.2rem !important;
     min-width: 320px; /* Prevent wrapping on very narrow screens */
@@ -45,7 +42,7 @@
   .navbar-collapse.show,
   .navbar-collapse.collapsing {
     position: absolute;
-    top: 60px;
+    top: 70px;
     left: 1rem;
     right: 1rem;
     width: calc(100% - 2rem);

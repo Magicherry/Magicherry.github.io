@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import ProjectCard from "./ProjectCard";
-import Particle from "../MainFrame/Particle";
+
 import FadeInOnScroll from "../MainFrame/FadeInOnScroll";
 import { BsGridFill, BsListUl } from "react-icons/bs";
 import { projects } from "./ProjectData";
@@ -11,7 +11,7 @@ const Projects = () => {
 
   return (
       <Container fluid className="project-section">
-        <Particle />
+        
         <Container>
           <h1 className="project-heading">
             My Recent <strong className="blue">Works</strong>
