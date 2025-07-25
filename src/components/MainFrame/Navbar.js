@@ -103,31 +103,31 @@ function NavBar() {
         <div className={`d-lg-none bottom-nav-container ${isNavbarHidden ? "bottom-nav-hidden" : ""}`}>
           <Nav className="bottom-nav">
             <Nav.Item>
-              <Nav.Link as={NavLink} to="/" end>
+              <Nav.Link as={NavLink} to="/" end onClick={closeNavbar}>
                 <AiOutlineHome />
                 <span>HOME</span>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as={NavLink} to="/about">
+              <Nav.Link as={NavLink} to="/about" onClick={closeNavbar}>
                 <AiOutlineUser />
                 <span>ABOUT</span>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as={NavLink} to="/experiences">
+              <Nav.Link as={NavLink} to="/experiences" onClick={closeNavbar}>
                 <MdWorkOutline />
                 <span>EXPERIENCES</span>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as={NavLink} to="/project">
+              <Nav.Link as={NavLink} to="/project" onClick={closeNavbar}>
                 <AiOutlineFundProjectionScreen />
                 <span>PROJECTS</span>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link as={NavLink} to="/resume">
+              <Nav.Link as={NavLink} to="/resume" onClick={closeNavbar}>
                 <CgFileDocument />
                 <span>RESUME</span>
               </Nav.Link>
