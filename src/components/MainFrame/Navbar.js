@@ -10,7 +10,7 @@ import {
 } from "react-icons/ai";
 import { MdWorkOutline } from "react-icons/md";
 
-function NavBar() {
+function NavBar({ triggerPreloader }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isNavbarHidden, setIsNavbarHidden] = useState(false);
@@ -61,7 +61,7 @@ function NavBar() {
             onToggle={setIsExpanded}
         >
           <Container>
-            <Navbar.Brand as={Link} to="/" onClick={closeNavbar}>
+            <Navbar.Brand as={Link} to="/" onClick={() => { closeNavbar(); triggerPreloader(); }}>
               MAGICHERRY.
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav">

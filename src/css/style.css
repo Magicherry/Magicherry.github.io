@@ -166,6 +166,7 @@ button:focus {
   box-shadow: 0 10px 10px 0 var(--navbar-shadow) !important;
   backdrop-filter: blur(15px) !important;
   -webkit-backdrop-filter: blur(15px) !important; /* For Safari */
+  z-index: 10;
 }
 
 .navbar-icon {

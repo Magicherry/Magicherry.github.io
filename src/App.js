@@ -24,6 +24,14 @@ import "./components/Experiences/Experiences.css";
 function App() {
   const [load, upadateLoad] = useState(true);
 
+  const triggerPreloader = () => {
+    upadateLoad(true);
+    const timer = setTimeout(() => {
+      upadateLoad(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  };
+
   useEffect(() => {
     document.body.classList.add("homepage");
   }, []);
@@ -31,7 +39,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       upadateLoad(false);
-    }, 1200);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -40,7 +48,7 @@ function App() {
     <Router>
       <Preloader load={load} />
       <div className="App" id={load ? "no-scroll" : "scroll"}>
-        <Navbar />
+        <Navbar triggerPreloader={triggerPreloader} />
         <Particle />
         <ScrollToTop />
         <div className="content-wrap">
