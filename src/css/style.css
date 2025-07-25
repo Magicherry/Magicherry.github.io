@@ -796,6 +796,7 @@ body.homepage .home-about-section {
 .project-card__tags {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 5px;
   margin-bottom: 15px;
 }
@@ -818,7 +819,6 @@ body.homepage .home-about-section {
   color: var(--color-text);
   padding: 5px 10px;
   border-radius: 5px;
-  margin: 0 5px;
   font-size: 0.8rem;
 }
 
@@ -902,7 +902,6 @@ body.homepage .home-about-section {
   color: var(--color-text);
   padding: 4px 12px;
   border-radius: 5px;
-  margin-right: 10px;
   font-size: 0.8rem;
 }
 
@@ -957,7 +956,6 @@ body.homepage .home-about-section {
   color: var(--color-text);
   padding: 4px 12px;
   border-radius: 5px;
-  margin-right: 10px;
   font-size: 0.8rem;
 }
 
@@ -1013,7 +1011,6 @@ body.homepage .home-about-section {
   color: var(--color-text);
   padding: 4px 12px;
   border-radius: 5px;
-  margin-right: 10px;
   font-size: 0.8rem;
 }
 
