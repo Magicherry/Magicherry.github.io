@@ -8,7 +8,6 @@ import { FaLinkedinIn } from "react-icons/fa";
 import { FaXTwitter} from "react-icons/fa6";
 
 function Home2() {
-  // 社交链接数组
   const socialLinks = [
     {
       href: "https://github.com/Magicherry",
