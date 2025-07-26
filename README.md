@@ -15,7 +15,7 @@
 
 ### 🚀 Framework & Core Upgrade
 
-- **Upgraded to React 19**: Migrated from React 17 to **React 19.1.0**, replacing the legacy rendering method with the modern `createRoot` API for improved performance and future compatibility.
+- **Upgraded to React 18**: Migrated from React 17 to **React 18.3.1**, replacing the legacy rendering method with the modern `createRoot` API for improved performance and future compatibility.
 - **Component Structure Refactoring**: Consolidated core layout components (`Navbar`, `Footer`, etc.) into a unified `MainFrame` directory for cleaner architecture and easier maintenance.
 
 ### 🧱 Page Redesign & New Sections
