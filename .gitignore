@@ -63,7 +63,7 @@ prof/
 # Others (optional, safe to exclude)
 *.sqlite3
 *.db
-*.lock
+
 *.tgz
 *.tar.gz
 *.zip
