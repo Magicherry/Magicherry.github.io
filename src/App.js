@@ -19,7 +19,7 @@ import "./css/style.css";
 import "./css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./css/responsive.css";
-import "./components/Experiences/Experiences.css";
+
 
 function App() {
   const [load, upadateLoad] = useState(true);
