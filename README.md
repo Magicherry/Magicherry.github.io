@@ -1,5 +1,8 @@
-<h2 align="center">Bits of Me - Personal Portfolio <br/> <a href=https://github.com/Magicherry/Bits-of-Me" target="_blank">yutingzhou.website</a>
+<h2 align="center">
+  Bits of Me - Personal Portfolio <br/>
+  <a href="https://github.com/Magicherry/Bits-of-Me" target="_blank">yutingzhou.website</a>
 </h2>
+
 <p align="center">
   This project is a comprehensive overhaul of the original portfolio template by <a href="https://github.com/soumyajit4419" target="_blank">Soumyajit</a>. 
 </p>
