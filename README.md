@@ -1,6 +1,6 @@
 <h2 align="center">
   Bits of Me - Personal Portfolio <br/>
-  <a href="https://github.com/Magicherry/Bits-of-Me" target="_blank">yutingzhou.website</a>
+  <a href="https://yutingzhouwebsite.vercel.app/" target="_blank">yutingzhou.website</a>
 </h2>
 
 <p align="center">
