@@ -98,7 +98,7 @@ function NavBar({ triggerPreloader }) {
                 </Nav.Item>
                 <Nav.Item className="fork-btn">
                   <Button
-                      href="https://github.com/Magicherry/peronsalwebsite"
+                      href="https://github.com/Magicherry/Bits-of-Me"
                       target="_blank"
                       className="fork-btn-inner"
                   >

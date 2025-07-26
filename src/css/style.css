@@ -1426,7 +1426,7 @@ body.homepage .home-about-section {
   vertical-align: middle !important;
   text-align: center !important;
   border-radius: 6px !important;
-
+  border: 1px solid var(--button-border-primary) !important;
 }
 
 .fork-btn-inner:hover {
@@ -1437,6 +1437,11 @@ body.homepage .home-about-section {
 
 .fork-btn-inner::after {
   display: none !important;
+}
+
+.navbar-fork-icon,
+.navbar-star-icon {
+  color: white !important;
 }
 
 /*================================================================

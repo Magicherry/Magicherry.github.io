@@ -4,10 +4,13 @@ import { Container, Row, Button, Spinner } from "react-bootstrap";
 import pdf from "../../Assets/cv/CV-Yuting Zhou.pdf";
 import { AiOutlineDownload } from "react-icons/ai";
 import { Document, Page, pdfjs } from "react-pdf";
-import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import 'react-pdf/dist/Page/AnnotationLayer.css';
 import "./ResumeNew.css";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url,
+).toString();
 
 const LoadingSpinner = () => (
     <div className="resume-pdf-container">
@@ -41,34 +44,35 @@ function ResumeNew() {
 
                 <Row className="resume__row animate-item delay-1">
                     <div className="d-flex justify-content-center">
-                        <Button className="resume__download-button" variant="primary" href={pdf} target="_blank">
+                        <Button className="download-cv-button" variant="primary" href={pdf} target="_blank">
                             <AiOutlineDownload />
                             &nbsp;Download CV
                         </Button>
                     </div>
                 </Row>
 
-                <Row className="resume d-flex flex-column align-items-center animate-item delay-2">
+                <div className="resume-container animate-item delay-2">
                     <Document
                         file={pdf}
                         onLoadSuccess={onDocumentLoadSuccess}
-                        className="d-flex justify-content-center flex-column align-items-center"
                         loading={<LoadingSpinner />}
+                        className="pdf-document"
                     >
                         {Array.from({ length: numPages || 0 }, (_, index) => (
-                            <div key={index + 1} className="pdf-page-fade-in my-2">
+                            <div key={index + 1} className="pdf-page-container">
                                 <Page
                                     pageNumber={index + 1}
-                                    width={width > 786 ? 900 : width - 50}
-                                    loading=""
+                                    width={Math.min(width * 0.9, 1050)}
+                                    renderTextLayer={false}
+                                    renderAnnotationLayer={false}
                                 />
                             </div>
                         ))}
                     </Document>
-                </Row>
-                <Row className="resume__row animate-item delay-1">
+                </div>
+                <Row className="resume__row bottom-download-row animate-item delay-1">
                     <div className="d-flex justify-content-center">
-                        <Button className="resume__download-button" variant="primary" href={pdf} target="_blank">
+                        <Button className="download-cv-button" variant="primary" href={pdf} target="_blank">
                             <AiOutlineDownload />
                             &nbsp;Download CV
                         </Button>

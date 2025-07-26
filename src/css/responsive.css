@@ -163,10 +163,7 @@
     height: auto !important;
   }
 
-  .resume-section .btn {
-    max-width: 200px !important;
-    font-size: 0.9rem;
-  }
+  
 
   .footer {
     padding-bottom: 80px !important; /* Increased padding for mobile view */
