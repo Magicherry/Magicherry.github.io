@@ -47,12 +47,11 @@
     right: 1rem;
     width: calc(100% - 2rem);
     background: rgba(28, 38, 52, 0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
     padding: 1rem;
     border-radius: 20px;
     border: 1px solid rgba(255,255,255,0.1);
-    z-index: 10;
   }
 
   .navbar-collapse .navbar-nav {

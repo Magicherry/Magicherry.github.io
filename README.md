@@ -4,34 +4,38 @@
 </h2>
 
 <p align="center">
-  This project is a comprehensive overhaul of the original portfolio template by <a href="https://github.com/soumyajit4419" target="_blank">Soumyajit</a>. 
+  This project is based on the original portfolio template by <a href="https://github.com/soumyajit4419" target="_blank">Soumyajit</a>. 
 </p>
 <p align="center">
-  <img src="https://img.shields.io/badge/React-19.1.0-blue?logo=react" alt="React Version">
+  <img src="https://img.shields.io/badge/React-18.3.1-blue?logo=react" alt="React Version">
+  <img src="https://img.shields.io/badge/HTML-5-orange?logo=html5" alt="HTML5">
+  <img src="https://img.shields.io/badge/JS-Supported-blueviolet?logo=react" alt="JSX Support">
+  <img src="https://img.shields.io/badge/Node.js-20.x-green?logo=nodedotjs" alt="Node.js">
   <img src="https://img.shields.io/badge/Vercel-Analytics-black?logo=vercel" alt="Vercel Analytics">
   <img src="https://img.shields.io/badge/Status-Maintained-brightgreen" alt="Status">
 </p>
+
 
 ---
 
 ## Modifications
 
-### 🚀 Framework & Core Upgrade
+### 🚀 Framework Upgrade
 
 - **Upgraded to React 18**: Migrated from React 17 to **React 18.3.1**, replacing the legacy rendering method with the modern `createRoot` API for improved performance and future compatibility.
 - **Component Structure Refactoring**: Consolidated core layout components (`Navbar`, `Footer`, etc.) into a unified `MainFrame` directory for cleaner architecture and easier maintenance.
 
-### 🧱 Page Redesign & New Sections
+### 🧱 Page Redesign
 
 - **Projects Page Overhaul**: Completely rewrote the `Projects` page. Introduced both **list** and **grid** views for more flexible content presentation, and restructured page hierarchy for better readability across devices.
 - **New "Experiences" Section**: Added a fully responsive timeline-based section to showcase professional experience, built entirely from scratch.
 
-### 📱 Mobile Optimization & Navigation
+### 📱 Mobile Optimization
 
 - **Bottom Navigation for Mobile**: Added a context-aware, adaptive bottom navigation bar to improve accessibility on smaller screens.
 - **Responsive Layout Refinement**: Audited and optimized layout depth and spacing for mobile, ensuring each page adapts fluidly to different screen sizes.
 
-### ✨ UI & Visual Enhancements
+### ✨ Visual Enhancements
 
 - **Rounded UI Elements**: Applied consistent border-radius styling across buttons, cards, modals, and containers to create a smoother, modernized appearance.
 - **Subtle Background Effects**: Integrated a light `Particle.js` effect on the homepage to enrich visual depth without distraction.
