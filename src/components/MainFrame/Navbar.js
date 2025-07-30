@@ -13,7 +13,8 @@ import { MdWorkOutline } from "react-icons/md";
 function NavBar({ triggerPreloader }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isNavbarHidden, setIsNavbarHidden] = useState(false);
+  const [isTopNavHidden, setIsTopNavHidden] = useState(false);
+  const [isBottomNavHidden, setIsBottomNavHidden] = useState(false);
   const lastScrollYRef = useRef(0);
   // 用于避免多次 setTimeout 导致多次关闭
   const scrollTimeoutRef = useRef(null);
@@ -32,13 +33,25 @@ function NavBar({ triggerPreloader }) {
         }, 0);
       }
 
-      if (atBottom) {
-        setIsNavbarHidden(false);
-      } else if (scrollY > lastScrollYRef.current && scrollY > 80) {
-        setIsNavbarHidden(true);
+      const isScrollingDown = scrollY > lastScrollYRef.current;
+
+      // --- Top Navbar Logic ---
+      // To disable auto-hide for the TOP navbar, comment out the following block.
+      if (isScrollingDown && scrollY > 80) {
+        setIsTopNavHidden(false);
       } else {
-        setIsNavbarHidden(false);
+        setIsTopNavHidden(false);
       }
+
+      // --- Bottom Navbar Logic ---
+      if (atBottom) {
+        setIsBottomNavHidden(false);
+      } else if (isScrollingDown && scrollY > 80) {
+        setIsBottomNavHidden(true);
+      } else {
+        setIsBottomNavHidden(false);
+      }
+
       lastScrollYRef.current = scrollY;
     }
 
@@ -50,12 +63,12 @@ function NavBar({ triggerPreloader }) {
   }, [isExpanded]);
 
   useEffect(() => {
-    if (isNavbarHidden) {
+    if (isBottomNavHidden) {
       document.body.classList.add("bottom-nav-is-hidden");
     } else {
       document.body.classList.remove("bottom-nav-is-hidden");
     }
-  }, [isNavbarHidden]);
+  }, [isBottomNavHidden]);
 
   const closeNavbar = () => setIsExpanded(false);
 
@@ -65,7 +78,7 @@ function NavBar({ triggerPreloader }) {
             expanded={isExpanded}
             fixed="top"
             expand="lg"
-            className={`${isNavbarHidden ? "navbar-hidden" : ""}`}
+            className={`${isTopNavHidden ? "navbar-hidden" : ""}`}
             onToggle={setIsExpanded}
         >
           <Container className="custom-navbar-container">
@@ -121,7 +134,7 @@ function NavBar({ triggerPreloader }) {
         </Navbar>
 
         {/* Bottom Tab Bar for Mobile */}
-        <div className={`d-lg-none bottom-nav-container ${isNavbarHidden ? "bottom-nav-hidden" : ""}`}>
+        <div className={`d-lg-none bottom-nav-container ${isBottomNavHidden ? "bottom-nav-hidden" : ""}`}>
           <Nav className="bottom-nav">
             <Nav.Item>
               <Nav.Link as={NavLink} to="/" end onClick={closeNavbar}>
