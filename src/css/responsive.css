@@ -129,7 +129,15 @@
     padding: 0 !important;
     color: var(--color-text) !important;
     height: 100%;
-    transition: color 0.2s ease-in-out;
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  }
+
+  .bottom-nav .nav-link:hover {
+    transform: scale(1.1);
+  }
+
+  .bottom-nav .nav-link:active {
+    transform: scale(0.9);
   }
 
   .bottom-nav .nav-link.active {
@@ -137,7 +145,7 @@
   }
 
   .bottom-nav .nav-link svg {
-    margin-bottom: 4px !important;
+    margin-bottom: 2px !important;
     font-size: 1.9rem !important;
   }
 
