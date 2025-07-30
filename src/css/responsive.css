@@ -87,8 +87,8 @@
     left: 15px;
     right: 15px;
     width: auto;
-    height: calc(75px + env(safe-area-inset-bottom));
-    background-color: rgba(26, 31, 46, 0.7);
+    height: 75px;
+    background-color: rgba(26, 31, 46, 0.5);
     backdrop-filter: blur(18px) saturate(180%);
     -webkit-backdrop-filter: blur(18px) saturate(180%);
     border-radius: 40px;
@@ -111,7 +111,7 @@
     height: 100%;
     padding: 0;
     margin: 0 !important;
-    padding-bottom: env(safe-area-inset-bottom);
+    
   }
 
   .bottom-nav .nav-item {
@@ -133,11 +133,11 @@
   }
 
   .bottom-nav .nav-link:hover {
-    transform: scale(1.1);
+    color: var(--navbar-color-brand-hover) !important;
   }
 
   .bottom-nav .nav-link:active {
-    transform: scale(0.9);
+
   }
 
   .bottom-nav .nav-link.active {
