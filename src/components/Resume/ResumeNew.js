@@ -40,8 +40,6 @@ function ResumeNew() {
     return (
         <div>
             <Container fluid className="resume-section">
-                
-
                 <Row className="resume__row animate-item delay-1">
                     <div className="d-flex justify-content-center">
                         <Button className="download-cv-button" variant="primary" href={pdf} target="_blank">

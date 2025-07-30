@@ -30,7 +30,7 @@ body {
   /*====================
       Navbar
   ====================*/
-  --navbar-bg: #1a1f2ea9;
+  --navbar-bg: rgba(26, 31, 46, 0.6);
   --navbar-bg-mobile: rgba(24, 28, 39, 0.7);
   --navbar-color-brand: rgb(16, 227, 246);
   --navbar-color-brand-hover: rgb(3, 248, 248);
@@ -48,9 +48,9 @@ body {
   /*====================
       Buttons
   ====================*/
-  --button-bg-primary: #367386;
+  --button-bg-primary: rgb(54, 115, 134);
   --button-bg-primary-hover: #209fc5d7;
-  --button-border-primary: #368686;
+  --button-border-primary: rgba(54, 134, 134, 0.9);
   --button-border-primary-hover: #20a4c5;
   --button-bg-like: #4cb4ce5e;
   --button-bg-like-hover: #4dbfd386;
@@ -161,11 +161,9 @@ button:focus {
   3. Navbar
 ================================================================*/
 .sticky {
-  background-color: var(--navbar-bg) !important;
+  background-color: transparent !important;
   transition: all 0.3s ease-out 0s !important;
   box-shadow: 0 10px 10px 0 var(--navbar-shadow) !important;
-  backdrop-filter: blur(15px) !important;
-  -webkit-backdrop-filter: blur(15px) !important; /* For Safari */
   z-index: 10;
 }
 
@@ -183,11 +181,10 @@ button:focus {
 
 .navbar {
   position: fixed !important;
+  top: 15px !important;
   transition: all 0.3s ease-out 0s !important;
   padding: 0.3rem 2rem !important;
   font-size: 1.2rem !important;
-  backdrop-filter: blur(15px) !important;
-  -webkit-backdrop-filter: blur(15px) !important; /* For Safari */
 }
 
 .navbar-toggler {
@@ -239,6 +236,25 @@ button:focus {
   transform: rotate(-135deg) !important;
   opacity: 0.9 !important;
 }
+
+.custom-navbar-container {
+  width: 100%;
+  max-width: 1140px;
+  border-radius: 60px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.1rem 2rem !important;
+  background: rgba(26, 31, 46, 0.6);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow:
+          inset 0 1.2px 1.2px rgba(255, 255, 255, 0.1),
+          0 6px 32px 0 rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 
 .navbar-brand {
   font-size: 1.5rem !important;
@@ -643,7 +659,7 @@ body.homepage .home-about-section {
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
   border-radius: 30px !important;
   padding: 8px 24px !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 4px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
 .view-switcher__button svg {
@@ -656,7 +672,7 @@ body.homepage .home-about-section {
 }
 
 .view-switcher__button:hover {
-  background-color: rgba(40, 50, 70, 0.7) !important;
+  background-color: rgba(64, 99, 128, 0.7) !important;
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 8px 25px rgba(0, 0, 0, 0.3) !important;
   cursor: pointer;
 }
@@ -668,7 +684,6 @@ body.homepage .home-about-section {
 .view-switcher__button--active {
   background-color: var(--button-bg-primary) !important;
   color: var(--color-text) !important;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 4px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
 .view-switcher__button--active svg {
@@ -697,7 +712,7 @@ body.homepage .home-about-section {
 .project-section {
   position: relative !important;
   z-index: 1;
-  padding-top: 150px !important;
+  padding-top: 170px !important;
   padding-bottom: 30px !important;
   /*background-image: var(--bg-gradient-section) !important;*/
 }
@@ -833,6 +848,12 @@ body.homepage .home-about-section {
   flex-direction: row !important;
   align-items: stretch !important;
   background: transparent !important;
+  /*background: linear-gradient(*/
+  /*        135deg,*/
+  /*        rgba(24, 41, 60, 0.52) 0%,*/
+  /*        rgba(18, 34, 48, 0.70) 50%,*/
+  /*        rgba(28, 45, 65, 0.54) 100%*/
+  /*) !important;*/
   box-shadow: 0 0 10px 2px var(--card-shadow-project) !important;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -850,6 +871,42 @@ body.homepage .home-about-section {
   box-shadow: 0 0 25px 5px var(--card-shadow-project-hover) !important;
   border-color: rgba(137, 204, 230, 0.5);
 }
+
+/*!*================================================================*/
+/*  Projects - List View*/
+/*================================================================*!*/
+/*.project-card-list-view {*/
+/*  position: relative !important;*/
+/*  display: flex !important;*/
+/*  flex-direction: row !important;*/
+/*  align-items: stretch !important;*/
+/*  background: linear-gradient(*/
+/*          135deg,*/
+/*          rgba(24, 41, 60, 0.52) 0%,*/
+/*          rgba(18, 34, 48, 0.70) 50%,*/
+/*          rgba(28, 45, 65, 0.54) 100%*/
+/*  ) !important;*/
+/*  backdrop-filter: blur(10px) saturate(180%);*/
+/*  -webkit-backdrop-filter: blur(10px) saturate(180%);*/
+/*  border-radius: 20px !important;*/
+/*  border: 1px solid rgba(255, 255, 255, 0.2);*/
+/*  z-index: 1000;*/
+/*  box-shadow: inset 0 1.5px 1.5px rgba(255, 255, 255, 0.2), 0 8px 32px 0 rgba(0, 0, 0, 0.2);*/
+
+/*  !*border-radius: 20px !important;*!*/
+/*  padding: 20px !important;*/
+/*  margin-bottom: 5px !important;*/
+/*  !*border: 1px solid rgba(137, 204, 230, 0.2);*!*/
+/*  transition: all 0.4s cubic-bezier(.45,.05,.55,.95);*/
+/*  color: var(--color-text) !important;*/
+/*  text-align: left;*/
+/*}*/
+
+/*.project-card-list-view:hover {*/
+/*  transform: translateY(-5px) scale(1.02);*/
+/*  box-shadow: 0 0 25px 5px var(--card-shadow-project-hover) !important;*/
+/*  border-color: rgba(137, 204, 230, 0.5);*/
+/*}*/
 
 .project-card-list-view:active {
   transform: scale(0.98) !important;
@@ -1003,6 +1060,7 @@ body.homepage .home-about-section {
   color: var(--color-text) !important;
   background-color: var(--button-bg-primary) !important;
   border-color: var(--button-border-primary) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease !important;
 }
 
@@ -1095,22 +1153,51 @@ body.homepage .home-about-section {
   color: inherit;
 }
 
+/*.tech-icons {*/
+/*  font-size: 4.8em !important;*/
+/*  margin: 10px !important;*/
+/*  padding: 10px !important;*/
+/*  opacity: 0.93 !important;*/
+/*  border: 1.7px solid var(--icon-border-tech) !important;*/
+/*  border-radius: 20px !important;*/
+/*  box-shadow: 4px 5px 4px 3px var(--icon-shadow-tech) !important;*/
+/*  overflow: hidden !important;*/
+/*  transition: transform 0.3s ease, border 0.3s ease !important;*/
+/*  backdrop-filter: blur(10px) !important;*/
+/*  -webkit-backdrop-filter: blur(10px) !important;*/
+/*  display: flex !important;*/
+/*  justify-content: center !important;*/
+/*  align-items: center !important;*/
+/*}*/
+
 .tech-icons {
   font-size: 4.8em !important;
   margin: 10px !important;
   padding: 10px !important;
   opacity: 0.93 !important;
-  border: 1.7px solid var(--icon-border-tech) !important;
   border-radius: 20px !important;
-  box-shadow: 4px 5px 4px 3px var(--icon-shadow-tech) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  background: linear-gradient(
+          135deg,
+          rgba(15, 28, 37, 0.52) 0%,
+          rgba(18, 34, 48, 0.70) 50%,
+          rgba(28, 45, 65, 0.54) 100%
+  );
+  backdrop-filter: blur(12px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(150%) !important;
+  box-shadow:
+          0 4px 16px 0 rgba(0, 0, 0, 0.26),
+          inset 0 1px 3px rgba(255, 255, 255, 0.10),
+          0 1.5px 3px rgba(15,28,37,0.16);
+
   overflow: hidden !important;
-  transition: transform 0.3s ease, border 0.3s ease !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
+  position: relative !important;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15), border 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15) !important;
 }
+
 
 @media (max-width: 767px) {
   .tech-icons {
@@ -1164,7 +1251,7 @@ body.homepage .home-about-section {
 .resume-section {
   position: relative !important;
   z-index: 1;
-  padding-top: 110px !important;
+  padding-top: 160px !important;
   padding-bottom: 30px !important;
   /*background-image: var(--bg-gradient-section) !important;*/
   color: white !important;
@@ -1184,6 +1271,8 @@ body.homepage .home-about-section {
   color: var(--color-text) !important;
   background-color: var(--button-bg-primary) !important;
   border-color: var(--button-border-primary) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 8px 32px 0 rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(18px) !important;
   padding: 10px 50px !important;
   border-radius: 30px !important;
 }
@@ -1321,12 +1410,12 @@ body.homepage .home-about-section {
   padding: 0.25rem 1.3rem !important;
   vertical-align: middle !important;
   text-align: center !important;
-  border-radius: 6px !important;
+  border-radius: 40px !important;
   border: 1px solid var(--button-border-primary) !important;
 }
 
 .fork-btn-inner:hover {
-  transform: translateY(-2px) !important;
+  /*transform: translateY(-2px) !important;*/
   background-color: var(--button-bg-fork-hover) !important;
   border-color: var(--button-bg-fork-hover) !important;
 }
@@ -1392,7 +1481,7 @@ body.homepage .home-about-section {
 
 .experience-section {
     position: relative !important;
-    padding-top: 150px !important;
+    padding-top: 170px !important;
     padding-bottom: 100px !important;
   }
   
@@ -1429,15 +1518,21 @@ body.homepage .home-about-section {
   .vertical-timeline-element-content {
     background: linear-gradient(
             135deg,
-            rgba(54, 115, 134, 0.2) 0%,
+            rgba(77, 162, 188, 0.2) 0%,
             rgba(60, 135, 150, 0.22) 50%,
             rgba(71, 169, 179, 0.25) 100%
     ) !important;
+    /*background: linear-gradient(*/
+    /*        135deg,*/
+    /*        rgba(24, 41, 60, 0.52) 0%,*/
+    /*        rgba(18, 34, 48, 0.70) 50%,*/
+    /*        rgba(28, 45, 65, 0.54) 100%*/
+    /*) !important;*/
     backdrop-filter: blur(12px) brightness(1.05) !important;
     -webkit-backdrop-filter: blur(12px) brightness(1.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 20px !important;
-    /*box-shadow: 0 0 0 1px rgba(28, 171, 191, 0.53) !important;*/
+    box-shadow: inset 0 1.3px 1.3px rgba(255, 255, 255, 0.2), 0 8px 32px 0 rgba(0, 0, 0, 0.2) !important;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease !important;
   }
 

@@ -65,10 +65,10 @@ function NavBar({ triggerPreloader }) {
             expanded={isExpanded}
             fixed="top"
             expand="lg"
-            className={`${isScrolled ? "sticky" : "navbar"} ${isNavbarHidden ? "navbar-hidden" : ""}`}
+            className={`${isNavbarHidden ? "navbar-hidden" : ""}`}
             onToggle={setIsExpanded}
         >
-          <Container>
+          <Container className="custom-navbar-container">
             <Navbar.Brand as={Link} to="/" onClick={() => { closeNavbar(); triggerPreloader(); }}>
               MAGICHERRY.
             </Navbar.Brand>
@@ -91,7 +91,7 @@ function NavBar({ triggerPreloader }) {
                 </Nav.Item>
                 <Nav.Item>
                   <Nav.Link as={NavLink} to="/experiences" onClick={closeNavbar}>
-                    <MdWorkOutline className="navbar-icon" /> EXPERIENCES
+                    <MdWorkOutline className="navbar-icon" /> TRACKS
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
@@ -104,16 +104,17 @@ function NavBar({ triggerPreloader }) {
                     <CgFileDocument className="navbar-icon" /> RESUME
                   </Nav.Link>
                 </Nav.Item>
-                <Nav.Item className="fork-btn">
-                  <Button
-                      href="https://github.com/Magicherry/Bits-of-Me"
-                      target="_blank"
-                      className="fork-btn-inner"
-                  >
-                    <CgGitFork className="navbar-fork-icon" />
-                    <AiFillStar className="navbar-star-icon" />
-                  </Button>
-                </Nav.Item>
+
+                {/*<Nav.Item className="fork-btn">*/}
+                {/*  <Button*/}
+                {/*      href="https://github.com/Magicherry/Bits-of-Me"*/}
+                {/*      target="_blank"*/}
+                {/*      className="fork-btn-inner"*/}
+                {/*  >*/}
+                {/*    <CgGitFork className="navbar-fork-icon" />*/}
+                {/*    <AiFillStar className="navbar-star-icon" />*/}
+                {/*  </Button>*/}
+                {/*</Nav.Item>*/}
               </Nav>
             </Navbar.Collapse>
           </Container>
@@ -137,7 +138,7 @@ function NavBar({ triggerPreloader }) {
             <Nav.Item>
               <Nav.Link as={NavLink} to="/experiences" onClick={closeNavbar}>
                 <MdWorkOutline />
-                <span>EXPERIENCES</span>
+                <span>TRACKS</span>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
