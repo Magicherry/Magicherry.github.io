@@ -49,6 +49,14 @@ function NavBar({ triggerPreloader }) {
     };
   }, [isExpanded]);
 
+  useEffect(() => {
+    if (isNavbarHidden) {
+      document.body.classList.add("bottom-nav-is-hidden");
+    } else {
+      document.body.classList.remove("bottom-nav-is-hidden");
+    }
+  }, [isNavbarHidden]);
+
   const closeNavbar = () => setIsExpanded(false);
 
   return (

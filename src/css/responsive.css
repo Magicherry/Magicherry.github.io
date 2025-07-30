@@ -172,16 +172,12 @@
   
 
   .footer {
-    padding-bottom: 80px !important; /* Increased padding for mobile view */
+    padding-bottom: 90px !important; /* Increased padding for mobile view */
   }
 
-  .footer {
-    padding-bottom: 70px; /* Space for the bottom nav */
+  body:not(.bottom-nav-is-hidden) .footer {
+    padding-bottom: 90px;
     transition: padding-bottom 0.3s ease-in-out;
-  }
-
-  body.bottom-nav-is-hidden .footer {
-    padding-bottom: 0;
   }
 
   .project-card-list-view {
