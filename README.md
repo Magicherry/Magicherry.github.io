@@ -15,32 +15,29 @@
   <img src="https://img.shields.io/badge/Status-Maintained-brightgreen" alt="Status">
 </p>
 
-
 ---
 
-## Modifications
+## Framework Upgrade
 
-### 🚀 Framework Upgrade
+- Migrated from React 17 to **React 18.3.1**.
+- Consolidated core layout components (`Navbar`, `Footer`, etc.) into a unified `MainFrame` directory for cleaner architecture.
 
-- **Upgraded to React 18**: Migrated from React 17 to **React 18.3.1**, replacing the legacy rendering method with the modern `createRoot` API for improved performance and future compatibility.
-- **Component Structure Refactoring**: Consolidated core layout components (`Navbar`, `Footer`, etc.) into a unified `MainFrame` directory for cleaner architecture and easier maintenance.
+## Page Redesign
 
-### 🧱 Page Redesign
+- Rewrote the `PROJECTS` page. Introduced both **list** and **grid** views for more flexible content presentation, and restructured page hierarchy for better readability across devices.
+- Added the `TRACKS` page for showing professional experience, built entirely from scratch.
 
-- **Projects Page Overhaul**: Completely rewrote the `Projects` page. Introduced both **list** and **grid** views for more flexible content presentation, and restructured page hierarchy for better readability across devices.
-- **New "Experiences" Section**: Added a fully responsive timeline-based section to showcase professional experience, built entirely from scratch.
+## Mobile Optimization
 
-### 📱 Mobile Optimization
+1. Added a context-aware, adaptive bottom navigation bar to improve accessibility on smaller screens.
+2. Audited and optimized layout depth and spacing for mobile, ensuring each page adapts fluidly to different screen sizes.
 
-- **Bottom Navigation for Mobile**: Added a context-aware, adaptive bottom navigation bar to improve accessibility on smaller screens.
-- **Responsive Layout Refinement**: Audited and optimized layout depth and spacing for mobile, ensuring each page adapts fluidly to different screen sizes.
+## Visual Enhancements
 
-### ✨ Visual Enhancements
-
-- **Rounded UI Elements**: Applied consistent border-radius styling across buttons, cards, modals, and containers to create a smoother, modernized appearance.
-- **Subtle Background Effects**: Integrated a light `Particle.js` effect on the homepage to enrich visual depth without distraction.
-- **Page Transition Animations**: Added entrance and exit animations to major pages for a more fluid and polished browsing experience.
-- **Component Interaction Feedback**: Enhanced user interaction by adding hover, tap, and motion-based animations across navigational links, buttons, and project items.
+- Unified border-radius across buttons, cards, modals, and containers, and incorporated glassmorphic components for a modern interface.
+- Integrated a light `Particle.js` effect on the homepage to enrich visual depth without distraction.
+- Added entrance and exit animations to major pages for a more fluid and polished browsing experience.
+- Enhanced user interaction by adding hover, tap, and motion-based animations across navigational links, buttons, and project items.
 
 ---
 
