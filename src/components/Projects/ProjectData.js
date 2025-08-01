@@ -3,7 +3,7 @@ export const projects = [
         imgPath: require("../../Assets/projects/NJT Graph Processor.png"),
         title: "NJT Graph Processor",
         description: "A Qt native application converting raw train data into intuitive and visual graphs. Helps researcher easily understand and analyze train activity for a specific day and location.",
-        tags: ["Python", "Matplotlab", "QT Native"],
+        tags: ["Python", "Matplotlab", "Qt Native"],
         type: "Company Internal"
     },
     {

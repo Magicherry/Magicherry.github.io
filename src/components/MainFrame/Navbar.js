@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
-import { CgGitFork, CgFileDocument } from "react-icons/cg";
+import { CgFileDocument } from "react-icons/cg";
 import {
-  AiFillStar,
   AiOutlineHome,
   AiOutlineFundProjectionScreen,
   AiOutlineUser,
@@ -15,8 +14,7 @@ function NavBar({ triggerPreloader }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isTopNavHidden, setIsTopNavHidden] = useState(false);
   const [isBottomNavHidden, setIsBottomNavHidden] = useState(false);
-  const lastScrollYRef = useRef(0);
-  // 用于避免多次 setTimeout 导致多次关闭
+  const lastScrollYRef = useRef(window.scrollY);
   const scrollTimeoutRef = useRef(null);
 
   useEffect(() => {
@@ -25,7 +23,7 @@ function NavBar({ triggerPreloader }) {
       const atBottom = window.innerHeight + scrollY >= document.body.offsetHeight - 10;
       setIsScrolled(scrollY >= 20);
 
-      // 滚动时延迟自动关闭展开的汉堡菜单
+      // 滚动时自动关闭展开的汉堡菜单
       if (isExpanded) {
         if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
         scrollTimeoutRef.current = setTimeout(() => {
@@ -33,17 +31,15 @@ function NavBar({ triggerPreloader }) {
         }, 0);
       }
 
+      // 顶部navbar隐藏逻辑
       const isScrollingDown = scrollY > lastScrollYRef.current;
-
-      // --- Top Navbar Logic ---
-      // To disable auto-hide for the TOP navbar, comment out the following block.
       if (isScrollingDown && scrollY > 80) {
         setIsTopNavHidden(false);
       } else {
         setIsTopNavHidden(false);
       }
 
-      // --- Bottom Navbar Logic ---
+      // 底部Tab栏隐藏逻辑
       if (atBottom) {
         setIsBottomNavHidden(false);
       } else if (isScrollingDown && scrollY > 80) {
@@ -78,7 +74,7 @@ function NavBar({ triggerPreloader }) {
             expanded={isExpanded}
             fixed="top"
             expand="lg"
-            className={`${isTopNavHidden ? "navbar-hidden" : ""}`}
+            className={`${isTopNavHidden ? "navbar-hidden" : ""} ${isScrolled ? "navbar-scrolled" : ""}`}
             onToggle={setIsExpanded}
         >
           <Container className="custom-navbar-container">
@@ -117,17 +113,6 @@ function NavBar({ triggerPreloader }) {
                     <CgFileDocument className="navbar-icon" /> RESUME
                   </Nav.Link>
                 </Nav.Item>
-
-                {/*<Nav.Item className="fork-btn">*/}
-                {/*  <Button*/}
-                {/*      href="https://github.com/Magicherry/Bits-of-Me"*/}
-                {/*      target="_blank"*/}
-                {/*      className="fork-btn-inner"*/}
-                {/*  >*/}
-                {/*    <CgGitFork className="navbar-fork-icon" />*/}
-                {/*    <AiFillStar className="navbar-star-icon" />*/}
-                {/*  </Button>*/}
-                {/*</Nav.Item>*/}
               </Nav>
             </Navbar.Collapse>
           </Container>
