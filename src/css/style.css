@@ -544,6 +544,9 @@ body.homepage .home-about-section {
 ================================================================*/
 .footer__social-link {
   color: white;
+  font-size: 1.8em;
+  display: inline-flex;
+  align-items: center;
 }
 
 .footer__social-link:hover {
@@ -559,21 +562,17 @@ body.homepage .home-about-section {
   z-index: 10;
 }
 .footer-copywright {
-  text-align: center !important;
 }
 
 .footer-body {
   z-index: 1;
-  text-align: center !important;
 }
 
 @media (max-width: 767px) {
   .footer-copywright {
-    text-align: center !important;
   }
 
   .footer-body {
-    text-align: center !important;
   }
 }
 

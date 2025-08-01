@@ -41,16 +41,16 @@ const Footer = () => {
 
   return (
     <Container fluid className="footer">
-      <Row>
-        <Col md={4} className="footer-copywright">
+      <Row className="align-items-center justify-content-center">
+        <Col md={4} className="footer-copywright d-flex align-items-center justify-content-center">
           <a href="mailto:zyt680129@gmail.com" className="email-link">
             <h3>Email: zyt680129@gmail.com</h3>
           </a>
         </Col>
-        <Col md={4} className="footer-copywright">
+        <Col md={4} className="footer-copywright d-flex align-items-center justify-content-center">
           <h3>Copyright © Yuting Zhou {year} </h3>
         </Col>
-        <Col md={4} className="footer-body">
+        <Col md={4} className="footer-body d-flex align-items-center justify-content-center">
           <ul className="footer-icons">
             {socialLinks.map((link, index) => (
               <li className="social-icons" key={index}>
