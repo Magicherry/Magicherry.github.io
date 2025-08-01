@@ -1,5 +1,5 @@
-import React from "react";
-import { Container, Row, Col, OverlayTrigger, Popover } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Modal } from "react-bootstrap";
 import myImg from "../../Assets/avatar/avatar.png";
 import Tilt from "react-parallax-tilt";
 import { AiFillGithub } from "react-icons/ai";
@@ -8,6 +8,31 @@ import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
 import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
 
 function Home2() {
+  const [showWechatModal, setShowWechatModal] = useState(false);
+
+  const handleWechatClick = (e) => {
+    e.preventDefault();
+    setShowWechatModal(true);
+  };
+
+  const handleCloseWechatModal = () => setShowWechatModal(false);
+
+  useEffect(() => {
+    if (showWechatModal) {
+      const handleScroll = () => {
+        handleCloseWechatModal();
+      };
+
+      window.addEventListener("wheel", handleScroll);
+      window.addEventListener("touchmove", handleScroll);
+
+      return () => {
+        window.removeEventListener("wheel", handleScroll);
+        window.removeEventListener("touchmove", handleScroll);
+      };
+    }
+  }, [showWechatModal]);
+
   const socialLinks = [
     {
       href: "https://github.com/Magicherry",
@@ -23,6 +48,7 @@ function Home2() {
       href: "#wechat",
       icon: <FaWeixin />,
       ariaLabel: "WeChat Profile",
+      onClick: handleWechatClick,
     },
     {
       href: "https://space.bilibili.com/155876727",
@@ -30,14 +56,6 @@ function Home2() {
       ariaLabel: "Bilibili Profile",
     },
   ];
-
-  const wechatPopover = (
-    <Popover id="popover-wechat" className="wechat-popover">
-      <Popover.Body>
-        <img src={wechatQrCode} alt="WeChat QR Code" style={{ width: '150px' }} />
-      </Popover.Body>
-    </Popover>
-  );
 
   return (
     <Container fluid className="home-about-section" id="about">
@@ -98,38 +116,28 @@ function Home2() {
             <ul className="home-about-social-links">
               {socialLinks.map((link, index) => (
                 <li className="social-icons" key={index}>
-                  {link.ariaLabel === "WeChat Profile" ? (
-                    <OverlayTrigger
-                      trigger={["hover", "focus"]}
-                      placement="top"
-                      overlay={wechatPopover}
-                    >
-                      <a
-                        href={link.href}
-                        className="icon-colour home-social-icons"
-                        aria-label={link.ariaLabel}
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        {link.icon}
-                      </a>
-                    </OverlayTrigger>
-                  ) : (
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="icon-colour home-social-icons"
-                      aria-label={link.ariaLabel}
-                    >
-                      {link.icon}
-                    </a>
-                  )}
+                  <a
+                    href={link.href}
+                    target={link.onClick ? "_self" : "_blank"}
+                    rel="noopener noreferrer"
+                    className="icon-colour home-social-icons"
+                    aria-label={link.ariaLabel}
+                    onClick={link.onClick}
+                  >
+                    {link.icon}
+                  </a>
                 </li>
               ))}
             </ul>
           </Col>
         </Row>
       </Container>
+
+      <Modal show={showWechatModal} onHide={handleCloseWechatModal} centered>
+        <Modal.Body style={{ textAlign: 'center', cursor: 'pointer' }} onClick={handleCloseWechatModal}>
+          <img src={wechatQrCode} alt="WeChat QR Code" style={{ maxWidth: '100%' }} />
+        </Modal.Body>
+      </Modal>
     </Container>
   );
 }

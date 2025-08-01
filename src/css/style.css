@@ -1652,18 +1652,3 @@ body.homepage .home-about-section {
     }
 }
 
-.wechat-popover .popover-body {
-    background-color: white;
-    border-radius: 8px;
-    border: none;
-    padding: 0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.wechat-popover .popover-arrow::after {
-    border-top-color: white !important;
-}
-
-.wechat-popover .popover-body img {
-    border-radius: 8px;
-}
