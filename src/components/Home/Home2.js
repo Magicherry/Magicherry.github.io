@@ -1,11 +1,11 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, OverlayTrigger, Popover } from "react-bootstrap";
 import myImg from "../../Assets/avatar/avatar.png";
 import Tilt from "react-parallax-tilt";
 import { AiFillGithub } from "react-icons/ai";
 import { SiBilibili } from "react-icons/si";
-import { FaLinkedinIn } from "react-icons/fa";
-import { FaXTwitter} from "react-icons/fa6";
+import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
+import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
 
 function Home2() {
   const socialLinks = [
@@ -15,14 +15,14 @@ function Home2() {
       ariaLabel: "GitHub Profile",
     },
     {
-      href: "https://x.com/Magicherrys",
-      icon: <FaXTwitter/>,
-      ariaLabel: "Twitter Profile",
-    },
-    {
       href: "https://www.linkedin.com/in/yuting-zhou-5140ba299/",
       icon: <FaLinkedinIn />,
       ariaLabel: "LinkedIn Profile",
+    },
+    {
+      href: "#wechat",
+      icon: <FaWeixin />,
+      ariaLabel: "WeChat Profile",
     },
     {
       href: "https://space.bilibili.com/155876727",
@@ -30,6 +30,14 @@ function Home2() {
       ariaLabel: "Bilibili Profile",
     },
   ];
+
+  const wechatPopover = (
+    <Popover id="popover-wechat" className="wechat-popover">
+      <Popover.Body>
+        <img src={wechatQrCode} alt="WeChat QR Code" style={{ width: '150px' }} />
+      </Popover.Body>
+    </Popover>
+  );
 
   return (
     <Container fluid className="home-about-section" id="about">
@@ -87,19 +95,35 @@ function Home2() {
             <p>
               Feel free to <span className="blue">connect </span>with me
             </p>
-            {/* 动态渲染社交链接 */}
             <ul className="home-about-social-links">
               {socialLinks.map((link, index) => (
                 <li className="social-icons" key={index}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="icon-colour home-social-icons"
-                    aria-label={link.ariaLabel}
-                  >
-                    {link.icon}
-                  </a>
+                  {link.ariaLabel === "WeChat Profile" ? (
+                    <OverlayTrigger
+                      trigger={["hover", "focus"]}
+                      placement="top"
+                      overlay={wechatPopover}
+                    >
+                      <a
+                        href={link.href}
+                        className="icon-colour home-social-icons"
+                        aria-label={link.ariaLabel}
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        {link.icon}
+                      </a>
+                    </OverlayTrigger>
+                  ) : (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="icon-colour home-social-icons"
+                      aria-label={link.ariaLabel}
+                    >
+                      {link.icon}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
