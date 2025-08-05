@@ -29,8 +29,8 @@
 
 ## Mobile Optimization
 
-1. Added a context-aware, adaptive bottom navigation bar to improve accessibility on smaller screens.
-2. Audited and optimized layout depth and spacing for mobile, ensuring each page adapts fluidly to different screen sizes.
+- Added a context-aware, adaptive bottom navigation bar to improve accessibility on smaller screens.
+- Audited and optimized layout depth and spacing for mobile, ensuring each page adapts fluidly to different screen sizes.
 
 ## Visual Enhancements
 
