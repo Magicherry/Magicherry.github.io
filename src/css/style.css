@@ -1,6 +1,8 @@
 html,
 body {
   scroll-behavior: auto !important;
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
 }
 
 :root {
@@ -561,19 +563,8 @@ body.homepage .home-about-section {
   position: relative;
   z-index: 10;
 }
-.footer-copywright {
-}
-
 .footer-body {
   z-index: 1;
-}
-
-@media (max-width: 767px) {
-  .footer-copywright {
-  }
-
-  .footer-body {
-  }
 }
 
 .footer h3 {
@@ -1482,6 +1473,8 @@ body.homepage .home-about-section {
     position: relative !important;
     padding-top: 170px !important;
     padding-bottom: 100px !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
   }
   
   .vertical-timeline-element-title {
@@ -1533,6 +1526,7 @@ body.homepage .home-about-section {
     border-radius: 20px !important;
     box-shadow: inset 0 1.3px 1.3px rgba(255, 255, 255, 0.2), 0 8px 32px 0 rgba(0, 0, 0, 0.2) !important;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease !important;
+    transform-origin: center !important;
   }
 
 
@@ -1547,6 +1541,34 @@ body.homepage .home-about-section {
 
   .vertical-timeline-element-content .vertical-timeline-element-date {
     color: #fff !important;
+  }
+
+  /* 防止vertical timeline动画导致页面拉长 */
+  .vertical-timeline {
+    max-width: 100% !important;
+  }
+
+  .vertical-timeline-element {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .vertical-timeline-element-content {
+    max-width: calc(100vw - 80px) !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 防止timeline的左右动画超出视口 */
+  @media (max-width: 1170px) {
+    .vertical-timeline-element-content {
+      max-width: calc(100vw - 60px) !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .vertical-timeline-element-content {
+      max-width: calc(100vw - 40px) !important;
+    }
   }
   
 

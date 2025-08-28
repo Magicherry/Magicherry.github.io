@@ -73,17 +73,20 @@ function NavBar({ triggerPreloader }) {
   useEffect(() => {
     if (!navContainerRef.current) return;
 
+    let resizeTimeout;
     const resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        // 延迟执行以确保布局完成
-        setTimeout(calculatePillPosition, 20);
-      }
+      // 防抖处理，避免频繁触发
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        calculatePillPosition();
+      }, 100);
     });
 
     resizeObserver.observe(navContainerRef.current);
 
     return () => {
       resizeObserver.disconnect();
+      clearTimeout(resizeTimeout);
     };
   }, [location.pathname, navItems]);
 
