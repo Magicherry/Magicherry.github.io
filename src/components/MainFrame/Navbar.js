@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { CgFileDocument } from "react-icons/cg";
 import {
   AiOutlineHome,
@@ -16,6 +16,158 @@ function NavBar({ triggerPreloader }) {
   const [isBottomNavHidden, setIsBottomNavHidden] = useState(false);
   const lastScrollYRef = useRef(window.scrollY);
   const scrollTimeoutRef = useRef(null);
+  
+  // 拖拽相关状态
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isDragging, setIsDragging] = useState(false);
+  const [pillPosition, setPillPosition] = useState(0);
+  const [dragStartX, setDragStartX] = useState(0);
+  const navContainerRef = useRef(null);
+  const pillRef = useRef(null);
+  
+  // 导航项配置
+  const navItems = [
+    { path: "/", icon: AiOutlineHome, label: "HOME" },
+    { path: "/about", icon: AiOutlineUser, label: "ABOUT" },
+    { path: "/experiences", icon: MdWorkOutline, label: "TRACKS" },
+    { path: "/project", icon: AiOutlineFundProjectionScreen, label: "PROJECTS" }
+  ];
+
+  // 计算药丸位置的函数
+  const calculatePillPosition = () => {
+    const currentIndex = navItems.findIndex(item => 
+      item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path)
+    );
+    if (currentIndex !== -1 && navContainerRef.current) {
+      const containerWidth = navContainerRef.current.offsetWidth;
+      const itemWidth = containerWidth / navItems.length;
+      const newPosition = currentIndex * itemWidth + itemWidth / 2;
+      setPillPosition(newPosition);
+    }
+  };
+
+  // 更新药丸位置基于当前路由
+  useEffect(() => {
+    calculatePillPosition();
+  }, [location.pathname, navItems]);
+
+  // 监听窗口大小变化，自适应调整药丸位置
+  useEffect(() => {
+    const handleResize = () => {
+      // 使用setTimeout延迟执行，确保DOM更新完成
+      setTimeout(calculatePillPosition, 10);
+    };
+
+    window.addEventListener('resize', handleResize);
+    // 监听方向变化（移动端）
+    window.addEventListener('orientationchange', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    };
+  }, [location.pathname, navItems]);
+
+  // 使用ResizeObserver监听容器大小变化（更精确）
+  useEffect(() => {
+    if (!navContainerRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        // 延迟执行以确保布局完成
+        setTimeout(calculatePillPosition, 20);
+      }
+    });
+
+    resizeObserver.observe(navContainerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [location.pathname, navItems]);
+
+  // 拖拽事件处理
+  const handlePillMouseDown = (e) => {
+    if (!navContainerRef.current) return;
+    setIsDragging(true);
+    const containerRect = navContainerRef.current.getBoundingClientRect();
+    setDragStartX(e.clientX - containerRect.left - pillPosition);
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handlePillTouchStart = (e) => {
+    if (!navContainerRef.current) return;
+    setIsDragging(true);
+    const containerRect = navContainerRef.current.getBoundingClientRect();
+    setDragStartX(e.touches[0].clientX - containerRect.left - pillPosition);
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging || !navContainerRef.current) return;
+    
+    const containerRect = navContainerRef.current.getBoundingClientRect();
+    const newX = e.clientX - containerRect.left - dragStartX;
+    const itemWidth = containerRect.width / navItems.length;
+    const clampedX = Math.max(itemWidth / 2, Math.min(newX, containerRect.width - itemWidth / 2));
+    setPillPosition(clampedX);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging || !navContainerRef.current) return;
+    
+    e.preventDefault(); // 防止页面滚动
+    const containerRect = navContainerRef.current.getBoundingClientRect();
+    const newX = e.touches[0].clientX - containerRect.left - dragStartX;
+    const itemWidth = containerRect.width / navItems.length;
+    const clampedX = Math.max(itemWidth / 2, Math.min(newX, containerRect.width - itemWidth / 2));
+    setPillPosition(clampedX);
+  };
+
+  const handleDragEnd = () => {
+    if (!isDragging || !navContainerRef.current) return;
+    
+    setIsDragging(false);
+    
+    // 计算最近的导航项
+    const containerWidth = navContainerRef.current.offsetWidth;
+    const itemWidth = containerWidth / navItems.length;
+    const closestIndex = Math.round((pillPosition - itemWidth / 2) / itemWidth);
+    const clampedIndex = Math.max(0, Math.min(closestIndex, navItems.length - 1));
+    
+    // 导航到对应页面
+    const targetPath = navItems[clampedIndex].path;
+    if (targetPath !== location.pathname) {
+      navigate(targetPath);
+      if (triggerPreloader) {
+        triggerPreloader();
+      }
+    }
+    
+    // 吸附到正确位置
+    const finalPosition = clampedIndex * itemWidth + itemWidth / 2;
+    setPillPosition(finalPosition);
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      const options = { passive: false };
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleDragEnd);
+      document.addEventListener('touchmove', handleTouchMove, options);
+      document.addEventListener('touchend', handleDragEnd);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleDragEnd);
+        document.removeEventListener('touchmove', handleTouchMove, options);
+        document.removeEventListener('touchend', handleDragEnd);
+      };
+    }
+  }, [isDragging, pillPosition, dragStartX]);
 
   useEffect(() => {
     function handleScroll() {
@@ -119,38 +271,42 @@ function NavBar({ triggerPreloader }) {
         </Navbar>
 
         {/* Bottom Tab Bar for Mobile */}
-        <div className={`d-lg-none bottom-nav-container ${isBottomNavHidden ? "bottom-nav-hidden" : ""}`}>
+        <div className={`d-lg-none bottom-nav-container ${isBottomNavHidden ? "bottom-nav-hidden" : ""}`} ref={navContainerRef}>
+          {/* 可拖拽的药丸滑块 */}
+          <div 
+            className={`draggable-pill ${isDragging ? 'dragging' : ''}`}
+            style={{
+              left: `${pillPosition}px`,
+              transform: 'translateX(-50%)'
+            }}
+            ref={pillRef}
+          >
+            {/* 拖拽手柄 */}
+            <div 
+              className="drag-handle"
+              onMouseDown={handlePillMouseDown}
+              onTouchStart={handlePillTouchStart}
+            />
+          </div>
+          
           <Nav className="bottom-nav">
-            <Nav.Item>
-              <Nav.Link as={NavLink} to="/" end onClick={closeNavbar}>
-                <AiOutlineHome />
-                <span>HOME</span>
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link as={NavLink} to="/about" onClick={closeNavbar}>
-                <AiOutlineUser />
-                <span>ABOUT</span>
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link as={NavLink} to="/experiences" onClick={closeNavbar}>
-                <MdWorkOutline />
-                <span>TRACKS</span>
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link as={NavLink} to="/project" onClick={closeNavbar}>
-                <AiOutlineFundProjectionScreen />
-                <span>PROJECTS</span>
-              </Nav.Link>
-            </Nav.Item>
-            {/* <Nav.Item>
-              <Nav.Link as={NavLink} to="/resume" onClick={closeNavbar}>
-                <CgFileDocument />
-                <span>RESUME</span>
-              </Nav.Link>
-            </Nav.Item> */}
+            {navItems.map((item, index) => {
+              const IconComponent = item.icon;
+              return (
+                <Nav.Item key={item.path}>
+                  <Nav.Link 
+                    as={NavLink} 
+                    to={item.path} 
+                    end={item.path === "/"} 
+                    onClick={closeNavbar}
+                    className="nav-item-clickable"
+                  >
+                    <IconComponent />
+                    <span>{item.label}</span>
+                  </Nav.Link>
+                </Nav.Item>
+              );
+            })}
           </Nav>
         </div>
       </>

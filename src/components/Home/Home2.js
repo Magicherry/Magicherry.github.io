@@ -4,7 +4,7 @@ import Tilt from "react-parallax-tilt";
 import { AiFillGithub } from "react-icons/ai";
 import { SiBilibili } from "react-icons/si";
 import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
-import { AiOutlineDownload } from "react-icons/ai";
+import { AiOutlineFileText } from "react-icons/ai";
 import myImg from "../../Assets/avatar/avatar.png";
 import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
 import cvFile from "../../Assets/cv/Yuting_Zhou_CV.pdf";
@@ -82,8 +82,8 @@ function Home2() {
                                 href={cvFile}
                                 target="_blank"
                             >
-                                <AiOutlineDownload />
-                                &nbsp;Download CV
+                                <AiOutlineFileText />
+                                &nbsp;View Resume
                             </Button>
                         </div>
                     </Col>
