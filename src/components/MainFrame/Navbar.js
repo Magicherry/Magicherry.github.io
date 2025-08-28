@@ -108,11 +108,11 @@ function NavBar({ triggerPreloader }) {
                     <AiOutlineFundProjectionScreen className="navbar-icon" /> PROJECTS
                   </Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
+                {/* <Nav.Item>
                   <Nav.Link as={NavLink} to="/resume" onClick={closeNavbar}>
                     <CgFileDocument className="navbar-icon" /> RESUME
                   </Nav.Link>
-                </Nav.Item>
+                </Nav.Item> */}
               </Nav>
             </Navbar.Collapse>
           </Container>
@@ -145,12 +145,12 @@ function NavBar({ triggerPreloader }) {
                 <span>PROJECTS</span>
               </Nav.Link>
             </Nav.Item>
-            <Nav.Item>
+            {/* <Nav.Item>
               <Nav.Link as={NavLink} to="/resume" onClick={closeNavbar}>
                 <CgFileDocument />
                 <span>RESUME</span>
               </Nav.Link>
-            </Nav.Item>
+            </Nav.Item> */}
           </Nav>
         </div>
       </>

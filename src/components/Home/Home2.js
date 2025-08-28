@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Modal } from "react-bootstrap";
+import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import Tilt from "react-parallax-tilt";
 import { AiFillGithub } from "react-icons/ai";
 import { SiBilibili } from "react-icons/si";
 import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
+import { AiOutlineDownload } from "react-icons/ai";
 import myImg from "../../Assets/avatar/avatar.png";
 import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
+import cvFile from "../../Assets/cv/Yuting_Zhou_CV.pdf";
 
 function Home2() {
     const [showWechatModal, setShowWechatModal] = useState(false);
@@ -20,6 +22,8 @@ function Home2() {
             window.removeEventListener("touchmove", handleScroll);
         };
     }, [showWechatModal]);
+
+
 
     const socialLinks = [
         {
@@ -71,6 +75,17 @@ function Home2() {
                         <Tilt>
                             <img src={myImg} className="img-fluid" alt="avatar" />
                         </Tilt>
+                        <div className="d-flex justify-content-center" style={{ marginTop: '20px' }}>
+                            <Button 
+                                className="download-cv-button" 
+                                variant="primary" 
+                                href={cvFile}
+                                target="_blank"
+                            >
+                                <AiOutlineDownload />
+                                &nbsp;Download CV
+                            </Button>
+                        </div>
                     </Col>
                 </Row>
                 <Row>
