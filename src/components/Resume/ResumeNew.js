@@ -12,6 +12,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 ).toString();
 
+// test
 const LoadingSpinner = () => (
     <div className="resume-pdf-container">
         <Spinner
