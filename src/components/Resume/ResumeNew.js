@@ -2,9 +2,13 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Container, Row, Button, Spinner } from "react-bootstrap";
 import { AiOutlineDownload } from "react-icons/ai";
 import { Document, Page, pdfjs } from "react-pdf";
+
+// 建议将 Assets 文件夹移入 src 目录，并相应更新此路径
+// 例如：import pdf from "../assets/cv/Yuting_Zhou_CV.pdf";
 import pdf from "../../Assets/cv/Yuting_Zhou_CV.pdf";
 import 'react-pdf/dist/Page/TextLayer.css';
 
+// 确保 public 文件夹中有 pdf.worker.min.mjs 文件
 pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`;
 
 const LoadingSpinner = () => (
@@ -41,16 +45,21 @@ function ResumeNew() {
     }, []);
 
     useEffect(() => {
-        const debouncedHandleResize = debounce(handleResize, 300); // 延迟300毫秒执行
+        const debouncedHandleResize = debounce(handleResize, 300);
         window.addEventListener('resize', debouncedHandleResize);
-        handleResize(); // 初始加载时执行一次
+        handleResize();
 
-        // 清理函数
         return () => window.removeEventListener('resize', debouncedHandleResize);
     }, [handleResize]);
 
     const onDocumentLoadSuccess = ({ numPages }) => {
         setNumPages(numPages);
+    };
+
+    // 【新增】一个错误处理函数，用于捕获 react-pdf 的内部错误
+    const onPdfError = (error) => {
+        console.error("PDF加载错误 (PDF loading error):", error);
+        // 你可以在这里设置一个状态，用于在页面上显示友好的错误提示
     };
 
     return (
@@ -62,8 +71,13 @@ function ResumeNew() {
 
                 <div className="resume-container animate-item delay-2">
                     <Document
-                        file={pdf}
+                        // 【关键修改】将 file prop 从字符串改为对象，这是最核心的修复
+                        file={{
+                            url: pdf,
+                        }}
                         onLoadSuccess={onDocumentLoadSuccess}
+                        // 【新增】添加错误回调 prop，用于调试
+                        onLoadError={onPdfError}
                         loading={<LoadingSpinner />}
                         className="pdf-document"
                     >
