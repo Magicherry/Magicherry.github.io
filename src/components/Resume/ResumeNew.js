@@ -5,7 +5,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import pdf from "../../Assets/cv/Yuting_Zhou_CV.pdf";
 import 'react-pdf/dist/Page/TextLayer.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL( 'pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url, ).toString();
+pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.mjs`;
 
 const LoadingSpinner = () => (
     <div className="resume-pdf-container">
