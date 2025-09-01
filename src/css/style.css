@@ -1391,17 +1391,24 @@ body.homepage .home-about-section {
 
 .fork-btn {
   font-size: 1.1em !important;
-  padding-top: 10px !important;
+  padding-top: 0 !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .fork-btn-inner {
   line-height: 1.4em !important;
   background-color: var(--button-bg-fork) !important;
-  padding: 0.25rem 1.3rem !important;
+  padding: 0.4rem 1.5rem !important;
   vertical-align: middle !important;
   text-align: center !important;
   border-radius: 40px !important;
   border: 1px solid var(--button-border-primary) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  gap: 0.3rem !important;
 }
 
 .fork-btn-inner:hover {
@@ -1417,6 +1424,25 @@ body.homepage .home-about-section {
 .navbar-fork-icon,
 .navbar-star-icon {
   color: white !important;
+}
+
+/* 移动端汉堡菜单中的GitHub按钮优化 */
+@media (max-width: 991.98px) {
+  .fork-btn {
+    margin: 15px auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-top: 0 !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+  
+  .fork-btn-inner {
+    width: auto !important;
+    display: inline-flex !important;
+    padding: 0.5rem 1rem !important;
+    margin: 0 auto !important;
+  }
 }
 
 /*================================================================

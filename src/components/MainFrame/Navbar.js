@@ -6,6 +6,8 @@ import {
   AiOutlineHome,
   AiOutlineFundProjectionScreen,
   AiOutlineUser,
+  AiFillGithub,
+  AiOutlineStar
 } from "react-icons/ai";
 import { MdWorkOutline } from "react-icons/md";
 
@@ -268,6 +270,18 @@ function NavBar({ triggerPreloader }) {
                     <CgFileDocument className="navbar-icon" /> RESUME
                   </Nav.Link>
                 </Nav.Item> */}
+                
+                <Nav.Item className="fork-btn">
+                  <Nav.Link
+                    href="https://github.com/Magicherry/Bits-of-Me"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="fork-btn-inner"
+                  >
+                    <AiFillGithub className="navbar-fork-icon" />
+                    <AiOutlineStar className="navbar-star-icon" />
+                  </Nav.Link>
+                </Nav.Item>
               </Nav>
             </Navbar.Collapse>
           </Container>
