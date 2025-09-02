@@ -3,7 +3,7 @@ export const projects = [
         imgPath: require("../../Assets/projects/NJT Graph Processor.png"),
         title: "NJT Graph Processor",
         description: "A Qt native application converting raw train data into intuitive and visual graphs. Helps researcher easily understand and analyze train activity for a specific day and location.",
-        tags: ["Python", "Matplotlab", "Qt Native"],
+        tags: ["Python", "PyQt", "Numpy", "Pandas", "Matplotlab"],
         type: "Company Internal"
     },
     {
@@ -12,7 +12,7 @@ export const projects = [
         description: "A full-stack note-taking application featuring a Vue3 front-end and a Django back-end. Includes web scraping and data mining capabilities to analyze user data.",
         ghLink: "https://github.com/Magicherry/AyeNote",
         demoLink: "https://github.com/Magicherry/AyeNote",
-        tags: ["Python", "Django", "Vue3"],
+        tags: ["Django", "Vue3", "MySQL", "Beautifull Soup", "AJAX"],
         type: "Personal"
     },
     {
@@ -21,7 +21,7 @@ export const projects = [
         description: "A real-time strategy game with a SpringBoot back-end and a Vue3 front-end. Features a MySQL database and a Bootstrap 4 interface for a dynamic gaming experience.",
         ghLink: "https://github.com/Magicherry/King-of-Bots",
         demoLink: "https://github.com/Magicherry/King-of-Bots",
-        tags: ["Java", "SpringBoot", "Vue3", "MySQL"],
+        tags: ["Spring Boot", "Vue3", "MySQL", "WebSocket","JWT"],
         type: "Personal"
     },
     {
@@ -30,7 +30,7 @@ export const projects = [
         description: "A web application that uses Google's Movenet model to perform real-time pose estimation from a webcam feed, providing instant feedback on movement accuracy.",
         ghLink: "https://github.com/Magicherry/Pose_Estimation",
         demoLink: "https://github.com/Magicherry/Pose_Estimation",
-        tags: ["Computer Vision", "Python", "Movenet"],
+        tags: ["Python", "Movenet", "OpenCV", "Pytorch", "TensorFlow"],
         type: "Personal"
     },
     {
@@ -39,7 +39,7 @@ export const projects = [
         description: "A comprehensive management system built with SpringBoot and MyBatis. Features a secure database with MD5 encryption and a clear separation of front-end and back-end concerns.",
         ghLink: "https://github.com/Magicherry/Management_Web_System",
         demoLink: "https://github.com/Magicherry/Management_Web_System",
-        tags: ["SpringBoot", "MyBatis", "MySQL"],
+        tags: ["Spring Boot", "Vue3", "MyBatis Plus", "MySQL", "MD5"],
         type: "Personal"
     },
     {
@@ -57,7 +57,7 @@ export const projects = [
         description: "A classic fighting game clone built with HTML and JavaScript. Features a microservice-based architecture and allows for two-player keyboard-controlled gameplay.",
         ghLink: "https://github.com/Magicherry/King-of-Fighters",
         demoLink: "https://github.com/Magicherry/King-of-Fighters",
-        tags: ["HTML", "JavaScript"],
+        tags: ["HTML", "JavaScript", "CSS"],
         type: "Personal"
     },
 ];

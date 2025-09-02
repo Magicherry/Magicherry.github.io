@@ -13,7 +13,8 @@ export const timelines = [
                 duration: "06/2025 - Present",
                 description: [
                     "Assisted with the preparation of data for the rail network modelling project.",
-                    "Enhanced the NJT Graph script and built a user-friendly Qt interface, resulting in a reliable standalone application."
+                    "Enhanced the NJT Graph script and developed a cross-platform Qt interface.",
+                    "Integrated LLM APIs and deployed local LLMs to automate data processing and consistency checks."
                 ]
             }
         ]
@@ -29,10 +30,10 @@ export const timelines = [
                 company: "Shanghai Tenchii Digital Tech Co., Ltd. (Tencent x Shentong Metro Group)",
                 duration: "06/2023 - 08/2023",
                 description: [
-                    "Optimized UX performance for the official Shanghai transit App.",
-                    "Restructured and updated website features and interface to align with evolving business objectives.",
-                    "Developed internal interface prototypes and comprehensive operational documentation for cross-team implementation.",
-                    "Utilized Vue, HTML, CSS, and JavaScript for front-end web pages.",
+                    "Optimized UX performance for the official Shanghai Transit App.",
+                    "Restructured website features to align with evolving business objectives.",
+                    "Assisted in developing a real-time lottery barrage system using Vue and WebSocket.",
+                    "Developed internal interface prototypes for cross-team implementation.",
                     "Collaborated closely with back-end developers."
                 ]
             },
@@ -59,7 +60,7 @@ export const timelines = [
                 company: "Shanghai Institute of Technology",
                 duration: "09/2022 - 05/2023",
                 description: [
-                    "Organized club activities, arranged equipment, assisted the president in writing course plans."
+                    "Organized club activities and assisted the president in writing course plans."
                 ]
             },
             {
@@ -77,7 +78,7 @@ export const timelines = [
                 company: "Shanghai Institute of Technology",
                 duration: "02/2021 - 05/2023",
                 description: [
-                    "Managed daily club administrative work, including booking classrooms and planning activities."
+                    "Managed daily club administrative work, prepared equipment and coordinated activity planning"
                 ]
             }
         ]
