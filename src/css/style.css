@@ -724,7 +724,7 @@ body.homepage .home-about-section {
   font-weight: normal;
 }
 
-.project-card-view {
+.project-card-grid-view {
   box-shadow: 0 4px 5px 3px var(--card-shadow-project) !important;
   color: var(--color-text) !important;
   background-color: transparent !important;
@@ -751,7 +751,7 @@ body.homepage .home-about-section {
   transition: transform 0.4s ease-in-out;
 }
 
-.project-card-view:hover .project-card__image {
+.project-card-grid-view:hover .project-card__image {
   transform: scale(1.1);
 }
 
@@ -774,7 +774,7 @@ body.homepage .home-about-section {
   text-align: center;
 }
 
-.project-card-view:hover .project-card__overlay {
+.project-card-grid-view:hover .project-card__overlay {
   opacity: 1;
 }
 
@@ -958,14 +958,14 @@ body.homepage .home-about-section {
   justify-content: center;
 }
 
-.project-card-view:hover {
+.project-card-grid-view:hover {
   transform: scale(1.02) !important;
   overflow: hidden !important;
   box-shadow: 0 0 25px 5px var(--card-shadow-project-hover) !important;
   border-radius: 20px !important;
 }
 
-.project-card-view:active {
+.project-card-grid-view:active {
   transform: scale(0.98) !important;
   transition: transform 0.1s ease !important;
 }
@@ -1409,12 +1409,18 @@ body.homepage .home-about-section {
   justify-content: center !important;
   white-space: nowrap !important;
   gap: 0.3rem !important;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.2) !important;
 }
 
 .fork-btn-inner:hover {
-  /*transform: translateY(-2px) !important;*/
   background-color: var(--button-bg-fork-hover) !important;
   border-color: var(--button-bg-fork-hover) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+.fork-btn-inner:active {
+  transform: scale(0.95) !important;
 }
 
 .fork-btn-inner::after {
@@ -1673,6 +1679,10 @@ body.homepage .home-about-section {
     background-color: rgba(100, 170, 190, 0.65) !important; /* Even brighter hover */
     border-color: rgba(100, 170, 190, 0.8) !important;
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+.download-cv-button:active {
+    transform: scale(0.95) !important;
 }
 
 .download-cv-button svg {

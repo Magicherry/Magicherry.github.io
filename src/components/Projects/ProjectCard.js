@@ -43,7 +43,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
 
     return (
         <div className="project-card-wrapper">
-            <Card className="project-card-view">
+            <Card className="project-card-grid-view">
                 <div className="project-card__image-container">
                     <Card.Img variant="top" src={imgPath} alt="Project preview" className="project-card__image" />
                 </div>
