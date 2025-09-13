@@ -287,44 +287,59 @@ function NavBar({ triggerPreloader }) {
           </Container>
         </Navbar>
 
-        {/* Bottom Tab Bar for Mobile */}
-        <div className={`d-lg-none bottom-nav-container ${isBottomNavHidden ? "bottom-nav-hidden" : ""}`} ref={navContainerRef}>
-          {/* 可拖拽的药丸滑块 */}
-          <div 
-            className={`draggable-pill ${isDragging ? 'dragging' : ''}`}
-            style={{
-              left: `${pillPosition}px`,
-              transform: 'translateX(-50%)'
-            }}
-            ref={pillRef}
-          >
-            {/* 拖拽手柄 */}
+        {/* Bottom Navigation Bar for Mobile */}
+        <div className={`d-lg-none bottom-nav-container ${isBottomNavHidden ? "bottom-nav-hidden" : ""}`}>
+          {/* Main navigation buttons with rounded rectangle background */}
+          <div className="main-nav-wrapper" ref={navContainerRef}>
+            {/* 可拖拽的药丸滑块 */}
             <div 
-              className="drag-handle"
-              onMouseDown={handlePillMouseDown}
-              onTouchStart={handlePillTouchStart}
-            />
+              className={`draggable-pill ${isDragging ? 'dragging' : ''}`}
+              style={{
+                left: `${pillPosition}px`,
+                transform: 'translateX(-50%)'
+              }}
+              ref={pillRef}
+            >
+              {/* 拖拽手柄 */}
+              <div 
+                className="drag-handle"
+                onMouseDown={handlePillMouseDown}
+                onTouchStart={handlePillTouchStart}
+              />
+            </div>
+            
+            <Nav className="main-nav">
+              {navItems.map((item, index) => {
+                const IconComponent = item.icon;
+                return (
+                  <Nav.Item key={item.path}>
+                    <Nav.Link 
+                      as={NavLink} 
+                      to={item.path} 
+                      end={item.path === "/"} 
+                      onClick={closeNavbar}
+                      className="main-nav-link"
+                    >
+                      <IconComponent />
+                      <span>{item.label}</span>
+                    </Nav.Link>
+                  </Nav.Item>
+                );
+              })}
+            </Nav>
           </div>
           
-          <Nav className="bottom-nav">
-            {navItems.map((item, index) => {
-              const IconComponent = item.icon;
-              return (
-                <Nav.Item key={item.path}>
-                  <Nav.Link 
-                    as={NavLink} 
-                    to={item.path} 
-                    end={item.path === "/"} 
-                    onClick={closeNavbar}
-                    className="nav-item-clickable"
-                  >
-                    <IconComponent />
-                    <span>{item.label}</span>
-                  </Nav.Link>
-                </Nav.Item>
-              );
-            })}
-          </Nav>
+          {/* Independent circular GitHub button */}
+          <div className="github-nav-wrapper">
+            <a
+              href="https://github.com/Magicherry/Bits-of-Me"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="github-nav-button"
+            >
+              <AiFillGithub />
+            </a>
+          </div>
         </div>
       </>
   );

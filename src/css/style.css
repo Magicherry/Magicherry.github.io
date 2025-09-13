@@ -1459,8 +1459,8 @@ body.homepage .home-about-section {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: var(--navbar-bg-mobile);
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+  background-color: transparent;
+  box-shadow: none;
   z-index: 1000;
   transition: transform 0.3s ease-in-out;
   transform: translateY(0);
