@@ -27,6 +27,7 @@ function NavBar({ triggerPreloader }) {
   const [dragStartX, setDragStartX] = useState(0);
   const navContainerRef = useRef(null);
   const pillRef = useRef(null);
+  const navbarRef = useRef(null);
   
   // 导航项配置
   const navItems = [
@@ -225,9 +226,29 @@ function NavBar({ triggerPreloader }) {
 
   const closeNavbar = () => setIsExpanded(false);
 
+  // 监听点击外部区域关闭汉堡菜单
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navbarRef.current && !navbarRef.current.contains(event.target) && isExpanded) {
+        closeNavbar();
+      }
+    };
+
+    if (isExpanded) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isExpanded]);
+
   return (
       <>
         <Navbar
+            ref={navbarRef}
             expanded={isExpanded}
             fixed="top"
             expand="lg"

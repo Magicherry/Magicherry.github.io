@@ -84,6 +84,42 @@
     display: none !important;
   }
 
+  /* Active state for mobile hamburger menu items */
+  .navbar-collapse .navbar-nav .nav-item a.active {
+    color: var(--navbar-color-brand) !important;
+  }
+
+  /*================================================================
+    Top Navbar Touch Effects (Mobile Only)
+  ================================================================*/
+  .custom-navbar-container {
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: center center;
+  }
+
+  .custom-navbar-container:active {
+    transform: scale(1.06);
+  }
+
+  .navbar-brand {
+    transform-origin: center center;
+  }
+
+  .navbar-brand:active {
+    transform: scale(1.06) !important;
+  }
+
+  .navbar-nav .nav-item a {
+    transform-origin: center center;
+  }
+
+  .navbar-nav .nav-item a:active {
+    transform: scale(1.06);
+  }
+
+  .fork-btn-inner:active {
+    transform: scale(1.12) !important;
+  }
 
   /*================================================================
     Bottom Navigation Bar
