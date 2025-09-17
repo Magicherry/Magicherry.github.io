@@ -114,7 +114,7 @@ button:focus {
 }
 
 /*================================================================
-  1. Preloader
+  Preloader
 ================================================================*/
 #preloader {
     position: fixed;
@@ -139,7 +139,7 @@ button:focus {
 }
 
 /*================================================================
-  2. Scrollbar
+  Scrollbar
 ================================================================*/
 ::-webkit-scrollbar {
     width: 7px;
@@ -160,7 +160,7 @@ button:focus {
 }
 
 /*================================================================
-  3. Navbar
+  Navbar
 ================================================================*/
 .sticky {
     background-color: transparent !important;
@@ -327,7 +327,7 @@ button:focus {
 }
 
 /*================================================================
-  4. Home Section
+  Home Section
 ================================================================*/
 
 body.homepage .home-section,
@@ -543,7 +543,7 @@ body.homepage .home-about-section {
 }
 
 /*================================================================
-  5. Footer
+  Footer
 ================================================================*/
 .footer__social-link {
     color: white;
@@ -599,7 +599,7 @@ body.homepage .home-about-section {
 }
 
 /*================================================================
-  6. Projects
+  Projects
 ================================================================*/
 .project-card-list-view__type-container {
     position: absolute;
@@ -1047,7 +1047,7 @@ body.homepage .home-about-section {
 }
 
 /*================================================================
-  7. About Section
+  About Section
 ================================================================*/
 .about-section {
     position: relative !important;
@@ -1207,7 +1207,7 @@ body.homepage .home-about-section {
 }
 
 /*================================================================
-  8. Resume
+  Resume
 ================================================================*/
 .resume-section {
     position: relative !important;
@@ -1405,12 +1405,9 @@ body.homepage .home-about-section {
     color: white !important;
 }
 
-/* 移动端汉堡菜单中的GitHub按钮优化 */
 @media (max-width: 991.98px) {
     .fork-btn {
         margin: 15px auto !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
         padding-top: 0 !important;
         justify-content: center !important;
         width: 100% !important;
@@ -1469,7 +1466,7 @@ body.homepage .home-about-section {
 
 
 /*================================================================
-  9. Experiences (from Experiences.css)
+  Experiences (from Experiences.css)
 ================================================================*/
 
 .experience-section {
@@ -1576,7 +1573,7 @@ body.homepage .home-about-section {
 
 
 /*================================================================
-  10. ResumeNew (from ResumeNew.css)
+  ResumeNew (from ResumeNew.css)
 ================================================================*/
 
 @keyframes fadeInUp {
@@ -1617,7 +1614,7 @@ body.homepage .home-about-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px; /* Space between pages */
+    gap: 20px;
 }
 
 .pdf-page-container {
@@ -1640,25 +1637,35 @@ body.homepage .home-about-section {
     white-space: nowrap;
     width: auto;
     color: var(--color-text) !important;
-    background-color: rgba(90, 150, 170, 0.5) !important; /* Even brighter glass effect */
+    background: linear-gradient(
+            135deg,
+            rgba(90, 150, 170, 0.6),
+            rgba(70, 130, 150, 0.6)
+    ) !important;
     backdrop-filter: blur(16px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-    border: 1px solid rgba(90, 150, 170, 0.7) !important;
-    padding: 12px 50px !important;
+    border: 1px solid rgba(90, 150, 170, 0.8) !important;
+    padding: 10px 40px !important;
     border-radius: 30px !important;
-    font-size: 1.1rem !important;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+    font-size: 1.15rem !important;
+    letter-spacing: 0.5px !important;
+    transition: all 0.35s cubic-bezier(0.19, 1, 0.22, 1) !important;
+    box-shadow:
+            inset 0 1px 1px rgba(255, 255, 255, 0.2),
+            0 6px 16px rgba(0, 0, 0, 0.25) !important;
 }
 
 .download-cv-button:hover {
-    background-color: rgba(100, 170, 190, 0.65) !important; /* Even brighter hover */
+    background-color: rgba(100, 170, 190, 0.65) !important;
     border-color: rgba(100, 170, 190, 0.8) !important;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+    box-shadow:
+            inset 0 1px 1px rgba(255, 255, 255, 0.2),
+            0 6px 16px rgba(0, 0, 0, 0.25) !important;
 }
 
 .download-cv-button:active {
     transform: scale(0.95) !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 0 0 rgba(0, 0, 0, 0.3) !important;
 }
 
 .download-cv-button svg {
@@ -1674,7 +1681,7 @@ body.homepage .home-about-section {
     }
 
     .download-cv-button svg {
-        font-size: 1.4em !important; /* Ensure icon size is consistent on mobile */
+        font-size: 1.4em !important;
     }
 }
 
