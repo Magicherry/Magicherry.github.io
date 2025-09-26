@@ -8,11 +8,11 @@ export const projects = [
     },
     {
         imgPath: require("../../Assets/projects/AYE.png"),
-        title: "AyeNote Online Cloud Notes",
+        title: "AyeNote Cloud Notes Platform",
         description: "A full-stack note-taking application featuring a Vue3 front-end and a Django back-end. Includes web scraping and data mining capabilities to analyze user data.",
         ghLink: "https://github.com/Magicherry/AyeNote",
         demoLink: "https://github.com/Magicherry/AyeNote",
-        tags: ["Django", "Vue3", "MySQL", "Beautifull Soup", "AJAX"],
+        tags: ["Django", "Vue3", "MySQL", "BeautifulSoup", "AJAX"],
         type: "Personal"
     },
     {
@@ -35,7 +35,7 @@ export const projects = [
     },
     {
         imgPath: require("../../Assets/projects/Book.png"),
-        title: "Management Web System",
+        title: "Management Dashboard",
         description: "A comprehensive management system built with SpringBoot and MyBatis. Features a secure database with MD5 encryption and a clear separation of front-end and back-end concerns.",
         ghLink: "https://github.com/Magicherry/Management_Web_System",
         demoLink: "https://github.com/Magicherry/Management_Web_System",
