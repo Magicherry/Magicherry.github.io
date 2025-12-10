@@ -11,12 +11,6 @@ function Particle() {
       <Particles
           id="tsparticles"
           options={{
-            background: {
-              color: {
-                value: "#0f1c23"
-              },
-              opacity: 0.85
-            },
             fullScreen: {
               enable: true,
               zIndex: -1
