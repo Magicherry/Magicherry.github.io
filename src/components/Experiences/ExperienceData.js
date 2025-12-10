@@ -4,7 +4,7 @@ export const timelines = [
     {
         title: 'Research',
         subtitle: "Here are a few research projects I've worked on.",
-        icon: FaFlask, // 注意是组件名，不是JSX
+        icon: FaFlask,
         data: [
             {
                 title: "Research Assistant",
