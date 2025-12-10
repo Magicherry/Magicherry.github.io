@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { CgFileDocument } from "react-icons/cg";
 import {
   AiOutlineHome,
   AiOutlineFundProjectionScreen,
@@ -10,6 +9,13 @@ import {
   AiOutlineStar
 } from "react-icons/ai";
 import { MdWorkOutline } from "react-icons/md";
+
+const NAV_ITEMS = [
+  { path: "/", icon: AiOutlineHome, label: "HOME" },
+  { path: "/about", icon: AiOutlineUser, label: "ABOUT" },
+  { path: "/experiences", icon: MdWorkOutline, label: "TRACKS" },
+  { path: "/project", icon: AiOutlineFundProjectionScreen, label: "PROJECTS" }
+];
 
 function NavBar({ triggerPreloader }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -29,31 +35,23 @@ function NavBar({ triggerPreloader }) {
   const pillRef = useRef(null);
   const navbarRef = useRef(null);
   
-  // 导航项配置
-  const navItems = [
-    { path: "/", icon: AiOutlineHome, label: "HOME" },
-    { path: "/about", icon: AiOutlineUser, label: "ABOUT" },
-    { path: "/experiences", icon: MdWorkOutline, label: "TRACKS" },
-    { path: "/project", icon: AiOutlineFundProjectionScreen, label: "PROJECTS" }
-  ];
-
   // 计算药丸位置的函数
-  const calculatePillPosition = () => {
-    const currentIndex = navItems.findIndex(item => 
+  const calculatePillPosition = useCallback(() => {
+    const currentIndex = NAV_ITEMS.findIndex(item =>
       item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path)
     );
     if (currentIndex !== -1 && navContainerRef.current) {
       const containerWidth = navContainerRef.current.offsetWidth;
-      const itemWidth = containerWidth / navItems.length;
+      const itemWidth = containerWidth / NAV_ITEMS.length;
       const newPosition = currentIndex * itemWidth + itemWidth / 2;
       setPillPosition(newPosition);
     }
-  };
+  }, [location.pathname]);
 
   // 更新药丸位置基于当前路由
   useEffect(() => {
     calculatePillPosition();
-  }, [location.pathname, navItems]);
+  }, [calculatePillPosition, location.pathname]);
 
   // 监听窗口大小变化，自适应调整药丸位置
   useEffect(() => {
@@ -70,7 +68,7 @@ function NavBar({ triggerPreloader }) {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleResize);
     };
-  }, [location.pathname, navItems]);
+  }, [calculatePillPosition]);
 
   // 使用ResizeObserver监听容器大小变化（更精确）
   useEffect(() => {
@@ -91,7 +89,7 @@ function NavBar({ triggerPreloader }) {
       resizeObserver.disconnect();
       clearTimeout(resizeTimeout);
     };
-  }, [location.pathname, navItems]);
+  }, [calculatePillPosition]);
 
   // 拖拽事件处理
   const handlePillMouseDown = (e) => {
@@ -112,40 +110,46 @@ function NavBar({ triggerPreloader }) {
     e.stopPropagation();
   };
 
-  const handleMouseMove = (e) => {
-    if (!isDragging || !navContainerRef.current) return;
-    
-    const containerRect = navContainerRef.current.getBoundingClientRect();
-    const newX = e.clientX - containerRect.left - dragStartX;
-    const itemWidth = containerRect.width / navItems.length;
-    const clampedX = Math.max(itemWidth / 2, Math.min(newX, containerRect.width - itemWidth / 2));
-    setPillPosition(clampedX);
-  };
+  const handleMouseMove = useCallback(
+    (e) => {
+      if (!isDragging || !navContainerRef.current) return;
+      
+      const containerRect = navContainerRef.current.getBoundingClientRect();
+      const newX = e.clientX - containerRect.left - dragStartX;
+      const itemWidth = containerRect.width / NAV_ITEMS.length;
+      const clampedX = Math.max(itemWidth / 2, Math.min(newX, containerRect.width - itemWidth / 2));
+      setPillPosition(clampedX);
+    },
+    [dragStartX, isDragging]
+  );
 
-  const handleTouchMove = (e) => {
-    if (!isDragging || !navContainerRef.current) return;
-    
-    e.preventDefault(); // 防止页面滚动
-    const containerRect = navContainerRef.current.getBoundingClientRect();
-    const newX = e.touches[0].clientX - containerRect.left - dragStartX;
-    const itemWidth = containerRect.width / navItems.length;
-    const clampedX = Math.max(itemWidth / 2, Math.min(newX, containerRect.width - itemWidth / 2));
-    setPillPosition(clampedX);
-  };
+  const handleTouchMove = useCallback(
+    (e) => {
+      if (!isDragging || !navContainerRef.current) return;
+      
+      e.preventDefault(); // 防止页面滚动
+      const containerRect = navContainerRef.current.getBoundingClientRect();
+      const newX = e.touches[0].clientX - containerRect.left - dragStartX;
+      const itemWidth = containerRect.width / NAV_ITEMS.length;
+      const clampedX = Math.max(itemWidth / 2, Math.min(newX, containerRect.width - itemWidth / 2));
+      setPillPosition(clampedX);
+    },
+    [dragStartX, isDragging]
+  );
 
-  const handleDragEnd = () => {
+  const handleDragEnd = useCallback(() => {
     if (!isDragging || !navContainerRef.current) return;
     
     setIsDragging(false);
     
     // 计算最近的导航项
     const containerWidth = navContainerRef.current.offsetWidth;
-    const itemWidth = containerWidth / navItems.length;
+    const itemWidth = containerWidth / NAV_ITEMS.length;
     const closestIndex = Math.round((pillPosition - itemWidth / 2) / itemWidth);
-    const clampedIndex = Math.max(0, Math.min(closestIndex, navItems.length - 1));
+    const clampedIndex = Math.max(0, Math.min(closestIndex, NAV_ITEMS.length - 1));
     
     // 导航到对应页面
-    const targetPath = navItems[clampedIndex].path;
+    const targetPath = NAV_ITEMS[clampedIndex].path;
     if (targetPath !== location.pathname) {
       navigate(targetPath);
       if (triggerPreloader) {
@@ -156,7 +160,7 @@ function NavBar({ triggerPreloader }) {
     // 吸附到正确位置
     const finalPosition = clampedIndex * itemWidth + itemWidth / 2;
     setPillPosition(finalPosition);
-  };
+  }, [isDragging, location.pathname, navigate, pillPosition, triggerPreloader]);
 
   useEffect(() => {
     if (isDragging) {
@@ -173,7 +177,7 @@ function NavBar({ triggerPreloader }) {
         document.removeEventListener('touchend', handleDragEnd);
       };
     }
-  }, [isDragging, pillPosition, dragStartX]);
+  }, [handleDragEnd, handleMouseMove, handleTouchMove, isDragging]);
 
   useEffect(() => {
     function handleScroll() {
@@ -330,7 +334,7 @@ function NavBar({ triggerPreloader }) {
             </div>
             
             <Nav className="main-nav">
-              {navItems.map((item, index) => {
+              {NAV_ITEMS.map((item, index) => {
                 const IconComponent = item.icon;
                 return (
                   <Nav.Item key={item.path}>
