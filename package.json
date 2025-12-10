@@ -1,7 +1,7 @@
 {
   "name": "bits-of-me",
   "version": "0.3.1",
-  "homepage": "https://Magicherry.github.io/Bits-of-Me/",
+  "homepage": "https://Magicherry.github.io/",
   "private": true,
   "dependencies": {
     "@react-pdf/renderer": "^4.3.0",
