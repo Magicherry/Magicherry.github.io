@@ -421,12 +421,12 @@ function NavBar({ triggerPreloader }) {
               <div className="floating-nav-title">M.S. in Computer Science</div>
               <a
                 className="floating-nav-location"
-                href="https://www.google.com/maps/search/?api=1&query=Edison%2C%20NJ"
+                href="https://www.google.com/maps/search/?api=1&query=Rutgers%20University%E2%80%93New%20Brunswick"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <FiMapPin />
-                <span>Edison, NJ</span>
+                <span>Rutgers University</span>
               </a>
               <div className="floating-nav-actions">
                 <a
