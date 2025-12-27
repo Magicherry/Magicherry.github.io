@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, Modal } from "react-bootstrap";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   AiOutlineHome,
@@ -9,6 +9,11 @@ import {
   AiOutlineStar
 } from "react-icons/ai";
 import { MdWorkOutline } from "react-icons/md";
+import { FiSidebar, FiMapPin } from "react-icons/fi";
+import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
+import { SiBilibili } from "react-icons/si";
+import avatarImg from "../../Assets/avatar/avatar.png";
+import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
 
 const NAV_ITEMS = [
   { path: "/", icon: AiOutlineHome, label: "HOME" },
@@ -22,6 +27,14 @@ function NavBar({ triggerPreloader }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isTopNavHidden, setIsTopNavHidden] = useState(false);
   const [isBottomNavHidden, setIsBottomNavHidden] = useState(false);
+  const [isSideNavVisible, setIsSideNavVisible] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const stored = window.localStorage ? window.localStorage.getItem("navMode") : null;
+    if (stored === "side" && window.innerWidth >= 992) return true;
+    if (stored === "top") return false;
+    return window.innerWidth >= 992;
+  });
+  const [showWechatModal, setShowWechatModal] = useState(false);
   const lastScrollYRef = useRef(window.scrollY);
   const scrollTimeoutRef = useRef(null);
   
@@ -183,6 +196,7 @@ function NavBar({ triggerPreloader }) {
     function handleScroll() {
       const scrollY = window.scrollY;
       const atBottom = window.innerHeight + scrollY >= document.body.offsetHeight - 10;
+      const isMobile = window.innerWidth < 992;
       setIsScrolled(scrollY >= 20);
 
       // 滚动时自动关闭展开的汉堡菜单
@@ -195,8 +209,12 @@ function NavBar({ triggerPreloader }) {
 
       // 顶部navbar隐藏逻辑
       const isScrollingDown = scrollY > lastScrollYRef.current;
-      if (isScrollingDown && scrollY > 80) {
-        setIsTopNavHidden(false);
+      if (isMobile) {
+        if (isScrollingDown && scrollY > 80) {
+          setIsTopNavHidden(true);
+        } else {
+          setIsTopNavHidden(false);
+        }
       } else {
         setIsTopNavHidden(false);
       }
@@ -228,7 +246,68 @@ function NavBar({ triggerPreloader }) {
     }
   }, [isBottomNavHidden]);
 
+  useEffect(() => {
+    if (isSideNavVisible) {
+      document.body.classList.add("side-nav-open");
+    } else {
+      document.body.classList.remove("side-nav-open");
+    }
+    if (typeof window !== "undefined" && window.localStorage) {
+      window.localStorage.setItem("navMode", isSideNavVisible ? "side" : "top");
+    }
+  }, [isSideNavVisible]);
+
+  useEffect(() => {
+    if (!showWechatModal) return;
+    const handleScroll = () => setShowWechatModal(false);
+    window.addEventListener("wheel", handleScroll);
+    window.addEventListener("touchmove", handleScroll);
+    return () => {
+      window.removeEventListener("wheel", handleScroll);
+      window.removeEventListener("touchmove", handleScroll);
+    };
+  }, [showWechatModal]);
+
+  // Auto-disable floating side navigation on small screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 992 && isSideNavVisible) {
+        setIsSideNavVisible(false);
+        if (typeof window !== "undefined" && window.localStorage) {
+          window.localStorage.setItem("navMode", "top");
+        }
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isSideNavVisible]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.localStorage) return;
+    const storedMode = window.localStorage.getItem("navMode");
+    if (storedMode === "side" && window.innerWidth >= 992) {
+      setIsSideNavVisible(true);
+    }
+  }, []);
+
   const closeNavbar = () => setIsExpanded(false);
+
+  const toggleSideNav = () => {
+    setIsSideNavVisible((prev) => {
+      const next = !prev;
+      if (typeof window !== "undefined" && window.localStorage) {
+        window.localStorage.setItem("navMode", next ? "side" : "top");
+      }
+      return next;
+    });
+    closeNavbar();
+  };
+
+  const openWechatModal = (event) => {
+    event.preventDefault();
+    setShowWechatModal(true);
+  };
 
   // 监听点击外部区域关闭汉堡菜单
   useEffect(() => {
@@ -256,13 +335,22 @@ function NavBar({ triggerPreloader }) {
             expanded={isExpanded}
             fixed="top"
             expand="lg"
-            className={`${isTopNavHidden ? "navbar-hidden" : ""} ${isScrolled ? "navbar-scrolled" : ""}`}
+            className={`${isTopNavHidden ? "navbar-hidden" : ""} ${isScrolled ? "navbar-scrolled" : ""} ${isSideNavVisible ? "navbar-floating-mode" : ""}`}
             onToggle={setIsExpanded}
         >
           <Container className="custom-navbar-container">
-            <Navbar.Brand as={Link} to="/" onClick={() => { closeNavbar(); triggerPreloader(); }}>
+            <Navbar.Brand as={Link} to="/" onClick={() => { closeNavbar(); if (triggerPreloader) { triggerPreloader(); } }}>
               MAGICHERRY.
             </Navbar.Brand>
+            <div className="layout-toggle-wrapper">
+              <button
+                type="button"
+                className={`layout-toggle-btn ${isSideNavVisible ? "active" : ""}`}
+                onClick={toggleSideNav}
+              >
+                <FiSidebar />
+              </button>
+            </div>
             <Navbar.Toggle aria-controls="responsive-navbar-nav">
               <span />
               <span />
@@ -311,6 +399,117 @@ function NavBar({ triggerPreloader }) {
             </Navbar.Collapse>
           </Container>
         </Navbar>
+
+        <div className={`floating-nav-container ${isSideNavVisible ? "show" : ""}`}>
+          <div className="floating-nav-panel">
+            <div className="floating-nav-header">
+              <span className="floating-nav-brand" onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}>
+                MAGICHERRY.
+              </span>
+              <button type="button" className="floating-nav-close" onClick={toggleSideNav} aria-label="Collapse to top navigation">
+                <FiSidebar />
+              </button>
+            </div>
+
+            <div className="floating-nav-profile">
+              <div className="floating-nav-avatar-wrapper">
+                <img src={avatarImg} alt="Yuting Zhou avatar" className="floating-nav-avatar" />
+              </div>
+              <div className="floating-nav-name">Yuting Zhou</div>
+              <div className="floating-nav-title">M.S. in Computer Science</div>
+              <a
+                className="floating-nav-location"
+                href="https://www.google.com/maps/search/?api=1&query=Edison%2C%20NJ"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FiMapPin />
+                <span>Edison, NJ</span>
+              </a>
+              <div className="floating-nav-actions">
+                <a
+                  className="floating-nav-icon-btn"
+                  href="https://github.com/Magicherry"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub"
+                >
+                  <AiFillGithub />
+                </a>
+                <a
+                  className="floating-nav-icon-btn"
+                  href="https://www.linkedin.com/in/yuting-zhou-5140ba299/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                >
+                  <FaLinkedinIn />
+                </a>
+                <a
+                  className="floating-nav-icon-btn"
+                  href="#wechat"
+                  aria-label="WeChat"
+                  onClick={openWechatModal}
+                >
+                  <FaWeixin />
+                </a>
+                <a
+                  className="floating-nav-icon-btn"
+                  href="https://space.bilibili.com/155876727"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Bilibili"
+                >
+                  <SiBilibili />
+                </a>
+              </div>
+            </div>
+
+            <div className="floating-nav-divider" />
+
+            <Nav className="floating-nav-list">
+              {NAV_ITEMS.map((item) => {
+                const IconComponent = item.icon;
+                return (
+                  <Nav.Item key={item.path}>
+                    <Nav.Link
+                      as={NavLink}
+                      to={item.path}
+                      end={item.path === "/"}
+                      className="floating-nav-link"
+                      onClick={() => {
+                        closeNavbar();
+                      }}
+                    >
+                      <IconComponent />
+                      <span>{item.label}</span>
+                    </Nav.Link>
+                  </Nav.Item>
+                );
+              })}
+            </Nav>
+
+            <div className="floating-nav-divider" />
+
+            <div className="floating-nav-bottom">
+              <div className="floating-nav-contact-text">
+                <a href="mailto:zyt680129@gmail.com">zyt680129@gmail.com</a>
+                <a href="tel:+18482309757">+1 (848) 230-9757</a>
+              </div>
+              <div className="floating-nav-footer">
+                <a
+                  href="https://github.com/Magicherry"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="floating-nav-ghost-btn"
+                >
+                  <AiFillGithub />
+                  <span>GitHub</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Bottom Navigation Bar for Mobile */}
         <div className={`d-lg-none bottom-nav-container ${isBottomNavHidden ? "bottom-nav-hidden" : ""}`}>
@@ -366,6 +565,12 @@ function NavBar({ triggerPreloader }) {
             </a>
           </div>
         </div>
+
+        <Modal show={showWechatModal} onHide={() => setShowWechatModal(false)} centered>
+          <Modal.Body style={{ textAlign: "center", cursor: "pointer" }} onClick={() => setShowWechatModal(false)}>
+            <img src={wechatQrCode} alt="WeChat QR Code" style={{ maxWidth: "100%" }} />
+          </Modal.Body>
+        </Modal>
       </>
   );
 }
