@@ -2021,18 +2021,13 @@ body.homepage .home-about-section {
     align-items: center !important;
     white-space: nowrap;
     width: auto;
-    color: var(--color-text) !important;
-    background: linear-gradient(
-            135deg,
-            rgba(90, 150, 170, 0.6),
-            rgba(70, 130, 150, 0.6)
-    ) !important;
-    backdrop-filter: blur(16px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-    border: 1px solid rgba(90, 150, 170, 0.8) !important;
-    padding: 10px 40px !important;
-    border-radius: 30px !important;
+    color: #0d2230 !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    padding: 11px 34px !important;
+    border-radius: 14px !important;
     font-size: 1.15rem !important;
+    font-weight: 600 !important;
     letter-spacing: 0.5px !important;
     transition: all 0.35s cubic-bezier(0.19, 1, 0.22, 1) !important;
     box-shadow:
@@ -2041,16 +2036,16 @@ body.homepage .home-about-section {
 }
 
 .download-cv-button:hover {
-    background-color: rgba(100, 170, 190, 0.65) !important;
-    border-color: rgba(100, 170, 190, 0.8) !important;
-    box-shadow:
-            inset 0 1px 1px rgba(255, 255, 255, 0.2),
-            0 6px 16px rgba(0, 0, 0, 0.25) !important;
+    background: #f2f8fb !important;
+    border-color: rgba(90, 150, 170, 0.4) !important;
+    color: #0b1b27 !important;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25) !important;
+    transform: translateY(-1px);
 }
 
 .download-cv-button:active {
-    transform: scale(0.95) !important;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 0 0 rgba(0, 0, 0, 0.3) !important;
+    transform: scale(0.97) !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 0 0 rgba(0, 0, 0, 0.2) !important;
 }
 
 .download-cv-button svg {

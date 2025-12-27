@@ -6,7 +6,8 @@ import {
   AiOutlineFundProjectionScreen,
   AiOutlineUser,
   AiFillGithub,
-  AiOutlineStar
+  AiOutlineStar,
+  AiOutlineFileText
 } from "react-icons/ai";
 import { MdWorkOutline } from "react-icons/md";
 import { FiSidebar, FiMapPin } from "react-icons/fi";
@@ -14,6 +15,7 @@ import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
 import { SiBilibili } from "react-icons/si";
 import avatarImg from "../../Assets/avatar/avatar.png";
 import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
+import cvFile from "../../Assets/cv/Yuting_Zhou_CV.pdf";
 
 const NAV_ITEMS = [
   { path: "/", icon: AiOutlineHome, label: "HOME" },
@@ -498,13 +500,13 @@ function NavBar({ triggerPreloader }) {
               </div>
               <div className="floating-nav-footer">
                 <a
-                  href="https://github.com/Magicherry"
+                  href={cvFile}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="floating-nav-ghost-btn"
                 >
-                  <AiFillGithub />
-                  <span>GitHub</span>
+                  <AiOutlineFileText />
+                  <span>View my resume</span>
                 </a>
               </div>
             </div>
