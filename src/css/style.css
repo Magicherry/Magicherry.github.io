@@ -265,18 +265,20 @@ button:focus {
 .layout-toggle-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    border-radius: 999px;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0;
     background: rgba(26, 31, 46, 0.65);
     border: 1px solid rgba(255, 255, 255, 0.15);
     color: var(--color-text);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     letter-spacing: 0.2px;
     backdrop-filter: blur(14px) saturate(160%);
     -webkit-backdrop-filter: blur(14px) saturate(160%);
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08), 0 10px 30px rgba(0, 0, 0, 0.25);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    transition: background 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
 }
 
 .layout-toggle-btn svg {
@@ -285,12 +287,12 @@ button:focus {
 }
 
 .layout-toggle-btn:hover {
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.08);
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 14px 36px rgba(0, 0, 0, 0.3);
 }
 
 .layout-toggle-btn:active {
-    transform: translateY(0);
+    transform: none;
 }
 
 .layout-toggle-btn.active {
@@ -491,7 +493,9 @@ button:focus {
     height: 1px;
     width: 100%;
     background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
-    margin: 6px 0 4px;
+    margin: 6px 10px 4px 0;
+    box-sizing: border-box;
+    flex-shrink: 0;
 }
 
 .floating-nav-list {
@@ -507,23 +511,27 @@ button:focus {
     letter-spacing: 0.6px;
     color: var(--navbar-color-brand);
     cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.floating-nav-brand:hover {
+    transform: translateY(-2px);
 }
 
 .floating-nav-close {
-    width: 34px;
-    height: 34px;
-    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.16);
     background: rgba(255, 255, 255, 0.05);
     color: var(--color-text);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .floating-nav-close:hover {
-    transform: translateY(-1px);
     background: rgba(255, 255, 255, 0.08);
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
 }
