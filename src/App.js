@@ -36,6 +36,78 @@ function App() {
     document.body.classList.add("homepage");
   }, []);
 
+  // Mouse glow limited to nav panels and buttons (no background bleed)
+  useEffect(() => {
+    const selector = [
+      ".floating-nav-panel",
+      ".floating-nav-link",
+      ".floating-nav-icon-btn",
+      ".floating-nav-ghost-btn",
+      ".floating-nav-container",
+      ".custom-navbar-container",
+      ".custom-navbar-container .nav-link",
+      ".custom-navbar-container .navbar-brand",
+      "button",
+      ".btn",
+      ".layout-toggle-btn",
+      ".main-nav-link",
+      ".github-nav-button"
+    ].join(", ");
+
+    const targets = Array.from(document.querySelectorAll(selector));
+    const overlays = new WeakMap();
+
+    targets.forEach((el) => {
+      // Ensure positioning context for absolute overlay
+      if (getComputedStyle(el).position === "static") {
+        el.dataset.glowPositionPatched = "true";
+        el.style.position = "relative";
+      }
+
+      const overlay = document.createElement("div");
+      overlay.className = "mouse-glow-local";
+      el.appendChild(overlay);
+      overlays.set(el, overlay);
+
+      const handleMove = (event) => {
+        const rect = el.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        overlay.style.setProperty("--glow-x", `${x}%`);
+        overlay.style.setProperty("--glow-y", `${y}%`);
+        overlay.classList.add("visible");
+      };
+
+      const handleLeave = () => {
+        overlay.classList.remove("visible");
+      };
+
+      el.addEventListener("mousemove", handleMove);
+      el.addEventListener("mouseleave", handleLeave);
+
+      // Store listeners for cleanup
+      overlays.set(el, { overlay, handleMove, handleLeave });
+    });
+
+    return () => {
+      targets.forEach((el) => {
+        const record = overlays.get(el);
+        if (record) {
+          const { overlay, handleMove, handleLeave } = record;
+          el.removeEventListener("mousemove", handleMove);
+          el.removeEventListener("mouseleave", handleLeave);
+          if (overlay && overlay.parentNode === el) {
+            el.removeChild(overlay);
+          }
+        }
+        if (el.dataset.glowPositionPatched) {
+          el.style.position = "";
+          delete el.dataset.glowPositionPatched;
+        }
+      });
+    };
+  }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       upadateLoad(false);

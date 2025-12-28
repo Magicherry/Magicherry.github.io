@@ -102,6 +102,68 @@ button:focus {
     box-shadow: none !important;
 }
 
+.mouse-glow-local {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    mix-blend-mode: screen;
+
+    opacity: 0;
+    transform: scale(0.985);
+    transition:
+        opacity 0.24s ease,
+        transform 0.24s ease;
+
+    background:
+        radial-gradient(
+            circle at var(--glow-x, 50%) var(--glow-y, 50%),
+
+            /* ↓ 中心亮度明显下调 */
+            rgba(110, 210, 255, 0.055) 0%,
+            rgba(110, 210, 255, 0.045) 12%,
+            rgba(110, 210, 255, 0.036) 22%,
+            rgba(110, 210, 255, 0.028) 32%,
+            rgba(110, 210, 255, 0.020) 42%,
+            rgba(110, 210, 255, 0.014) 52%,
+            rgba(110, 210, 255, 0.008) 62%,
+            rgba(110, 210, 255, 0.003) 72%,
+            rgba(110, 210, 255, 0.000) 82%
+        );
+
+    box-shadow:
+        inset 0 0 0 1px rgba(150, 220, 255, 0.028),
+        0 0 10px rgba(90, 190, 255, 0.035);
+
+    filter:
+        blur(7px)
+        brightness(1.02); /* ↓ 从 1.05 降到 1.02 */
+
+    will-change: opacity, transform;
+}
+
+.mouse-glow-local.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.custom-navbar-container {
+    position: relative;
+    overflow: visible; /* allow collapse to expand; glow clipped via clip-path */
+    border-radius: 14px;
+}
+
+/* Clip glow itself without hiding navbar children */
+.custom-navbar-container > .mouse-glow-local {
+    clip-path: inset(0 round 14px);
+}
+
+@media (max-width: 768px) {
+    .mouse-glow-local {
+        filter: blur(8px);
+    }
+}
+
 .fade-in-section {
     opacity: 0;
     transform: translateY(30px);
@@ -334,7 +396,7 @@ button:focus {
     overscroll-behavior: contain;
     padding-right: 14px;
     scrollbar-gutter: stable both-edges;
-    background: rgba(20, 25, 36, 0.7);
+    background: rgb(20, 25, 36);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 18px;
     padding: 16px;
