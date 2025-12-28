@@ -342,7 +342,7 @@ function NavBar({ triggerPreloader }) {
         >
           <Container className="custom-navbar-container">
             <Navbar.Brand as={Link} to="/" onClick={() => { closeNavbar(); if (triggerPreloader) { triggerPreloader(); } }}>
-              YUTING ZHOU
+              MAGICHERRY.
             </Navbar.Brand>
             <div className="layout-toggle-wrapper">
               <button
@@ -406,7 +406,7 @@ function NavBar({ triggerPreloader }) {
           <div className="floating-nav-panel">
             <div className="floating-nav-header">
               <span className="floating-nav-brand" onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}>
-                YUTING ZHOU
+                MAGICHERRY.
               </span>
               <button type="button" className="floating-nav-close" onClick={toggleSideNav} aria-label="Collapse to top navigation">
                 <FiSidebar />
