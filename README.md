@@ -1,6 +1,6 @@
 <h2 align="center">
   Bits of Me - Personal Portfolio <br/>
-  <a href="https://yutingzhouwebsite.vercel.app/" target="_blank">yutingzhou.website</a>
+  <a href="https://magicherry.github.io/" target="_blank">magicherry.github.io</a>
 </h2>
 
 <p align="center">
@@ -15,107 +15,55 @@
   <img src="https://img.shields.io/badge/Status-Maintained-brightgreen" alt="Status">
 </p>
 
----
+## Overview
 
-## Framework Upgrade
+A fully customized React-based portfolio evolved from an open-source template.
+Built with maintainability, mobile-first responsiveness, and polished UI interactions in mind.
 
-- Migrated from React 17 to **React 18.3.1**.
-- Consolidated core layout components (`Navbar`, `Footer`, etc.) into a unified `MainFrame` directory for cleaner architecture.
-
-## Page Redesign
-
-- Rewrote the `PROJECTS` page. Introduced both **list** and **grid** views for more flexible content presentation, and restructured page hierarchy for better readability across devices.
-- Added the `TRACKS` page for showing professional experience, built entirely from scratch.
-
-## Mobile Optimization
-
-- Added a context-aware, adaptive bottom navigation bar to improve accessibility on smaller screens.
-- Audited and optimized layout depth and spacing for mobile, ensuring each page adapts fluidly to different screen sizes.
-
-## Visual Enhancements
-
-- Unified border-radius across buttons, cards, modals, and containers, and incorporated glassmorphic components for a modern interface.
-- Integrated a light `Particle.js` effect on the homepage to enrich visual depth without distraction.
-- Added entrance and exit animations to major pages for a more fluid and polished browsing experience.
-- Enhanced user interaction by adding hover, tap, and motion-based animations across navigational links, buttons, and project items.
+![Home Page](src/Assets/demo/Demo.png)
 
 ---
 
-<details>
-<summary>Click to view the original README from Soumyajit</summary>
+## Highlights
+- Polished personal portfolio built with a modern React 18 stack
+- Adaptive navigation experience across desktop and mobile, including top, side, and bottom layouts
+- Redesigned Projects section with flexible list and grid presentations
+- Dedicated Tracks page highlighting professional experience and growth
+- Mobile-first responsive design with smooth, intuitive interactions
+- Subtle animations and glassmorphic visuals for a clean, contemporary aesthetic
 
-<br>
+## Prerequisites & Setup
 
-<h2 align="center">
-  Portfolio Website - v2.0<br/>
-  <a href="https://soumyajit.vercel.app/" target="_blank">soumyajit.tech</a>
-</h2>
+Clone down this repository. You will need these tools installed:
+- `git` (for cloning)
+- `node` 20.x (LTS) and `npm` (bundled with Node)
+- Optional: `nvm` for managing Node versions
+- Optional: `vercel` CLI if you plan to deploy with Vercel
 
-<br/>
+## Local Development
 
-<center>
-
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) &nbsp;
-[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com) &nbsp;
-[![forthebadge](https://forthebadge.com/images/badges/open-source.svg)](https://forthebadge.com) &nbsp;
-![GitHub Repo stars](https://img.shields.io/github/stars/soumyajit4419/Portfolio?color=red&logo=github&style=for-the-badge) &nbsp;
-![GitHub forks](https://img.shields.io/github/forks/soumyajit4419/Portfolio?color=red&logo=github&style=for-the-badge)
-
-</center>
-
-<h3 align="center">
-    🔹
-    <a href="https://github.com/soumyajit4419/Portfolio/issues">Report Bug</a> &nbsp; &nbsp;
-    🔹
-    <a href="https://github.com/soumyajit4419/Portfolio/issues">Request Feature</a>
-</h3>
-
-## TL;DR
-
-You can fork this repo to modify and make changes of your own. Please give me proper credit by linking back to [Soumyajit4419](https://github.com/soumyajit4419/Portfolio). Thanks!
-
-## Built With
-
-My personal portfolio <a href="https://soumyajit.vercel.app/" target="_blank">soumyajit.tech</a> which features some of my github projects as well as my resume and technical skills.<br/>
-
-This project was built using these technologies.
-
-- React.js
-- Node.js
-- Express.js
-- CSS3
-- VsCode
-- Vercel
-
-## Features
-
-**📖 Multi-Page Layout**
-
-**🎨 Styled with React-Bootstrap and Css with easy to customize colors**
-
-**📱 Fully Responsive**
-
-## Getting Started
-
-Clone down this repository. You will need `node.js` and `git` installed globally on your machine.
-
-## 🛠 Installation and Setup Instructions
-
-1. Installation: `npm install`
-
-2. In the project directory, you can run: `npm start`
+Install dependencies and start the development server:
+```bash
+npm install
+npm start
+```
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
 The page will reload if you make edits.
 
-## Usage Instructions
+## Usage
 
 Open the project folder and Navigate to `/src/components/`. <br/>
-You will find all the components used and you can edit your information accordingly.
+Each section is modularized for clarity, making it easy to adjust structure, visuals, or interactions as the portfolio evolves.
 
-### Show your support
+## Acknowledgements
 
-Give a ⭐ if you like this website!
-
-<a href="https://www.buymeacoffee.com/soumyajit4419" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-violet.png" alt="Buy Me A Coffee" height= "60px" width= "217px" ></a>
+Grateful to the open-source community and the following projects for inspiration and building blocks:
+- [React](https://react.dev)
+- [Bootstrap](https://getbootstrap.com/)
+- [React-Bootstrap](https://react-bootstrap.github.io/)
+- [React Icons](https://react-icons.github.io/react-icons)
+- [Vercel](https://vercel.com/)
+- Contributors of the original portfolio template by [Soumyajit](https://github.com/soumyajit4419/Portfolio)
