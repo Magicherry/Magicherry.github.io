@@ -6,9 +6,11 @@ function TypeWord() {
     <Typewriter
       options={{
         strings: [
-          "Software Developer",
+          "Software Engineer",
+          "Machine Learning Engineer",
           "Front-end Developer",
           "Back-end Developer",
+          "Full-stack Developer",
             "Test Engineer",
             "Data Analysis",
         ],
