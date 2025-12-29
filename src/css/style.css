@@ -1547,16 +1547,21 @@ body.homepage .home-about-section {
 .tech-stack__row {
     justify-content: center;
     padding-bottom: 50px;
+    row-gap: 12px;
 }
 
 .tech-stack__col {
-    padding: 10px;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    min-width: 150px;
 }
 
 .tech-stack__icon-link {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 12px;
     width: 100%;
     height: 100%;
     text-decoration: none;
@@ -1581,9 +1586,9 @@ body.homepage .home-about-section {
 /*}*/
 
 .tech-icons {
-    font-size: 4.8em !important;
-    margin: 10px !important;
-    padding: 10px !important;
+    font-size: 1rem !important;
+    margin: 8px !important;
+    padding: 14px 18px !important;
     opacity: 0.93 !important;
     border-radius: 20px !important;
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
@@ -1603,16 +1608,51 @@ body.homepage .home-about-section {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+    gap: 12px !important;
+    width: 100%;
+    max-width: 220px;
+    flex-shrink: 0;
     position: relative !important;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15), border 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15) !important;
+    text-align: center;
+    min-height: 76px;
+}
+
+.tech-icons__icon {
+    font-size: 3rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tech-icons__name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+    opacity: 0.92;
 }
 
 
 @media (max-width: 767px) {
     .tech-icons {
-        margin: 0 !important;
-        font-size: 4em !important;
-        padding: 15px !important;
+        margin: 6px !important;
+        padding: 12px 14px !important;
+        max-width: 200px;
+        min-height: 78px;
+    }
+
+    .tech-stack__col {
+        min-width: 130px;
+    }
+
+    .tech-icons__icon {
+        font-size: 2.4rem;
+    }
+
+    .tech-icons__name {
+        font-size: 1rem;
     }
 }
 

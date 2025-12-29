@@ -21,7 +21,7 @@ import {
     SiTensorflow,
     SiPytorch
 } from "react-icons/si";
-import { FaGlassMartiniAlt } from "react-icons/fa"; // Gin 占位图标
+import { FaGlassMartiniAlt } from "react-icons/fa"; // Gin placeholder icon
 import { CgCPlusPlus } from "react-icons/cg";
 
 const techStackIcons = [
@@ -60,15 +60,26 @@ function Techstack() {
         <FadeInOnScroll>
             <Row className="tech-stack__row">
                 {techStackIcons.map((tech, index) => (
-                    <Col key={index} xs={4} md={2} className="tech-stack__col">
+                    <Col
+                        key={index}
+                        xs={6}
+                        sm={4}
+                        md={3}
+                        lg={2}
+                        xl={2}
+                        className="tech-stack__col"
+                    >
                         <a
                             className="tech-icons tech-stack__icon-link"
                             href={tech.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            title={tech.name} // 悬停显示技能名称
+                            title={tech.name} // Show skill name on hover
                         >
-                            {tech.icon}
+                            <span className="tech-icons__icon" aria-hidden="true">
+                                {tech.icon}
+                            </span>
+                            <span className="tech-icons__name">{tech.name}</span>
                         </a>
                     </Col>
                 ))}
