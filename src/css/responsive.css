@@ -205,10 +205,6 @@
         border-radius: 40px !important;
     }
 
-    .main-nav-link:active {
-        /* 移除单个按钮的缩放，让整个导航栏统一缩放 */
-    }
-
     .main-nav-link.active {
         color: #00f7ff !important;
         background-color: transparent !important;

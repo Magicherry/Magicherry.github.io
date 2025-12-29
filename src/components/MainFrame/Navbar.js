@@ -24,21 +24,137 @@ const NAV_ITEMS = [
   { path: "/project", icon: AiOutlineFundProjectionScreen, label: "PROJECTS" }
 ];
 
-function NavBar({ triggerPreloader }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isTopNavHidden, setIsTopNavHidden] = useState(false);
-  const [isBottomNavHidden, setIsBottomNavHidden] = useState(false);
-  const [isSideNavVisible, setIsSideNavVisible] = useState(() => {
+function useNavMode() {
+  const getInitial = () => {
     if (typeof window === "undefined") return false;
     const stored = window.localStorage ? window.localStorage.getItem("navMode") : null;
     if (stored === "side" && window.innerWidth >= 992) return true;
     if (stored === "top") return false;
     return window.innerWidth >= 992;
-  });
-  const [showWechatModal, setShowWechatModal] = useState(false);
-  const lastScrollYRef = useRef(window.scrollY);
+  };
+
+  const [isSideNavVisible, setIsSideNavVisible] = useState(getInitial);
+
+  // Persist
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      window.localStorage.setItem("navMode", isSideNavVisible ? "side" : "top");
+    }
+  }, [isSideNavVisible]);
+
+  // Auto-disable on small screens
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleResize = () => {
+      if (window.innerWidth < 992 && isSideNavVisible) {
+        setIsSideNavVisible(false);
+        if (window.localStorage) {
+          window.localStorage.setItem("navMode", "top");
+        }
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isSideNavVisible]);
+
+  const toggleSideNav = useCallback(() => {
+    setIsSideNavVisible((prev) => {
+      const next = !prev;
+      if (typeof window !== "undefined" && window.localStorage) {
+        window.localStorage.setItem("navMode", next ? "side" : "top");
+      }
+      return next;
+    });
+  }, []);
+
+  return { isSideNavVisible, toggleSideNav, setIsSideNavVisible };
+}
+
+function useScrollHideNav({ isExpanded, setIsExpanded }) {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isTopNavHidden, setIsTopNavHidden] = useState(false);
+  const [isBottomNavHidden, setIsBottomNavHidden] = useState(false);
+  const lastScrollYRef = useRef(0);
   const scrollTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const atBottom = window.innerHeight + scrollY >= document.body.offsetHeight - 10;
+      const isMobile = window.innerWidth < 992;
+      setIsScrolled(scrollY >= 20);
+
+      if (isExpanded) {
+        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = setTimeout(() => setIsExpanded(false), 0);
+      }
+
+      const isScrollingDown = scrollY > lastScrollYRef.current;
+      if (isMobile) {
+        setIsTopNavHidden(isScrollingDown && scrollY > 80);
+      } else {
+        setIsTopNavHidden(false);
+      }
+
+      if (atBottom) {
+        setIsBottomNavHidden(false);
+      } else if (isScrollingDown && scrollY > 80) {
+        setIsBottomNavHidden(true);
+      } else {
+        setIsBottomNavHidden(false);
+      }
+
+      lastScrollYRef.current = scrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
+  }, [isExpanded, setIsExpanded]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (isBottomNavHidden) {
+      document.body.classList.add("bottom-nav-is-hidden");
+    } else {
+      document.body.classList.remove("bottom-nav-is-hidden");
+    }
+  }, [isBottomNavHidden]);
+
+  return { isScrolled, isTopNavHidden, isBottomNavHidden };
+}
+
+function NavLinks({ linkClassName, iconClassName, onClick, navItemClassName, navLinkProps = {} }) {
+  return NAV_ITEMS.map((item) => {
+    const IconComponent = item.icon;
+    return (
+      <Nav.Item key={item.path} className={navItemClassName}>
+        <Nav.Link
+          as={NavLink}
+          to={item.path}
+          end={item.path === "/"}
+          onClick={onClick}
+          className={linkClassName}
+          {...navLinkProps}
+        >
+          <IconComponent className={iconClassName} />
+          <span>{item.label}</span>
+        </Nav.Link>
+      </Nav.Item>
+    );
+  });
+}
+
+function NavBar({ triggerPreloader }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const { isSideNavVisible, toggleSideNav } = useNavMode();
+  const { isScrolled, isTopNavHidden, isBottomNavHidden } = useScrollHideNav({ isExpanded, setIsExpanded });
+  const [showWechatModal, setShowWechatModal] = useState(false);
   
   // 拖拽相关状态
   const location = useLocation();
@@ -195,67 +311,10 @@ function NavBar({ triggerPreloader }) {
   }, [handleDragEnd, handleMouseMove, handleTouchMove, isDragging]);
 
   useEffect(() => {
-    function handleScroll() {
-      const scrollY = window.scrollY;
-      const atBottom = window.innerHeight + scrollY >= document.body.offsetHeight - 10;
-      const isMobile = window.innerWidth < 992;
-      setIsScrolled(scrollY >= 20);
-
-      // 滚动时自动关闭展开的汉堡菜单
-      if (isExpanded) {
-        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-        scrollTimeoutRef.current = setTimeout(() => {
-          setIsExpanded(false);
-        }, 0);
-      }
-
-      // 顶部navbar隐藏逻辑
-      const isScrollingDown = scrollY > lastScrollYRef.current;
-      if (isMobile) {
-        if (isScrollingDown && scrollY > 80) {
-          setIsTopNavHidden(true);
-        } else {
-          setIsTopNavHidden(false);
-        }
-      } else {
-        setIsTopNavHidden(false);
-      }
-
-      // 底部Tab栏隐藏逻辑
-      if (atBottom) {
-        setIsBottomNavHidden(false);
-      } else if (isScrollingDown && scrollY > 80) {
-        setIsBottomNavHidden(true);
-      } else {
-        setIsBottomNavHidden(false);
-      }
-
-      lastScrollYRef.current = scrollY;
-    }
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-    };
-  }, [isExpanded]);
-
-  useEffect(() => {
-    if (isBottomNavHidden) {
-      document.body.classList.add("bottom-nav-is-hidden");
-    } else {
-      document.body.classList.remove("bottom-nav-is-hidden");
-    }
-  }, [isBottomNavHidden]);
-
-  useEffect(() => {
     if (isSideNavVisible) {
       document.body.classList.add("side-nav-open");
     } else {
       document.body.classList.remove("side-nav-open");
-    }
-    if (typeof window !== "undefined" && window.localStorage) {
-      window.localStorage.setItem("navMode", isSideNavVisible ? "side" : "top");
     }
   }, [isSideNavVisible]);
 
@@ -270,39 +329,10 @@ function NavBar({ triggerPreloader }) {
     };
   }, [showWechatModal]);
 
-  // Auto-disable floating side navigation on small screens
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 992 && isSideNavVisible) {
-        setIsSideNavVisible(false);
-        if (typeof window !== "undefined" && window.localStorage) {
-          window.localStorage.setItem("navMode", "top");
-        }
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, [isSideNavVisible]);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.localStorage) return;
-    const storedMode = window.localStorage.getItem("navMode");
-    if (storedMode === "side" && window.innerWidth >= 992) {
-      setIsSideNavVisible(true);
-    }
-  }, []);
-
   const closeNavbar = () => setIsExpanded(false);
 
-  const toggleSideNav = () => {
-    setIsSideNavVisible((prev) => {
-      const next = !prev;
-      if (typeof window !== "undefined" && window.localStorage) {
-        window.localStorage.setItem("navMode", next ? "side" : "top");
-      }
-      return next;
-    });
+  const handleToggleSideNav = () => {
+    toggleSideNav();
     closeNavbar();
   };
 
@@ -348,7 +378,7 @@ function NavBar({ triggerPreloader }) {
               <button
                 type="button"
                 className={`layout-toggle-btn ${isSideNavVisible ? "active" : ""}`}
-                onClick={toggleSideNav}
+                onClick={handleToggleSideNav}
               >
                 <FiSidebar />
               </button>
@@ -360,26 +390,11 @@ function NavBar({ triggerPreloader }) {
             </Navbar.Toggle>
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="ms-auto" defaultActiveKey="#home">
-                <Nav.Item>
-                  <Nav.Link as={NavLink} to="/" end onClick={closeNavbar}>
-                    <AiOutlineHome className="navbar-icon" /> HOME
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link as={NavLink} to="/about" onClick={closeNavbar}>
-                    <AiOutlineUser className="navbar-icon" /> ABOUT
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link as={NavLink} to="/experiences" onClick={closeNavbar}>
-                    <MdWorkOutline className="navbar-icon" /> TRACKS
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link as={NavLink} to="/project" onClick={closeNavbar}>
-                    <AiOutlineFundProjectionScreen className="navbar-icon" /> PROJECTS
-                  </Nav.Link>
-                </Nav.Item>
+                <NavLinks
+                  linkClassName=""
+                  iconClassName="navbar-icon"
+                  onClick={closeNavbar}
+                />
                 {/* <Nav.Item>
                   <Nav.Link as={NavLink} to="/resume" onClick={closeNavbar}>
                     <CgFileDocument className="navbar-icon" /> RESUME
@@ -470,25 +485,10 @@ function NavBar({ triggerPreloader }) {
             <div className="floating-nav-divider" />
 
             <Nav className="floating-nav-list">
-              {NAV_ITEMS.map((item) => {
-                const IconComponent = item.icon;
-                return (
-                  <Nav.Item key={item.path}>
-                    <Nav.Link
-                      as={NavLink}
-                      to={item.path}
-                      end={item.path === "/"}
-                      className="floating-nav-link"
-                      onClick={() => {
-                        closeNavbar();
-                      }}
-                    >
-                      <IconComponent />
-                      <span>{item.label}</span>
-                    </Nav.Link>
-                  </Nav.Item>
-                );
-              })}
+              <NavLinks
+                linkClassName="floating-nav-link"
+                onClick={closeNavbar}
+              />
             </Nav>
 
             <div className="floating-nav-divider" />
@@ -535,23 +535,10 @@ function NavBar({ triggerPreloader }) {
             </div>
             
             <Nav className="main-nav">
-              {NAV_ITEMS.map((item, index) => {
-                const IconComponent = item.icon;
-                return (
-                  <Nav.Item key={item.path}>
-                    <Nav.Link 
-                      as={NavLink} 
-                      to={item.path} 
-                      end={item.path === "/"} 
-                      onClick={closeNavbar}
-                      className="main-nav-link"
-                    >
-                      <IconComponent />
-                      <span>{item.label}</span>
-                    </Nav.Link>
-                  </Nav.Item>
-                );
-              })}
+              <NavLinks
+                linkClassName="main-nav-link"
+                onClick={closeNavbar}
+              />
             </Nav>
           </div>
           
