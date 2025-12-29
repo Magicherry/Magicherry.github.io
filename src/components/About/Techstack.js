@@ -65,8 +65,8 @@ function Techstack() {
                         xs={6}
                         sm={4}
                         md={3}
-                        lg={3}
-                        xl={3}
+                        lg={2}
+                        xl={2}
                         className="tech-stack__col"
                     >
                         <a
