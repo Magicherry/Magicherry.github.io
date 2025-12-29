@@ -29,7 +29,7 @@ function Toolstack() {
                         xs={6}
                         sm={4}
                         md={3}
-                        lg={2}
+                        lg={3}
                         xl={2}
                         className="tech-stack__col"
                     >

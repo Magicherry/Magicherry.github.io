@@ -1554,7 +1554,6 @@ body.homepage .home-about-section {
     padding: 8px;
     display: flex;
     justify-content: center;
-    min-width: 150px;
 }
 
 .tech-stack__icon-link {
@@ -1641,10 +1640,6 @@ body.homepage .home-about-section {
         padding: 12px 14px !important;
         max-width: 200px;
         min-height: 78px;
-    }
-
-    .tech-stack__col {
-        min-width: 130px;
     }
 
     .tech-icons__icon {
