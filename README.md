@@ -7,12 +7,11 @@
   This project is based on the original portfolio template by <a href="https://github.com/soumyajit4419" target="_blank">Soumyajit</a>. 
 </p>
 <p align="center">
-  <img src="https://img.shields.io/badge/React-18.3.1-blue?logo=react" alt="React Version">
-  <img src="https://img.shields.io/badge/HTML-5-orange?logo=html5" alt="HTML5">
-  <img src="https://img.shields.io/badge/JS-Supported-blueviolet?logo=react" alt="JSX Support">
-  <img src="https://img.shields.io/badge/Node.js-20.x-green?logo=nodedotjs" alt="Node.js">
-  <img src="https://img.shields.io/badge/Vercel-Analytics-black?logo=vercel" alt="Vercel Analytics">
-  <img src="https://img.shields.io/badge/Status-Maintained-brightgreen" alt="Status">
+  <img src="https://img.shields.io/badge/React-18.3.1-0f172a?logo=react&logoColor=61DAFB">
+  <img src="https://img.shields.io/badge/HTML5-Standard-0f172a?logo=html5&logoColor=E34F26">
+  <img src="https://img.shields.io/badge/JavaScript-ES2023-0f172a?logo=javascript&logoColor=F7DF1E">
+  <img src="https://img.shields.io/badge/Node.js-20.x-0f172a?logo=nodedotjs&logoColor=3C873A">
+  <img src="https://img.shields.io/badge/Vercel-Analytics-0f172a?logo=vercel&logoColor=white">
 </p>
 
 ## Overview

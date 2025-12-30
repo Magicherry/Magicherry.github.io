@@ -20,7 +20,7 @@ body {
     --bg-gradient-image: linear-gradient(to bottom left, rgba(17, 16, 16, 0.678), rgba(10, 14, 22, 0.863));
 
     --bg-preloader: #050b13;
-    --bg-footer: rgb(4, 16, 22);
+    --bg-footer: linear-gradient(145deg, #08121a 0%, #0f1f2b 40%, #0c1621 100%);
 
     /*====================
         Scrollbar
@@ -1014,7 +1014,9 @@ body.homepage .home-about-section {
 }
 
 .footer {
-    background-color: var(--bg-footer);
+    background: var(--bg-footer);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.45);
     bottom: 0 !important;
     padding-top: 10px !important;
     padding-bottom: 8px !important;

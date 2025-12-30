@@ -83,7 +83,7 @@ function Home2() {
                                 target="_blank"
                             >
                                 <AiOutlineFileText />
-                                &nbsp;View my Resume
+                                &nbsp;View my resume
                             </Button>
                         </div>
                     </Col>
