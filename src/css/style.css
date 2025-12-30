@@ -1023,6 +1023,8 @@ body.homepage .home-about-section {
         inset 0 1px 0 rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(16px) saturate(165%);
     -webkit-backdrop-filter: blur(16px) saturate(165%);
+    position: relative;
+    overflow: hidden;
     bottom: 0 !important;
     padding-top: 10px !important;
     padding-bottom: 8px !important;

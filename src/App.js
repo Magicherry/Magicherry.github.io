@@ -47,6 +47,7 @@ function App() {
       ".custom-navbar-container",
       ".custom-navbar-container .nav-link",
       ".custom-navbar-container .navbar-brand",
+      ".footer",
       "button",
       ".btn",
       ".layout-toggle-btn",
