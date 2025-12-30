@@ -41,7 +41,7 @@ function Toolstack() {
                             title={tool.name} // Show tool name on hover
                         >
                             <span className="tech-icons__icon" aria-hidden="true">
-                                {tool.icon}
+                            {tool.icon}
                             </span>
                             <span className="tech-icons__name">{tool.name}</span>
                         </a>

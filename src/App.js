@@ -120,6 +120,7 @@ function App() {
     <Router>
       <Preloader load={load} />
       <div className="App" id={load ? "no-scroll" : "scroll"}>
+        <div className="app-top-blur" aria-hidden="true" />
         <Navbar triggerPreloader={triggerPreloader} />
         <Particle />
         <ScrollToTop />
