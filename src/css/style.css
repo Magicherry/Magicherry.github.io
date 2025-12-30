@@ -1014,9 +1014,15 @@ body.homepage .home-about-section {
 }
 
 .footer {
-    background: var(--bg-footer);
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.45);
+    background: linear-gradient(135deg, rgba(12, 20, 28, 0.55), rgba(12, 22, 32, 0.38));
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 1px solid rgba(255, 255, 255, 0.04);
+    border-right: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow:
+        0 -4px 16px rgba(0, 0, 0, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px) saturate(165%);
+    -webkit-backdrop-filter: blur(16px) saturate(165%);
     bottom: 0 !important;
     padding-top: 10px !important;
     padding-bottom: 8px !important;
