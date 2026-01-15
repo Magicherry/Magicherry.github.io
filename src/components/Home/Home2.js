@@ -63,12 +63,10 @@ function Home2() {
                         <p className="home-about-body">
                             I fell in love with programming and have stayed curious ever since. 🤷‍♂️
                             <br /><br />
-                            I am fluent in classics <b className="blue">C++, Java, Python and Go. 💻</b>
+                            I am especially interested in <b className="blue">ML systems</b> and <b className="blue">data-driven products</b> that turn insights into reliable, practical software. 🚀
                             <br /><br />
                             I work across the stack—from crafting <b className="blue">clean, responsive interfaces </b> to building dependable <b className="blue">back-end services </b>.
-                            I’m comfortable with <b className="blue">databases, API design, and containerized deployments that scale. </b>
-                            <br /><br />
-                            I am also interested in <b className="blue">ML systems</b> and <b className="blue">data-driven products</b> that turn insights into reliable, practical software.
+                            I’m comfortable with <b className="blue">databases, API design, and containerized deployments that scale </b>. 💻
                             <br /><br />
                             Whenever possible, I strive to turn ideas into products that are <b className="blue">fast, maintainable, and a joy </b>to use!
                         </p>
