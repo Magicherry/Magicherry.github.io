@@ -16,9 +16,9 @@ export const projects = [
         date: "2025"
     },
     {
-        imgPath: require("../../Assets/projects/Movenet.png"),
+        imgPath: require("../../Assets/projects/Fitness.png"),
         title: "Real-time Pose Estimation",
-        description: "A web application that uses Google's Movenet model to perform real-time pose estimation from a webcam feed, providing instant feedback on movement accuracy.",
+        description: "A application that uses Google Movenet model to perform real-time pose estimation from a webcam feed, providing instant feedback on movement accuracy.",
         ghLink: "https://github.com/Magicherry/Pose_Estimation",
         demoLink: "https://github.com/Magicherry/Pose_Estimation",
         tags: ["Python", "Movenet", "OpenCV", "Pytorch", "TensorFlow"],
