@@ -1,10 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const FadeInOnScroll = ({ children, delay }) => {
+const FadeInOnScroll = ({ children, delay = 0, eager = false }) => {
   const [isVisible, setIsVisible] = useState(false);
   const domRef = useRef();
 
   useEffect(() => {
+    if (eager) {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, delay);
+      return () => clearTimeout(timer);
+    }
+
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -24,7 +31,7 @@ const FadeInOnScroll = ({ children, delay }) => {
         observer.unobserve(current);
       }
     };
-  }, []);
+  }, [delay, eager]);
 
   return (
     <div

@@ -167,7 +167,7 @@ button:focus {
 .fade-in-section {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.4s ease-out, transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: opacity 0.25s ease-out, transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.1);
 }
 
 .fade-in-section.is-visible {
@@ -396,12 +396,12 @@ button:focus {
     overscroll-behavior: contain;
     padding-right: 14px;
     scrollbar-gutter: stable both-edges;
-    background: rgb(20, 25, 36);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(20, 25, 36, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 18px;
     padding: 16px;
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(26px) saturate(160%);
+    -webkit-backdrop-filter: blur(26px) saturate(160%);
     box-shadow:
             0 18px 50px rgba(0, 0, 0, 0.35),
             inset 0 1px 1px rgba(255, 255, 255, 0.08);

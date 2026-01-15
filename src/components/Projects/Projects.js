@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import ProjectCard from "./ProjectCard";
 
@@ -7,7 +7,19 @@ import { BsGridFill, BsListUl } from "react-icons/bs";
 import { projects } from "./ProjectData";
 
 const Projects = () => {
-  const [viewMode, setViewMode] = useState("list");
+  const getInitialViewMode = () => {
+    if (typeof window === "undefined") return "list";
+    const stored = window.localStorage ? window.localStorage.getItem("projectsViewMode") : null;
+    return stored === "grid" || stored === "list" ? stored : "list";
+  };
+
+  const [viewMode, setViewMode] = useState(getInitialViewMode);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      window.localStorage.setItem("projectsViewMode", viewMode);
+    }
+  }, [viewMode]);
 
   return (
       <Container fluid className="project-section">
@@ -44,7 +56,7 @@ const Projects = () => {
                     className="project-card"
                     key={`${viewMode}-${index}`}
                 >
-                  <FadeInOnScroll delay={index * 100}>
+              <FadeInOnScroll delay={index * 40} eager>
                     <ProjectCard
                         {...project}
                         viewMode={viewMode}
