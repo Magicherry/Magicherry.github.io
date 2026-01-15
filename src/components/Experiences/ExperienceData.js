@@ -13,8 +13,8 @@ export const timelines = [
                 duration: "06/2025 - Present",
                 description: [
                     "Assisted with the preparation of data for the rail network modelling project.",
-                    "Enhanced the NJT Graph script and developed a cross-platform Qt interface.",
-                    "Integrated LLM APIs and deployed local LLMs to automate data processing and consistency checks."
+                    "Built Qt visualization tools that converts raw train data into intuitive graphs for efficient daily and location-based analysis.",
+                    "Trained and fine-tuned hierarchical multi-label classifiers based on pretrained language models for incident categorization."
                 ]
             }
         ]

@@ -1,13 +1,20 @@
 export const projects = [
     {
-        imgPath: require("../../Assets/projects/NJT Graph Processor.png"),
+        imgPath: require("../../Assets/projects/Railway.png"),
+        title: "Railway Incident Classification System",
+        description: "A hierarchical NLP system based on DeBERTa-v3 to automatically classify real-world railway incident logs across four structured label levels, with end-to-end training and evaluation pipelines.",
+        tags: ["Hierarchical Learning", "Data Preprocessing", "Supervised Fine-tuning ", "DeBERTa-v3"],
+        type: "Company Internal"
+    },
+    {
+        imgPath: require("../../Assets/projects/train_multi.png"),
         title: "NJT Graph Processor",
         description: "A Qt native application converting raw train data into intuitive and visual graphs. Helps researcher easily understand and analyze train activity for a specific day and location.",
         tags: ["Python", "PyQt", "Numpy", "Pandas", "Matplotlab"],
         type: "Company Internal"
     },
     {
-        imgPath: require("../../Assets/projects/AYE.png"),
+        imgPath: require("../../Assets/projects/AyeNote.png"),
         title: "AyeNote Cloud Notes Platform",
         description: "A full-stack note-taking application featuring a Vue3 front-end and a Django back-end. Includes web scraping and data mining capabilities to analyze user data.",
         ghLink: "https://github.com/Magicherry/AyeNote",
@@ -34,7 +41,7 @@ export const projects = [
         type: "Personal"
     },
     {
-        imgPath: require("../../Assets/projects/Book.png"),
+        imgPath: require("../../Assets/projects/Managements.png"),
         title: "Management Dashboard",
         description: "A comprehensive management system built with SpringBoot and MyBatis. Features a secure database with MD5 encryption and a clear separation of front-end and back-end concerns.",
         ghLink: "https://github.com/Magicherry/Management_Web_System",
@@ -43,7 +50,7 @@ export const projects = [
         type: "Personal"
     },
     {
-        imgPath: require("../../Assets/projects/music.png"),
+        imgPath: require("../../Assets/projects/CiderMusic.png"),
         title: "MusicApp UX Design",
         description: "A high-fidelity UX prototype for a third-party music streaming application, designed in Axure RP 9 and inspired by Apple Music's clean and intuitive interface.",
         ghLink: "https://github.com/Magicherry/Music-App-Ui-Design",
@@ -52,7 +59,7 @@ export const projects = [
         type: "Personal"
     },
     {
-        imgPath: require("../../Assets/projects/KOF.png"),
+        imgPath: require("../../Assets/projects/Fighters.png"),
         title: "King of Fighters",
         description: "A classic fighting game clone built with HTML and JavaScript. Features a microservice-based architecture and allows for two-player keyboard-controlled gameplay.",
         ghLink: "https://github.com/Magicherry/King-of-Fighters",
