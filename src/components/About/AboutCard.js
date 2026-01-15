@@ -3,10 +3,10 @@ import Card from "react-bootstrap/Card";
 import { ImPointRight } from "react-icons/im";
 
 const activities = [
-  "Writing Tech Blogs",
-  "Experiencing Games",
-  "Browsing Tech | Movie & TV Reviews",
-  "Photography & Videography"
+  "Reading tech blogs",
+  "Playing games",
+  "Watching movies & TV",
+  "Photography & videography"
 ];
 
 const AboutCard = () => {
@@ -14,19 +14,25 @@ const AboutCard = () => {
     <Card className="quote-card-view">
       <Card.Body>
         <blockquote className="blockquote mb-0">
-          <p className="about-card__paragraph">
-            - Hello Guys, I am <span className="blue" >Yuting Zhou</span> from{" "}
-            <span className="blue">Shanghai, China.</span>
-            <br />
-            - I am currently pursuing a Master’s degree in Computer Science at
-            Rutgers University–New Brunswick, NJ, US.
-            <br />
-            - I am actively seeking research opportunities and internships to
-            enhance my skills and gain hands-on experience.
-            <br />
-            <br />
-            Apart from coding, here are some activities I love:
-          </p>
+          <ul className="about-card__highlights">
+            <li className="about-card__highlight">
+              Hello, I am <span className="blue">Yuting Zhou</span>, a Computer Science master’s student at{" "}
+              <span className="blue">Rutgers University</span>.
+            </li>
+            <li className="about-card__highlight">
+              I currently work as a Research Assistant at the <span className="blue">CAIT Lab</span>, focusing on{" "}
+              <span className="blue">rail incident modeling</span>, <span className="blue">large-scale data engineering</span>, and{" "}
+              <span className="blue">NLP/LLM-based automation</span> for transportation systems.
+            </li>
+            <li className="about-card__highlight">
+              I am actively seeking <span className="blue">Software Engineering</span> opportunities starting{" "}
+              <span className="blue">Summer 2026</span>, with interests in <span className="blue">ML systems</span>,{" "}
+              <span className="blue">Frontend &amp; Backend Engineering</span>, and <span className="blue">data-driven products</span>.
+            </li>
+            <li className="about-card__highlight">
+              Apart from coding, here are some activities I enjoy:
+            </li>
+          </ul>
           <ul>
             {activities.map((activity, index) => (
               <li className="about-activity" key={index}>

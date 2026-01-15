@@ -66,7 +66,9 @@ function Home2() {
                             I am fluent in classics <b className="blue">C++, Java, Python and Go. 💻</b>
                             <br /><br />
                             I work across the stack—from crafting <b className="blue">clean, responsive interfaces </b> to building dependable <b className="blue">back-end services </b>.
-                            I’m comfortable with <b className="blue">databases, API design, and containerized deployments that scale </b>.
+                            I’m comfortable with <b className="blue">databases, API design, and containerized deployments that scale. </b>
+                            <br /><br />
+                            I am also interested in <b className="blue">ML systems</b> and <b className="blue">data-driven products</b> that turn insights into reliable, practical software.
                             <br /><br />
                             Whenever possible, I strive to turn ideas into products that are <b className="blue">fast, maintainable, and a joy </b>to use!
                         </p>
