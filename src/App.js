@@ -39,15 +39,12 @@ function App() {
   // Mouse glow limited to nav panels and buttons (no background bleed)
   useEffect(() => {
     const selector = [
-      ".floating-nav-panel",
       ".floating-nav-link",
       ".floating-nav-icon-btn",
       ".floating-nav-ghost-btn",
-      ".floating-nav-container",
       ".custom-navbar-container",
       ".custom-navbar-container .nav-link",
       ".custom-navbar-container .navbar-brand",
-      ".footer",
       "button",
       ".btn",
       ".layout-toggle-btn",
@@ -55,7 +52,9 @@ function App() {
       ".github-nav-button"
     ].join(", ");
 
-    const targets = Array.from(document.querySelectorAll(selector));
+    const targets = Array.from(document.querySelectorAll(selector)).filter(
+      (el) => !el.closest(".footer")
+    );
     const overlays = new WeakMap();
 
     targets.forEach((el) => {
