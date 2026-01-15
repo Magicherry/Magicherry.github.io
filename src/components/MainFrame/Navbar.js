@@ -13,6 +13,7 @@ import { MdWorkOutline } from "react-icons/md";
 import { FiSidebar, FiMapPin } from "react-icons/fi";
 import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
 import { SiBilibili } from "react-icons/si";
+import Tilt from "react-parallax-tilt";
 import avatarImg from "../../Assets/avatar/avatar.png";
 import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
 import cvFile from "../../Assets/cv/Yuting_Zhou_CV.pdf";
@@ -430,7 +431,9 @@ function NavBar({ triggerPreloader }) {
 
             <div className="floating-nav-profile">
               <div className="floating-nav-avatar-wrapper">
-                <img src={avatarImg} alt="Yuting Zhou avatar" className="floating-nav-avatar" />
+                <Tilt>
+                  <img src={avatarImg} alt="Yuting Zhou avatar" className="floating-nav-avatar" />
+                </Tilt>
               </div>
               <div className="floating-nav-name">Yuting Zhou</div>
               <div className="floating-nav-title">M.S. in Computer Science</div>
