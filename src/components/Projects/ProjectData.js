@@ -4,32 +4,16 @@ export const projects = [
         title: "Railway Incident Classification System",
         description: "A hierarchical NLP system based on DeBERTa-v3 to automatically classify real-world railway incident logs across four structured label levels, with end-to-end training and evaluation pipelines.",
         tags: ["Hierarchical Learning", "Data Preprocessing", "Supervised Fine-tuning ", "DeBERTa-v3"],
-        type: "Company Internal"
+        type: "Company Internal",
+        date: "2025"
     },
     {
         imgPath: require("../../Assets/projects/train_multi.png"),
         title: "NJT Graph Processor",
         description: "A Qt native application converting raw train data into intuitive and visual graphs. Helps researcher easily understand and analyze train activity for a specific day and location.",
         tags: ["Python", "PyQt", "Numpy", "Pandas", "Matplotlab"],
-        type: "Company Internal"
-    },
-    {
-        imgPath: require("../../Assets/projects/AyeNote.png"),
-        title: "AyeNote Cloud Notes Platform",
-        description: "A full-stack note-taking application featuring a Vue3 front-end and a Django back-end. Includes web scraping and data mining capabilities to analyze user data.",
-        ghLink: "https://github.com/Magicherry/AyeNote",
-        demoLink: "https://github.com/Magicherry/AyeNote",
-        tags: ["Django", "Vue3", "MySQL", "BeautifulSoup", "AJAX"],
-        type: "Personal"
-    },
-    {
-        imgPath: require("../../Assets/projects/KOB.png"),
-        title: "King of Bots",
-        description: "A real-time strategy game with a SpringBoot back-end and a Vue3 front-end. Features a MySQL database and a Bootstrap 4 interface for a dynamic gaming experience.",
-        ghLink: "https://github.com/Magicherry/King-of-Bots",
-        demoLink: "https://github.com/Magicherry/King-of-Bots",
-        tags: ["Spring Boot", "Vue3", "MySQL", "WebSocket","JWT"],
-        type: "Personal"
+        type: "Company Internal",
+        date: "2025"
     },
     {
         imgPath: require("../../Assets/projects/Movenet.png"),
@@ -38,7 +22,28 @@ export const projects = [
         ghLink: "https://github.com/Magicherry/Pose_Estimation",
         demoLink: "https://github.com/Magicherry/Pose_Estimation",
         tags: ["Python", "Movenet", "OpenCV", "Pytorch", "TensorFlow"],
-        type: "Personal"
+        type: "Personal",
+        date: "2024"
+    },
+    {
+        imgPath: require("../../Assets/projects/AyeNote.png"),
+        title: "AyeNote Cloud Notes Platform",
+        description: "A full-stack note-taking application featuring a Vue3 front-end and a Django back-end. Includes web scraping and data mining capabilities to analyze user data.",
+        ghLink: "https://github.com/Magicherry/AyeNote",
+        demoLink: "https://github.com/Magicherry/AyeNote",
+        tags: ["Django", "Vue3", "MySQL", "BeautifulSoup", "AJAX"],
+        type: "Personal",
+        date: "2023"
+    },
+    {
+        imgPath: require("../../Assets/projects/KOB.png"),
+        title: "King of Bots",
+        description: "A real-time strategy game with a SpringBoot back-end and a Vue3 front-end. Features a MySQL database and a Bootstrap 4 interface for a dynamic gaming experience.",
+        ghLink: "https://github.com/Magicherry/King-of-Bots",
+        demoLink: "https://github.com/Magicherry/King-of-Bots",
+        tags: ["Spring Boot", "Vue3", "MySQL", "WebSocket","JWT"],
+        type: "Personal",
+        date: "2023"
     },
     {
         imgPath: require("../../Assets/projects/Managements.png"),
@@ -47,7 +52,8 @@ export const projects = [
         ghLink: "https://github.com/Magicherry/Management_Web_System",
         demoLink: "https://github.com/Magicherry/Management_Web_System",
         tags: ["Spring Boot", "Vue3", "MyBatis Plus", "MySQL", "MD5"],
-        type: "Personal"
+        type: "Personal",
+        date: "2022"
     },
     {
         imgPath: require("../../Assets/projects/CiderMusic.png"),
@@ -56,7 +62,8 @@ export const projects = [
         ghLink: "https://github.com/Magicherry/Music-App-Ui-Design",
         demoLink: "https://github.com/Magicherry/Music-App-Ui-Design",
         tags: ["Axure RP"],
-        type: "Personal"
+        type: "Personal",
+        date: "2022"
     },
     {
         imgPath: require("../../Assets/projects/Fighters.png"),
@@ -65,6 +72,7 @@ export const projects = [
         ghLink: "https://github.com/Magicherry/King-of-Fighters",
         demoLink: "https://github.com/Magicherry/King-of-Fighters",
         tags: ["HTML", "JavaScript", "CSS"],
-        type: "Personal"
+        type: "Personal",
+        date: "2021"
     },
 ];

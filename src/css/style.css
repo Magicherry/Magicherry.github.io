@@ -1298,6 +1298,31 @@ body.homepage .home-about-section {
     border-color: var(--button-border-primary-hover) !important;
 }
 
+.project-card__date {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--color-text-accent);
+    background: rgba(13, 22, 26, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    pointer-events: none;
+}
+
+.project-card__date--grid {
+    right: 12px;
+    bottom: 12px;
+    background: rgba(13, 22, 26, 0.75);
+}
+
+.project-card__date--list {
+    right: 18px;
+    bottom: 16px;
+}
+
 /*================================================================
   Projects - List View
 ================================================================*/

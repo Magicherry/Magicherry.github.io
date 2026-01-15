@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import { CgWebsite } from "react-icons/cg";
 import { BsGithub } from "react-icons/bs";
 
-const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, viewMode, type }) => {
+const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, viewMode, type, date }) => {
     if (viewMode === "list") {
         return (
             <Card className="project-card-list-view">
@@ -37,6 +37,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                         )}
                     </div>
                 </div>
+                {date && <span className="project-card__date project-card__date--list">{date}</span>}
             </Card>
         );
     }
@@ -84,6 +85,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                         )}
                     </div>
                 </div>
+                {date && <span className="project-card__date project-card__date--grid">{date}</span>}
             </Card>
             <h5 className="project-card__static-title">{title}</h5>
         </div>
