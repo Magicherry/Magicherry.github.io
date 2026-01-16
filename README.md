@@ -4,9 +4,6 @@
 </h2>
 
 <p align="center">
-  This project is based on the original portfolio template by <a href="https://github.com/soumyajit4419" target="_blank">Soumyajit</a>. 
-</p>
-<p align="center">
   <img src="https://img.shields.io/badge/React-18.3.1-0f172a?logo=react&logoColor=61DAFB">
   <img src="https://img.shields.io/badge/HTML5-Standard-0f172a?logo=html5&logoColor=E34F26">
   <img src="https://img.shields.io/badge/JavaScript-ES2023-0f172a?logo=javascript&logoColor=F7DF1E">
