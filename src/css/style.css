@@ -1592,7 +1592,7 @@ body.homepage .home-about-section {
 
 .about-card__highlight {
     position: relative;
-    padding-left: 24px;
+    padding-left: 0;
     margin-bottom: 14px;
     text-align: left;
 }
@@ -1602,10 +1602,10 @@ body.homepage .home-about-section {
 }
 
 .about-card__highlight::before {
-    content: "➤";
+    content: "";
     position: absolute;
     left: 0;
-    top: 0.05em;
+    top: 0;
     color: var(--color-text-accent);
 }
 
