@@ -910,10 +910,18 @@ body.homepage .home-about-section {
     padding-top: 9em !important;
 }
 
+.myAvtar img {
+    max-width: 260px;
+}
+
 @media (max-width: 767px) {
     .myAvtar {
         padding-top: 2em !important;
         padding-bottom: 2em !important;
+    }
+
+    .myAvtar img {
+        max-width: 260px;
     }
 }
 
