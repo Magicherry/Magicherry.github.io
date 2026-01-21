@@ -9,7 +9,7 @@ export const projects = [
     },
     {
         imgPath: require("../../Assets/projects/train_multi.png"),
-        title: "NJT Graph Processor",
+        title: "Railway Time–Space Diagram Generator",
         description: "A Qt native application converting raw train data into intuitive and visual graphs. Helps researcher easily understand and analyze train activity for a specific day and location.",
         tags: ["Python", "PyQt", "Numpy", "Pandas", "Matplotlab"],
         type: "Company Internal",
