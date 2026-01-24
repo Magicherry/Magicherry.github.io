@@ -2363,6 +2363,8 @@ body.homepage .home-about-section {
     width: auto;
     color: #e9fbff !important;
     background: rgba(0, 197, 255, 0.18) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.22) !important;
     padding: 11px 34px !important;
     border-radius: 14px !important;
@@ -2381,6 +2383,8 @@ body.homepage .home-about-section {
     color: #e9fbff !important;
     box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25) !important;
     transform: translateY(-1px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .download-cv-button:active {
