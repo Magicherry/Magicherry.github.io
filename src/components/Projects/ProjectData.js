@@ -2,7 +2,7 @@ export const projects = [
     {
         imgPath: require("../../Assets/projects/Railway.png"),
         title: "Railway Incident Classification System",
-        description: "A hierarchical NLP system based on DeBERTa-v3 to automatically classify real-world railway incident logs across four structured label levels, with end-to-end training and evaluation pipelines.",
+        description: "A hierarchical NLP system based on DeBERTa-v3 to automatically classify real-world railway incident logs across multi structured label levels, with end-to-end training and evaluation pipelines.",
         tags: ["Hierarchical Learning", "Data Preprocessing", "Supervised Fine-tuning ", "DeBERTa-v3"],
         type: "Company Internal",
         date: "2025"

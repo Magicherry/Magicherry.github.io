@@ -10,7 +10,7 @@ import {
   AiOutlineFileText
 } from "react-icons/ai";
 import { MdWorkOutline } from "react-icons/md";
-import { FiSidebar, FiMapPin } from "react-icons/fi";
+import { FiSidebar, FiMapPin, FiMail, FiPhone } from "react-icons/fi";
 import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
 import { SiBilibili } from "react-icons/si";
 import Tilt from "react-parallax-tilt";
@@ -432,7 +432,7 @@ function NavBar({ triggerPreloader }) {
             <div className="floating-nav-profile">
               <div className="floating-nav-avatar-wrapper">
                 <Tilt>
-                  <img src={avatarImg} alt="Yuting Zhou avatar" className="floating-nav-avatar" />
+                <img src={avatarImg} alt="Yuting Zhou avatar" className="floating-nav-avatar" />
                 </Tilt>
               </div>
               <div className="floating-nav-name">Yuting Zhou</div>
@@ -498,8 +498,14 @@ function NavBar({ triggerPreloader }) {
 
             <div className="floating-nav-bottom">
               <div className="floating-nav-contact-text">
-                <a href="mailto:zyt680129@gmail.com">zyt680129@gmail.com</a>
-                <a href="tel:+18482309757">+1 (848) 230-9757</a>
+                <a href="mailto:zyt680129@gmail.com">
+                  <FiMail />
+                  <span>zyt680129@gmail.com</span>
+                </a>
+                <a href="tel:+18482309757">
+                  <FiPhone />
+                  <span>+1 (848) 230-9757</span>
+                </a>
               </div>
               <div className="floating-nav-footer">
                 <a

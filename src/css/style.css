@@ -530,9 +530,18 @@ button:focus {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    width: 100%;
+    align-items: center;
+    align-self: center;
+    text-align: center;
 }
 
 .floating-nav-contact-text a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    width: auto;
     color: var(--color-text);
     text-decoration: none;
     font-size: 0.9rem;
@@ -550,6 +559,8 @@ button:focus {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    width: 100%;
+    align-items: stretch;
 }
 
 .floating-nav-divider {
@@ -623,11 +634,19 @@ button:focus {
     border-color: rgba(90, 150, 170, 0.35);
     box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
     transform: translateY(-1px);
+    color: var(--navbar-color-brand) !important;
+    font-weight: 600;
+}
+
+.floating-nav-link:hover svg,
+.floating-nav-link.active svg {
+    color: var(--navbar-color-brand);
 }
 
 .floating-nav-footer {
     margin-top: 0;
     padding-top: 6px;
+    width: 100%;
 }
 
 .floating-nav-ghost-btn {
@@ -638,16 +657,20 @@ button:focus {
     gap: 8px;
     padding: 10px 12px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--color-text);
+    background: rgba(0, 197, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #e9fbff;
+    font-weight: 600;
+    box-shadow:
+        inset 0 1px 1px rgba(255, 255, 255, 0.2),
+        0 10px 26px rgba(0, 0, 0, 0.25);
     text-decoration: none;
     transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border 0.2s ease;
 }
 
 .floating-nav-ghost-btn:hover {
-    background: rgba(90, 150, 170, 0.12);
-    border-color: rgba(90, 150, 170, 0.35);
+    background: rgba(0, 197, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.4);
     box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
     transform: translateY(-1px);
 }
@@ -1582,6 +1605,14 @@ body.homepage .home-about-section {
     text-align: justify;
 }
 
+.about-card__paragraph .blue {
+    font-weight: 600;
+}
+
+.about-card__highlights .blue {
+    font-weight: 600;
+}
+
 .about-card__highlights {
     list-style: none;
     padding-left: 0;
@@ -2201,9 +2232,9 @@ body.homepage .home-about-section {
     align-items: center !important;
     white-space: nowrap;
     width: auto;
-    color: #0d2230 !important;
-    background: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #e9fbff !important;
+    background: rgba(0, 197, 255, 0.18) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
     padding: 11px 34px !important;
     border-radius: 14px !important;
     font-size: 1.15rem !important;
@@ -2216,9 +2247,9 @@ body.homepage .home-about-section {
 }
 
 .download-cv-button:hover {
-    background: #f2f8fb !important;
-    border-color: rgba(90, 150, 170, 0.4) !important;
-    color: #0b1b27 !important;
+    background: rgba(0, 197, 255, 0.28) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    color: #e9fbff !important;
     box-shadow: 0 10px 26px rgba(0, 0, 0, 0.25) !important;
     transform: translateY(-1px);
 }
