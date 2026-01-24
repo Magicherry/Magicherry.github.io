@@ -157,7 +157,7 @@ function NavBar({ triggerPreloader }) {
   const { isScrolled, isTopNavHidden, isBottomNavHidden } = useScrollHideNav({ isExpanded, setIsExpanded });
   const [showWechatModal, setShowWechatModal] = useState(false);
   
-  // 拖拽相关状态
+  // Drag-related state
   const location = useLocation();
   const navigate = useNavigate();
   const [isDragging, setIsDragging] = useState(false);
@@ -167,7 +167,7 @@ function NavBar({ triggerPreloader }) {
   const pillRef = useRef(null);
   const navbarRef = useRef(null);
   
-  // 计算药丸位置的函数
+  // Calculate the pill position
   const calculatePillPosition = useCallback(() => {
     const currentIndex = NAV_ITEMS.findIndex(item =>
       item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path)
@@ -180,20 +180,20 @@ function NavBar({ triggerPreloader }) {
     }
   }, [location.pathname]);
 
-  // 更新药丸位置基于当前路由
+  // Update the pill position based on the route
   useEffect(() => {
     calculatePillPosition();
   }, [calculatePillPosition, location.pathname]);
 
-  // 监听窗口大小变化，自适应调整药丸位置
+  // Watch window size and keep the pill aligned
   useEffect(() => {
     const handleResize = () => {
-      // 使用setTimeout延迟执行，确保DOM更新完成
+      // Use a timeout so the DOM finishes updating
       setTimeout(calculatePillPosition, 10);
     };
 
     window.addEventListener('resize', handleResize);
-    // 监听方向变化（移动端）
+    // Track orientation changes on mobile
     window.addEventListener('orientationchange', handleResize);
     
     return () => {
@@ -202,13 +202,13 @@ function NavBar({ triggerPreloader }) {
     };
   }, [calculatePillPosition]);
 
-  // 使用ResizeObserver监听容器大小变化（更精确）
+  // Use ResizeObserver for precise container sizing
   useEffect(() => {
     if (!navContainerRef.current) return;
 
     let resizeTimeout;
     const resizeObserver = new ResizeObserver((entries) => {
-      // 防抖处理，避免频繁触发
+      // Debounce to avoid frequent updates
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
         calculatePillPosition();
@@ -223,7 +223,7 @@ function NavBar({ triggerPreloader }) {
     };
   }, [calculatePillPosition]);
 
-  // 拖拽事件处理
+  // Drag handlers
   const handlePillMouseDown = (e) => {
     if (!navContainerRef.current) return;
     setIsDragging(true);
@@ -259,7 +259,7 @@ function NavBar({ triggerPreloader }) {
     (e) => {
       if (!isDragging || !navContainerRef.current) return;
       
-      e.preventDefault(); // 防止页面滚动
+      e.preventDefault(); // Prevent page scrolling during drag
       const containerRect = navContainerRef.current.getBoundingClientRect();
       const newX = e.touches[0].clientX - containerRect.left - dragStartX;
       const itemWidth = containerRect.width / NAV_ITEMS.length;
@@ -274,13 +274,13 @@ function NavBar({ triggerPreloader }) {
     
     setIsDragging(false);
     
-    // 计算最近的导航项
+    // Find the closest nav item
     const containerWidth = navContainerRef.current.offsetWidth;
     const itemWidth = containerWidth / NAV_ITEMS.length;
     const closestIndex = Math.round((pillPosition - itemWidth / 2) / itemWidth);
     const clampedIndex = Math.max(0, Math.min(closestIndex, NAV_ITEMS.length - 1));
     
-    // 导航到对应页面
+    // Navigate to the selected page
     const targetPath = NAV_ITEMS[clampedIndex].path;
     if (targetPath !== location.pathname) {
       navigate(targetPath);
@@ -289,7 +289,7 @@ function NavBar({ triggerPreloader }) {
       }
     }
     
-    // 吸附到正确位置
+    // Snap to the correct position
     const finalPosition = clampedIndex * itemWidth + itemWidth / 2;
     setPillPosition(finalPosition);
   }, [isDragging, location.pathname, navigate, pillPosition, triggerPreloader]);
@@ -342,7 +342,7 @@ function NavBar({ triggerPreloader }) {
     setShowWechatModal(true);
   };
 
-  // 监听点击外部区域关闭汉堡菜单
+  // Close the menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navbarRef.current && !navbarRef.current.contains(event.target) && isExpanded) {
@@ -432,7 +432,13 @@ function NavBar({ triggerPreloader }) {
             <div className="floating-nav-profile">
               <div className="floating-nav-avatar-wrapper">
                 <Tilt>
-                <img src={avatarImg} alt="Yuting Zhou avatar" className="floating-nav-avatar" />
+                <img
+                  src={avatarImg}
+                  alt="Yuting Zhou avatar"
+                  className="floating-nav-avatar"
+                  loading="lazy"
+                  decoding="async"
+                />
                 </Tilt>
               </div>
               <div className="floating-nav-name">Yuting Zhou</div>
@@ -526,7 +532,7 @@ function NavBar({ triggerPreloader }) {
         <div className={`d-lg-none bottom-nav-container ${isBottomNavHidden ? "bottom-nav-hidden" : ""}`}>
           {/* Main navigation buttons with rounded rectangle background */}
           <div className="main-nav-wrapper" ref={navContainerRef}>
-            {/* 可拖拽的药丸滑块 */}
+            {/* Draggable pill slider */}
             <div 
               className={`draggable-pill ${isDragging ? 'dragging' : ''}`}
               style={{
@@ -535,7 +541,7 @@ function NavBar({ triggerPreloader }) {
               }}
               ref={pillRef}
             >
-              {/* 拖拽手柄 */}
+              {/* Drag handle */}
               <div 
                 className="drag-handle"
                 onMouseDown={handlePillMouseDown}
@@ -566,7 +572,13 @@ function NavBar({ triggerPreloader }) {
 
         <Modal show={showWechatModal} onHide={() => setShowWechatModal(false)} centered>
           <Modal.Body style={{ textAlign: "center", cursor: "pointer" }} onClick={() => setShowWechatModal(false)}>
-            <img src={wechatQrCode} alt="WeChat QR Code" style={{ maxWidth: "100%" }} />
+            <img
+              src={wechatQrCode}
+              alt="WeChat QR Code"
+              style={{ maxWidth: "100%" }}
+              loading="lazy"
+              decoding="async"
+            />
           </Modal.Body>
         </Modal>
       </>

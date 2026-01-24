@@ -26,7 +26,13 @@ function About() {
             md={5}
             className="about__image-col about-img"
           >
-            <img src={laptopImg} alt="about" className="img-fluid" />
+            <img
+              src={laptopImg}
+              alt="about"
+              className="img-fluid"
+              loading="lazy"
+              decoding="async"
+            />
           </Col>
         </Row>
         <h1 className="project-heading">

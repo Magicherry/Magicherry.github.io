@@ -70,7 +70,13 @@ const Footer = () => {
               style={{ textAlign: "center", cursor: "pointer" }}
               onClick={() => setShowWechatModal(false)}
           >
-            <img src={wechatQrCode} alt="WeChat QR Code" style={{ maxWidth: "100%" }} />
+            <img
+              src={wechatQrCode}
+              alt="WeChat QR Code"
+              style={{ maxWidth: "100%" }}
+              loading="lazy"
+              decoding="async"
+            />
           </Modal.Body>
         </Modal>
       </Container>

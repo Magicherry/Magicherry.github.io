@@ -73,7 +73,13 @@ function Home2() {
                     </Col>
                     <Col md={4} className="myAvtar">
                         <Tilt>
-                            <img src={myImg} className="img-fluid" alt="avatar" />
+                            <img
+                                src={myImg}
+                                className="img-fluid"
+                                alt="avatar"
+                                loading="lazy"
+                                decoding="async"
+                            />
                         </Tilt>
                         <div className="d-flex justify-content-center" style={{ marginTop: '20px' }}>
                             <Button 
@@ -115,7 +121,13 @@ function Home2() {
             </Container>
             <Modal show={showWechatModal} onHide={() => setShowWechatModal(false)} centered>
                 <Modal.Body style={{ textAlign: "center", cursor: "pointer" }} onClick={() => setShowWechatModal(false)}>
-                    <img src={wechatQrCode} alt="WeChat QR Code" style={{ maxWidth: "100%" }} />
+                    <img
+                        src={wechatQrCode}
+                        alt="WeChat QR Code"
+                        style={{ maxWidth: "100%" }}
+                        loading="lazy"
+                        decoding="async"
+                    />
                 </Modal.Body>
             </Modal>
         </Container>

@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef, Suspense, lazy } from "react";
 import Preloader from "./components/MainFrame/Pre";
 import Navbar from "./components/MainFrame/Navbar";
 import Home from "./components/Home/Home";
-import About from "./components/About/About";
-import Projects from "./components/Projects/Projects";
 import Footer from "./components/MainFrame/Footer";
-import Resume from "./components/Resume/ResumeNew";
-import Experiences from "./components/Experiences/Experiences";
 import Particle from "./components/MainFrame/Particle";
 import {
   BrowserRouter as Router,
@@ -20,17 +16,25 @@ import "./css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./css/responsive.css";
 
+const About = lazy(() => import("./components/About/About"));
+const Projects = lazy(() => import("./components/Projects/Projects"));
+const Resume = lazy(() => import("./components/Resume/ResumeNew"));
+const Experiences = lazy(() => import("./components/Experiences/Experiences"));
 
 function App() {
   const [load, upadateLoad] = useState(true);
+  const preloaderTimerRef = useRef(null);
 
-  const triggerPreloader = () => {
+  const triggerPreloader = useCallback(() => {
     upadateLoad(true);
-    const timer = setTimeout(() => {
+    if (preloaderTimerRef.current) {
+      clearTimeout(preloaderTimerRef.current);
+    }
+    preloaderTimerRef.current = setTimeout(() => {
       upadateLoad(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  };
+      preloaderTimerRef.current = null;
+    }, 1600);
+  }, []);
 
   useEffect(() => {
     document.body.classList.add("homepage");
@@ -142,9 +146,14 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       upadateLoad(false);
-    }, 1000);
+    }, 1600);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      if (preloaderTimerRef.current) {
+        clearTimeout(preloaderTimerRef.current);
+      }
+    };
   }, []);
 
   return (
@@ -156,14 +165,16 @@ function App() {
         <Particle />
         <ScrollToTop />
         <div className="content-wrap">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/project" element={<Projects />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/resume" element={<Resume />} />
-            <Route path="/experiences" element={<Experiences />} />
-            <Route path="*" element={<Navigate to="/"/>} />
-          </Routes>
+          <Suspense fallback={null}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/project" element={<Projects />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/resume" element={<Resume />} />
+              <Route path="/experiences" element={<Experiences />} />
+              <Route path="*" element={<Navigate to="/"/>} />
+            </Routes>
+          </Suspense>
         </div>
         <Footer />
       </div>

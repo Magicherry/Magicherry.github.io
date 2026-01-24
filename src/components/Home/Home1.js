@@ -38,6 +38,8 @@ function Home1() {
                 src={homeLogo}
                 alt="home pic"
                 className="img-fluid home__image"
+                decoding="async"
+                fetchPriority="high"
               />
             </Col>
           </Row>
