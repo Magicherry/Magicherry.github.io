@@ -19,7 +19,7 @@ function ExperienceTimeline({ title, subtitle, data, icon: Icon }) {
                         className="vertical-timeline-element--work"
                         date={experience.duration}
                         iconStyle={{ background: 'var(--button-bg-primary)', color: '#fff' }}
-                        icon={<Icon />}
+                        icon={experience.icon ? <experience.icon /> : <Icon />}
                     >
                         <h3 className="vertical-timeline-element-title">{experience.title}</h3>
                         <h4 className="vertical-timeline-element-subtitle">{experience.department}</h4>

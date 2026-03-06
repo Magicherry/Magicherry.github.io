@@ -8,8 +8,8 @@ function Pre({ load }) {
         aria-hidden="true"
         key={load ? "preloader-on" : "preloader-off"}
       >
-        <span className="preloader-logo" data-text="MAGICHERRY.">
-          MAGICHERRY.
+        <span className="preloader-logo" data-text="YUTING ZHOU.">
+          YUTING ZHOU.
         </span>
         <span className="preloader-bar" aria-hidden="true" />
       </div>

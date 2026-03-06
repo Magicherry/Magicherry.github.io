@@ -55,7 +55,7 @@ function Home2() {
     return (
         <Container fluid className="home-about-section" id="about">
             <Container>
-                <Row>
+                <Row className="align-items-center">
                     <Col md={8} className="home-about-description">
                         <h1 className="home-about__title">
                             LET ME <span className="blue">INTRODUCE</span> MYSELF
@@ -72,25 +72,27 @@ function Home2() {
                         </p>
                     </Col>
                     <Col md={4} className="myAvtar">
-                        <Tilt>
-                            <img
-                                src={myImg}
-                                className="img-fluid"
-                                alt="avatar"
-                                loading="lazy"
-                                decoding="async"
-                            />
-                        </Tilt>
-                        <div className="d-flex justify-content-center" style={{ marginTop: '20px' }}>
-                            <Button 
-                                className="download-cv-button" 
-                                variant="primary" 
-                                href={cvFile}
-                                target="_blank"
-                            >
-                                <AiOutlineFileText />
-                                &nbsp;View my resume
-                            </Button>
+                        <div className="myAvtar-wrapper">
+                            <Tilt>
+                                <img
+                                    src={myImg}
+                                    className="img-fluid"
+                                    alt="avatar"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            </Tilt>
+                            <div className="d-flex justify-content-center w-100" style={{ marginTop: '20px' }}>
+                                <Button 
+                                    className="download-cv-button" 
+                                    variant="primary" 
+                                    href={cvFile}
+                                    target="_blank"
+                                >
+                                    <AiOutlineFileText />
+                                    &nbsp;Download CV
+                                </Button>
+                            </div>
                         </div>
                     </Col>
                 </Row>

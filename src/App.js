@@ -52,8 +52,7 @@ function App() {
       "button",
       ".btn",
       ".layout-toggle-btn",
-      ".main-nav-link",
-      ".github-nav-button"
+      ".main-nav-link"
     ].join(", ");
 
     const targets = Array.from(document.querySelectorAll(selector)).filter(

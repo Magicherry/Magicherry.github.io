@@ -1,4 +1,4 @@
-import { FaFlask, FaBriefcase, FaUsers } from 'react-icons/fa';
+import { FaFlask, FaBriefcase, FaUsers, FaSubway } from 'react-icons/fa';
 
 export const timelines = [
     {
@@ -8,6 +8,7 @@ export const timelines = [
         data: [
             {
                 title: "Research Assistant",
+                icon: FaSubway,
                 department: "Rail Network Modelling Project",
                 company: "RUTGERS Center for Advanced Infrastructure and Transportation (CAIT)",
                 duration: "06/2025 - Present",

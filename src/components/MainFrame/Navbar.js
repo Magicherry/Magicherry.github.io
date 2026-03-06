@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Navbar, Nav, Container, Modal } from "react-bootstrap";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   AiOutlineHome,
   AiOutlineFundProjectionScreen,
   AiOutlineUser,
   AiFillGithub,
-  AiOutlineStar,
   AiOutlineFileText
 } from "react-icons/ai";
 import { MdWorkOutline } from "react-icons/md";
-import { FiSidebar, FiMapPin, FiMail, FiPhone } from "react-icons/fi";
+import { FiSidebar, FiMapPin, FiMail, FiPhone, FiBookOpen } from "react-icons/fi";
 import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
 import { SiBilibili } from "react-icons/si";
 import Tilt from "react-parallax-tilt";
@@ -19,11 +18,14 @@ import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
 import cvFile from "../../Assets/cv/Yuting_Zhou_CV.pdf";
 
 const NAV_ITEMS = [
-  { path: "/", icon: AiOutlineHome, label: "HOME" },
-  { path: "/about", icon: AiOutlineUser, label: "ABOUT" },
-  { path: "/experiences", icon: MdWorkOutline, label: "TRACKS" },
-  { path: "/project", icon: AiOutlineFundProjectionScreen, label: "PROJECTS" }
+  { path: "/", icon: AiOutlineHome, label: "Home" },
+  { path: "/about", icon: AiOutlineUser, label: "About" },
+  { path: "/experiences", icon: MdWorkOutline, label: "Tracks" },
+  { path: "/project", icon: AiOutlineFundProjectionScreen, label: "Projects" },
+  { path: "/resume", icon: AiOutlineFileText, label: "Resume" }
 ];
+
+const BOTTOM_NAV_ITEMS = NAV_ITEMS;
 
 function useNavMode() {
   const getInitial = () => {
@@ -130,8 +132,8 @@ function useScrollHideNav({ isExpanded, setIsExpanded }) {
   return { isScrolled, isTopNavHidden, isBottomNavHidden };
 }
 
-function NavLinks({ linkClassName, iconClassName, onClick, navItemClassName, navLinkProps = {} }) {
-  return NAV_ITEMS.map((item) => {
+function NavLinks({ items = NAV_ITEMS, linkClassName, iconClassName, onClick, navItemClassName, navLinkProps = {}, hideIcon = false }) {
+  return items.map((item) => {
     const IconComponent = item.icon;
     return (
       <Nav.Item key={item.path} className={navItemClassName}>
@@ -143,7 +145,7 @@ function NavLinks({ linkClassName, iconClassName, onClick, navItemClassName, nav
           className={linkClassName}
           {...navLinkProps}
         >
-          <IconComponent className={iconClassName} />
+          {!hideIcon && <IconComponent className={iconClassName} />}
           <span>{item.label}</span>
         </Nav.Link>
       </Nav.Item>
@@ -162,6 +164,7 @@ function NavBar({ triggerPreloader }) {
   const navigate = useNavigate();
   const [isDragging, setIsDragging] = useState(false);
   const [pillPosition, setPillPosition] = useState(0);
+  const [isPillVisible, setIsPillVisible] = useState(true);
   const [dragStartX, setDragStartX] = useState(0);
   const navContainerRef = useRef(null);
   const pillRef = useRef(null);
@@ -169,14 +172,18 @@ function NavBar({ triggerPreloader }) {
   
   // Calculate the pill position
   const calculatePillPosition = useCallback(() => {
-    const currentIndex = NAV_ITEMS.findIndex(item =>
+    const currentIndex = BOTTOM_NAV_ITEMS.findIndex(item =>
       item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path)
     );
     if (currentIndex !== -1 && navContainerRef.current) {
-      const containerWidth = navContainerRef.current.offsetWidth;
-      const itemWidth = containerWidth / NAV_ITEMS.length;
+      // Use clientWidth to exclude borders for accurate center positioning
+      const containerWidth = navContainerRef.current.clientWidth;
+      const itemWidth = containerWidth / BOTTOM_NAV_ITEMS.length;
       const newPosition = currentIndex * itemWidth + itemWidth / 2;
       setPillPosition(newPosition);
+      setIsPillVisible(true);
+    } else {
+      setIsPillVisible(false);
     }
   }, [location.pathname]);
 
@@ -228,7 +235,8 @@ function NavBar({ triggerPreloader }) {
     if (!navContainerRef.current) return;
     setIsDragging(true);
     const containerRect = navContainerRef.current.getBoundingClientRect();
-    setDragStartX(e.clientX - containerRect.left - pillPosition);
+    const borderLeft = (containerRect.width - navContainerRef.current.clientWidth) / 2;
+    setDragStartX(e.clientX - containerRect.left - borderLeft - pillPosition);
     e.preventDefault();
     e.stopPropagation();
   };
@@ -237,7 +245,8 @@ function NavBar({ triggerPreloader }) {
     if (!navContainerRef.current) return;
     setIsDragging(true);
     const containerRect = navContainerRef.current.getBoundingClientRect();
-    setDragStartX(e.touches[0].clientX - containerRect.left - pillPosition);
+    const borderLeft = (containerRect.width - navContainerRef.current.clientWidth) / 2;
+    setDragStartX(e.touches[0].clientX - containerRect.left - borderLeft - pillPosition);
     e.preventDefault();
     e.stopPropagation();
   };
@@ -247,9 +256,12 @@ function NavBar({ triggerPreloader }) {
       if (!isDragging || !navContainerRef.current) return;
       
       const containerRect = navContainerRef.current.getBoundingClientRect();
-      const newX = e.clientX - containerRect.left - dragStartX;
-      const itemWidth = containerRect.width / NAV_ITEMS.length;
-      const clampedX = Math.max(itemWidth / 2, Math.min(newX, containerRect.width - itemWidth / 2));
+      const clientWidth = navContainerRef.current.clientWidth;
+      const borderLeft = (containerRect.width - clientWidth) / 2;
+      
+      const newX = e.clientX - containerRect.left - borderLeft - dragStartX;
+      const itemWidth = clientWidth / BOTTOM_NAV_ITEMS.length;
+      const clampedX = Math.max(itemWidth / 2, Math.min(newX, clientWidth - itemWidth / 2));
       setPillPosition(clampedX);
     },
     [dragStartX, isDragging]
@@ -261,9 +273,12 @@ function NavBar({ triggerPreloader }) {
       
       e.preventDefault(); // Prevent page scrolling during drag
       const containerRect = navContainerRef.current.getBoundingClientRect();
-      const newX = e.touches[0].clientX - containerRect.left - dragStartX;
-      const itemWidth = containerRect.width / NAV_ITEMS.length;
-      const clampedX = Math.max(itemWidth / 2, Math.min(newX, containerRect.width - itemWidth / 2));
+      const clientWidth = navContainerRef.current.clientWidth;
+      const borderLeft = (containerRect.width - clientWidth) / 2;
+      
+      const newX = e.touches[0].clientX - containerRect.left - borderLeft - dragStartX;
+      const itemWidth = clientWidth / BOTTOM_NAV_ITEMS.length;
+      const clampedX = Math.max(itemWidth / 2, Math.min(newX, clientWidth - itemWidth / 2));
       setPillPosition(clampedX);
     },
     [dragStartX, isDragging]
@@ -275,13 +290,13 @@ function NavBar({ triggerPreloader }) {
     setIsDragging(false);
     
     // Find the closest nav item
-    const containerWidth = navContainerRef.current.offsetWidth;
-    const itemWidth = containerWidth / NAV_ITEMS.length;
+    const containerWidth = navContainerRef.current.clientWidth;
+    const itemWidth = containerWidth / BOTTOM_NAV_ITEMS.length;
     const closestIndex = Math.round((pillPosition - itemWidth / 2) / itemWidth);
-    const clampedIndex = Math.max(0, Math.min(closestIndex, NAV_ITEMS.length - 1));
+    const clampedIndex = Math.max(0, Math.min(closestIndex, BOTTOM_NAV_ITEMS.length - 1));
     
     // Navigate to the selected page
-    const targetPath = NAV_ITEMS[clampedIndex].path;
+    const targetPath = BOTTOM_NAV_ITEMS[clampedIndex].path;
     if (targetPath !== location.pathname) {
       navigate(targetPath);
       if (triggerPreloader) {
@@ -371,11 +386,8 @@ function NavBar({ triggerPreloader }) {
             className={`${isTopNavHidden ? "navbar-hidden" : ""} ${isScrolled ? "navbar-scrolled" : ""} ${isSideNavVisible ? "navbar-floating-mode" : ""}`}
             onToggle={setIsExpanded}
         >
-          <Container className="custom-navbar-container">
-            <Navbar.Brand as={Link} to="/" onClick={() => { closeNavbar(); if (triggerPreloader) { triggerPreloader(); } }}>
-              MAGICHERRY.
-            </Navbar.Brand>
-            <div className="layout-toggle-wrapper">
+          <Container className="custom-navbar-container" style={{ justifyContent: "center", position: "relative" }}>
+            <div className="layout-toggle-wrapper" style={{ position: "absolute", left: "8px", margin: 0 }}>
               <button
                 type="button"
                 className={`layout-toggle-btn ${isSideNavVisible ? "active" : ""}`}
@@ -384,37 +396,34 @@ function NavBar({ triggerPreloader }) {
                 <FiSidebar />
               </button>
             </div>
-            <Navbar.Toggle aria-controls="responsive-navbar-nav">
+
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" className="ms-auto">
               <span />
               <span />
               <span />
             </Navbar.Toggle>
             <Navbar.Collapse id="responsive-navbar-nav">
-              <Nav className="ms-auto" defaultActiveKey="#home">
+              <Nav className="mx-auto" defaultActiveKey="#home">
                 <NavLinks
                   linkClassName=""
                   iconClassName="navbar-icon"
                   onClick={closeNavbar}
+                  hideIcon={true}
                 />
-                {/* <Nav.Item>
-                  <Nav.Link as={NavLink} to="/resume" onClick={closeNavbar}>
-                    <CgFileDocument className="navbar-icon" /> RESUME
-                  </Nav.Link>
-                </Nav.Item> */}
-                
-                <Nav.Item className="fork-btn">
-                  <Nav.Link
-                    href="https://github.com/Magicherry/Bits-of-Me"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="fork-btn-inner"
-                  >
-                    <AiFillGithub className="navbar-fork-icon" />
-                    <AiOutlineStar className="navbar-star-icon" />
-                  </Nav.Link>
-                </Nav.Item>
               </Nav>
             </Navbar.Collapse>
+
+            <div className="layout-toggle-wrapper" style={{ position: "absolute", right: "8px", margin: 0 }}>
+              <a
+                href="https://github.com/Magicherry/Bits-of-Me"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="layout-toggle-btn"
+                aria-label="GitHub Repository"
+              >
+                <AiFillGithub />
+              </a>
+            </div>
           </Container>
         </Navbar>
 
@@ -422,7 +431,7 @@ function NavBar({ triggerPreloader }) {
           <div className="floating-nav-panel">
             <div className="floating-nav-header">
               <span className="floating-nav-brand" onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}>
-                MAGICHERRY.
+                YUTING ZHOU.
               </span>
               <button type="button" className="floating-nav-close" onClick={toggleSideNav} aria-label="Collapse to top navigation">
                 <FiSidebar />
@@ -441,18 +450,32 @@ function NavBar({ triggerPreloader }) {
                 />
                 </Tilt>
               </div>
-              <div className="floating-nav-name">Yuting Zhou</div>
-              <div className="floating-nav-title">M.S. in Computer Science</div>
-              <a
-                className="floating-nav-location"
-                href="https://www.google.com/maps/search/?api=1&query=Rutgers%20University%E2%80%93New%20Brunswick"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FiMapPin />
-                <span>Rutgers University</span>
-              </a>
-              <div className="floating-nav-actions">
+              
+              <div className="floating-nav-contact-group">
+                <div className="floating-nav-contact-item">
+                  <FiBookOpen />
+                  <span>M.S. in Computer Science</span>
+                </div>
+                <a
+                  className="floating-nav-contact-item"
+                  href="https://www.google.com/maps/search/?api=1&query=Rutgers%20University%E2%80%93New%20Brunswick"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FiMapPin />
+                  <span>Rutgers University, NJ, USA</span>
+                </a>
+                <a className="floating-nav-contact-item" href="mailto:zyt680129@gmail.com">
+                  <FiMail />
+                  <span>zyt680129@gmail.com</span>
+                </a>
+                <a className="floating-nav-contact-item" href="tel:+18482309757">
+                  <FiPhone />
+                  <span>+1 (848) 230-9757</span>
+                </a>
+              </div>
+
+              <div className="floating-nav-actions" style={{ marginTop: "14px", justifyContent: "space-between", width: "100%", padding: "0 10px" }}>
                 <a
                   className="floating-nav-icon-btn"
                   href="https://github.com/Magicherry"
@@ -503,16 +526,6 @@ function NavBar({ triggerPreloader }) {
             <div className="floating-nav-divider" />
 
             <div className="floating-nav-bottom">
-              <div className="floating-nav-contact-text">
-                <a href="mailto:zyt680129@gmail.com">
-                  <FiMail />
-                  <span>zyt680129@gmail.com</span>
-                </a>
-                <a href="tel:+18482309757">
-                  <FiPhone />
-                  <span>+1 (848) 230-9757</span>
-                </a>
-              </div>
               <div className="floating-nav-footer">
                 <a
                   href={cvFile}
@@ -521,7 +534,7 @@ function NavBar({ triggerPreloader }) {
                   className="floating-nav-ghost-btn"
                 >
                   <AiOutlineFileText />
-                  <span>View my resume</span>
+                  <span>Download CV</span>
                 </a>
               </div>
             </div>
@@ -537,7 +550,9 @@ function NavBar({ triggerPreloader }) {
               className={`draggable-pill ${isDragging ? 'dragging' : ''}`}
               style={{
                 left: `${pillPosition}px`,
-                transform: 'translateX(-50%)'
+                transform: 'translateX(-50%)',
+                opacity: isPillVisible ? 1 : 0,
+                pointerEvents: isPillVisible ? 'auto' : 'none'
               }}
               ref={pillRef}
             >
@@ -551,22 +566,11 @@ function NavBar({ triggerPreloader }) {
             
             <Nav className="main-nav">
               <NavLinks
+                items={BOTTOM_NAV_ITEMS}
                 linkClassName="main-nav-link"
                 onClick={closeNavbar}
               />
             </Nav>
-          </div>
-          
-          {/* Independent circular GitHub button */}
-          <div className="github-nav-wrapper">
-            <a
-              href="https://github.com/Magicherry/Bits-of-Me"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="github-nav-button"
-            >
-              <AiFillGithub />
-            </a>
           </div>
         </div>
 
