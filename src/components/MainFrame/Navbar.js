@@ -159,13 +159,11 @@ function NavBar({ triggerPreloader }) {
   const { isScrolled, isTopNavHidden, isBottomNavHidden } = useScrollHideNav({ isExpanded, setIsExpanded });
   const [showWechatModal, setShowWechatModal] = useState(false);
   
-  // Drag-related state
+  // Pill position state
   const location = useLocation();
   const navigate = useNavigate();
-  const [isDragging, setIsDragging] = useState(false);
   const [pillPosition, setPillPosition] = useState(0);
   const [isPillVisible, setIsPillVisible] = useState(true);
-  const [dragStartX, setDragStartX] = useState(0);
   const navContainerRef = useRef(null);
   const pillRef = useRef(null);
   const navbarRef = useRef(null);
@@ -230,101 +228,6 @@ function NavBar({ triggerPreloader }) {
     };
   }, [calculatePillPosition]);
 
-  // Drag handlers
-  const handlePillMouseDown = (e) => {
-    if (!navContainerRef.current) return;
-    setIsDragging(true);
-    const containerRect = navContainerRef.current.getBoundingClientRect();
-    const borderLeft = (containerRect.width - navContainerRef.current.clientWidth) / 2;
-    setDragStartX(e.clientX - containerRect.left - borderLeft - pillPosition);
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handlePillTouchStart = (e) => {
-    if (!navContainerRef.current) return;
-    setIsDragging(true);
-    const containerRect = navContainerRef.current.getBoundingClientRect();
-    const borderLeft = (containerRect.width - navContainerRef.current.clientWidth) / 2;
-    setDragStartX(e.touches[0].clientX - containerRect.left - borderLeft - pillPosition);
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleMouseMove = useCallback(
-    (e) => {
-      if (!isDragging || !navContainerRef.current) return;
-      
-      const containerRect = navContainerRef.current.getBoundingClientRect();
-      const clientWidth = navContainerRef.current.clientWidth;
-      const borderLeft = (containerRect.width - clientWidth) / 2;
-      
-      const newX = e.clientX - containerRect.left - borderLeft - dragStartX;
-      const itemWidth = clientWidth / BOTTOM_NAV_ITEMS.length;
-      const clampedX = Math.max(itemWidth / 2, Math.min(newX, clientWidth - itemWidth / 2));
-      setPillPosition(clampedX);
-    },
-    [dragStartX, isDragging]
-  );
-
-  const handleTouchMove = useCallback(
-    (e) => {
-      if (!isDragging || !navContainerRef.current) return;
-      
-      e.preventDefault(); // Prevent page scrolling during drag
-      const containerRect = navContainerRef.current.getBoundingClientRect();
-      const clientWidth = navContainerRef.current.clientWidth;
-      const borderLeft = (containerRect.width - clientWidth) / 2;
-      
-      const newX = e.touches[0].clientX - containerRect.left - borderLeft - dragStartX;
-      const itemWidth = clientWidth / BOTTOM_NAV_ITEMS.length;
-      const clampedX = Math.max(itemWidth / 2, Math.min(newX, clientWidth - itemWidth / 2));
-      setPillPosition(clampedX);
-    },
-    [dragStartX, isDragging]
-  );
-
-  const handleDragEnd = useCallback(() => {
-    if (!isDragging || !navContainerRef.current) return;
-    
-    setIsDragging(false);
-    
-    // Find the closest nav item
-    const containerWidth = navContainerRef.current.clientWidth;
-    const itemWidth = containerWidth / BOTTOM_NAV_ITEMS.length;
-    const closestIndex = Math.round((pillPosition - itemWidth / 2) / itemWidth);
-    const clampedIndex = Math.max(0, Math.min(closestIndex, BOTTOM_NAV_ITEMS.length - 1));
-    
-    // Navigate to the selected page
-    const targetPath = BOTTOM_NAV_ITEMS[clampedIndex].path;
-    if (targetPath !== location.pathname) {
-      navigate(targetPath);
-      if (triggerPreloader) {
-        triggerPreloader();
-      }
-    }
-    
-    // Snap to the correct position
-    const finalPosition = clampedIndex * itemWidth + itemWidth / 2;
-    setPillPosition(finalPosition);
-  }, [isDragging, location.pathname, navigate, pillPosition, triggerPreloader]);
-
-  useEffect(() => {
-    if (isDragging) {
-      const options = { passive: false };
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleDragEnd);
-      document.addEventListener('touchmove', handleTouchMove, options);
-      document.addEventListener('touchend', handleDragEnd);
-      
-      return () => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleDragEnd);
-        document.removeEventListener('touchmove', handleTouchMove, options);
-        document.removeEventListener('touchend', handleDragEnd);
-      };
-    }
-  }, [handleDragEnd, handleMouseMove, handleTouchMove, isDragging]);
 
   useEffect(() => {
     if (isSideNavVisible) {
@@ -545,24 +448,17 @@ function NavBar({ triggerPreloader }) {
         <div className={`d-lg-none bottom-nav-container ${isBottomNavHidden ? "bottom-nav-hidden" : ""}`}>
           {/* Main navigation buttons with rounded rectangle background */}
           <div className="main-nav-wrapper" ref={navContainerRef}>
-            {/* Draggable pill slider */}
+            {/* Pill slider */}
             <div 
-              className={`draggable-pill ${isDragging ? 'dragging' : ''}`}
+              className="draggable-pill"
               style={{
                 left: `${pillPosition}px`,
                 transform: 'translateX(-50%)',
                 opacity: isPillVisible ? 1 : 0,
-                pointerEvents: isPillVisible ? 'auto' : 'none'
+                pointerEvents: 'none'
               }}
               ref={pillRef}
-            >
-              {/* Drag handle */}
-              <div 
-                className="drag-handle"
-                onMouseDown={handlePillMouseDown}
-                onTouchStart={handlePillTouchStart}
-              />
-            </div>
+            />
             
             <Nav className="main-nav">
               <NavLinks
