@@ -9,7 +9,7 @@ import {
   AiOutlineFileText
 } from "react-icons/ai";
 import { MdWorkOutline } from "react-icons/md";
-import { FiSidebar, FiMapPin, FiMail, FiPhone, FiBookOpen } from "react-icons/fi";
+import { FiSidebar, FiMapPin, FiMail, FiPhone } from "react-icons/fi";
 import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
 import { SiBilibili } from "react-icons/si";
 import Tilt from "react-parallax-tilt";
@@ -334,7 +334,7 @@ function NavBar({ triggerPreloader }) {
           <div className="floating-nav-panel">
             <div className="floating-nav-header">
               <span className="floating-nav-brand" onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}>
-                YUTING ZHOU.
+                Bits of Me.
               </span>
               <button type="button" className="floating-nav-close" onClick={toggleSideNav} aria-label="Collapse to top navigation">
                 <FiSidebar />
@@ -353,32 +353,11 @@ function NavBar({ triggerPreloader }) {
                 />
                 </Tilt>
               </div>
-              
-              <div className="floating-nav-contact-group">
-                <div className="floating-nav-contact-item">
-                  <FiBookOpen />
-                  <span>M.S. in Computer Science</span>
-                </div>
-                <a
-                  className="floating-nav-contact-item"
-                  href="https://www.google.com/maps/search/?api=1&query=Rutgers%20University%E2%80%93New%20Brunswick"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FiMapPin />
-                  <span>Rutgers University, NJ, USA</span>
-                </a>
-                <a className="floating-nav-contact-item" href="mailto:zyt680129@gmail.com">
-                  <FiMail />
-                  <span>zyt680129@gmail.com</span>
-                </a>
-                <a className="floating-nav-contact-item" href="tel:+18482309757">
-                  <FiPhone />
-                  <span>+1 (848) 230-9757</span>
-                </a>
-              </div>
 
-              <div className="floating-nav-actions" style={{ marginTop: "14px", justifyContent: "space-between", width: "100%", padding: "0 10px" }}>
+              <div className="floating-nav-name" style={{ marginTop: "4px" }}>Yuting Zhou</div>
+              <div className="floating-nav-title" style={{ marginTop: "4px" }}>M.S. in Computer Science</div>
+              
+              <div className="floating-nav-actions" style={{ marginTop: "12px", justifyContent: "space-between", width: "100%", padding: "0 10px" }}>
                 <a
                   className="floating-nav-icon-btn"
                   href="https://github.com/Magicherry"
@@ -429,6 +408,26 @@ function NavBar({ triggerPreloader }) {
             <div className="floating-nav-divider" />
 
             <div className="floating-nav-bottom">
+              <div className="floating-nav-contact-group" style={{ marginTop: "0", marginBottom: "12px", paddingLeft: "4px" }}>
+                <a
+                  className="floating-nav-contact-item"
+                  href="https://www.google.com/maps/search/?api=1&query=Rutgers%20University%E2%80%93New%20Brunswick"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FiMapPin />
+                  <span>Rutgers University, NJ, USA</span>
+                </a>
+                <a className="floating-nav-contact-item" href="mailto:zyt680129@gmail.com">
+                  <FiMail />
+                  <span>zyt680129@gmail.com</span>
+                </a>
+                <a className="floating-nav-contact-item" href="tel:+18482309757">
+                  <FiPhone />
+                  <span>+1 (848) 230-9757</span>
+                </a>
+              </div>
+
               <div className="floating-nav-footer">
                 <a
                   href={cvFile}
