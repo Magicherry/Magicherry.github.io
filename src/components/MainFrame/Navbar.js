@@ -6,7 +6,9 @@ import {
   AiOutlineFundProjectionScreen,
   AiOutlineUser,
   AiFillGithub,
-  AiOutlineFileText
+  AiOutlineFileText,
+  AiOutlineDownload,
+  AiFillStar
 } from "react-icons/ai";
 import { MdWorkOutline } from "react-icons/md";
 import { FiSidebar, FiMapPin, FiMail, FiPhone } from "react-icons/fi";
@@ -105,7 +107,7 @@ function useScrollHideNav({ isExpanded, setIsExpanded }) {
       if (atBottom) {
         setIsBottomNavHidden(false);
       } else if (isScrollingDown && scrollY > 80) {
-        setIsBottomNavHidden(true);
+        setIsBottomNavHidden(false); // Changed to false to keep it always visible
       } else {
         setIsBottomNavHidden(false);
       }
@@ -281,52 +283,62 @@ function NavBar({ triggerPreloader }) {
 
   return (
       <>
+        <div className="navbar-vignette-mask d-none d-lg-block" />
         <Navbar
             ref={navbarRef}
             expanded={isExpanded}
             fixed="top"
             expand="lg"
-            className={`${isTopNavHidden ? "navbar-hidden" : ""} ${isScrolled ? "navbar-scrolled" : ""} ${isSideNavVisible ? "navbar-floating-mode" : ""}`}
+            className={`top-navbar-wrapper ${isTopNavHidden ? "navbar-hidden" : ""} ${isScrolled ? "navbar-scrolled" : ""} ${isSideNavVisible ? "navbar-floating-mode" : ""}`}
             onToggle={setIsExpanded}
         >
-          <Container className="custom-navbar-container" style={{ justifyContent: "center", position: "relative" }}>
-            <div className="layout-toggle-wrapper" style={{ position: "absolute", left: "8px", margin: 0 }}>
+          <Container className="d-flex align-items-center justify-content-between" style={{ height: "100%", position: "relative" }}>
+            
+            {/* Left Column: Brand */}
+            <div className="navbar-brand-col">
+              <span className="navbar-brand-text" onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}>
+                YUTING ZHOU.
+              </span>
+            </div>
+
+            {/* Center Column: Pill Navigation Container */}
+            <div className="navbar-center-pill">
               <button
                 type="button"
-                className={`layout-toggle-btn ${isSideNavVisible ? "active" : ""}`}
+                className={`sidebar-toggle-icon ${isSideNavVisible ? "active" : ""}`}
                 onClick={handleToggleSideNav}
+                aria-label="Toggle Sidebar"
               >
                 <FiSidebar />
               </button>
+              <Navbar.Toggle aria-controls="responsive-navbar-nav" className="d-lg-none" />
+              <Navbar.Collapse id="responsive-navbar-nav">
+                <Nav className="mx-auto" defaultActiveKey="#home">
+                  <NavLinks
+                    linkClassName=""
+                    iconClassName="navbar-icon"
+                    onClick={closeNavbar}
+                    hideIcon={true}
+                  />
+                </Nav>
+              </Navbar.Collapse>
             </div>
 
-            <Navbar.Toggle aria-controls="responsive-navbar-nav" className="ms-auto">
-              <span />
-              <span />
-              <span />
-            </Navbar.Toggle>
-            <Navbar.Collapse id="responsive-navbar-nav">
-              <Nav className="mx-auto" defaultActiveKey="#home">
-                <NavLinks
-                  linkClassName=""
-                  iconClassName="navbar-icon"
-                  onClick={closeNavbar}
-                  hideIcon={true}
-                />
-              </Nav>
-            </Navbar.Collapse>
-
-            <div className="layout-toggle-wrapper" style={{ position: "absolute", right: "8px", margin: 0 }}>
+            {/* Right Column: GitHub */}
+            <div className="navbar-right-col">
               <a
                 href="https://github.com/Magicherry/Bits-of-Me"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="layout-toggle-btn"
+                className="github-pill-btn"
                 aria-label="GitHub Repository"
               >
-                <AiFillGithub />
+                <AiFillStar className="star-icon" />
+                <div className="divider" />
+                <AiFillGithub className="github-icon" />
               </a>
             </div>
+            
           </Container>
         </Navbar>
 
@@ -334,7 +346,7 @@ function NavBar({ triggerPreloader }) {
           <div className="floating-nav-panel">
             <div className="floating-nav-header">
               <span className="floating-nav-brand" onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}>
-                Bits of Me.
+                BITS of ME.
               </span>
               <button type="button" className="floating-nav-close" onClick={toggleSideNav} aria-label="Collapse to top navigation">
                 <FiSidebar />
@@ -357,7 +369,7 @@ function NavBar({ triggerPreloader }) {
               <div className="floating-nav-name" style={{ marginTop: "4px" }}>Yuting Zhou</div>
               <div className="floating-nav-title" style={{ marginTop: "4px" }}>M.S. in Computer Science</div>
               
-              <div className="floating-nav-actions" style={{ marginTop: "12px", justifyContent: "space-between", width: "100%", padding: "0 10px" }}>
+              <div className="floating-nav-actions" style={{ marginTop: "12px", justifyContent: "center", gap: "12px", width: "100%", padding: "0 10px" }}>
                 <a
                   className="floating-nav-icon-btn"
                   href="https://github.com/Magicherry"
@@ -435,7 +447,7 @@ function NavBar({ triggerPreloader }) {
                   rel="noopener noreferrer"
                   className="floating-nav-ghost-btn"
                 >
-                  <AiOutlineFileText />
+                  <AiOutlineDownload />
                   <span>Download CV</span>
                 </a>
               </div>

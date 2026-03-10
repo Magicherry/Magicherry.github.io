@@ -154,8 +154,12 @@ button:focus {
 }
 
 /* Clip glow itself without hiding navbar children */
-.custom-navbar-container > .mouse-glow-local {
-    clip-path: inset(0 round 14px);
+.navbar-center-pill > .mouse-glow-local {
+    clip-path: inset(0 round 999px);
+}
+
+.navbar-nav .nav-item a > .mouse-glow-local {
+    clip-path: inset(0 round 999px);
 }
 
 @media (max-width: 768px) {
@@ -416,66 +420,152 @@ button:focus {
     opacity: 0.9 !important;
 }
 
-.custom-navbar-container {
+.navbar-vignette-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 1100px !important;
-    border-radius: 60px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 0 1rem !important; /* Reduced padding to make it thinner */
-    height: 52px;
-    background: rgba(26, 31, 46, 0.6);
-    backdrop-filter: blur(15px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    box-shadow: inset 0 1.2px 1.2px rgba(255, 255, 255, 0.1),
-    0 6px 32px 0 rgba(0, 0, 0, 0.2);
+    height: 100px;
+    background: linear-gradient(180deg, rgba(9,9,11,0.7) 0%, rgba(9,9,11,0.3) 50%, transparent 100%);
+    pointer-events: none;
+    z-index: 1020;
+}
 
+.top-navbar-wrapper {
+    transition: all 0.3s ease-out 0s;
+    padding: 0.8rem 0 !important;
+    font-size: 1.2rem;
+    z-index: 1030;
+}
+
+.top-navbar-wrapper .container {
+    max-width: 1300px !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    transition: max-width 0.3s ease;
+}
+
+@media (max-width: 1300px) {
+    .top-navbar-wrapper .container {
+        max-width: 100% !important;
+    }
+}
+
+.navbar-brand-col {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    z-index: 10;
 }
 
-.layout-toggle-wrapper {
-    margin-left: auto;
-    margin-right: 14px;
+.navbar-brand-text {
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: var(--navbar-color-brand);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.5rem;
+    line-height: 48px; /* Matches the height of the center pill and github button */
+    display: inline-flex;
+    align-items: center;
+    pointer-events: auto;
+    text-shadow: 0 0 8px rgba(90, 150, 170, 0.4);
+}
+
+.navbar-brand-text:hover {
+    text-shadow: 0 0 16px rgba(110, 205, 255, 0.8), 0 0 4px rgba(110, 205, 255, 0.4);
+    color: #ffffff;
+}
+
+.navbar-center-pill {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 6px; /* Uniform padding all around */
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1.2px 1.2px rgba(255, 255, 255, 0.1), 0 6px 24px 0 rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    white-space: nowrap;
 }
 
-.layout-toggle-btn {
+.navbar-right-col {
+    display: flex;
+    align-items: center;
+    z-index: 10;
+}
+
+.sidebar-toggle-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    padding: 0;
-    background: rgba(26, 31, 46, 0.65);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: var(--color-text);
-    font-size: 0.95rem;
-    letter-spacing: 0.2px;
-    backdrop-filter: blur(14px) saturate(160%);
-    -webkit-backdrop-filter: blur(14px) saturate(160%);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08), 0 10px 30px rgba(0, 0, 0, 0.25);
-    transition: background 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+    background: transparent;
+    border: none;
+    padding: 6px 16px; /* Matched exactly with nav-item a padding */
+    margin: 0; /* Removed margin to let the flex container handle spacing */
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 1);
+    cursor: pointer;
+    transition: all 0.2s ease-out 0s;
+    height: 36px; /* Explicit height to match nav items if needed, though padding should handle it */
 }
 
-.layout-toggle-btn svg {
-    width: 18px;
-    height: 18px;
-}
-
-.layout-toggle-btn:hover {
+.sidebar-toggle-icon:hover {
     background: rgba(255, 255, 255, 0.08);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 14px 36px rgba(0, 0, 0, 0.3);
 }
 
-.layout-toggle-btn:active {
-    transform: none;
+.sidebar-toggle-icon.active {
+    color: var(--navbar-color-brand) !important;
+    background: rgba(255, 255, 255, 0.15);
 }
 
-.layout-toggle-btn.active {
-    background: rgba(55, 115, 134, 0.75);
-    border-color: rgba(90, 180, 200, 0.6);
+.sidebar-toggle-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.github-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px; /* Increased to match the overall height of the center pill (36px content + 12px padding) */
+    border-radius: 999px;
+    padding: 0 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: inset 0 1.2px 1.2px rgba(255, 255, 255, 0.1), 0 6px 24px 0 rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    text-decoration: none;
+    gap: 8px;
+}
+
+.github-pill-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    /* Removed transform: translateY(-1px); */
+}
+
+.github-pill-btn .star-icon {
+    font-size: 1.3rem;
+    color: #e3b341;
+}
+
+.github-pill-btn .divider {
+    width: 1px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.github-pill-btn .github-icon {
+    font-size: 1.3rem;
 }
 
 .navbar-floating-mode {
@@ -513,16 +603,13 @@ button:focus {
     overflow-x: hidden;
     overscroll-behavior: contain;
     padding-right: 8px;
-    background: linear-gradient(225deg, rgba(26, 31, 46, 0.75) 0%, rgba(20, 25, 36, 0.6) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(23, 28, 40, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 20px;
     padding: 16px;
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
-    box-shadow:
-            inset -1px 1px 1px rgba(255, 255, 255, 0.25),
-            inset 1px -1px 1px rgba(0, 0, 0, 0.4),
-            0 20px 55px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.45);
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -769,12 +856,14 @@ a.floating-nav-contact-item:hover {
     letter-spacing: 0.6px;
     color: var(--navbar-color-brand);
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: all 0.3s ease;
     pointer-events: auto;
+    text-shadow: 0 0 8px rgba(90, 150, 170, 0.4);
 }
 
 .floating-nav-brand:hover {
-    transform: translateY(-2px);
+    text-shadow: 0 0 16px rgba(110, 205, 255, 0.8), 0 0 4px rgba(110, 205, 255, 0.4);
+    color: #ffffff;
 }
 
 .floating-nav-close {
@@ -797,6 +886,7 @@ a.floating-nav-contact-item:hover {
 }
 
 .floating-nav-list .floating-nav-link {
+    position: relative;
     display: flex !important;
     align-items: center;
     justify-content: flex-start;
@@ -809,6 +899,26 @@ a.floating-nav-contact-item:hover {
     border: none;
     transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border 0.2s ease;
     width: 100%;
+}
+
+.floating-nav-list .floating-nav-link::before {
+    content: "";
+    position: absolute;
+    left: 8px; /* Moved inward by changing left from 0 to 8px */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 0;
+    background-color: var(--navbar-color-brand);
+    border-radius: 4px; /* Changed to full rounded corners since it's no longer attached to the edge */
+    transition: height 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+}
+
+.floating-nav-list .floating-nav-link:hover::before,
+.floating-nav-list .floating-nav-link.active::before {
+    height: 40%;
+    opacity: 1;
 }
 
 .floating-nav-list .floating-nav-link svg {
@@ -953,52 +1063,54 @@ a.floating-nav-contact-item:hover {
 
 .navbar-nav .nav-link {
     color: var(--color-text) !important;
-    padding-right: 1rem !important;
-    padding-left: 1rem !important;
 }
 
 .nav-link {
-    padding: 0.4rem 1rem !important;
+    padding: 0 !important;
 }
 
 @media (max-width: 767px) {
     .nav-link {
-        padding: 0.4rem 1rem !important;
+        padding: 0 !important;
     }
 }
 
 .navbar-nav .nav-item {
     position: relative;
-    margin-left: 20px;
+    margin: 0;
     display: flex;
     align-items: center;
 }
 
 .navbar-nav .nav-item a {
-    font-weight: 400;
-    transition: all 0.3s ease-out 0s;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.2s ease-out 0s;
     position: relative;
     z-index: 1;
+    padding: 6px 16px !important;
+    margin: 0 2px; /* Reduced margin to tighten the gap */
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 1) !important; /* Changed to pure white */
+    overflow: hidden; /* Added to contain the mouse glow effect */
 }
 
-.navbar-nav .nav-item a::after {
-    content: "";
-    position: relative;
-    display: block;
-    height: 4px;
-    width: 0;
-    border-radius: 16px;
-    background: var(--navbar-bg-item-hover);
-    bottom: 1px;
-    z-index: -1;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: all 0.3s ease-out 0s;
+.navbar-nav .nav-item a:hover {
+    color: rgba(255, 255, 255, 1) !important;
+    background: rgba(255, 255, 255, 0.08);
 }
 
-.navbar-nav .nav-item a:hover::after,
-.navbar-nav .nav-item a.active::after {
-    width: 100%;
+.navbar-nav .nav-item a.active {
+    color: var(--navbar-color-brand) !important;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.navbar-nav .nav-item:first-child a {
+    margin-left: 0;
+}
+
+.navbar-nav .nav-item:last-child a {
+    margin-right: 0;
 }
 
 /*================================================================
