@@ -94,11 +94,11 @@ function ResumeNew() {
     return (
         <div>
             <Container fluid className="resume-section">
-                <Row className="resume__row animate-item delay-1">
+                <Row className="resume__row">
                     <DownloadButton />
                 </Row>
 
-                <div className="resume-container animate-item delay-2" ref={containerRef}>
+                <div className="resume-container" ref={containerRef}>
                     <Document
                         file={pdf}
                         onLoadSuccess={onDocumentLoadSuccess}
@@ -120,7 +120,7 @@ function ResumeNew() {
                         ))}
                     </Document>
                 </div>
-                <Row className="resume__row bottom-download-row animate-item delay-1">
+                <Row className="resume__row bottom-download-row">
                     <DownloadButton />
                 </Row>
             </Container>

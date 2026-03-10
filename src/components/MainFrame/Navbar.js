@@ -177,9 +177,11 @@ function NavBar({ triggerPreloader }) {
     );
     if (currentIndex !== -1 && navContainerRef.current) {
       // Use clientWidth to exclude borders for accurate center positioning
-      const containerWidth = navContainerRef.current.clientWidth;
+      // Account for the 6px padding on each side of the wrapper
+      const padding = 6;
+      const containerWidth = navContainerRef.current.clientWidth - (padding * 2);
       const itemWidth = containerWidth / BOTTOM_NAV_ITEMS.length;
-      const newPosition = currentIndex * itemWidth + itemWidth / 2;
+      const newPosition = padding + (currentIndex * itemWidth) + (itemWidth / 2);
       setPillPosition(newPosition);
       setIsPillVisible(true);
     } else {
