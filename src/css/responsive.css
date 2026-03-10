@@ -317,6 +317,13 @@
         flex-direction: column !important;
     }
 
+    .project-card-list-view__type {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        z-index: 2;
+    }
+
     .project-card-list-view__image-container {
         width: 100%;
         max-width: 400px; /* Constrain the image width on smaller screens */
@@ -327,7 +334,15 @@
         text-align: center;
     }
 
+    .project-card-list-view__tags {
+        justify-content: center;
+    }
+
     .project-card-list-view__description {
         text-align: left;
+    }
+
+    .project-card-list-view__buttons {
+        justify-content: center;
     }
 }

@@ -1,8 +1,7 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { CgWebsite } from "react-icons/cg";
-import { BsGithub } from "react-icons/bs";
+import { BsGithub, BsArrowRight } from "react-icons/bs";
 
 const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, viewMode, type, date }) => {
     if (viewMode === "list") {
@@ -13,12 +12,10 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                 </div>
                 <div className="project-card-list-view__content">
                     <Card.Title className="project-card-list-view__title">{title}</Card.Title>
-                    <div className="project-card-list-view__type-container">
+                    <div className="project-card-list-view__tags">
                         <span className={`project-card-list-view__type ${type === 'Company Internal' ? 'company' : 'personal'}`}>
                             {type}
                         </span>
-                    </div>
-                    <div className="project-card-list-view__tags">
                         {tags.map((tag, index) => (
                             <span key={index} className="project-card-list-view__tag">
                                 {tag}
@@ -27,14 +24,9 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                     </div>
                     <Card.Text className="project-card-list-view__description">{description}</Card.Text>
                     <div className="project-card-list-view__buttons">
-                        {ghLink && (<Button variant="primary" href={ghLink} target="_blank">
-                            <BsGithub /> &nbsp; GitHub
+                        {ghLink && (<Button variant="light" href={ghLink} target="_blank" className="github-pill-btn-project">
+                            <BsGithub /> &nbsp; GitHub &nbsp; <BsArrowRight />
                         </Button>)}
-                        {demoLink && (
-                            <Button variant="primary" href={demoLink} target="_blank" className="ms-2">
-                                <CgWebsite /> &nbsp; Demo
-                            </Button>
-                        )}
                     </div>
                 </div>
                 {date && <span className="project-card__date project-card__date--list">{date}</span>}
@@ -64,25 +56,14 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                     <Card.Text className="project-card__description">{description}</Card.Text>
                     <div className="project-card__buttons">
                         {ghLink && (<Button
-                            variant="primary"
+                            variant="light"
                             href={ghLink}
                             target="_blank"
-                            className="project-card__button"
+                            className="project-card__button github-pill-btn-project"
                         >
                             <BsGithub /> &nbsp;
-                            GitHub
+                            GitHub &nbsp; <BsArrowRight />
                         </Button>)}
-                        {demoLink && (
-                            <Button
-                                variant="primary"
-                                href={demoLink}
-                                target="_blank"
-                                className="project-card__button"
-                            >
-                                <CgWebsite /> &nbsp;
-                                Demo
-                            </Button>
-                        )}
                     </div>
                 </div>
                 {date && <span className="project-card__date project-card__date--grid">{date}</span>}

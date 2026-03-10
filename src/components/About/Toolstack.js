@@ -1,6 +1,5 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import FadeInOnScroll from "../MainFrame/FadeInOnScroll";
 import {
     SiVisualstudiocode,
     SiLinux,
@@ -21,34 +20,32 @@ const toolStackIcons = [
 
 function Toolstack() {
     return (
-        <FadeInOnScroll>
-            <Row className="tech-stack__row">
-                {toolStackIcons.map((tool, index) => (
-                    <Col
-                        key={index}
-                        xs={6}
-                        sm={4}
-                        md={3}
-                        lg={2}
-                        xl={2}
-                        className="tech-stack__col"
+        <Row className="tech-stack__row">
+            {toolStackIcons.map((tool, index) => (
+                <Col
+                    key={index}
+                    xs={6}
+                    sm={4}
+                    md={3}
+                    lg={2}
+                    xl={2}
+                    className="tech-stack__col"
+                >
+                    <a
+                        className="tech-icons tech-stack__icon-link"
+                        href={tool.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={tool.name} // Show tool name on hover
                     >
-                        <a
-                            className="tech-icons tech-stack__icon-link"
-                            href={tool.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title={tool.name} // Show tool name on hover
-                        >
-                            <span className="tech-icons__icon" aria-hidden="true">
-                            {tool.icon}
-                            </span>
-                            <span className="tech-icons__name">{tool.name}</span>
-                        </a>
-                    </Col>
-                ))}
-            </Row>
-        </FadeInOnScroll>
+                        <span className="tech-icons__icon" aria-hidden="true">
+                        {tool.icon}
+                        </span>
+                        <span className="tech-icons__name">{tool.name}</span>
+                    </a>
+                </Col>
+            ))}
+        </Row>
     );
 }
 

@@ -1,14 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef, Suspense, lazy } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Preloader from "./components/MainFrame/Pre";
 import Navbar from "./components/MainFrame/Navbar";
-import Home from "./components/Home/Home";
 import Footer from "./components/MainFrame/Footer";
 import Particle from "./components/MainFrame/Particle";
 import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate
+  BrowserRouter as Router
 } from "react-router-dom";
 import ScrollToTop from "./components/MainFrame/ScrollToTop";
 import "./css/style.css";
@@ -16,10 +12,7 @@ import "./css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./css/responsive.css";
 
-const About = lazy(() => import("./components/About/About"));
-const Projects = lazy(() => import("./components/Projects/Projects"));
-const Resume = lazy(() => import("./components/Resume/ResumeNew"));
-const Experiences = lazy(() => import("./components/Experiences/Experiences"));
+import AnimatedRoutes from "./components/MainFrame/AnimatedRoutes";
 
 function App() {
   const [load, upadateLoad] = useState(true);
@@ -163,16 +156,7 @@ function App() {
         <Particle />
         <ScrollToTop />
         <div className="content-wrap">
-          <Suspense fallback={null}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/project" element={<Projects />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/resume" element={<Resume />} />
-              <Route path="/experiences" element={<Experiences />} />
-              <Route path="*" element={<Navigate to="/"/>} />
-            </Routes>
-          </Suspense>
+          <AnimatedRoutes />
         </div>
         <Footer />
       </div>
