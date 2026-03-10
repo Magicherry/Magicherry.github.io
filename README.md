@@ -13,20 +13,32 @@
 
 ## Overview
 
-A fully customized React-based portfolio evolved from an open-source template.
-Built with maintainability, mobile-first responsiveness, and polished UI interactions in mind.
+A modern, highly interactive personal portfolio built with React. Evolved from an open-source template, this project has been extensively customized with a focus on **fluid animations**, **glassmorphic design**, and a **wonderful user experience**. 
 
-![Home Page](src/Assets/demo/Demo.png)
+Whether viewed on a desktop or a mobile device, the portfolio adapts seamlessly—featuring dynamic navigation systems, interactive project showcases, and subtle visual feedback that brings the interface to life.
+
+### Home Page (with Top Navigation)
+![Home Page](preview/Home.png)
+
+### About Page (with Side Navigation)
+![About Page](preview/About.png)
 
 ---
 
-## Highlights
-- Polished personal portfolio built with a modern React 18 stack
-- Adaptive navigation experience across desktop and mobile, including top, side, and bottom layouts
-- Redesigned Projects section with flexible list and grid presentations
-- Dedicated Tracks page highlighting professional experience and growth
-- Mobile-first responsive design with smooth, intuitive interactions
-- Subtle animations and glassmorphic visuals for a clean, contemporary aesthetic
+## Highlights & Features
+- **Modern Tech Stack**: Built with React 18, React Router v6, and Bootstrap 5.
+- **Advanced Navigation System**: 
+  - Desktop: Floating glassmorphic top pill navigation with an optional side panel.
+  - Mobile: App-like bottom navigation bar with smooth sliding pill indicators.
+- **Interactive UI/UX**: 
+  - Custom mouse glow effects on buttons and navigation elements.
+  - Scroll-triggered fade-in animations.
+  - Interactive particle background (`@tsparticles/react`).
+- **Project Showcase**: Redesigned Projects section with tag filtering and flexible List/Grid layout toggles.
+- **Professional Tracks**: Dedicated experience timeline using `react-vertical-timeline-component`.
+- **Integrated Resume**: Built-in PDF viewer using `react-pdf` for seamless resume reading.
+- **GitHub Integration**: Live GitHub contribution calendar visualization.
+- **Responsive & Polished**: Mobile-first design with glassmorphic visuals, subtle blurs, and a clean contemporary aesthetic.
 
 ## Prerequisites & Setup
 
@@ -45,14 +57,18 @@ npm start
 ```
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 
 The page will reload if you make edits.
 
-## Usage
+## Usage & Customization
 
-Open the project folder and Navigate to `/src/components/`. <br/>
+Open the project folder and navigate to `/src/components/`. <br/>
 Each section is modularized for clarity, making it easy to adjust structure, visuals, or interactions as the portfolio evolves.
+
+- **Data Customization**: Update your personal information, projects, and experiences in the respective data files (e.g., `src/components/Projects/ProjectData.js`).
+- **Assets**: Replace images in the `src/Assets/` directory.
+- **Resume**: Replace `src/Assets/cv/Yuting_Zhou_CV.pdf` with your own PDF resume.
 
 ## Acknowledgements
 
