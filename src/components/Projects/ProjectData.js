@@ -1,5 +1,15 @@
 export const projects = [
     {
+        imgPath: require("../../Assets/projects/StreamX.png"),
+        title: "StreamX - Movie Recommender",
+        description: "A Personalized Recommender System implementing custom Matrix Factorization. Includes data preprocessing, model evaluation (MAE, RMSE, NDCG), and a full-stack web application.",
+        ghLink: "https://github.com/Magicherry/Movies-Recommendation",
+        demoLink: "https://github.com/Magicherry/Movies-Recommendation",
+        tags: ["Machine Learning", "Matrix Factorization", "Next.js", "Django", "Recommender System"],
+        type: "Personal",
+        date: "2026"
+    },
+    {
         imgPath: require("../../Assets/projects/Railway.png"),
         title: "Railway Incident Classification System",
         description: "A hierarchical NLP system based on DeBERTa-v3 to automatically classify real-world railway incident logs across multi structured label levels, with end-to-end training and evaluation pipelines.",
