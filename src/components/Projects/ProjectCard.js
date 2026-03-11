@@ -2,6 +2,7 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { BsGithub, BsArrowRight } from "react-icons/bs";
+import { FaLock } from "react-icons/fa";
 
 const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, viewMode, type, date }) => {
     if (viewMode === "list") {
@@ -24,9 +25,15 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                     </div>
                     <Card.Text className="project-card-list-view__description">{description}</Card.Text>
                     <div className="project-card-list-view__buttons">
-                        {ghLink && (<Button variant="light" href={ghLink} target="_blank" className="github-pill-btn-project">
-                            <BsGithub /> &nbsp; GitHub &nbsp; <BsArrowRight />
-                        </Button>)}
+                        {ghLink ? (
+                            <Button variant="light" href={ghLink} target="_blank" className="github-pill-btn-project">
+                                <BsGithub /> &nbsp; GitHub &nbsp; <BsArrowRight />
+                            </Button>
+                        ) : (
+                            <Button variant="light" disabled className="github-pill-btn-project" style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+                                <FaLock /> &nbsp; Private Repository
+                            </Button>
+                        )}
                     </div>
                 </div>
                 {date && <span className="project-card__date project-card__date--list">{date}</span>}
@@ -55,15 +62,27 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                     </div>
                     <Card.Text className="project-card__description">{description}</Card.Text>
                     <div className="project-card__buttons">
-                        {ghLink && (<Button
-                            variant="light"
-                            href={ghLink}
-                            target="_blank"
-                            className="project-card__button github-pill-btn-project"
-                        >
-                            <BsGithub /> &nbsp;
-                            GitHub &nbsp; <BsArrowRight />
-                        </Button>)}
+                        {ghLink ? (
+                            <Button
+                                variant="light"
+                                href={ghLink}
+                                target="_blank"
+                                className="project-card__button github-pill-btn-project"
+                            >
+                                <BsGithub /> &nbsp;
+                                GitHub &nbsp; <BsArrowRight />
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="light"
+                                disabled
+                                className="project-card__button github-pill-btn-project"
+                                style={{ opacity: 0.6, cursor: 'not-allowed' }}
+                            >
+                                <FaLock /> &nbsp;
+                                Private Repo
+                            </Button>
+                        )}
                     </div>
                 </div>
                 {date && <span className="project-card__date project-card__date--grid">{date}</span>}

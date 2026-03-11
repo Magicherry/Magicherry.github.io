@@ -11,7 +11,7 @@ export const projects = [
     },
     {
         imgPath: require("../../Assets/projects/Railway.png"),
-        title: "Railway Incident Classification System",
+        title: "Intelligent Rail Incident Classifier",
         description: "A hierarchical NLP system based on DeBERTa-v3 to automatically classify real-world railway incident logs across multi structured label levels, with end-to-end training and evaluation pipelines.",
         tags: ["Hierarchical Learning", "Data Preprocessing", "Supervised Fine-tuning ", "DeBERTa-v3"],
         type: "Company Internal",
@@ -19,7 +19,7 @@ export const projects = [
     },
     {
         imgPath: require("../../Assets/projects/train_multi.png"),
-        title: "Railway Time–Space Diagram Generator",
+        title: "Rail Time–Space Diagram Generator",
         description: "A Qt native application converting raw train data into intuitive and visual graphs. Helps researcher easily understand and analyze train activity for a specific day and location.",
         tags: ["Python", "PyQt", "Numpy", "Pandas", "Matplotlab"],
         type: "Company Internal",
@@ -37,7 +37,7 @@ export const projects = [
     },
     {
         imgPath: require("../../Assets/projects/AyeNote.png"),
-        title: "AyeNote Cloud Notes Platform",
+        title: "AyeNote Cloud Notes",
         description: "A full-stack note-taking application featuring a Vue3 front-end and a Django back-end. Includes web scraping and data mining capabilities to analyze user data.",
         ghLink: "https://github.com/Magicherry/AyeNote",
         demoLink: "https://github.com/Magicherry/AyeNote",

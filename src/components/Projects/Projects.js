@@ -61,7 +61,7 @@ const Projects = () => {
           <h1 className="project-heading">
             My Recent <strong className="blue">Works</strong>
           </h1>
-          <p className="projects__paragraph">
+          <p style={{ color: "white" }}>
             My works make use of a vast variety of the latest technology tools.
           </p>
           <Row className={`projects__row ${viewMode}`}>

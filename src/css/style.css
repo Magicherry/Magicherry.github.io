@@ -1862,7 +1862,7 @@ body.homepage .home-about-section {
     margin-top: 25px;
     color: var(--color-text-accent);
     font-size: 1.6rem;
-    font-weight: normal;
+    font-weight: 700 !important;
 }
 
 .project-card-grid-view {
@@ -2071,7 +2071,7 @@ body.homepage .home-about-section {
 
 .project-card-list-view__title {
     font-size: 1.6rem;
-    font-weight: bold;
+    font-weight: 700 !important;
     margin-bottom: 12px;
     color: var(--color-text-accent) !important;
     line-height: 1.2;
