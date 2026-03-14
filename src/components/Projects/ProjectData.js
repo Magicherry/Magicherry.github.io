@@ -13,7 +13,7 @@ export const projects = [
         imgPath: require("../../Assets/projects/Railway.png"),
         title: "Intelligent Rail Incident Classifier",
         description: "A hierarchical NLP system based on DeBERTa-v3 to automatically classify real-world railway incident logs across multi structured label levels, with end-to-end training and evaluation pipelines.",
-        tags: ["Hierarchical Learning", "Data Preprocessing", "Supervised Fine-tuning ", "DeBERTa-v3"],
+        tags: ["Hierarchical Learning", "Data Preprocessing", "Supervised Fine-tuning", "DeBERTa-v3"],
         type: "Company Internal",
         date: "2025"
     },
@@ -21,7 +21,7 @@ export const projects = [
         imgPath: require("../../Assets/projects/train_multi.png"),
         title: "Rail Time–Space Diagram Generator",
         description: "A Qt native application converting raw train data into intuitive and visual graphs. Helps researcher easily understand and analyze train activity for a specific day and location.",
-        tags: ["Python", "PyQt", "Numpy", "Pandas", "Matplotlab"],
+        tags: ["Python", "PyQt", "NumPy", "Pandas", "Matplotlib"],
         type: "Company Internal",
         date: "2025"
     },
@@ -31,7 +31,7 @@ export const projects = [
         description: "A application that uses Google Movenet model to perform real-time pose estimation from a webcam feed, providing instant feedback on movement accuracy.",
         ghLink: "https://github.com/Magicherry/Pose_Estimation",
         demoLink: "https://github.com/Magicherry/Pose_Estimation",
-        tags: ["Python", "Movenet", "OpenCV", "Pytorch", "TensorFlow"],
+        tags: ["Python", "MoveNet", "OpenCV", "PyTorch", "TensorFlow"],
         type: "Personal",
         date: "2024"
     },
@@ -41,7 +41,7 @@ export const projects = [
         description: "A full-stack note-taking application featuring a Vue3 front-end and a Django back-end. Includes web scraping and data mining capabilities to analyze user data.",
         ghLink: "https://github.com/Magicherry/AyeNote",
         demoLink: "https://github.com/Magicherry/AyeNote",
-        tags: ["Django", "Vue3", "MySQL", "BeautifulSoup", "AJAX"],
+        tags: ["Django", "Vue 3", "MySQL", "BeautifulSoup", "AJAX"],
         type: "Personal",
         date: "2023"
     },
@@ -51,7 +51,7 @@ export const projects = [
         description: "A real-time strategy game with a SpringBoot back-end and a Vue3 front-end. Features a MySQL database and a Bootstrap 4 interface for a dynamic gaming experience.",
         ghLink: "https://github.com/Magicherry/King-of-Bots",
         demoLink: "https://github.com/Magicherry/King-of-Bots",
-        tags: ["Spring Boot", "Vue3", "MySQL", "WebSocket","JWT"],
+        tags: ["Spring Boot", "Vue 3", "MySQL", "WebSocket", "JWT"],
         type: "Personal",
         date: "2023"
     },
@@ -61,7 +61,7 @@ export const projects = [
         description: "A comprehensive management system built with SpringBoot and MyBatis. Features a secure database with MD5 encryption and a clear separation of front-end and back-end concerns.",
         ghLink: "https://github.com/Magicherry/Management_Web_System",
         demoLink: "https://github.com/Magicherry/Management_Web_System",
-        tags: ["Spring Boot", "Vue3", "MyBatis Plus", "MySQL", "MD5"],
+        tags: ["Spring Boot", "Vue 3", "MyBatis Plus", "MySQL", "MD5"],
         type: "Personal",
         date: "2022"
     },

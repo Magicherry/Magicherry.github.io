@@ -3,7 +3,7 @@ import { FaFlask, FaBriefcase, FaUsers, FaSubway } from 'react-icons/fa';
 export const timelines = [
     {
         title: 'Research',
-        subtitle: "Here are a few research projects I've worked on.",
+        subtitle: "Academic and applied research endeavors.",
         icon: FaFlask,
         data: [
             {
@@ -22,7 +22,7 @@ export const timelines = [
     },
     {
         title: 'Internship',
-        subtitle: "Here are a few internships I've had.",
+        subtitle: "Professional industry experience.",
         icon: FaBriefcase,
         data: [
             {
@@ -52,7 +52,7 @@ export const timelines = [
     },
     {
         title: 'Extracurricular',
-        subtitle: "Here are some extracurriculars I've joined.",
+        subtitle: "Leadership and community involvement.",
         icon: FaUsers,
         data: [
             {
