@@ -2565,7 +2565,7 @@ body.homepage .home-about-section {
 .tech-icons {
     font-size: 1rem !important;
     margin: 8px !important;
-    padding: 14px 18px !important;
+    padding: 16px 12px !important;
     opacity: 0.93 !important;
     border-radius: 20px !important;
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
@@ -2583,20 +2583,21 @@ body.homepage .home-about-section {
 
     overflow: hidden !important;
     display: flex !important;
+    flex-direction: column !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 12px !important;
+    gap: 10px !important;
     width: 100%;
-    max-width: 220px;
+    max-width: 180px;
     flex-shrink: 0;
     position: relative !important;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15), border 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.15) !important;
     text-align: center;
-    min-height: 76px;
+    min-height: 100px;
 }
 
 .tech-icons__icon {
-    font-size: 3rem;
+    font-size: 3.2rem;
     line-height: 1;
     display: inline-flex;
     align-items: center;
@@ -2604,32 +2605,35 @@ body.homepage .home-about-section {
 }
 
 .tech-icons__name {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     font-weight: 600;
     letter-spacing: 0.3px;
     line-height: 1.2;
     opacity: 0.92;
+    word-break: break-word;
+    white-space: normal;
 }
 
 
 @media (max-width: 767px) {
     .tech-icons {
         margin: 6px !important;
-        padding: 12px 14px !important;
-        max-width: 200px;
-        min-height: 78px;
+        padding: 14px 10px !important;
+        max-width: 150px;
+        min-height: 90px;
+        gap: 8px !important;
     }
 
     .tech-stack__col {
-        min-width: 130px;
+        min-width: 110px;
     }
 
     .tech-icons__icon {
-        font-size: 2.4rem;
+        font-size: 2.6rem;
     }
 
     .tech-icons__name {
-        font-size: 1rem;
+        font-size: 0.85rem;
     }
 }
 

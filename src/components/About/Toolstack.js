@@ -24,7 +24,7 @@ function Toolstack() {
             {toolStackIcons.map((tool, index) => (
                 <Col
                     key={index}
-                    xs={6}
+                    xs={4}
                     sm={4}
                     md={3}
                     lg={2}
