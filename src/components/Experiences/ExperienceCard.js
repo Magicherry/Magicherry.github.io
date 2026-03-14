@@ -7,7 +7,7 @@ function ExperienceCard(props) {
       <Card.Body>
         <Card.Title>{props.title}</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">{props.company}</Card.Subtitle>
-        <Card.Text style={{ textAlign: "justify" }}>
+        <Card.Text className="text-justify">
           {props.description}
         </Card.Text>
         <Card.Footer>{props.duration}</Card.Footer>

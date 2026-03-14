@@ -22,9 +22,9 @@ function Home1() {
                 </span>
               </h1>
 
-              <h1 className="heading-name">
+              <h1 className="home-heading-label">
                 I'M
-                <strong className="main-name"> YUTING ZHOU</strong>
+                <strong className="home-hero-name"> YUTING ZHOU</strong>
                 .
               </h1>
 

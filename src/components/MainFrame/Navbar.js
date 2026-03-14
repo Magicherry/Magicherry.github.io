@@ -294,7 +294,7 @@ function NavBar({ triggerPreloader }) {
             className={`top-navbar-wrapper ${isTopNavHidden ? "navbar-hidden" : ""} ${isScrolled ? "navbar-scrolled" : ""} ${isSideNavVisible ? "navbar-floating-mode" : ""}`}
             onToggle={setIsExpanded}
         >
-          <Container className="d-flex align-items-center justify-content-between" style={{ height: "100%", position: "relative" }}>
+          <Container className="d-flex align-items-center justify-content-between navbar-top-inner">
             
             {/* Left Column: Brand */}
             <div className="navbar-brand-col">
@@ -368,10 +368,9 @@ function NavBar({ triggerPreloader }) {
                 </Tilt>
               </div>
 
-              <div className="floating-nav-name" style={{ marginTop: "4px" }}>Yuting Zhou</div>
-              <div className="floating-nav-title" style={{ marginTop: "4px" }}>M.S. in Computer Science</div>
-              
-              <div className="floating-nav-actions" style={{ marginTop: "12px", justifyContent: "center", gap: "12px", width: "100%", padding: "0 10px" }}>
+              <div className="floating-nav-name">Yuting Zhou</div>
+              <div className="floating-nav-title">M.S. in Computer Science</div>
+              <div className="floating-nav-actions">
                 <a
                   className="floating-nav-icon-btn"
                   href="https://github.com/Magicherry"
@@ -422,7 +421,7 @@ function NavBar({ triggerPreloader }) {
             <div className="floating-nav-divider" />
 
             <div className="floating-nav-bottom">
-              <div className="floating-nav-contact-group" style={{ marginTop: "0", marginBottom: "12px", paddingLeft: "4px" }}>
+              <div className="floating-nav-contact-group">
                 <a
                   className="floating-nav-contact-item"
                   href="https://www.google.com/maps/search/?api=1&query=Rutgers%20University%E2%80%93New%20Brunswick"
@@ -462,13 +461,13 @@ function NavBar({ triggerPreloader }) {
           {/* Main navigation buttons with rounded rectangle background */}
           <div className="main-nav-wrapper" ref={navContainerRef}>
             {/* Pill slider */}
-            <div 
+            {/* Position and opacity are dynamic (route/container); see style.css header for rationale */}
+            <div
               className="draggable-pill"
               style={{
                 left: `${pillPosition}px`,
                 transform: 'translateX(-50%)',
-                opacity: isPillVisible ? 1 : 0,
-                pointerEvents: 'none'
+                opacity: isPillVisible ? 1 : 0
               }}
               ref={pillRef}
             />
@@ -484,11 +483,11 @@ function NavBar({ triggerPreloader }) {
         </div>
 
         <Modal show={showWechatModal} onHide={() => setShowWechatModal(false)} centered>
-          <Modal.Body style={{ textAlign: "center", cursor: "pointer" }} onClick={() => setShowWechatModal(false)}>
+          <Modal.Body className="modal-body-center" onClick={() => setShowWechatModal(false)}>
             <img
               src={wechatQrCode}
               alt="WeChat QR Code"
-              style={{ maxWidth: "100%" }}
+              className="img-max-full"
               loading="lazy"
               decoding="async"
             />

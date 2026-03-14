@@ -59,20 +59,22 @@ const Projects = () => {
         
         <Container>
           <h1 className="project-heading">
-            My Recent <strong className="blue">Works</strong>
+            My Recent <strong className="text-accent">Works</strong>
           </h1>
-          <p style={{ color: "white" }}>
+          <p className="section-intro-text">
             My works make use of a vast variety of the latest technology tools.
           </p>
           <Row className={`projects__row ${viewMode}`}>
-            <Col md={12} className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <Col md={12} className="projects__toolbar d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
               <div className="filter-dropdown-container" ref={dropdownRef}>
                 <div className="d-flex align-items-center gap-2">
                   <button 
                     className={`filter-dropdown-toggle ${isDropdownOpen ? 'active' : ''}`}
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
-                    <span className="filter-dropdown-label">All Genres</span>
+                    {selectedTags.length === 0 && (
+                      <span className="filter-dropdown-label">All Genres</span>
+                    )}
                     {selectedTags.length > 0 && (
                       <div 
                         className="filter-selected-tags"

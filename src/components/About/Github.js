@@ -6,7 +6,7 @@ function Github() {
   return (
     <Row className="github__row">
       <h1 className="project-heading github__title">
-        Days I <strong className="blue">Code</strong>
+        Days I <strong className="text-accent">Code</strong>
       </h1>
       <GitHubCalendar
         username="magicherry"

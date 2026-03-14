@@ -57,21 +57,21 @@ function Home2() {
                 <Row className="align-items-center">
                     <Col md={8} className="home-about-description">
                         <h1 className="home-about__title">
-                            LET ME <span className="blue">INTRODUCE</span> MYSELF
+                            LET ME <span className="text-accent">INTRODUCE</span> MYSELF
                         </h1>
                         <p className="home-about-body">
                             I fell in love with programming and have stayed curious ever since. 🤷‍♂️
                             <br /><br />
-                            I am especially interested in <b className="blue">ML systems</b> and <b className="blue">data-driven products</b> that turn insights into reliable, practical software. 🚀
+                            I am especially interested in <b className="text-accent">ML systems</b> and <b className="text-accent">data-driven products</b> that turn insights into reliable, practical software. 🚀
                             <br /><br />
-                            I work across the stack—from crafting <b className="blue">clean, responsive interfaces </b> to building dependable <b className="blue">back-end services </b>.
-                            I’m comfortable with <b className="blue">databases, API design, and containerized deployments that scale </b>. 💻
+                            I work across the stack—from crafting <b className="text-accent">clean, responsive interfaces </b> to building dependable <b className="text-accent">back-end services </b>.
+                            I’m comfortable with <b className="text-accent">databases, API design, and containerized deployments that scale </b>. 💻
                             <br /><br />
-                            Whenever possible, I strive to turn ideas into products that are <b className="blue">fast, maintainable, and a joy </b>to use!
+                            Whenever possible, I strive to turn ideas into products that are <b className="text-accent">fast, maintainable, and a joy </b>to use!
                         </p>
                     </Col>
-                    <Col md={4} className="myAvtar">
-                        <div className="myAvtar-wrapper">
+                    <Col md={4} className="home-avatar">
+                        <div className="home-avatar-wrapper">
                             <Tilt>
                                 <img
                                     src={myImg}
@@ -81,7 +81,7 @@ function Home2() {
                                     decoding="async"
                                 />
                             </Tilt>
-                            <div className="d-flex justify-content-center w-100" style={{ marginTop: '20px' }}>
+                            <div className="d-flex justify-content-center w-100 home-about-actions">
                                 <Button 
                                     className="download-cv-button" 
                                     variant="primary" 
@@ -99,7 +99,7 @@ function Home2() {
                     <Col md={12} className="home-about-social">
                         <h1>FIND ME ON</h1>
                         <p>
-                            Feel free to <span className="blue">connect</span> with me
+                            Feel free to <span className="text-accent">connect</span> with me
                         </p>
                         <ul className="home-about-social-links">
                             {socialLinks.map((link, idx) => (
@@ -108,7 +108,7 @@ function Home2() {
                                         href={link.href}
                                         target={link.onClick ? "_self" : "_blank"}
                                         rel="noopener noreferrer"
-                                        className="icon-colour home-social-icons"
+                                        className="social-icon-color home-social-icons"
                                         aria-label={link.ariaLabel}
                                         onClick={link.onClick}
                                     >
@@ -121,11 +121,11 @@ function Home2() {
                 </Row>
             </Container>
             <Modal show={showWechatModal} onHide={() => setShowWechatModal(false)} centered>
-                <Modal.Body style={{ textAlign: "center", cursor: "pointer" }} onClick={() => setShowWechatModal(false)}>
+                <Modal.Body className="modal-body-center" onClick={() => setShowWechatModal(false)}>
                     <img
                         src={wechatQrCode}
                         alt="WeChat QR Code"
-                        style={{ maxWidth: "100%" }}
+                        className="img-max-full"
                         loading="lazy"
                         decoding="async"
                     />

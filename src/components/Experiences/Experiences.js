@@ -9,9 +9,9 @@ function ExperienceTimeline({ title, subtitle, data, icon: Icon }) {
     return (
         <>
             <h1 className="project-heading">
-                My <strong className="blue">{title} </strong> Experiences
+                My <strong className="text-accent">{title} </strong> Experiences
             </h1>
-            <p style={{ color: "white" }}>{subtitle}</p>
+            <p className="section-intro-text">{subtitle}</p>
             <VerticalTimeline>
                 {data.map((experience, index) => (
                     <VerticalTimelineElement

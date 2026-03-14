@@ -30,7 +30,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                                 <BsGithub /> &nbsp; GitHub &nbsp; <BsArrowRight />
                             </Button>
                         ) : (
-                            <Button variant="light" disabled className="github-pill-btn-project" style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+                            <Button variant="light" disabled className="github-pill-btn-project">
                                 <FaLock /> &nbsp; Private Repository
                             </Button>
                         )}
@@ -77,7 +77,6 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                                 variant="light"
                                 disabled
                                 className="project-card__button github-pill-btn-project"
-                                style={{ opacity: 0.6, cursor: 'not-allowed' }}
                             >
                                 <FaLock /> &nbsp;
                                 Private Repo

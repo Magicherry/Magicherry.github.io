@@ -10,16 +10,16 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 const LoadingSpinner = ({ progress }) => (
     <div className="resume-pdf-container">
         <div className="d-flex flex-column align-items-center gap-3">
-            <Spinner animation="border" style={{ color: '#5fe1f8' }} />
+            <Spinner animation="border" className="resume-loading-spinner" />
             <div className="text-light small">Loading resume…</div>
             {Number.isFinite(progress) && progress > 0 ? (
-                <div className="w-100" style={{ maxWidth: "280px" }}>
+                <div className="w-100 resume-progress-wrap">
                     <ProgressBar
                         now={progress}
                         animated
                         striped
                         variant="info"
-                        style={{ height: "6px" }}
+                        className="progress-bar-thin"
                         aria-label="Resume loading progress"
                     />
                 </div>

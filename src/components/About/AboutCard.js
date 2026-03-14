@@ -16,18 +16,18 @@ const AboutCard = () => {
         <blockquote className="blockquote mb-0">
           <ul className="about-card__highlights">
             <li className="about-card__highlight">
-              Hello, I am <span className="blue">Yuting Zhou</span>, a Computer Science master’s student at{" "}
-              <span className="blue">Rutgers University</span>.
+              Hello, I am <span className="text-accent">Yuting Zhou</span>, a Computer Science master’s student at{" "}
+              <span className="text-accent">Rutgers University</span>.
             </li>
             <li className="about-card__highlight">
-              I currently work as a Research Assistant at the <span className="blue">CAIT Lab</span>, focusing on{" "}
-              <span className="blue">rail incident modeling</span>, <span className="blue">large-scale data engineering</span>, and{" "}
-              <span className="blue">NLP/LLM-based automation</span> for transportation systems.
+              I currently work as a Research Assistant at the <span className="text-accent">CAIT Lab</span>, focusing on{" "}
+              <span className="text-accent">rail incident modeling</span>, <span className="text-accent">large-scale data engineering</span>, and{" "}
+              <span className="text-accent">NLP/LLM-based automation</span> for transportation systems.
             </li>
             <li className="about-card__highlight">
-              I am actively seeking <span className="blue">Software Engineering</span> opportunities starting{" "}
-              <span className="blue">Summer 2026</span>, with interests in <span className="blue">ML systems</span>,{" "}
-              <span className="blue">Frontend &amp; Backend Engineering</span>, and <span className="blue">data-driven products</span>.
+              I am actively seeking <span className="text-accent">Software Engineering</span> opportunities starting{" "}
+              <span className="text-accent">Summer 2026</span>, with interests in <span className="text-accent">ML systems</span>,{" "}
+              <span className="text-accent">Frontend &amp; Backend Engineering</span>, and <span className="text-accent">data-driven products</span>.
             </li>
             <li className="about-card__highlight">
               Apart from coding, here are some activities I enjoy:
@@ -41,7 +41,7 @@ const AboutCard = () => {
             ))}
           </ul>
 
-          <p className="blue about-card__quote">
+          <p className="text-accent about-card__quote">
             <em>"No matter what your dream is, you have to dedicate yourself entirely to it."</em>
           </p>
           <footer className="blockquote-footer">AYRTON SENNA</footer>

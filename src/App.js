@@ -7,10 +7,8 @@ import {
   BrowserRouter as Router
 } from "react-router-dom";
 import ScrollToTop from "./components/MainFrame/ScrollToTop";
-import "./css/style.css";
-import "./css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./css/responsive.css";
+import "./css/style.css";
 
 import AnimatedRoutes from "./components/MainFrame/AnimatedRoutes";
 

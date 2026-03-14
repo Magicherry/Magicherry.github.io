@@ -38,12 +38,12 @@ const Footer = () => {
   return (
       <Container fluid className="footer">
         <Row className="align-items-center justify-content-center">
-          <Col md={4} className="footer-copywright d-flex align-items-center justify-content-center">
+          <Col md={4} className="footer-copyright d-flex align-items-center justify-content-center">
             <a href="mailto:zyt680129@gmail.com" className="email-link">
               <h3>Email: zyt680129@gmail.com</h3>
             </a>
           </Col>
-          <Col md={4} className="footer-copywright d-flex align-items-center justify-content-center">
+          <Col md={4} className="footer-copyright d-flex align-items-center justify-content-center">
             <h3>Copyright © Yuting Zhou {year}</h3>
           </Col>
           <Col md={4} className="footer-body d-flex align-items-center justify-content-center">
@@ -67,13 +67,13 @@ const Footer = () => {
         </Row>
         <Modal show={showWechatModal} onHide={() => setShowWechatModal(false)} centered>
           <Modal.Body
-              style={{ textAlign: "center", cursor: "pointer" }}
+              className="modal-body-center"
               onClick={() => setShowWechatModal(false)}
           >
             <img
               src={wechatQrCode}
               alt="WeChat QR Code"
-              style={{ maxWidth: "100%" }}
+              className="img-max-full"
               loading="lazy"
               decoding="async"
             />

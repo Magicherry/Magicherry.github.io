@@ -42,7 +42,7 @@ const FadeInOnScroll = ({ children, delay = 0, eager = false, skipAnimation = fa
     <div
       ref={domRef}
       className={skipAnimation ? '' : `fade-in-section ${isVisible ? 'is-visible' : ''}`}
-      style={skipAnimation ? {} : { transitionDelay: `${delay}ms` }}
+      style={skipAnimation ? {} : { '--fade-delay': `${delay}ms` } /* dynamic per instance; see style.css header */}
     >
       {children}
     </div>
