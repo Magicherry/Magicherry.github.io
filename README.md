@@ -17,15 +17,25 @@ A modern, highly interactive personal portfolio built with React. Evolved from a
 
 Whether viewed on a desktop or a mobile device, the portfolio adapts seamlesslyâ€”featuring dynamic navigation systems, interactive project showcases, and subtle visual feedback that brings the interface to life.
 
-### Home Page (with Top Navigation)
-![Home Page](preview/Home.png)
+### Previews
 
-### About Page (with Side Navigation)
-![About Page](preview/About.png)
+#### Desktop
+
+| Home with Top Bar | About with Side Bar |
+| :---: | :---: |
+| ![Home (Desktop)](preview/Home_desktop.png) | ![About (Desktop)](preview/About_with_side_bar_desktop.png) |
+
+#### Mobile
+
+| Home with Bottom Bar | Tracks with Bottom Bar |
+| :---: | :---: |
+| ![Home (Mobile)](preview/Home_mobile.png) | ![Tracks (Mobile)](preview/Tracks_mobile.png) |
+
 
 ---
 
 ## Highlights & Features
+
 - **Modern Tech Stack**: Built with React 18, React Router v6, and Bootstrap 5.
 - **Advanced Navigation System**: 
   - Desktop: Floating glassmorphic top pill navigation with an optional side panel.
@@ -43,6 +53,7 @@ Whether viewed on a desktop or a mobile device, the portfolio adapts seamlesslyâ
 ## Prerequisites & Setup
 
 Clone down this repository. You will need these tools installed:
+
 - `git` (for cloning)
 - `node` 20.x (LTS) and `npm` (bundled with Node)
 - Optional: `nvm` for managing Node versions
@@ -51,19 +62,21 @@ Clone down this repository. You will need these tools installed:
 ## Local Development
 
 Install dependencies and start the development server:
+
 ```bash
 npm install
 npm start
 ```
 
-Runs the app in the development mode.\
+Runs the app in the development mode.  
 Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 
 The page will reload if you make edits.
 
 ## Usage & Customization
 
-Open the project folder and navigate to `/src/components/`. <br/>
+Open the project folder and navigate to `/src/components/`.   
+
 Each section is modularized for clarity, making it easy to adjust structure, visuals, or interactions as the portfolio evolves.
 
 - **Data Customization**: Update your personal information, projects, and experiences in the respective data files (e.g., `src/components/Projects/ProjectData.js`).
@@ -73,9 +86,11 @@ Each section is modularized for clarity, making it easy to adjust structure, vis
 ## Acknowledgements
 
 Grateful to the open-source community and the following projects for inspiration and building blocks:
+
 - [React](https://react.dev)
 - [Bootstrap](https://getbootstrap.com/)
 - [React-Bootstrap](https://react-bootstrap.github.io/)
 - [React Icons](https://react-icons.github.io/react-icons)
 - [Vercel](https://vercel.com/)
 - Contributors of the original portfolio template by [Soumyajit](https://github.com/soumyajit4419/Portfolio)
+
