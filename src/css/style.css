@@ -2581,9 +2581,9 @@ body.homepage .home-about-section {
 }
 
 .tech-icons {
-    font-size: 1rem !important;
+    font-size: 1.2rem !important;
     margin: 8px !important;
-    padding: 16px 12px !important;
+    padding: 12px 8px !important;
     opacity: 0.93 !important;
     border-radius: 20px !important;
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
@@ -2623,7 +2623,7 @@ body.homepage .home-about-section {
 }
 
 .tech-icons__name {
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     font-weight: 600;
     letter-spacing: 0.3px;
     line-height: 1.2;
@@ -2636,7 +2636,7 @@ body.homepage .home-about-section {
 @media (max-width: 767px) {
     .tech-icons {
         margin: 6px !important;
-        padding: 14px 10px !important;
+        padding: 10px 8px !important;
         max-width: 150px;
         min-height: 90px;
         gap: 8px !important;
@@ -2647,11 +2647,11 @@ body.homepage .home-about-section {
     }
 
     .tech-icons__icon {
-        font-size: 2.6rem;
+        font-size: 3.2rem;
     }
 
     .tech-icons__name {
-        font-size: 0.85rem;
+        font-size: 0.95rem;
     }
 }
 

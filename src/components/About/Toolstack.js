@@ -1,21 +1,13 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import {
-    SiVisualstudiocode,
-    SiLinux,
-    SiWindows11,
-    SiJetbrains,
-    SiJupyter,
-} from "react-icons/si";
-import { FaApple } from "react-icons/fa";
 
 const toolStackIcons = [
-    { icon: <SiWindows11 />, name: "Windows", link: "https://www.microsoft.com/en-us/windows" },
-    { icon: <FaApple />, name: "macOS", link: "https://www.apple.com/macos/" },
-    { icon: <SiLinux />, name: "Linux", link: "https://ubuntu.com/desktop/" },
-    { icon: <SiJupyter />, name: "Jupyter", link: "https://jupyter.org/" },
-    { icon: <SiVisualstudiocode />, name: "Visual Studio Code", link: "https://code.visualstudio.com/" },
-    { icon: <SiJetbrains />, name: "JetBrains", link: "https://www.jetbrains.com/" },
+    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/windows11/windows11-original.svg" alt="Windows" style={{ width: "1em", height: "1em", filter: "brightness(1.5) contrast(1.2)" }} />, name: "Windows", link: "https://www.microsoft.com/en-us/windows" },
+    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apple/apple-original.svg" alt="macOS" style={{ width: "1em", height: "1em", filter: "invert(1)" }} />, name: "macOS", link: "https://www.apple.com/macos/" },
+    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" alt="Linux" style={{ width: "1em", height: "1em" }} />, name: "Linux", link: "https://ubuntu.com/desktop/" },
+    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jupyter/jupyter-original.svg" alt="Jupyter" style={{ width: "1em", height: "1em" }} />, name: "Jupyter", link: "https://jupyter.org/" },
+    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg" alt="VS Code" style={{ width: "1em", height: "1em" }} />, name: "Visual Studio Code", link: "https://code.visualstudio.com/" },
+    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jetbrains/jetbrains-original.svg" alt="JetBrains" style={{ width: "1em", height: "1em" }} />, name: "JetBrains", link: "https://www.jetbrains.com/" },
 ];
 
 function Toolstack() {

@@ -5,7 +5,7 @@ export const projects = [
         description: "A Personalized Recommender System implementing custom Matrix Factorization. Includes data preprocessing, model evaluation (MAE, RMSE, NDCG), and a full-stack web application.",
         ghLink: "https://github.com/Magicherry/Movies-Recommendation",
         demoLink: "https://github.com/Magicherry/Movies-Recommendation",
-        tags: ["Machine Learning", "Matrix Factorization", "Next.js", "Django", "Recommender System"],
+        tags: ["Python", "Machine Learning", "Matrix Factorization", "Next.js", "Django", "Text CNN", "Recommender"],
         type: "Personal",
         date: "2026"
     },
@@ -13,7 +13,7 @@ export const projects = [
         imgPath: require("../../Assets/projects/Railway.png"),
         title: "Intelligent Rail Incident Classifier",
         description: "A hierarchical NLP system based on DeBERTa-v3 to automatically classify real-world railway incident logs across multi structured label levels, with end-to-end training and evaluation pipelines.",
-        tags: ["Hierarchical Learning", "Data Preprocessing", "Supervised Fine-tuning", "DeBERTa-v3"],
+        tags: ["Python", "Hierarchical Learning", "Preprocessing", "Fine-tuning", "DeBERTa-v3", "NLP"],
         type: "Company Internal",
         date: "2025"
     },
@@ -41,7 +41,7 @@ export const projects = [
         description: "A full-stack note-taking application featuring a Vue3 front-end and a Django back-end. Includes web scraping and data mining capabilities to analyze user data.",
         ghLink: "https://github.com/Magicherry/AyeNote",
         demoLink: "https://github.com/Magicherry/AyeNote",
-        tags: ["Django", "Vue 3", "MySQL", "BeautifulSoup", "AJAX"],
+        tags: ["Python", "Django", "Vue 3", "MySQL", "Beautiful Soup", "AJAX"],
         type: "Personal",
         date: "2023"
     },
@@ -51,7 +51,7 @@ export const projects = [
         description: "A real-time strategy game with a SpringBoot back-end and a Vue3 front-end. Features a MySQL database and a Bootstrap 4 interface for a dynamic gaming experience.",
         ghLink: "https://github.com/Magicherry/King-of-Bots",
         demoLink: "https://github.com/Magicherry/King-of-Bots",
-        tags: ["Spring Boot", "Vue 3", "MySQL", "WebSocket", "JWT"],
+        tags: ["Java", "Spring Boot", "Vue 3", "MySQL", "WebSocket", "JWT"],
         type: "Personal",
         date: "2023"
     },
@@ -61,7 +61,7 @@ export const projects = [
         description: "A comprehensive management system built with SpringBoot and MyBatis. Features a secure database with MD5 encryption and a clear separation of front-end and back-end concerns.",
         ghLink: "https://github.com/Magicherry/Management_Web_System",
         demoLink: "https://github.com/Magicherry/Management_Web_System",
-        tags: ["Spring Boot", "Vue 3", "MyBatis Plus", "MySQL", "MD5"],
+        tags: ["Java", "Spring Boot", "Vue 3", "MyBatis Plus", "MySQL", "MD5"],
         type: "Personal",
         date: "2022"
     },
@@ -71,7 +71,7 @@ export const projects = [
         description: "A high-fidelity UX prototype for a third-party music streaming application, designed in Axure RP 9 and inspired by Apple Music's clean and intuitive interface.",
         ghLink: "https://github.com/Magicherry/Music-App-Ui-Design",
         demoLink: "https://github.com/Magicherry/Music-App-Ui-Design",
-        tags: ["Axure RP"],
+        tags: ["Axure RP", "UX", "Prototyping"],
         type: "Personal",
         date: "2022"
     },
