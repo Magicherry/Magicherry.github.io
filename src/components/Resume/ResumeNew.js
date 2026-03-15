@@ -120,9 +120,9 @@ function ResumeNew() {
                         ))}
                     </Document>
                 </div>
-                <Row className="resume__row bottom-download-row">
+                {/* <Row className="resume__row bottom-download-row">
                     <DownloadButton />
-                </Row>
+                </Row> */}
             </Container>
         </div>
     );

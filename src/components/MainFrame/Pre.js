@@ -8,8 +8,8 @@ function Pre({ load }) {
         aria-hidden="true"
         key={load ? "preloader-on" : "preloader-off"}
       >
-        <span className="preloader__logo" data-text="YUTING ZHOU.">
-          YUTING ZHOU.
+        <span className="preloader__logo" data-text="YUTING ZHOU">
+          YUTING ZHOU
         </span>
         <span className="preloader__bar" aria-hidden="true" />
       </div>

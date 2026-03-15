@@ -2557,6 +2557,7 @@ body.homepage .home-about-section {
 }
 
 .tech-stack__row {
+    /* justify-content: flex-start; */
     justify-content: center;
     padding-bottom: 50px;
     row-gap: 12px;

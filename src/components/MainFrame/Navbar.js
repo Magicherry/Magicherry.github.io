@@ -299,7 +299,7 @@ function NavBar({ triggerPreloader }) {
             {/* Left Column: Brand */}
             <div className="navbar-brand-col">
               <span className="navbar-brand-text" onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}>
-                YUTING ZHOU.
+                YUTING ZHOU
               </span>
             </div>
 
@@ -348,7 +348,7 @@ function NavBar({ triggerPreloader }) {
           <div className="floating-nav-panel">
             <div className="floating-nav-header">
               <span className="floating-nav-brand" onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}>
-                BITS of ME.
+                Bits of Me
               </span>
               <button type="button" className="floating-nav-close" onClick={toggleSideNav} aria-label="Collapse to top navigation">
                 <FiSidebar />
