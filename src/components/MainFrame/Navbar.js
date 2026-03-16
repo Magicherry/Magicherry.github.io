@@ -424,7 +424,7 @@ function NavBar({ triggerPreloader }) {
               <div className="floating-nav-contact-group">
                 <a
                   className="floating-nav-contact-item"
-                  href="https://www.google.com/maps/search/?api=1&query=Rutgers%20University%E2%80%93New%20Brunswick"
+                  href="https://www.cs.rutgers.edu/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

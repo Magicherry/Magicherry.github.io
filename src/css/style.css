@@ -1681,6 +1681,31 @@ body.homepage .home-about-section {
     text-decoration: none;
 }
 
+.email-link:hover .footer-email__icon,
+.email-link:hover .footer-email__text {
+    color: var(--navbar-color-brand);
+}
+
+.footer-email {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-email__icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    color: inherit;
+    transition: color 0.2s ease;
+}
+
+.footer-email__text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: inherit;
+    transition: color 0.2s ease;
+}
+
 .blockquote-footer {
     color: var(--color-blockquote-footer) !important;
 }

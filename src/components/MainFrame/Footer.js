@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Modal } from "react-bootstrap";
 import { AiFillGithub } from "react-icons/ai";
 import { SiBilibili } from "react-icons/si";
-import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
+import { FaLinkedinIn, FaWeixin, FaEnvelope } from "react-icons/fa";
 import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
 
 const Footer = () => {
@@ -39,8 +39,9 @@ const Footer = () => {
       <Container fluid className="footer">
         <Row className="align-items-center justify-content-center">
           <Col md={4} className="footer-copyright d-flex align-items-center justify-content-center">
-            <a href="mailto:zyt680129@gmail.com" className="email-link">
-              <h3>Email: zyt680129@gmail.com</h3>
+            <a href="mailto:zyt680129@gmail.com" className="email-link footer-email">
+              <FaEnvelope className="footer-email__icon" aria-hidden="true" />
+              <span className="footer-email__text">zyt680129@gmail.com</span>
             </a>
           </Col>
           <Col md={4} className="footer-copyright d-flex align-items-center justify-content-center">
