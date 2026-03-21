@@ -15,6 +15,50 @@ import AnimatedRoutes from "./components/MainFrame/AnimatedRoutes";
 function App() {
   const [load, upadateLoad] = useState(true);
   const preloaderTimerRef = useRef(null);
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== "undefined") {
+      if (window.localStorage && window.localStorage.getItem("theme")) {
+        return window.localStorage.getItem("theme");
+      }
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        return "light";
+      }
+    }
+    return "dark";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    if (typeof window !== "undefined" && window.localStorage) {
+      window.localStorage.setItem("theme", theme);
+    }
+  }, [theme]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
+    const handleChange = (e) => {
+      // Only auto-switch if user hasn't manually set a preference
+      if (typeof window !== "undefined" && window.localStorage && !window.localStorage.getItem("theme")) {
+        setTheme(e.matches ? "light" : "dark");
+      }
+    };
+    
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    } else if (mediaQuery.addListener) {
+      mediaQuery.addListener(handleChange);
+      return () => mediaQuery.removeListener(handleChange);
+    }
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    document.documentElement.classList.add('theme-transition');
+    setTheme((prev) => prev === "dark" ? "light" : "dark");
+    setTimeout(() => {
+      document.documentElement.classList.remove('theme-transition');
+    }, 400);
+  }, []);
 
   const triggerPreloader = useCallback(() => {
     upadateLoad(true);
@@ -150,8 +194,8 @@ function App() {
       <Preloader load={load} />
       <div className="App" id={load ? "no-scroll" : "scroll"}>
         <div className="app-top-blur" aria-hidden="true" />
-        <Navbar triggerPreloader={triggerPreloader} />
-        <Particle />
+        <Navbar triggerPreloader={triggerPreloader} theme={theme} toggleTheme={toggleTheme} />
+        <Particle theme={theme} />
         <ScrollToTop />
         <div className="content-wrap">
           <AnimatedRoutes />

@@ -2,10 +2,12 @@ import React, { useEffect, useMemo } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 
-function Particle() {
+function Particle({ theme }) {
   useEffect(() => {
     initParticlesEngine(loadSlim);
   }, []);
+
+  const particleColor = theme === "light" ? "#0284c7" : "#38bdf8";
 
   const options = useMemo(
     () => ({
@@ -21,13 +23,13 @@ function Particle() {
       fpsLimit: 120,
       particles: {
         color: {
-          value: "#38bdf8", // 科技蓝
+          value: particleColor,
         },
         links: {
-          color: "#38bdf8",
-          distance: 160, // 增加连线判定距离，让更多节点连接
+          color: particleColor,
+          distance: 160,
           enable: true,
-          opacity: 0.15, // 稍微提高连线可见度
+          opacity: 0.15,
           width: 1,
         },
         move: {
@@ -70,11 +72,11 @@ function Particle() {
       },
       detectRetina: true,
     }),
-    []
+    [particleColor]
   );
 
   return (
-    <Particles id="tsparticles" options={options} />
+    <Particles key={theme} id="tsparticles" options={options} />
   );
 }
 

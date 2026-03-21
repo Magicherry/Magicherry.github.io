@@ -11,14 +11,14 @@ const techStackIcons = [
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript" style={{ width: "1em", height: "1em" }} />, name: "JavaScript", link: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python" style={{ width: "1em", height: "1em" }} />, name: "Python", link: "https://www.python.org/" },
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/django/django-plain.svg" alt="Django" style={{ width: "1em", height: "1em", filter: "brightness(3.5) contrast(1.2)" }} />, name: "Django", link: "https://www.djangoproject.com/" },
-    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flask/flask-original.svg" alt="Flask" style={{ width: "1em", height: "1em", filter: "invert(1)" }} />, name: "Flask", link: "https://flask.palletsprojects.com/" },
+    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flask/flask-original.svg" alt="Flask" style={{ width: "1em", height: "1em" }} className="theme-invert" />, name: "Flask", link: "https://flask.palletsprojects.com/" },
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg" alt="FastAPI" style={{ width: "1em", height: "1em", filter: "brightness(1.2) contrast(1.1)" }} />, name: "FastAPI", link: "https://fastapi.tiangolo.com/" },
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="Node.js" style={{ width: "1em", height: "1em",filter: "brightness(1.2) contrast(1.0)" }} />, name: "Node.js", link: "https://nodejs.org/" },
 
     // Frontend
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" alt="React" style={{ width: "1em", height: "1em" }} />, name: "React", link: "https://react.dev/" },
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg" alt="Vue.js" style={{ width: "1em", height: "1em" }} />, name: "Vue.js", link: "https://vuejs.org/" },
-    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg" alt="Next.js" style={{ width: "1em", height: "1em", filter: "invert(1)" }} />, name: "Next.js", link: "https://nextjs.org/" },
+    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg" alt="Next.js" style={{ width: "1em", height: "1em" }} className="theme-invert" />, name: "Next.js", link: "https://nextjs.org/" },
 
     // Databases
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" alt="MySQL" style={{ width: "1em", height: "1em", filter: "brightness(1.8) contrast(1.2)" }} />, name: "MySQL", link: "https://www.mysql.com/" },

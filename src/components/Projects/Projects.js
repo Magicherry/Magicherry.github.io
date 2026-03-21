@@ -7,7 +7,6 @@ import { BsGridFill, BsListUl, BsChevronDown, BsCheck } from "react-icons/bs";
 import { projects } from "./ProjectData";
 
 const SORT_OPTIONS = [
-  { value: "default", label: "Default" },
   { value: "dateDesc", label: "Newest first" },
   { value: "dateAsc", label: "Oldest first" },
 ];
@@ -22,7 +21,7 @@ const Projects = () => {
   const [viewMode, setViewMode] = useState(getInitialViewMode);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [sortBy, setSortBy] = useState("default");
+  const [sortBy, setSortBy] = useState("dateDesc");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -35,7 +34,6 @@ const Projects = () => {
     : projects.filter(p => selectedTags.every(tag => p.tags.includes(tag)));
 
   const sortedProjects = (() => {
-    if (sortBy === "default") return filteredProjects;
     const year = (p) => parseInt(p.date, 10) || 0;
     if (sortBy === "dateDesc") return [...filteredProjects].sort((a, b) => year(b) - year(a));
     if (sortBy === "dateAsc") return [...filteredProjects].sort((a, b) => year(a) - year(b));
@@ -147,7 +145,7 @@ const Projects = () => {
                   onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
                 >
                   <span className="filter-dropdown-label">
-                    Sort: {SORT_OPTIONS.find(o => o.value === sortBy)?.label ?? "Default"}
+                    Sort: {SORT_OPTIONS.find(o => o.value === sortBy)?.label ?? "Newest first"}
                   </span>
                   <BsChevronDown className="dropdown-icon" />
                 </button>
@@ -170,12 +168,12 @@ const Projects = () => {
                 )}
               </div>
 
-              {(selectedTags.length > 0 || sortBy !== "default") && (
+              {(selectedTags.length > 0 || sortBy !== "dateDesc") && (
                 <button
                   className="filter-clear-btn"
                   onClick={() => {
                     setSelectedTags([]);
-                    setSortBy("default");
+                    setSortBy("dateDesc");
                   }}
                 >
                   × Clear

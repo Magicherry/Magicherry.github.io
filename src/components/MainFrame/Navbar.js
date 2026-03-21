@@ -10,7 +10,7 @@ import {
   AiOutlineDownload,
   AiFillStar
 } from "react-icons/ai";
-import { MdWorkOutline } from "react-icons/md";
+import { MdWorkOutline, MdDarkMode, MdLightMode } from "react-icons/md";
 import { FiSidebar, FiMapPin, FiMail, FiPhone } from "react-icons/fi";
 import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
 import { SiBilibili } from "react-icons/si";
@@ -155,7 +155,7 @@ function NavLinks({ items = NAV_ITEMS, linkClassName, iconClassName, onClick, na
   });
 }
 
-function NavBar({ triggerPreloader }) {
+function NavBar({ triggerPreloader, theme, toggleTheme }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const { isSideNavVisible, toggleSideNav } = useNavMode();
   const { isScrolled, isTopNavHidden, isBottomNavHidden } = useScrollHideNav({ isExpanded, setIsExpanded });
@@ -326,8 +326,16 @@ function NavBar({ triggerPreloader }) {
               </Navbar.Collapse>
             </div>
 
-            {/* Right Column: GitHub */}
-            <div className="navbar-right-col">
+            {/* Right Column: GitHub & Theme Toggle */}
+            <div className="navbar-right-col" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <button
+                type="button"
+                className="theme-toggle-btn"
+                onClick={toggleTheme}
+                aria-label="Toggle Theme"
+              >
+                {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
+              </button>
               <a
                 href="https://github.com/Magicherry/Bits-of-Me"
                 target="_blank"
@@ -347,11 +355,17 @@ function NavBar({ triggerPreloader }) {
         <div className={`floating-nav-container ${isSideNavVisible ? "show" : ""}`}>
           <div className="floating-nav-panel">
             <div className="floating-nav-header">
-              <span className="floating-nav-brand" onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}>
-                Bits of Me
-              </span>
               <button type="button" className="floating-nav-close" onClick={toggleSideNav} aria-label="Collapse to top navigation">
                 <FiSidebar />
+              </button>
+              <button
+                type="button"
+                className="theme-toggle-btn"
+                onClick={toggleTheme}
+                aria-label="Toggle Theme"
+                style={{ width: '40px', height: '40px', fontSize: '1.1rem' }}
+              >
+                {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
               </button>
             </div>
 
@@ -480,6 +494,16 @@ function NavBar({ triggerPreloader }) {
               />
             </Nav>
           </div>
+          
+          {/* Mobile Theme Toggle Button */}
+          <button
+            type="button"
+            className="mobile-theme-toggle-btn"
+            onClick={toggleTheme}
+            aria-label="Toggle Theme"
+          >
+            {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
+          </button>
         </div>
 
         <Modal show={showWechatModal} onHide={() => setShowWechatModal(false)} centered>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Modal, Button } from "react-bootstrap";
+import { Container, Row, Col, Modal } from "react-bootstrap";
 import Tilt from "react-parallax-tilt";
 import { AiFillGithub, AiOutlineDownload } from "react-icons/ai";
 import { SiBilibili } from "react-icons/si";
@@ -82,15 +82,15 @@ function Home2() {
                                 />
                             </Tilt>
                             <div className="d-flex justify-content-center w-100 home-about-actions">
-                                <Button 
-                                    className="download-cv-button" 
-                                    variant="primary" 
+                                <a
                                     href={cvFile}
                                     target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="download-cv-button"
                                 >
                                     <AiOutlineDownload />
-                                    &nbsp;Download CV
-                                </Button>
+                                    <span>Download CV</span>
+                                </a>
                             </div>
                         </div>
                     </Col>

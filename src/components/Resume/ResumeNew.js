@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { Container, Row, Button, Spinner, ProgressBar } from "react-bootstrap";
+import { Container, Row, Spinner, ProgressBar } from "react-bootstrap";
 import { AiOutlineDownload } from "react-icons/ai";
 import { Document, Page, pdfjs } from "react-pdf";
 import pdf from "../../Assets/cv/Yuting_Zhou_CV.pdf";
@@ -39,10 +39,15 @@ const LoadingError = ({ message }) => (
 
 const DownloadButton = () => (
     <div className="d-flex justify-content-center">
-        <Button className="download-cv-button" variant="primary" href={pdf} target="_blank">
+        <a
+            href={pdf}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="download-cv-button"
+        >
             <AiOutlineDownload />
-            &nbsp;Download CV
-        </Button>
+            <span>Download CV</span>
+        </a>
     </div>
 );
 
