@@ -13,50 +13,62 @@ function Particle() {
         enable: true,
         zIndex: -1
       },
-      particles: {
-        number: {
-          value: 220,
-          density: {
-            enable: true,
-            value_area: 1500
-          }
+      background: {
+        color: {
+          value: "transparent",
         },
-        line_linked: {
-          enable: false,
-          opacity: 0.03
+      },
+      fpsLimit: 120,
+      particles: {
+        color: {
+          value: "#38bdf8", // 科技蓝
+        },
+        links: {
+          color: "#38bdf8",
+          distance: 160, // 增加连线判定距离，让更多节点连接
+          enable: true,
+          opacity: 0.15, // 稍微提高连线可见度
+          width: 1,
         },
         move: {
-          direction: "right",
-          speed: 0.05
+          direction: "none",
+          enable: true,
+          outModes: {
+            default: "bounce",
+          },
+          random: false,
+          speed: 0.4, // 极慢的呼吸感漂浮
+          straight: false,
         },
-        size: {
-          value: 1
+        number: {
+          density: {
+            enable: true,
+            area: 800,
+          },
+          value: 120, // 节点数量
         },
         opacity: {
-          value: { min: 0.1, max: 1 },
-          animation: {
-            enable: true,
-            speed: 1,
-            sync: false,
-            startValue: "random",
-            destroy: "none"
-          }
-        }
+          value: 0.3,
+        },
+        shape: {
+          type: "circle",
+        },
+        size: {
+          value: { min: 1, max: 2 },
+        },
       },
       interactivity: {
         events: {
-          onclick: {
-            enable: true,
-            mode: "push"
-          }
+          onHover: {
+            enable: false,
+          },
+          onClick: {
+            enable: false,
+          },
+          resize: true,
         },
-        modes: {
-          push: {
-            particles_nb: 1
-          }
-        }
       },
-      retina_detect: true
+      detectRetina: true,
     }),
     []
   );
