@@ -248,8 +248,6 @@ body {
     --project-date-bg-grid: var(--surface-overlay-dark-strong);
     --project-overlay-bg: var(--surface-overlay-dark);
     --project-image-container-bg: rgba(0, 0, 0, 0.15);
-    --title-underline: linear-gradient(to right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
-    --divider-line: linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
     --button-pill-bg: rgba(16, 76, 115, 0.85);
     --button-pill-text: #ffffff;
     --github-btn-bg: rgba(255, 255, 255, 0.9);
@@ -405,8 +403,6 @@ body {
     --project-date-bg-grid: rgba(255, 255, 255, 0.9);
     --project-overlay-bg: rgba(255, 255, 255, 0.8);
     --project-image-container-bg: rgba(255, 255, 255, 0.4);
-    --title-underline: linear-gradient(to right, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
-    --divider-line: linear-gradient(90deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0) 100%);
     --button-pill-bg: rgba(0, 0, 0, 0.8);
     --button-pill-text: #fff;
     --github-btn-bg: rgba(0, 0, 0, 0.8);
@@ -1288,7 +1284,7 @@ a.floating-nav-contact-item:hover {
 .floating-nav-divider {
     height: 1px;
     width: 100%;
-    background: var(--divider-line);
+    background: var(--border-medium);
     margin: 6px 10px 4px 0;
     box-sizing: border-box;
     flex-shrink: 0;
@@ -2462,14 +2458,15 @@ body.homepage .home-about-section {
     width: 100%;
 }
 
+/* Match track timeline cards: .experience-description border-top */
 .project-card__title::after {
     content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 1px;
-    background: var(--title-underline);
+    height: 0;
+    border-bottom: 1px solid var(--border-strong);
 }
 
 .project-card__tags {
@@ -2617,8 +2614,8 @@ body.homepage .home-about-section {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 1px;
-    background: var(--title-underline);
+    height: 0;
+    border-bottom: 1px solid var(--border-strong);
 }
 
 .project-card-list-view__tags {
@@ -2856,6 +2853,11 @@ body.homepage .home-about-section {
     align-items: center;
     justify-content: center;
     color: var(--color-text);
+}
+
+/* java-original is very dark; lighten only in dark theme (light mode: unfiltered asset) */
+[data-theme="dark"] .tech-icons__icon img.tech-icon-java {
+    filter: brightness(2.5) contrast(1.1);
 }
 
 .tech-icons__name {
@@ -3818,23 +3820,6 @@ body.homepage .home-about-section {
     .project-card__title {
         display: block;
         width: 100%;
-    }
-
-    .project-card-list-view__title::after,
-    .project-card__title::after {
-        width: 100%;
-        left: 0;
-        transform: none;
-        height: 2px;
-        background: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.12) 20%,
-            rgba(255, 255, 255, 0.22) 50%,
-            rgba(255, 255, 255, 0.12) 80%,
-            transparent 100%
-        );
-        border-radius: 1px;
     }
 
     .project-card-list-view__tags {

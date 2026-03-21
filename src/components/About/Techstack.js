@@ -4,7 +4,7 @@ import { Col, Row } from "react-bootstrap";
 const techStackIcons = [
     // Languages & Backend
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-original.svg" alt="C++" style={{ width: "1em", height: "1em" }} />, name: "C++", link: "https://isocpp.org/" },
-    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="Java" style={{ width: "1em", height: "1em", filter: "brightness(2.5) contrast(1.1)" }} />, name: "Java", link: "https://www.java.com/" },
+    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="Java" className="tech-icon-java" style={{ width: "1em", height: "1em" }} />, name: "Java", link: "https://www.java.com/" },
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/spring/spring-original.svg" alt="Spring Boot" style={{ width: "1em", height: "1em" }} />, name: "Spring Boot", link: "https://spring.io/projects/spring-boot" },
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original.svg" alt="Go" style={{ width: "1em", height: "1em" }} />, name: "Go", link: "https://go.dev/" },
     { icon: <img src="https://raw.githubusercontent.com/gin-gonic/logo/master/color.png" alt="Gin" style={{ width: "1em", height: "1em", objectFit: "contain" }} />, name: "Gin", link: "https://gin-gonic.com/" },
