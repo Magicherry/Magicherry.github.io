@@ -21,21 +21,16 @@ Whether viewed on a desktop or a mobile device, the portfolio adapts seamlesslyâ
 
 #### Desktop
 
-| Home with Top Bar | About with Side Bar |
+| Dark Mode | Light Mode |
 | :---: | :---: |
-| ![Home (Desktop)](preview/Home_desktop.png) | ![About (Desktop)](preview/About_with_side_bar_desktop.png) |
-
-#### Mobile
-
-| Home with Bottom Bar | Tracks with Bottom Bar |
-| :---: | :---: |
-| ![Home (Mobile)](preview/Home_mobile.png) | ![Tracks (Mobile)](preview/Tracks_mobile.png) |
+| ![Home (Dark Mode)](preview/DarkMode.png) | ![Home (Light Mode)](preview/LightMode.png) |
 
 
 ---
 
 ## Highlights & Features
 
+- **Dynamic Theming**: Seamless Light and Dark modes that automatically sync with system preferences, featuring smooth transitions and tailored glassmorphic effects for both themes.
 - **Modern Tech Stack**: Built with React 18, React Router v6, and Bootstrap 5.
 - **Advanced Navigation System**: 
   - Desktop: Floating glassmorphic top pill navigation with an optional side panel.
