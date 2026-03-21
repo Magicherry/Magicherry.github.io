@@ -323,7 +323,7 @@ body {
     --navbar-bg-item-hover: #e0f2fe;
     --navbar-shadow: rgba(0, 0, 0, 0.05);
 
-    --navbar-glass-bg: rgba(0, 0, 0, 0.03);
+    --navbar-glass-bg: var(--navbar-bg);
     --navbar-glass-border: rgba(0, 0, 0, 0.08);
     --navbar-glass-border-hover: rgba(0, 0, 0, 0.15);
     --navbar-glass-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -523,7 +523,7 @@ button:focus {
 
     filter:
         blur(7px)
-        brightness(1.02); /* ↓ 从 1.05 降到 1.02 */
+        brightness(1.02);
 
     will-change: opacity, transform;
 }
@@ -1317,25 +1317,29 @@ a.floating-nav-contact-item:hover {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 1px solid var(--border-medium);
-    background: var(--surface-glass);
+    border: 1px solid var(--navbar-glass-border);
+    background: var(--navbar-glass-bg);
     color: var(--color-text);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s ease, box-shadow 0.2s ease;
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    box-shadow: var(--navbar-glass-shadow);
+    transition: var(--button-transition), border-color 0.25s ease;
     pointer-events: auto;
 }
 
 .floating-nav-close:hover {
     background: var(--surface-glass-hover);
-    box-shadow: var(--shadow-drop-md);
+    color: var(--color-white);
+    border-color: var(--navbar-glass-border-hover);
 }
 
 .floating-nav-close:active {
     transform: scale(var(--button-active-scale));
     background: var(--surface-glass-active);
-    transition: transform 0.1s ease, background 0.1s ease;
+    transition: var(--button-transition-active), background 0.1s ease;
 }
 
 .floating-nav-list .floating-nav-link {
