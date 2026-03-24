@@ -2874,6 +2874,12 @@ body.homepage .home-about-section {
     filter: invert(1);
 }
 
+/* Gemini CLI + Jellyfin: read better on dark glass skill cards */
+[data-theme="dark"] .tech-icons__icon img.tech-icon-gemini-cli,
+[data-theme="dark"] .tech-icons__icon img.tech-icon-jellyfin {
+    filter: brightness(1.35) contrast(1.08);
+}
+
 .tech-icons__name {
     font-size: 1.05rem;
     font-weight: 600;
