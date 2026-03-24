@@ -108,7 +108,7 @@ function Home2() {
                                         href={link.href}
                                         target={link.onClick ? "_self" : "_blank"}
                                         rel="noopener noreferrer"
-                                        className="social-icon-color home-social-icons"
+                                        className="home-social-icons"
                                         aria-label={link.ariaLabel}
                                         onClick={link.onClick}
                                     >

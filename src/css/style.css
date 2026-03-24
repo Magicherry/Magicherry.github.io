@@ -90,20 +90,19 @@ body {
     --border-cta-hover: transparent;
     --color-cta-text: #ffffff;
 
-    /* Social Buttons */
-    --social-btn-bg: rgba(255, 255, 255, 0.05);
-    --social-btn-border: rgba(255, 255, 255, 0.1);
-    --social-btn-color: var(--color-text);
-    --social-btn-hover-bg: var(--button-pill-bg);
-    --social-btn-hover-border: var(--button-pill-bg);
-    --social-btn-hover-color: var(--button-pill-text);
-
     /* Shadows */
     --shadow-inset-light: inset 0 1px 1px rgba(255, 255, 255, 0.2);
     --shadow-inset-pill: inset 0 1.2px 1.2px rgba(255, 255, 255, 0.1);
     --shadow-drop-md: 0 6px 24px rgba(0, 0, 0, 0.2);
     --shadow-drop-lg: 0 10px 26px rgba(0, 0, 0, 0.25);
     --shadow-drop-xl: 0 20px 55px rgba(0, 0, 0, 0.45);
+    /* Omnidirectional glow (no downward offset); used by sidebar panel + top glass via --navbar-glass-shadow */
+    --floating-nav-panel-shadow: 0 0 24px rgba(0, 0, 0, 0.25), 0 0 48px rgba(0, 0, 0, 0.15);
+    /* Sidebar panel only: stronger halo than top-nav glass */
+    --sidebar-panel-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 0 30px rgba(0, 0, 0, 0.32),
+        0 0 60px rgba(0, 0, 0, 0.2);
     --nav-link-hover-shadow: var(--shadow-drop-md);
     --nav-link-hover-border: transparent;
 
@@ -115,6 +114,7 @@ body {
     --button-radius-lg: 14px;
     --button-transition: all 0.2s ease;
     --button-transition-active: transform 0.1s ease;
+    --button-hover-scale: 1.035;
     --button-active-scale: 0.95;
     --button-disabled-opacity: 0.6;
 
@@ -146,12 +146,18 @@ body {
     --navbar-color-brand-hover: rgb(3, 248, 248);
     --navbar-color-toggler: #50c0f4;
     --navbar-bg-item-hover: #5bdef5;
-    --navbar-shadow: rgba(5, 18, 29, 0.17);
+    --navbar-shadow: transparent;
     /* Top nav glass (frosted bar, no dark tint) */
     --navbar-glass-bg: rgba(255, 255, 255, 0.06);
     --navbar-glass-border: rgba(210, 200, 185, 0.11);
     --navbar-glass-border-hover: rgba(220, 212, 200, 0.18);
-    --navbar-glass-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 4px 12px rgba(0, 0, 0, 0.08);
+    /* Outer drop matches sidebar panel; inset keeps glass rim */
+    --navbar-glass-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 0 12px rgba(0, 0, 0, 0.15), 0 0 24px rgba(0, 0, 0, 0.08);
+    /* Social / collapse / theme: lighter than main glass but clearly visible */
+    --navbar-glass-shadow-sm:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 0 12px rgba(0, 0, 0, 0.2),
+        0 0 28px rgba(0, 0, 0, 0.12);
     --navbar-glass-active-bg: rgba(255, 255, 255, 0.14);
     --navbar-glass-active-border: rgba(230, 220, 210, 0.18);
     /* Project cards: darker glass, slightly stronger border so it’s visible */
@@ -215,6 +221,10 @@ body {
     ====================*/
     --footer-color-email-hover: #3de8ff;
     --footer-social-link-icon-hover: #5bdef5;
+    --footer-border-top: var(--border-medium);
+    --footer-border-side: var(--border-subtle);
+    --footer-shadow-outer: var(--shadow-drop-lg);
+    --footer-shadow-inset: var(--shadow-inset-soft);
 
     /* Unified: text opacity, overlays, project, glow, blur (use these instead of raw rgba in body) */
     --color-text-muted: rgba(255, 255, 255, 0.18);
@@ -286,20 +296,20 @@ body {
     --cta-bg-hover: linear-gradient(135deg, #1ea6b4, #168894);
     --cta-bg-active: linear-gradient(135deg, #168894, #106b75);
 
-    /* Social Buttons */
-    --social-btn-bg: #ffffff;
-    --social-btn-border: rgba(0, 0, 0, 0.1);
-    --social-btn-color: #171717;
-    --social-btn-hover-bg: var(--button-pill-bg);
-    --social-btn-hover-border: var(--button-pill-bg);
-    --social-btn-hover-color: var(--button-pill-text);
-
     --shadow-inset-light: inset 0 1px 1px rgba(255, 255, 255, 0.8);
     --shadow-inset-pill: inset 0 1.2px 1.2px rgba(255, 255, 255, 0.6);
-    --shadow-drop-md: 0 6px 24px rgba(0, 0, 0, 0.06);
-    --shadow-drop-lg: 0 10px 26px rgba(0, 0, 0, 0.08);
-    --shadow-drop-xl: 0 20px 55px rgba(0, 0, 0, 0.12);
-    --nav-link-hover-shadow: var(--shadow-drop-md), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    /* Light mode: modest lift; wider blur footprint for glass panels */
+    --shadow-drop-md: 0 7px 28px rgba(0, 0, 0, 0.068), 0 2px 7px rgba(0, 0, 0, 0.038);
+    --shadow-drop-lg: 0 12px 38px rgba(0, 0, 0, 0.085), 0 3px 12px rgba(0, 0, 0, 0.042);
+    --shadow-drop-xl: 0 24px 70px rgba(0, 0, 0, 0.13), 0 7px 26px rgba(0, 0, 0, 0.06);
+    /* Sidebar panel + top glass: even halo (0 offset), similar weight to prior downward xl */
+    --floating-nav-panel-shadow: 0 0 22px rgba(0, 0, 0, 0.072), 0 0 48px rgba(0, 0, 0, 0.038);
+    --sidebar-panel-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.86),
+        0 0 28px rgba(0, 0, 0, 0.09),
+        0 0 56px rgba(0, 0, 0, 0.048);
+    /* Sidebar row hover/active only: keep soft shadow (do not use strengthened --shadow-drop-md) */
+    --nav-link-hover-shadow: 0 6px 24px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.4);
     --nav-link-hover-border: transparent;
 
     --bg-gradient-section: linear-gradient(to bottom left, rgba(229, 229, 229, 0.8), rgba(212, 212, 212, 0.9));
@@ -321,20 +331,29 @@ body {
     --navbar-color-brand-hover: #0369a1;
     --navbar-color-toggler: #0284c7;
     --navbar-bg-item-hover: #e0f2fe;
-    --navbar-shadow: rgba(0, 0, 0, 0.05);
+    --navbar-shadow: transparent;
 
     --navbar-glass-bg: var(--navbar-bg);
-    --navbar-glass-border: rgba(0, 0, 0, 0.08);
-    --navbar-glass-border-hover: rgba(0, 0, 0, 0.15);
-    --navbar-glass-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.05);
+    --navbar-glass-border: rgba(255, 255, 255, 0.72);
+    --navbar-glass-border-hover: rgba(255, 255, 255, 0.95);
+    --navbar-glass-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.86),
+        var(--floating-nav-panel-shadow);
+    --navbar-glass-shadow-sm:
+        inset 0 1px 0 rgba(255, 255, 255, 0.86),
+        0 0 16px rgba(0, 0, 0, 0.08),
+        0 0 40px rgba(0, 0, 0, 0.055);
     --navbar-glass-active-bg: rgba(0, 0, 0, 0.06);
-    --navbar-glass-active-border: rgba(0, 0, 0, 0.12);
+    --navbar-glass-active-border: rgba(255, 255, 255, 0.88);
 
     --card-glass-bg: rgba(255, 255, 255, 0.45);
     --card-glass-bg-list: rgba(255, 255, 255, 0.6);
-    --card-glass-border: rgba(0, 0, 0, 0.08);
-    --card-glass-border-hover: rgba(0, 0, 0, 0.15);
-    --card-glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    --card-glass-border: rgba(255, 255, 255, 0.68);
+    --card-glass-border-hover: rgba(255, 255, 255, 0.95);
+    --card-glass-shadow:
+        0 10px 42px rgba(0, 0, 0, 0.074),
+        0 3px 14px rgba(0, 0, 0, 0.042),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82);
     --track-card-bg: rgba(255, 255, 255, 0.45);
     --skill-card-bg: rgba(255, 255, 255, 0.45);
 
@@ -351,13 +370,13 @@ body {
     --button-bg-fork: rgba(2, 132, 199, 0.1);
     --button-bg-fork-hover: rgba(2, 132, 199, 0.2);
 
-    --card-shadow-project: rgba(0, 0, 0, 0.08);
-    --card-shadow-project-hover: rgba(2, 132, 199, 0.15);
-    --card-shadow-blog: rgba(0, 0, 0, 0.08);
-    --card-shadow-blog-hover: rgba(2, 132, 199, 0.15);
+    --card-shadow-project: rgba(0, 0, 0, 0.09);
+    --card-shadow-project-hover: rgba(2, 132, 199, 0.18);
+    --card-shadow-blog: rgba(0, 0, 0, 0.09);
+    --card-shadow-blog-hover: rgba(2, 132, 199, 0.18);
     --icon-border-tech: rgba(0, 0, 0, 0.1);
     --icon-border-tech-hover: rgba(2, 132, 199, 0.5);
-    --icon-shadow-tech: rgba(0, 0, 0, 0.05);
+    --icon-shadow-tech: rgba(0, 0, 0, 0.065);
     --icon-color-social: #0f172a;
 
     --social-icon-bg-hover: #f1f5f9;
@@ -372,6 +391,11 @@ body {
 
     --footer-color-email-hover: #0284c7;
     --footer-social-link-icon-hover: #0284c7;
+    /* Frosted footer rim + lift tuned for wide bar (not identical to cards) */
+    --footer-border-top: rgba(255, 255, 255, 0.8);
+    --footer-border-side: rgba(255, 255, 255, 0.62);
+    --footer-shadow-outer: 0 12px 44px rgba(0, 0, 0, 0.07), 0 4px 16px rgba(0, 0, 0, 0.04);
+    --footer-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.85);
 
     --color-text-muted: rgba(0, 0, 0, 0.4);
     --color-text-soft: rgba(0, 0, 0, 0.6);
@@ -382,8 +406,10 @@ body {
     --surface-overlay-dark-soft: rgba(255, 255, 255, 0.6);
     --surface-overlay-dark-strong: rgba(255, 255, 255, 0.75);
     --surface-nav-collapse: rgba(255, 255, 255, 0.95);
-    --shadow-inset-soft: inset 0 1px 0 rgba(0, 0, 0, 0.06);
-    --navbar-collapse-shadow: inset 0 -1.2px 1.2px rgba(0, 0, 0, 0.05), 0 -6px 32px 0 rgba(0, 0, 0, 0.1);
+    --shadow-inset-soft: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    --navbar-collapse-shadow:
+        inset 0 -1.2px 1.2px rgba(0, 0, 0, 0.055),
+        0 -8px 42px 0 rgba(0, 0, 0, 0.105);
     --blur-top-gradient: linear-gradient(180deg, rgba(245, 245, 247, 0.92) 0%, rgba(255, 255, 255, 0.78) 32%, rgba(255, 255, 255, 0.42) 62%, rgba(255, 255, 255, 0.14) 84%, rgba(255, 255, 255, 0) 100%);
     --blur-mask-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.26) 36%, rgba(0, 0, 0, 0.12) 72%, rgba(0, 0, 0, 0) 100%);
     --preloader-logo-glow: rgba(2, 132, 199, 0.2);
@@ -706,6 +732,13 @@ button:focus {
     height: 100vh;
 }
 
+/* While preloader is up: hide duplicate “logo” text (nav brand + home hero) to avoid a flash when it fades */
+body.preloader-active .navbar-brand-text,
+body.preloader-active .home-hero-name {
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
 /*================================================================
   Scrollbar
 ================================================================*/
@@ -764,6 +797,7 @@ button:focus {
     transition: all 0.3s ease-out 0s !important;
     padding: 0.2rem 2rem !important;
     font-size: 1.1rem !important;
+    box-shadow: none !important;
 }
 
 .navbar-toggler {
@@ -832,6 +866,8 @@ button:focus {
     padding: 0.5rem 0 !important;
     font-size: 1.2rem;
     z-index: 1030;
+    box-shadow: none !important;
+    background: transparent !important;
 }
 
 .navbar-top-inner {
@@ -957,7 +993,7 @@ button:focus {
     color: var(--color-white);
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
-    box-shadow: var(--navbar-glass-shadow);
+    box-shadow: var(--navbar-glass-shadow-sm);
     transition: var(--button-transition), border-color 0.25s ease;
     cursor: pointer;
     font-size: 1.3rem;
@@ -966,6 +1002,7 @@ button:focus {
 .theme-toggle-btn:hover {
     background: var(--surface-glass-hover);
     color: var(--color-white);
+    transform: scale(var(--button-hover-scale));
 }
 
 .theme-toggle-btn:active {
@@ -995,6 +1032,7 @@ button:focus {
 .github-pill-btn:hover {
     background: var(--surface-glass-hover);
     color: var(--color-white);
+    transform: scale(var(--button-hover-scale));
 }
 
 .github-pill-btn:active {
@@ -1060,7 +1098,7 @@ button:focus {
     padding: 16px;
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
-    box-shadow: var(--shadow-drop-xl);
+    box-shadow: var(--sidebar-panel-shadow);
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -1181,11 +1219,15 @@ button:focus {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--social-btn-color);
-    background: var(--social-btn-bg);
-    border: 1px solid var(--social-btn-border);
-    box-shadow: var(--shadow-drop-md);
-    transition: var(--button-transition);
+    color: var(--color-white);
+    background: var(--navbar-glass-bg);
+    border: 1px solid var(--navbar-glass-border);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    box-shadow: var(--navbar-glass-shadow-sm);
+    transition: var(--button-transition), border-color 0.25s ease;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .floating-nav-icon-btn svg {
@@ -1193,17 +1235,21 @@ button:focus {
     height: 20px;
 }
 
+.floating-nav-icon-btn:visited {
+    color: var(--color-white);
+}
+
 .floating-nav-icon-btn:hover {
-    background: var(--social-btn-hover-bg);
-    border-color: var(--social-btn-hover-border);
-    color: var(--social-btn-hover-color);
-    box-shadow: var(--shadow-drop-lg);
-    transform: translateY(-2px);
+    background: var(--surface-glass-hover);
+    border-color: var(--navbar-glass-border-hover);
+    color: var(--color-white);
+    box-shadow: var(--navbar-glass-shadow-sm);
+    transform: scale(var(--button-hover-scale));
 }
 
 .floating-nav-icon-btn:active {
     transform: scale(var(--button-active-scale));
-    background: var(--social-btn-hover-bg);
+    background: var(--surface-glass-active);
     transition: var(--button-transition-active), background 0.1s ease;
 }
 
@@ -1319,21 +1365,26 @@ a.floating-nav-contact-item:hover {
     border-radius: 50%;
     border: 1px solid var(--navbar-glass-border);
     background: var(--navbar-glass-bg);
-    color: var(--color-text);
+    color: var(--color-white);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
-    box-shadow: var(--navbar-glass-shadow);
+    box-shadow: var(--navbar-glass-shadow-sm);
     transition: var(--button-transition), border-color 0.25s ease;
     pointer-events: auto;
+    cursor: pointer;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .floating-nav-close:hover {
     background: var(--surface-glass-hover);
     color: var(--color-white);
     border-color: var(--navbar-glass-border-hover);
+    box-shadow: var(--navbar-glass-shadow-sm);
+    transform: scale(var(--button-hover-scale));
 }
 
 .floating-nav-close:active {
@@ -1799,12 +1850,15 @@ body.homepage .home-about-section {
     width: 42px !important;
     height: 42px !important;
     font-size: 1.5em !important;
-    background: var(--social-btn-bg) !important;
-    color: var(--social-btn-color) !important;
-    border: 1px solid var(--social-btn-border) !important;
+    color: var(--color-white) !important;
+    background: var(--navbar-glass-bg) !important;
+    border: 1px solid var(--navbar-glass-border) !important;
     border-radius: 14px !important;
-    box-shadow: var(--shadow-drop-md) !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border 0.2s ease, color 0.2s ease !important;
+    backdrop-filter: blur(18px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+    box-shadow: var(--navbar-glass-shadow-sm) !important;
+    transition: var(--button-transition), border-color 0.25s ease !important;
+    text-decoration: none !important;
 }
 
 .home-social-icons::before {
@@ -1812,21 +1866,27 @@ body.homepage .home-about-section {
 }
 
 .home-social-icons:hover {
-    background: var(--social-btn-hover-bg) !important;
-    border-color: var(--social-btn-hover-border) !important;
-    color: var(--social-btn-hover-color) !important;
-    box-shadow: var(--shadow-drop-lg) !important;
-    transform: translateY(-2px) !important;
+    background: var(--surface-glass-hover) !important;
+    border-color: var(--navbar-glass-border-hover) !important;
+    color: var(--color-white) !important;
+    box-shadow: var(--navbar-glass-shadow-sm) !important;
+    transform: scale(var(--button-hover-scale)) !important;
+}
+
+.home-social-icons:active {
+    transform: scale(var(--button-active-scale)) !important;
+    background: var(--surface-glass-active) !important;
+    transition: var(--button-transition-active), background 0.1s ease !important;
+}
+
+.home-social-icons:visited {
+    color: var(--color-white) !important;
 }
 
 .social-icons {
     display: inline-block !important;
     padding-right: 15px;
     padding-left: 15px;
-}
-
-.social-icon-color {
-    color: var(--color-text) !important;
 }
 
 /*================================================================
@@ -1845,12 +1905,12 @@ body.homepage .home-about-section {
 
 .footer {
     background: var(--footer-bg);
-    border-top: 1px solid var(--border-medium);
-    border-left: 1px solid var(--border-subtle);
-    border-right: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--footer-border-top);
+    border-left: 1px solid var(--footer-border-side);
+    border-right: 1px solid var(--footer-border-side);
     box-shadow:
-        var(--shadow-drop-lg),
-        var(--shadow-inset-soft);
+        var(--footer-shadow-outer),
+        var(--footer-shadow-inset);
     backdrop-filter: blur(16px) saturate(165%);
     -webkit-backdrop-filter: blur(16px) saturate(165%);
     position: relative;
@@ -1988,7 +2048,7 @@ body.homepage .home-about-section {
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     border: 1px solid var(--navbar-glass-border);
-    box-shadow: var(--shadow-inset-soft), var(--shadow-drop-md);
+    box-shadow: var(--navbar-glass-shadow);
     border-radius: var(--button-radius-pill);
     padding: 6px 16px;
     color: var(--color-text-strong);
@@ -2135,7 +2195,7 @@ body.homepage .home-about-section {
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     border: 1px solid var(--navbar-glass-border);
-    box-shadow: var(--shadow-inset-soft), var(--shadow-drop-lg);
+    box-shadow: var(--navbar-glass-shadow);
     border-radius: 20px;
     padding: 8px;
     padding-right: 6px; /* Leave room for scrollbar inside rounded area */
@@ -2216,7 +2276,7 @@ body.homepage .home-about-section {
     backdrop-filter: blur(18px) saturate(160%);
     -webkit-backdrop-filter: blur(18px) saturate(160%);
     border: 1px solid var(--navbar-glass-border);
-    box-shadow: var(--shadow-inset-soft), var(--shadow-drop-md);
+    box-shadow: var(--navbar-glass-shadow);
     border-radius: var(--button-radius-pill);
     padding: 4px;
     gap: 2px;
@@ -2897,6 +2957,10 @@ body.homepage .home-about-section {
     -webkit-mask-position: center;
 }
 
+[data-theme="dark"] .tech-icons__icon .tech-icon-fastapi-brand {
+    filter: brightness(1.5) contrast(1.08);
+}
+
 .tech-icons__name {
     font-size: 1.05rem;
     font-weight: 600;
@@ -3394,20 +3458,27 @@ body.homepage .home-about-section {
     background: var(--button-pill-bg) !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--border-medium) !important;
+    /* Uniform rim; avoid asymmetric border-top (reads odd on pills) */
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
     padding: 12px 36px !important;
     border-radius: var(--button-radius-pill) !important;
     font-size: 1.15rem !important;
     font-weight: 600 !important;
     letter-spacing: 0.5px !important;
     text-decoration: none !important;
-    transition: var(--button-transition) !important;
-    box-shadow: var(--shadow-drop-md) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+    /* Single elevation + subtle top highlight (no stacked token mix) */
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
 }
 
 .download-cv-button:hover {
     transform: scale(1.05) !important;
-    box-shadow: var(--shadow-drop-lg) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     text-decoration: none !important;
@@ -3416,12 +3487,33 @@ body.homepage .home-about-section {
 
 .download-cv-button:active {
     transform: scale(var(--button-active-scale)) !important;
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
     transition: var(--button-transition-active) !important;
 }
 
 .download-cv-button svg {
     font-size: 1.4em !important; /* Adjust icon size */
     margin-right: 8px;
+}
+
+[data-theme="light"] .download-cv-button {
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+}
+
+[data-theme="light"] .download-cv-button:hover {
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+}
+
+[data-theme="light"] .download-cv-button:active {
+    box-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
 }
 
 /* Mobile view adjustments */
@@ -3636,8 +3728,12 @@ body.homepage .home-about-section {
         box-sizing: border-box;
     }
 
+    .mobile-theme-toggle-btn:hover {
+        transform: scale(var(--button-hover-scale));
+    }
+
     .mobile-theme-toggle-btn:active {
-        transform: scale(0.92);
+        transform: scale(var(--button-active-scale));
         background-color: var(--surface-glass-active);
         box-shadow: var(--shadow-inset-light), var(--shadow-drop-md) !important;
     }

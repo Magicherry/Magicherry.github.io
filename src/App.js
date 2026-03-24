@@ -35,6 +35,15 @@ function App() {
   }, [theme]);
 
   useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (load) {
+      document.body.classList.add("preloader-active");
+    } else {
+      document.body.classList.remove("preloader-active");
+    }
+  }, [load]);
+
+  useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
     const handleChange = (e) => {
       // Only auto-switch if user hasn't manually set a preference

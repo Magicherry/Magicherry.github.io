@@ -14,6 +14,24 @@
   <title>Yuting Zhou</title>
   <meta name="description" content="Self Developed personal website build with React.js">
 
+  <!-- Match App.js theme init before paint to avoid navbar / preloader color flash -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+          document.documentElement.setAttribute("data-theme", "light");
+        } else {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+
   <!-- Google / Search Engine Tags -->
   <meta itemprop="name" content="Yuting Zhou">
   <meta itemprop="description" content="Self Developed personal website build with React.js">
@@ -36,7 +54,7 @@
     content="https://raw.githubusercontent.com/soumyajit4419/Portfolio/master/Images/readme-img.png?token=AK7VCIF5RYEUZZAURELPTAC76U6AK">
 </head>
 
-<body>
+<body class="preloader-active">
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
 </body>
