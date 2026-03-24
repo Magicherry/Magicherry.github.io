@@ -2880,6 +2880,23 @@ body.homepage .home-about-section {
     filter: brightness(1.35) contrast(1.08);
 }
 
+/* FastAPI: official white SVG as mask, filled with brand teal */
+.tech-icons__icon .tech-icon-fastapi-brand {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+    background-color: #019486;
+    mask-image: url("https://fastapi.tiangolo.com/img/icon-white.svg");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-image: url("https://fastapi.tiangolo.com/img/icon-white.svg");
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+}
+
 .tech-icons__name {
     font-size: 1.05rem;
     font-weight: 600;
