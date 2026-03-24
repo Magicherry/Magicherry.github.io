@@ -2864,6 +2864,16 @@ body.homepage .home-about-section {
     filter: brightness(2.5) contrast(1.1);
 }
 
+/* windows11-original: default colors in light mode; boost slightly on dark cards */
+[data-theme="dark"] .tech-icons__icon img.tech-icon-windows {
+    filter: brightness(1.5) contrast(1.2);
+}
+
+/* OpenAI (Codex) simple-icon is dark; invert in dark theme for contrast on skill cards */
+[data-theme="dark"] .tech-icons__icon img.tech-icon-codex {
+    filter: invert(1);
+}
+
 .tech-icons__name {
     font-size: 1.05rem;
     font-weight: 600;
