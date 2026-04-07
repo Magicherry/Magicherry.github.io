@@ -14,7 +14,7 @@ function About() {
     ? {
       title: <>进一步了解 <strong className="text-accent">我</strong></>,
       skills: <>我常用的 <strong className="text-accent">技术栈</strong></>,
-      tools: <>日常使用的 <strong className="text-accent">工具</strong> 与工作流</>
+      tools: <><strong className="text-accent">工具</strong> 与 <strong className="text-accent">工作流</strong></>
     }
     : {
       title: <>Know Who <strong className="text-accent">I'M</strong></>,
