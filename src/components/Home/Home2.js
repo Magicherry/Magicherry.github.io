@@ -20,7 +20,7 @@ function Home2() {
                 <>
                     我一直追求将模糊的想法打磨成真实、可用的产品。在我看来，编程不仅是功能的实现，更是将逻辑与细节有机组织的过程。正因如此，我对技术始终保持着浓厚的兴趣。
                     <br /><br />
-                    目前我尤其关注<b className="text-accent">机器学习系统</b>、<b className="text-accent">数据驱动的产品形态</b>，以及能够真正落地的<b className="text-accent">工程实践</b>。我乐于将分析结果、模型能力与业务目标贯通起来，最终沉淀为稳定、清晰且具备持续演进能力的软件体验。
+                    目前我尤其关注<b className="text-accent">机器学习系统</b>、<b className="text-accent">数据驱动的产品形态</b>，以及能够真正落地的<b className="text-accent">工程实践</b>。我乐于把分析、建模与业务打通，沉淀为稳定、清晰、可持续演进的软件体验。
                     <br /><br />
                     在技术栈上，我既能做<b className="text-accent">干净、响应迅速的前端界面</b>，也能搭建可靠的<b className="text-accent">后端服务</b>。我对<b className="text-accent">数据库设计、API 设计、数据处理流程，以及可扩展的容器化部署</b>都有持续的实践积累。
                     <br /><br />
