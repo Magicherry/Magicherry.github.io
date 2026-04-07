@@ -11,7 +11,7 @@ const Projects = () => {
   const { locale } = useLanguage();
   const copy = locale === "zh"
     ? {
-      headingPrefix: "我之前做过的",
+      headingPrefix: "经历",
       headingAccent: "项目",
       subtitle: "既有个人作品，也有更贴近真实场景的问题拆解与工程实现。",
       sortOptions: [
@@ -101,7 +101,7 @@ const Projects = () => {
         
         <Container>
           <h1 className="project-heading">
-          {copy.headingPrefix} <strong className="text-accent">{copy.headingAccent}</strong>
+          {locale === "zh" ? <><strong className="text-accent">{copy.headingAccent}</strong> {copy.headingPrefix}</> : <>{copy.headingPrefix}{copy.headingPrefix ? " " : ""}<strong className="text-accent">{copy.headingAccent}</strong></>}
           </h1>
           <p className="section-intro-text">
             {copy.subtitle}
