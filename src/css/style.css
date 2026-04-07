@@ -419,8 +419,8 @@ body {
     --accent-bg-strong: rgba(0, 0, 0, 0.16);
     --accent-border-soft: rgba(2, 132, 199, 0.2);
     
-    --project-type-company-bg: #f59e0b;
-    --project-type-company-text: #fff;
+    --project-type-company-bg: #ffc107;
+    --project-type-company-text: #000;
     --project-type-personal-bg: #10b981;
     --project-type-personal-text: #fff;
     --project-tag-bg: rgba(0, 0, 0, 0.06);
@@ -882,6 +882,10 @@ body.preloader-active .home-hero-name {
     transition: max-width 0.3s ease;
 }
 
+.mobile-topbar {
+    display: none;
+}
+
 @media (max-width: 1300px) {
     .top-navbar-wrapper .container {
         max-width: 100% !important;
@@ -906,6 +910,12 @@ body.preloader-active .home-hero-name {
     align-items: center;
     pointer-events: auto;
     text-shadow: 0 0 8px var(--accent-glow-strong);
+}
+
+.navbar-brand-text--zh {
+    font-size: 1.62rem;
+    letter-spacing: 0.18em;
+    padding-left: 0.08em;
 }
 
 .navbar-brand-text:hover {
@@ -1009,6 +1019,87 @@ body.preloader-active .home-hero-name {
     transform: scale(var(--button-active-scale));
     background: var(--surface-glass-active);
     transition: var(--button-transition-active), background 0.1s ease;
+}
+
+.theme-toggle-btn:focus,
+.theme-toggle-btn:focus-visible {
+    box-shadow: var(--navbar-glass-shadow-sm) !important;
+}
+
+.language-control-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.language-control-group--side {
+    flex: 0 0 auto;
+    justify-content: flex-start;
+    margin-right: auto;
+}
+
+.language-toggle-btn {
+    border: 1px solid var(--navbar-glass-border);
+    background: var(--navbar-glass-bg);
+    color: var(--color-white);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    box-shadow: var(--navbar-glass-shadow-sm);
+    transition: var(--button-transition), border-color 0.25s ease;
+    cursor: pointer;
+}
+
+.language-toggle-btn {
+    min-width: 82px;
+    height: 48px;
+    border-radius: 999px;
+    padding: 0 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.language-toggle-btn__option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: var(--color-text-soft);
+    transition: color 0.2s ease, opacity 0.2s ease;
+    opacity: 0.72;
+}
+
+.language-toggle-btn__option.active {
+    color: var(--navbar-color-brand);
+    opacity: 1;
+}
+
+.language-toggle-btn__divider {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--color-text-soft);
+    opacity: 0.7;
+}
+
+.language-toggle-btn:hover {
+    background: var(--surface-glass-hover);
+    color: var(--color-white);
+    transform: scale(var(--button-hover-scale));
+}
+
+.language-toggle-btn:active {
+    transform: scale(var(--button-active-scale));
+    background: var(--surface-glass-active);
+    transition: var(--button-transition-active), background 0.1s ease;
+}
+
+.language-toggle-btn:focus,
+.language-toggle-btn:focus-visible {
+    box-shadow: var(--navbar-glass-shadow-sm) !important;
 }
 
 .github-pill-btn {
@@ -1128,6 +1219,18 @@ body.preloader-active .home-hero-name {
 
 .floating-nav-header > * {
     pointer-events: auto;
+}
+
+.floating-nav-header-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.floating-nav-header .language-toggle-btn {
+    min-width: 76px;
+    height: 40px;
+    padding: 0 7px;
 }
 
 .floating-nav-header::before {
@@ -1385,6 +1488,11 @@ a.floating-nav-contact-item:hover {
     border-color: var(--navbar-glass-border-hover);
     box-shadow: var(--navbar-glass-shadow-sm);
     transform: scale(var(--button-hover-scale));
+}
+
+.floating-nav-close:focus,
+.floating-nav-close:focus-visible {
+    box-shadow: var(--navbar-glass-shadow-sm) !important;
 }
 
 .floating-nav-close:active {
@@ -2934,9 +3042,9 @@ body.homepage .home-about-section {
     filter: invert(1);
 }
 
-/* Gemini CLI + Jellyfin: read better on dark glass skill cards */
+/* Gemini CLI + Cursor: read better on dark glass skill cards */
 [data-theme="dark"] .tech-icons__icon img.tech-icon-gemini-cli,
-[data-theme="dark"] .tech-icons__icon img.tech-icon-jellyfin {
+[data-theme="dark"] .tech-icons__icon .tech-icon-cursor img {
     filter: brightness(1.35) contrast(1.08);
 }
 
@@ -3588,13 +3696,42 @@ body.homepage .home-about-section {
         display: none !important;
     }
 
-    .navbar {
-        display: none !important;
+    .top-navbar-wrapper {
+        display: block !important;
+        top: 0 !important;
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding: 14px 16px 0 16px !important;
+        background: transparent !important;
     }
 
-    .navbar.navbar-hidden {
-        top: 10px !important;
-        transform: translateY(-150%) !important;
+    .top-navbar-wrapper.navbar-hidden {
+        transform: translateY(-130%) !important;
+    }
+
+    .mobile-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .mobile-topbar__btn {
+        flex: 0 0 auto;
+    }
+
+    .mobile-topbar .theme-toggle-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+    }
+
+    .mobile-topbar__btn--language {
+        min-width: 82px;
+        height: 48px;
+        padding: 0 8px;
     }
 
     .navbar .container {
@@ -3736,6 +3873,12 @@ body.homepage .home-about-section {
         transform: scale(var(--button-active-scale));
         background-color: var(--surface-glass-active);
         box-shadow: var(--shadow-inset-light), var(--shadow-drop-md) !important;
+    }
+
+    .language-toggle-btn {
+        min-width: 74px;
+        height: 42px;
+        padding: 0 7px;
     }
 
     .main-nav-wrapper {
@@ -3889,12 +4032,12 @@ body.homepage .home-about-section {
     .about-section,
     .resume-section,
     .experience-section {
-        padding-top: 60px !important;
+        padding-top: 112px !important;
         padding-bottom: 60px !important;
     }
 
     .home-content {
-        padding-top: 60px !important;
+        padding-top: 112px !important;
         padding-bottom: 4rem !important;
     }
 

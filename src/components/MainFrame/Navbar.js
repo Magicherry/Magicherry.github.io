@@ -18,16 +18,25 @@ import Tilt from "react-parallax-tilt";
 import avatarImg from "../../Assets/avatar/avatar.png";
 import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
 import cvFile from "../../Assets/cv/Yuting_Zhou_CV.pdf";
+import cvFileZh from "../../Assets/cv/Yuting_Zhou_CV_zh.pdf";
+import { useLanguage } from "../../context/LanguageContext";
 
-const NAV_ITEMS = [
-  { path: "/", icon: AiOutlineHome, label: "Home" },
-  { path: "/about", icon: AiOutlineUser, label: "About" },
-  { path: "/experiences", icon: MdWorkOutline, label: "Tracks" },
-  { path: "/project", icon: AiOutlineFundProjectionScreen, label: "Projects" },
-  { path: "/resume", icon: AiOutlineFileText, label: "Resume" }
-];
-
-const BOTTOM_NAV_ITEMS = NAV_ITEMS;
+const NAV_ITEMS = {
+  en: [
+    { path: "/", icon: AiOutlineHome, label: "Home" },
+    { path: "/about", icon: AiOutlineUser, label: "About" },
+    { path: "/experiences", icon: MdWorkOutline, label: "Tracks" },
+    { path: "/project", icon: AiOutlineFundProjectionScreen, label: "Projects" },
+    { path: "/resume", icon: AiOutlineFileText, label: "Resume" }
+  ],
+  zh: [
+    { path: "/", icon: AiOutlineHome, label: "首页" },
+    { path: "/about", icon: AiOutlineUser, label: "关于我" },
+    { path: "/experiences", icon: MdWorkOutline, label: "经历" },
+    { path: "/project", icon: AiOutlineFundProjectionScreen, label: "项目" },
+    { path: "/resume", icon: AiOutlineFileText, label: "简历" }
+  ]
+};
 
 function useNavMode() {
   const getInitial = () => {
@@ -99,7 +108,7 @@ function useScrollHideNav({ isExpanded, setIsExpanded }) {
 
       const isScrollingDown = scrollY > lastScrollYRef.current;
       if (isMobile) {
-        setIsTopNavHidden(isScrollingDown && scrollY > 80);
+        setIsTopNavHidden(false);
       } else {
         setIsTopNavHidden(false);
       }
@@ -134,7 +143,7 @@ function useScrollHideNav({ isExpanded, setIsExpanded }) {
   return { isScrolled, isTopNavHidden, isBottomNavHidden };
 }
 
-function NavLinks({ items = NAV_ITEMS, linkClassName, iconClassName, onClick, navItemClassName, navLinkProps = {}, hideIcon = false }) {
+function NavLinks({ items, linkClassName, iconClassName, onClick, navItemClassName, navLinkProps = {}, hideIcon = false }) {
   return items.map((item) => {
     const IconComponent = item.icon;
     return (
@@ -156,10 +165,46 @@ function NavLinks({ items = NAV_ITEMS, linkClassName, iconClassName, onClick, na
 }
 
 function NavBar({ triggerPreloader, theme, toggleTheme }) {
+  const { locale, toggleLocale } = useLanguage();
   const [isExpanded, setIsExpanded] = useState(false);
   const { isSideNavVisible, toggleSideNav } = useNavMode();
   const { isScrolled, isTopNavHidden, isBottomNavHidden } = useScrollHideNav({ isExpanded, setIsExpanded });
   const [showWechatModal, setShowWechatModal] = useState(false);
+  const navItems = NAV_ITEMS[locale];
+  const copy = locale === "zh" ? {
+    displayName: "周昱廷",
+    brandName: "YUTING ZHOU",
+    toggleSidebar: "切换侧边导航",
+    toggleTheme: "切换主题",
+    collapseToTopNav: "收起为顶部导航",
+    masterTitle: "罗格斯大学 · 计算机科学硕士",
+    location: "美国新泽西州罗格斯大学",
+    downloadCv: "下载简历",
+    githubRepository: "GitHub 仓库",
+    avatarAlt: "周钰婷头像",
+    wechatQrAlt: "微信二维码",
+    languageToggle: "切换语言",
+    languageMode: "当前语言",
+    email: "zyt680129@163.com",
+    phone: "+86 13681756546"
+  } : {
+    displayName: "Yuting Zhou",
+    brandName: "YUTING ZHOU",
+    toggleSidebar: "Toggle sidebar",
+    toggleTheme: "Toggle theme",
+    collapseToTopNav: "Collapse to top navigation",
+    masterTitle: "M.S. in Computer Science",
+    location: "Rutgers University, NJ, USA",
+    downloadCv: "Download CV",
+    githubRepository: "GitHub Repository",
+    avatarAlt: "Yuting Zhou avatar",
+    wechatQrAlt: "WeChat QR Code",
+    languageToggle: "Toggle language",
+    languageMode: "Current language",
+    email: "zyt680129@gmail.com",
+    phone: "+1 (848) 230-9757"
+  };
+  const activeCvFile = locale === "zh" ? cvFileZh : cvFile;
   
   // Pill position state
   const location = useLocation();
@@ -172,7 +217,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
   
   // Calculate the pill position
   const calculatePillPosition = useCallback(() => {
-    const currentIndex = BOTTOM_NAV_ITEMS.findIndex(item =>
+    const currentIndex = navItems.findIndex(item =>
       item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path)
     );
     if (currentIndex !== -1 && navContainerRef.current) {
@@ -180,14 +225,14 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
       // Account for the 6px padding on each side of the wrapper
       const padding = 6;
       const containerWidth = navContainerRef.current.clientWidth - (padding * 2);
-      const itemWidth = containerWidth / BOTTOM_NAV_ITEMS.length;
+      const itemWidth = containerWidth / navItems.length;
       const newPosition = padding + (currentIndex * itemWidth) + (itemWidth / 2);
       setPillPosition(newPosition);
       setIsPillVisible(true);
     } else {
       setIsPillVisible(false);
     }
-  }, [location.pathname]);
+  }, [location.pathname, navItems]);
 
   // Update the pill position based on the route
   useEffect(() => {
@@ -283,6 +328,22 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
     };
   }, [isExpanded]);
 
+  const renderLanguageControls = (variant = "top") => (
+    <div className={`language-control-group ${variant === "side" ? "language-control-group--side" : ""}`}>
+      <button
+        type="button"
+        className="language-toggle-btn"
+        onClick={toggleLocale}
+        aria-label={copy.languageToggle}
+        title={copy.languageMode}
+      >
+        <span className={`language-toggle-btn__option ${locale === "zh" ? "active" : ""}`}>中</span>
+        <span className="language-toggle-btn__divider">/</span>
+        <span className={`language-toggle-btn__option ${locale === "en" ? "active" : ""}`}>EN</span>
+      </button>
+    </div>
+  );
+
   return (
       <>
         <div className="navbar-vignette-mask d-none d-lg-block" />
@@ -294,12 +355,37 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
             className={`top-navbar-wrapper ${isTopNavHidden ? "navbar-hidden" : ""} ${isScrolled ? "navbar-scrolled" : ""} ${isSideNavVisible ? "navbar-floating-mode" : ""}`}
             onToggle={setIsExpanded}
         >
-          <Container className="d-flex align-items-center justify-content-between navbar-top-inner">
+          <div className="d-lg-none mobile-topbar">
+            <button
+              type="button"
+              className="language-toggle-btn mobile-topbar__btn mobile-topbar__btn--language"
+              onClick={toggleLocale}
+              aria-label={copy.languageToggle}
+              title={copy.languageMode}
+            >
+              <span className={`language-toggle-btn__option ${locale === "zh" ? "active" : ""}`}>中</span>
+              <span className="language-toggle-btn__divider">/</span>
+              <span className={`language-toggle-btn__option ${locale === "en" ? "active" : ""}`}>EN</span>
+            </button>
+            <button
+              type="button"
+              className="theme-toggle-btn mobile-topbar__btn"
+              onClick={toggleTheme}
+              aria-label={copy.toggleTheme}
+            >
+              {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
+            </button>
+          </div>
+
+          <Container className="d-none d-lg-flex align-items-center justify-content-between navbar-top-inner">
             
             {/* Left Column: Brand */}
             <div className="navbar-brand-col">
-              <span className="navbar-brand-text" onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}>
-                YUTING ZHOU
+              <span
+                className="navbar-brand-text"
+                onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}
+              >
+                {copy.brandName}
               </span>
             </div>
 
@@ -309,7 +395,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
                 type="button"
                 className={`sidebar-toggle-icon ${isSideNavVisible ? "active" : ""}`}
                 onClick={handleToggleSideNav}
-                aria-label="Toggle Sidebar"
+                aria-label={copy.toggleSidebar}
               >
                 <FiSidebar />
               </button>
@@ -317,6 +403,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mx-auto" defaultActiveKey="#home">
                   <NavLinks
+                    items={navItems}
                     linkClassName=""
                     iconClassName="navbar-icon"
                     onClick={closeNavbar}
@@ -332,16 +419,17 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
                 type="button"
                 className="theme-toggle-btn"
                 onClick={toggleTheme}
-                aria-label="Toggle Theme"
+                aria-label={copy.toggleTheme}
               >
                 {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
               </button>
+              {renderLanguageControls()}
               <a
                 href="https://github.com/Magicherry/Bits-of-Me"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="github-pill-btn"
-                aria-label="GitHub Repository"
+                aria-label={copy.githubRepository}
               >
                 <AiFillStar className="star-icon" />
                 <div className="divider" />
@@ -355,35 +443,36 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
         <div className={`floating-nav-container ${isSideNavVisible ? "show" : ""}`}>
           <div className="floating-nav-panel">
             <div className="floating-nav-header">
-              <button type="button" className="floating-nav-close" onClick={toggleSideNav} aria-label="Collapse to top navigation">
-                <FiSidebar />
-              </button>
-              <button
-                type="button"
-                className="theme-toggle-btn"
-                onClick={toggleTheme}
-                aria-label="Toggle Theme"
-                style={{ width: '40px', height: '40px', fontSize: '1.1rem' }}
-              >
-                {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
-              </button>
+              {renderLanguageControls("side")}
+              <div className="floating-nav-header-actions">
+                <button
+                  type="button"
+                  className="theme-toggle-btn"
+                  onClick={toggleTheme}
+                  aria-label={copy.toggleTheme}
+                  style={{ width: '40px', height: '40px', fontSize: '1.1rem' }}
+                >
+                  {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
+                </button>
+                <button type="button" className="floating-nav-close" onClick={toggleSideNav} aria-label={copy.collapseToTopNav}>
+                  <FiSidebar />
+                </button>
+              </div>
             </div>
 
             <div className="floating-nav-profile">
-              <div className="floating-nav-avatar-wrapper">
-                <Tilt>
+              <Tilt className="floating-nav-avatar-wrapper">
                 <img
                   src={avatarImg}
-                  alt="Yuting Zhou avatar"
+                  alt={copy.avatarAlt}
                   className="floating-nav-avatar"
                   loading="lazy"
                   decoding="async"
                 />
-                </Tilt>
-              </div>
+              </Tilt>
 
-              <div className="floating-nav-name">Yuting Zhou</div>
-              <div className="floating-nav-title">M.S. in Computer Science</div>
+              <div className="floating-nav-name">{copy.displayName}</div>
+              <div className="floating-nav-title">{copy.masterTitle}</div>
               <div className="floating-nav-actions">
                 <a
                   className="floating-nav-icon-btn"
@@ -427,6 +516,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
 
             <Nav className="floating-nav-list">
               <NavLinks
+                items={navItems}
                 linkClassName="floating-nav-link"
                 onClick={closeNavbar}
               />
@@ -443,27 +533,27 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
                   rel="noopener noreferrer"
                 >
                   <FiMapPin />
-                  <span>Rutgers University, NJ, USA</span>
+                  <span>{copy.location}</span>
                 </a>
-                <a className="floating-nav-contact-item" href="mailto:zyt680129@gmail.com">
+                <a className="floating-nav-contact-item" href={`mailto:${copy.email}`}>
                   <FiMail />
-                  <span>zyt680129@gmail.com</span>
+                  <span>{copy.email}</span>
                 </a>
-                <a className="floating-nav-contact-item" href="tel:+18482309757">
+                <a className="floating-nav-contact-item" href={`tel:${copy.phone.replace(/[^\d+]/g, "")}`}>
                   <FiPhone />
-                  <span>+1 (848) 230-9757</span>
+                  <span>{copy.phone}</span>
                 </a>
               </div>
 
               <div className="floating-nav-footer">
                 <a
-                  href={cvFile}
+                  href={activeCvFile}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="floating-nav-ghost-btn"
                 >
                   <AiOutlineDownload />
-                  <span>Download CV</span>
+                  <span>{copy.downloadCv}</span>
                 </a>
               </div>
             </div>
@@ -486,31 +576,21 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               ref={pillRef}
             />
             
-            <Nav className="main-nav">
-              <NavLinks
-                items={BOTTOM_NAV_ITEMS}
+              <Nav className="main-nav">
+                <NavLinks
+                items={navItems}
                 linkClassName="main-nav-link"
                 onClick={closeNavbar}
               />
             </Nav>
           </div>
-          
-          {/* Mobile Theme Toggle Button */}
-          <button
-            type="button"
-            className="mobile-theme-toggle-btn"
-            onClick={toggleTheme}
-            aria-label="Toggle Theme"
-          >
-            {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
-          </button>
         </div>
 
         <Modal show={showWechatModal} onHide={() => setShowWechatModal(false)} centered>
           <Modal.Body className="modal-body-center" onClick={() => setShowWechatModal(false)}>
             <img
               src={wechatQrCode}
-              alt="WeChat QR Code"
+              alt={copy.wechatQrAlt}
               className="img-max-full"
               loading="lazy"
               decoding="async"

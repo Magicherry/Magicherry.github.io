@@ -3,15 +3,17 @@ import { Container, Row, Spinner, ProgressBar } from "react-bootstrap";
 import { AiOutlineDownload } from "react-icons/ai";
 import { Document, Page, pdfjs } from "react-pdf";
 import pdf from "../../Assets/cv/Yuting_Zhou_CV.pdf";
+import pdfZh from "../../Assets/cv/Yuting_Zhou_CV_zh.pdf";
 import 'react-pdf/dist/Page/TextLayer.css';
+import { useLanguage } from "../../context/LanguageContext";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
-const LoadingSpinner = ({ progress }) => (
+const LoadingSpinner = ({ progress, copy }) => (
     <div className="resume-pdf-container">
         <div className="d-flex flex-column align-items-center gap-3">
             <Spinner animation="border" className="resume-loading-spinner" />
-            <div className="text-light small">Loading resume…</div>
+            <div className="text-light small">{copy.loading}</div>
             {Number.isFinite(progress) && progress > 0 ? (
                 <div className="w-100 resume-progress-wrap">
                     <ProgressBar
@@ -20,7 +22,7 @@ const LoadingSpinner = ({ progress }) => (
                         striped
                         variant="info"
                         className="progress-bar-thin"
-                        aria-label="Resume loading progress"
+                        aria-label={copy.loadingProgress}
                     />
                 </div>
             ) : null}
@@ -28,35 +30,58 @@ const LoadingSpinner = ({ progress }) => (
     </div>
 );
 
-const LoadingError = ({ message }) => (
+const LoadingError = ({ message, copy }) => (
     <div className="resume-pdf-container">
         <div className="text-center text-light">
-            <div className="mb-2">Unable to load the PDF.</div>
+            <div className="mb-2">{copy.errorTitle}</div>
             <div className="small text-muted">{message}</div>
         </div>
     </div>
 );
 
-const DownloadButton = () => (
+const DownloadButton = ({ file, copy }) => (
     <div className="d-flex justify-content-center">
         <a
-            href={pdf}
+            href={file}
             target="_blank"
             rel="noopener noreferrer"
             className="download-cv-button"
         >
             <AiOutlineDownload />
-            <span>Download CV</span>
+            <span>{copy.download}</span>
         </a>
     </div>
 );
 
 function ResumeNew() {
+    const { locale } = useLanguage();
+    const copy = locale === "zh"
+        ? {
+            loading: "正在加载简历…",
+            loadingProgress: "简历加载进度",
+            errorTitle: "PDF 加载失败。",
+            errorFallback: "请稍后再试。",
+            download: "下载简历"
+        }
+        : {
+            loading: "Loading resume…",
+            loadingProgress: "Resume loading progress",
+            errorTitle: "Unable to load the PDF.",
+            errorFallback: "Please try again later.",
+            download: "Download CV"
+        };
+    const activePdf = locale === "zh" ? pdfZh : pdf;
     const [width, setWidth] = useState(1200);
     const [numPages, setNumPages] = useState(null);
     const [loadError, setLoadError] = useState(null);
     const [loadProgress, setLoadProgress] = useState(0);
     const containerRef = useRef(null);
+
+    useEffect(() => {
+        setNumPages(null);
+        setLoadError(null);
+        setLoadProgress(0);
+    }, [activePdf]);
 
     const handleResize = useCallback((nextWidth) => {
         if (!nextWidth || Number.isNaN(nextWidth)) return;
@@ -100,17 +125,17 @@ function ResumeNew() {
         <div>
             <Container fluid className="resume-section">
                 <Row className="resume__row">
-                    <DownloadButton />
+                    <DownloadButton file={activePdf} copy={copy} />
                 </Row>
 
                 <div className="resume-container" ref={containerRef}>
                     <Document
-                        file={pdf}
+                        file={activePdf}
                         onLoadSuccess={onDocumentLoadSuccess}
                         onLoadError={onDocumentLoadError}
                         onLoadProgress={onDocumentLoadProgress}
-                        loading={<LoadingSpinner progress={loadProgress} />}
-                        error={<LoadingError message={loadError || "Please try again later."} />}
+                        loading={<LoadingSpinner progress={loadProgress} copy={copy} />}
+                        error={<LoadingError message={loadError || copy.errorFallback} copy={copy} />}
                         className="pdf-document"
                     >
                         {Array.from({ length: numPages || 0 }, (_, index) => (

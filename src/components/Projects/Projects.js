@@ -5,13 +5,39 @@ import ProjectCard from "./ProjectCard";
 import FadeInOnScroll from "../MainFrame/FadeInOnScroll";
 import { BsGridFill, BsListUl, BsChevronDown, BsCheck } from "react-icons/bs";
 import { projects } from "./ProjectData";
-
-const SORT_OPTIONS = [
-  { value: "dateDesc", label: "Newest first" },
-  { value: "dateAsc", label: "Oldest first" },
-];
+import { useLanguage } from "../../context/LanguageContext";
 
 const Projects = () => {
+  const { locale } = useLanguage();
+  const copy = locale === "zh"
+    ? {
+      headingPrefix: "我之前做过的",
+      headingAccent: "项目",
+      subtitle: "既有个人作品，也有更贴近真实场景的问题拆解与工程实现。",
+      sortOptions: [
+        { value: "dateDesc", label: "最新优先" },
+        { value: "dateAsc", label: "最早优先" },
+      ],
+      allGenres: "全部标签",
+      sort: "排序",
+      clear: "清除",
+      listView: "列表视图",
+      gridView: "网格视图"
+    }
+    : {
+      headingPrefix: "My Previous",
+      headingAccent: "Portfolio",
+      subtitle: "Built with modern technologies and tools.",
+      sortOptions: [
+        { value: "dateDesc", label: "Newest first" },
+        { value: "dateAsc", label: "Oldest first" },
+      ],
+      allGenres: "All Genres",
+      sort: "Sort",
+      clear: "Clear",
+      listView: "List view",
+      gridView: "Grid view"
+    };
   const getInitialViewMode = () => {
     if (typeof window === "undefined") return "list";
     const stored = window.localStorage ? window.localStorage.getItem("projectsViewMode") : null;
@@ -75,10 +101,10 @@ const Projects = () => {
         
         <Container>
           <h1 className="project-heading">
-          My Previous <strong className="text-accent">Portfolio</strong>
+          {copy.headingPrefix} <strong className="text-accent">{copy.headingAccent}</strong>
           </h1>
           <p className="section-intro-text">
-            Built with modern technologies and tools.
+            {copy.subtitle}
           </p>
           <Row className={`projects__row ${viewMode}`}>
             <Col md={12} className="projects__toolbar d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
@@ -90,7 +116,7 @@ const Projects = () => {
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
                     {selectedTags.length === 0 && (
-                      <span className="filter-dropdown-label">All Genres</span>
+                      <span className="filter-dropdown-label">{copy.allGenres}</span>
                     )}
                     {selectedTags.length > 0 && (
                       <div 
@@ -145,13 +171,13 @@ const Projects = () => {
                   onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
                 >
                   <span className="filter-dropdown-label">
-                    Sort: {SORT_OPTIONS.find(o => o.value === sortBy)?.label ?? "Newest first"}
+                    {copy.sort}: {copy.sortOptions.find(o => o.value === sortBy)?.label ?? copy.sortOptions[0].label}
                   </span>
                   <BsChevronDown className="dropdown-icon" />
                 </button>
                 {isSortDropdownOpen && (
                   <div className="filter-dropdown-menu">
-                    {SORT_OPTIONS.map(opt => (
+                    {copy.sortOptions.map(opt => (
                       <button
                         key={opt.value}
                         className={`filter-dropdown-item ${sortBy === opt.value ? "selected" : ""}`}
@@ -176,7 +202,7 @@ const Projects = () => {
                     setSortBy("dateDesc");
                   }}
                 >
-                  × Clear
+                  × {copy.clear}
                 </button>
               )}
               </div>
@@ -186,6 +212,7 @@ const Projects = () => {
                     variant="outline-primary"
                     onClick={() => setViewMode("list")}
                     className={`view-switcher__button ${viewMode === "list" ? "view-switcher__button--active" : ""}`}
+                    aria-label={copy.listView}
                 >
                   <BsListUl />
                 </Button>
@@ -193,6 +220,7 @@ const Projects = () => {
                     variant="outline-primary"
                     onClick={() => setViewMode("grid")}
                     className={`view-switcher__button ${viewMode === "grid" ? "view-switcher__button--active" : ""}`}
+                    aria-label={copy.gridView}
                 >
                   <BsGridFill />
                 </Button>

@@ -4,14 +4,18 @@ import { Container } from "react-bootstrap";
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import { timelines } from "./ExperienceData";
+import { useLanguage } from "../../context/LanguageContext";
 
 function ExperienceTimeline({ title, subtitle, data, icon: Icon }) {
+    const { locale } = useLanguage();
     return (
         <>
             <h1 className="project-heading">
-                My <strong className="text-accent">{title} </strong> Experiences
+                {locale === "zh"
+                    ? <>我的 <strong className="text-accent">{title[locale]} </strong>经历</>
+                    : <>My <strong className="text-accent">{title[locale]} </strong> Experiences</>}
             </h1>
-            <p className="section-intro-text">{subtitle}</p>
+            <p className="section-intro-text">{subtitle[locale]}</p>
             <VerticalTimeline>
                 {data.map((experience, index) => (
                     <VerticalTimelineElement
@@ -21,11 +25,10 @@ function ExperienceTimeline({ title, subtitle, data, icon: Icon }) {
                         iconStyle={{ background: 'var(--button-bg-primary)', color: '#fff' }}
                         icon={experience.icon ? <experience.icon /> : <Icon />}
                     >
-                        <h3 className="vertical-timeline-element-title">{experience.title}</h3>
-                        <h4 className="vertical-timeline-element-subtitle">{experience.department}</h4>
-                        <h5 className="vertical-timeline-element-subtitle">{experience.company}</h5>
+                        <h3 className="vertical-timeline-element-title">{experience.title[locale]}</h3>
+                        <h5 className="vertical-timeline-element-subtitle">{experience.company[locale]}</h5>
                         <ul className="experience-description">
-                            {experience.description.map((item, i) => (
+                            {experience.description[locale].map((item, i) => (
                                 <li key={i}>{item}</li>
                             ))}
                         </ul>

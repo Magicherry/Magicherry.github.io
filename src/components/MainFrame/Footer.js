@@ -4,10 +4,23 @@ import { AiFillGithub } from "react-icons/ai";
 import { SiBilibili } from "react-icons/si";
 import { FaLinkedinIn, FaWeixin, FaEnvelope } from "react-icons/fa";
 import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
+import { useLanguage } from "../../context/LanguageContext";
 
 const Footer = () => {
   const year =  new Date().getFullYear();
   const [showWechatModal, setShowWechatModal] = useState(false);
+  const { locale } = useLanguage();
+  const copy = locale === "zh"
+    ? {
+      copyright: `版权所有 © 周昱廷 ${year}`,
+      wechatQrAlt: "微信二维码",
+      email: "zyt680129@163.com"
+    }
+    : {
+      copyright: `Copyright © Yuting Zhou ${year}`,
+      wechatQrAlt: "WeChat QR Code",
+      email: "zyt680129@gmail.com"
+    };
 
   useEffect(() => {
     if (!showWechatModal) return;
@@ -39,13 +52,13 @@ const Footer = () => {
       <Container fluid className="footer">
         <Row className="align-items-center justify-content-center">
           <Col md={4} className="footer-copyright d-flex align-items-center justify-content-center">
-            <a href="mailto:zyt680129@gmail.com" className="email-link footer-email">
+            <a href={`mailto:${copy.email}`} className="email-link footer-email">
               <FaEnvelope className="footer-email__icon" aria-hidden="true" />
-              <span className="footer-email__text">zyt680129@gmail.com</span>
+              <span className="footer-email__text">{copy.email}</span>
             </a>
           </Col>
           <Col md={4} className="footer-copyright d-flex align-items-center justify-content-center">
-            <h3>Copyright © Yuting Zhou {year}</h3>
+            <h3>{copy.copyright}</h3>
           </Col>
           <Col md={4} className="footer-body d-flex align-items-center justify-content-center">
             <ul className="footer-icons">
@@ -73,7 +86,7 @@ const Footer = () => {
           >
             <img
               src={wechatQrCode}
-              alt="WeChat QR Code"
+              alt={copy.wechatQrAlt}
               className="img-max-full"
               loading="lazy"
               decoding="async"

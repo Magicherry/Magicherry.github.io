@@ -11,9 +11,19 @@ const toolStackIcons = [
     { icon: <img src="https://cdn.simpleicons.org/claude/CC785C" alt="Claude Code" style={{ width: "1em", height: "1em" }} />, name: "Claude Code", link: "https://www.anthropic.com/claude-code" },
     { icon: <img src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg" alt="Codex" className="tech-icon-codex" style={{ width: "1em", height: "1em" }} />, name: "Codex", link: "https://developers.openai.com/codex" },
     { icon: <img src="https://cdn.simpleicons.org/googlegemini" alt="Gemini CLI" className="tech-icon-gemini-cli" style={{ width: "1em", height: "1em" }} />, name: "Gemini CLI", link: "https://github.com/google-gemini/gemini-cli" },
+    {
+        icon: (
+            <picture className="tech-icon-cursor">
+                <source media="(prefers-color-scheme: dark)" srcSet="https://cursor.com/marketing-static/favicon.svg" />
+                <source media="(prefers-color-scheme: light)" srcSet="https://cursor.com/marketing-static/favicon-light.svg" />
+                <img src="https://cursor.com/marketing-static/icon-192x192.png" alt="Cursor" style={{ width: "1em", height: "1em" }} />
+            </picture>
+        ),
+        name: "Cursor",
+        link: "https://www.cursor.com/",
+    },
     { icon: <img src="https://www.zerotier.com/wp-content/uploads/2024/10/icon.svg" alt="ZeroTier" style={{ width: "1em", height: "1em" }} />, name: "ZeroTier", link: "https://www.zerotier.com/" },
     { icon: <img src="https://tailscale.com/favicon.svg" alt="Tailscale" style={{ width: "1em", height: "1em" }} />, name: "Tailscale", link: "https://tailscale.com/" },
-    { icon: <img src="https://cdn.jsdelivr.net/gh/jellyfin/jellyfin-ux@master/branding/SVG/icon-transparent.svg" alt="Jellyfin" className="tech-icon-jellyfin" style={{ width: "1em", height: "1em" }} />, name: "Jellyfin", link: "https://jellyfin.org/" },
 ];
 
 function Toolstack() {

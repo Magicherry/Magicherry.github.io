@@ -4,9 +4,23 @@ import homeLogo from "../../Assets/home/home-main.svg";
 
 
 import TypeWord from "./TypeWord";
+import { useLanguage } from "../../context/LanguageContext";
 
 function Home1() {
-  
+  const { locale } = useLanguage();
+  const copy = locale === "zh"
+    ? {
+      greeting: "你好呀！",
+      intro: "我是",
+      name: "周昱廷",
+      waveLabel: "挥手"
+    }
+    : {
+      greeting: "Hi There!",
+      intro: "I'M",
+      name: "YUTING ZHOU",
+      waveLabel: "wave"
+    };
 
   return (
     <section>
@@ -16,15 +30,15 @@ function Home1() {
           <Row className="align-items-center">
             <Col md={7} className="home-header">
               <h1 className="heading home__title">
-                Hi There!{" "}
-                <span className="wave" role="img" aria-labelledby="wave">
+                {copy.greeting}{" "}
+                <span className="wave" role="img" aria-label={copy.waveLabel}>
                   👋🏻
                 </span>
               </h1>
 
               <h1 className="home-heading-label">
-                I'M
-                <strong className="home-hero-name"> YUTING ZHOU</strong>
+                {copy.intro}
+                <strong className="home-hero-name"> {copy.name}</strong>
                 .
               </h1>
 

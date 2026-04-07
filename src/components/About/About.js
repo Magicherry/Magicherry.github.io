@@ -6,8 +6,22 @@ import Techstack from "./Techstack";
 import Aboutcard from "./AboutCard";
 import laptopImg from "../../Assets/about/about.png";
 import Toolstack from "./Toolstack";
+import { useLanguage } from "../../context/LanguageContext";
 
 function About() {
+  const { locale } = useLanguage();
+  const copy = locale === "zh"
+    ? {
+      title: <>进一步了解 <strong className="text-accent">我</strong></>,
+      skills: <>我常用的 <strong className="text-accent">技术栈</strong></>,
+      tools: <>日常使用的 <strong className="text-accent">工具</strong> 与工作流</>
+    }
+    : {
+      title: <>Know Who <strong className="text-accent">I'M</strong></>,
+      skills: <>Professional <strong className="text-accent">Skillset </strong></>,
+      tools: <><strong className="text-accent">Tools</strong> I use</>
+    };
+
   return (
     <Container fluid className="about-section">
       
@@ -18,7 +32,7 @@ function About() {
             className="about__content-col"
           >
             <h1 className="about__title">
-              Know Who <strong className="text-accent">I'M</strong>
+              {copy.title}
             </h1>
             <Aboutcard />
           </Col>
@@ -36,13 +50,13 @@ function About() {
           </Col>
         </Row>
         <h1 className="project-heading">
-          Professional <strong className="text-accent">Skillset </strong>
+          {copy.skills}
         </h1>
 
         <Techstack />
 
         <h1 className="project-heading">
-          <strong className="text-accent">Tools</strong> I use
+          {copy.tools}
         </h1>
         <Toolstack />
 

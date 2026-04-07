@@ -11,27 +11,57 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./css/style.css";
 
 import AnimatedRoutes from "./components/MainFrame/AnimatedRoutes";
+import { LanguageProvider } from "./context/LanguageContext";
+import { useTimedAutoPreference } from "./hooks/useTimedAutoPreference";
+
+const THEME_STORAGE_KEY = "themePreference";
+const THEME_OVERRIDE_TTL_MS = 1000 * 60 * 60 * 24;
+
+function getSystemTheme() {
+  if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+    return "light";
+  }
+  return "dark";
+}
+
+function isValidTheme(value) {
+  return value === "dark" || value === "light";
+}
+
+function subscribeToSystemThemeChanges(onChange) {
+  if (typeof window === "undefined" || !window.matchMedia) return undefined;
+
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
+  const handleChange = () => {
+    onChange();
+  };
+
+  if (mediaQuery.addEventListener) {
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }
+
+  if (mediaQuery.addListener) {
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }
+
+  return undefined;
+}
 
 function App() {
   const [load, upadateLoad] = useState(true);
   const preloaderTimerRef = useRef(null);
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== "undefined") {
-      if (window.localStorage && window.localStorage.getItem("theme")) {
-        return window.localStorage.getItem("theme");
-      }
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-        return "light";
-      }
-    }
-    return "dark";
+  const { value: theme, setManualValue: setManualTheme } = useTimedAutoPreference({
+    storageKey: THEME_STORAGE_KEY,
+    getAutoValue: getSystemTheme,
+    isValid: isValidTheme,
+    ttlMs: THEME_OVERRIDE_TTL_MS,
+    subscribeToAutoChanges: subscribeToSystemThemeChanges,
   });
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-    if (typeof window !== "undefined" && window.localStorage) {
-      window.localStorage.setItem("theme", theme);
-    }
   }, [theme]);
 
   useEffect(() => {
@@ -43,31 +73,13 @@ function App() {
     }
   }, [load]);
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: light)');
-    const handleChange = (e) => {
-      // Only auto-switch if user hasn't manually set a preference
-      if (typeof window !== "undefined" && window.localStorage && !window.localStorage.getItem("theme")) {
-        setTheme(e.matches ? "light" : "dark");
-      }
-    };
-    
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
-    } else if (mediaQuery.addListener) {
-      mediaQuery.addListener(handleChange);
-      return () => mediaQuery.removeListener(handleChange);
-    }
-  }, []);
-
   const toggleTheme = useCallback(() => {
     document.documentElement.classList.add('theme-transition');
-    setTheme((prev) => prev === "dark" ? "light" : "dark");
+    setManualTheme(theme === "dark" ? "light" : "dark");
     setTimeout(() => {
       document.documentElement.classList.remove('theme-transition');
     }, 400);
-  }, []);
+  }, [setManualTheme, theme]);
 
   const triggerPreloader = useCallback(() => {
     upadateLoad(true);
@@ -200,17 +212,19 @@ function App() {
 
   return (
     <Router>
-      <Preloader load={load} />
-      <div className="App" id={load ? "no-scroll" : "scroll"}>
-        <div className="app-top-blur" aria-hidden="true" />
-        <Navbar triggerPreloader={triggerPreloader} theme={theme} toggleTheme={toggleTheme} />
-        <Particle theme={theme} />
-        <ScrollToTop />
-        <div className="content-wrap">
-          <AnimatedRoutes />
+      <LanguageProvider>
+        <Preloader load={load} />
+        <div className="App" id={load ? "no-scroll" : "scroll"}>
+          <div className="app-top-blur" aria-hidden="true" />
+          <Navbar triggerPreloader={triggerPreloader} theme={theme} toggleTheme={toggleTheme} />
+          <Particle theme={theme} />
+          <ScrollToTop />
+          <div className="content-wrap">
+            <AnimatedRoutes />
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
+      </LanguageProvider>
     </Router>
   );
 }
