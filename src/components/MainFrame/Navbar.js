@@ -4,7 +4,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   AiOutlineHome,
   AiOutlineFundProjectionScreen,
-  AiOutlineUser,
+  AiOutlineCode,
   AiFillGithub,
   AiOutlineFileText,
   AiOutlineDownload,
@@ -24,14 +24,14 @@ import { useLanguage } from "../../context/LanguageContext";
 const NAV_ITEMS = {
   en: [
     { path: "/", icon: AiOutlineHome, label: "Home" },
-    { path: "/about", icon: AiOutlineUser, label: "About" },
+    { path: "/about", icon: AiOutlineCode, label: "Stacks" },
     { path: "/experiences", icon: MdWorkOutline, label: "Tracks" },
     { path: "/project", icon: AiOutlineFundProjectionScreen, label: "Projects" },
     { path: "/resume", icon: AiOutlineFileText, label: "Resume" }
   ],
   zh: [
     { path: "/", icon: AiOutlineHome, label: "首页" },
-    { path: "/about", icon: AiOutlineUser, label: "关于我" },
+    { path: "/about", icon: AiOutlineCode, label: "技术栈" },
     { path: "/experiences", icon: MdWorkOutline, label: "经历" },
     { path: "/project", icon: AiOutlineFundProjectionScreen, label: "项目" },
     { path: "/resume", icon: AiOutlineFileText, label: "简历" }
