@@ -3,7 +3,7 @@ export const projects = [
         imgPath: require("../../Assets/projects/StreamX.png"),
         title: {
             en: "StreamX: Movies Recommender",
-            zh: "StreamX：电影推荐系统"
+            zh: "StreamX 电影推荐系统"
         },
         description: {
             en: "A personalized recommender system with Matrix Factorization (SGD, ALS), SVD, and TextCNN, featuring end-to-end preprocessing, evaluation (MAE, RMSE, NDCG), and a full-stack web app.",
@@ -94,7 +94,7 @@ export const projects = [
         imgPath: require("../../Assets/projects/KOB.png"),
         title: {
             en: "King of Bots: Real-time Battle Platform",
-            zh: "King of Bots：实时对战平台"
+            zh: "King of Bots 实时对战平台"
         },
         description: {
             en: "A real-time strategy game with a SpringBoot back-end and a Vue3 front-end. Features a MySQL database and a Bootstrap 4 interface for a dynamic gaming experience.",

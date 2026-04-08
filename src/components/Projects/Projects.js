@@ -253,7 +253,12 @@ const Projects = () => {
                     className="project-card"
                     key={project.title.en}
                 >
-              <FadeInOnScroll delay={index * 40} eager skipAnimation={isInitialLoad}>
+              <FadeInOnScroll
+                key={`${project.title.en}-${viewMode}`}
+                delay={index * 40}
+                eager
+                skipAnimation={isInitialLoad}
+              >
                     <ProjectCard
                         {...project}
                         viewMode={viewMode}
