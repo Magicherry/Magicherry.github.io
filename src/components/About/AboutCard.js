@@ -27,7 +27,7 @@ const AboutCard = () => {
         <>除此之外，我也很享受这些能让我保持敏锐和灵感的事情：</>
       ],
       quote: "无论你的梦想是什么，你都必须全身心投入其中。",
-      quoteAuthor: "艾尔顿·塞纳"
+      quoteAuthor: "艾尔顿 · 塞纳"
     }
     : {
       highlights: [

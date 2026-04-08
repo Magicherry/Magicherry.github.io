@@ -44,7 +44,7 @@ function useNavMode() {
     const stored = window.localStorage ? window.localStorage.getItem("navMode") : null;
     if (stored === "side" && window.innerWidth >= 992) return true;
     if (stored === "top") return false;
-    return window.innerWidth >= 992;
+    return false;
   };
 
   const [isSideNavVisible, setIsSideNavVisible] = useState(getInitial);

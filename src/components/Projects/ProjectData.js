@@ -2,7 +2,7 @@ export const projects = [
     {
         imgPath: require("../../Assets/projects/StreamX.png"),
         title: {
-            en: "StreamX: Movie Recommender",
+            en: "StreamX: Movies Recommender",
             zh: "StreamX：电影推荐系统"
         },
         description: {
@@ -11,7 +11,7 @@ export const projects = [
         },
         ghLink: "https://github.com/Magicherry/Movies-Recommendation",
         demoLink: "https://github.com/Magicherry/Movies-Recommendation",
-        tags: ["Python", "Machine Learning", "Matrix Factorization", "Next.js", "Django", "Text CNN", "Recommender"],
+        tags: ["Python", "Machine Learning", "Matrix Factorization", "Next.js", "Django", "Text CNN", "Hybrid Recommender"],
         type: {
             en: "Personal",
             zh: "个人项目"
@@ -38,8 +38,8 @@ export const projects = [
     {
         imgPath: require("../../Assets/projects/train_multi.png"),
         title: {
-            en: "Rail Time-Space Diagram Generator",
-            zh: "列车时空图生成器"
+            en: "Rail Spatial-temporal Analyzer",
+            zh: "铁路时空分析系统"
         },
         description: {
             en: "A Qt native application converting raw train data into intuitive and visual graphs. Helps researcher easily understand and analyze train activity for a specific day and location.",
