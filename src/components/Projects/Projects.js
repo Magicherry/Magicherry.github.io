@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import ProjectCard from "./ProjectCard";
 
@@ -53,26 +53,38 @@ const Projects = () => {
   const dropdownRef = useRef(null);
   const sortDropdownRef = useRef(null);
 
-  const allTags = Array.from(new Set(projects.flatMap(p => p.tags)));
+  const allTags = useMemo(
+    () => Array.from(new Set(projects.flatMap((project) => project.tags))),
+    []
+  );
 
-  const filteredProjects = selectedTags.length === 0
-    ? projects
-    : projects.filter(p => selectedTags.every(tag => p.tags.includes(tag)));
+  const filteredProjects = useMemo(() => (
+    selectedTags.length === 0
+      ? projects
+      : projects.filter((project) => selectedTags.every((tag) => project.tags.includes(tag)))
+  ), [selectedTags]);
 
-  const sortedProjects = (() => {
-    const year = (p) => parseInt(p.date, 10) || 0;
-    if (sortBy === "dateDesc") return [...filteredProjects].sort((a, b) => year(b) - year(a));
-    if (sortBy === "dateAsc") return [...filteredProjects].sort((a, b) => year(a) - year(b));
+  const sortedProjects = useMemo(() => {
+    const getYear = (project) => parseInt(project.date, 10) || 0;
+
+    if (sortBy === "dateDesc") {
+      return [...filteredProjects].sort((a, b) => getYear(b) - getYear(a));
+    }
+
+    if (sortBy === "dateAsc") {
+      return [...filteredProjects].sort((a, b) => getYear(a) - getYear(b));
+    }
+
     return filteredProjects;
-  })();
+  }, [filteredProjects, sortBy]);
 
-  const handleTagToggle = (tag) => {
+  const handleTagToggle = useCallback((tag) => {
     setSelectedTags(prev => 
       prev.includes(tag) 
         ? prev.filter(t => t !== tag)
         : [...prev, tag]
     );
-  };
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
@@ -81,6 +93,14 @@ const Projects = () => {
   }, [viewMode]);
 
   useEffect(() => {
+    setIsInitialLoad(false);
+  }, []);
+
+  useEffect(() => {
+    if (!isDropdownOpen && !isSortDropdownOpen) {
+      return undefined;
+    }
+
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
@@ -91,10 +111,9 @@ const Projects = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    setIsInitialLoad(false);
 
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isDropdownOpen, isSortDropdownOpen]);
 
   return (
       <Container fluid className="project-section">
@@ -232,7 +251,7 @@ const Projects = () => {
                     md={viewMode === "grid" ? 6 : 12}
                     sm={12}
                     className="project-card"
-                    key={`${viewMode}-${index}`}
+                    key={project.title.en}
                 >
               <FadeInOnScroll delay={index * 40} eager skipAnimation={isInitialLoad}>
                     <ProjectCard

@@ -1,10 +1,32 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 
+let particlesEngineInitPromise;
+
+function getParticlesEngineInitPromise() {
+  if (!particlesEngineInitPromise) {
+    particlesEngineInitPromise = initParticlesEngine(loadSlim);
+  }
+
+  return particlesEngineInitPromise;
+}
+
 function Particle({ theme }) {
+  const [isReady, setIsReady] = useState(false);
+
   useEffect(() => {
-    initParticlesEngine(loadSlim);
+    let mounted = true;
+
+    getParticlesEngineInitPromise().then(() => {
+      if (mounted) {
+        setIsReady(true);
+      }
+    });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const particleColor = theme === "light" ? "#0284c7" : "#38bdf8";
@@ -75,8 +97,12 @@ function Particle({ theme }) {
     [particleColor]
   );
 
+  if (!isReady) {
+    return null;
+  }
+
   return (
-    <Particles key={theme} id="tsparticles" options={options} />
+    <Particles id="tsparticles" options={options} />
   );
 }
 

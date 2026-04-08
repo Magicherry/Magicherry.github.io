@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Modal } from "react-bootstrap";
 import Tilt from "react-parallax-tilt";
 import { AiFillGithub, AiOutlineDownload } from "react-icons/ai";
@@ -9,6 +9,7 @@ import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
 import cvFile from "../../Assets/cv/Yuting_Zhou_CV.pdf";
 import cvFileZh from "../../Assets/cv/Yuting_Zhou_CV_zh.pdf";
 import { useLanguage } from "../../context/LanguageContext";
+import { useCloseOnWindowScroll } from "../../hooks/useCloseOnWindowScroll";
 
 function Home2() {
     const [showWechatModal, setShowWechatModal] = useState(false);
@@ -54,16 +55,7 @@ function Home2() {
         };
     const activeCvFile = locale === "zh" ? cvFileZh : cvFile;
 
-    useEffect(() => {
-        if (!showWechatModal) return;
-        const handleScroll = () => setShowWechatModal(false);
-        window.addEventListener("wheel", handleScroll);
-        window.addEventListener("touchmove", handleScroll);
-        return () => {
-            window.removeEventListener("wheel", handleScroll);
-            window.removeEventListener("touchmove", handleScroll);
-        };
-    }, [showWechatModal]);
+    useCloseOnWindowScroll(showWechatModal, () => setShowWechatModal(false));
 
 
 

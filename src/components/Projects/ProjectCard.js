@@ -27,7 +27,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
         return (
             <Card className="project-card-list-view">
                 <div className="project-card-list-view__image-container">
-                    <Card.Img src={imgPath} alt="Project preview" className="project-card-list-view__image" />
+                    <Card.Img src={imgPath} alt="Project preview" className="project-card-list-view__image" loading="lazy" decoding="async" />
                 </div>
                 <div className="project-card-list-view__content">
                     <Card.Title className="project-card-list-view__title">{localizedTitle}</Card.Title>
@@ -63,7 +63,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
         <div className="project-card-wrapper">
             <Card className="project-card-grid-view">
                 <div className="project-card__image-container">
-                    <Card.Img variant="top" src={imgPath} alt="Project preview" className="project-card__image" />
+                    <Card.Img variant="top" src={imgPath} alt="Project preview" className="project-card__image" loading="lazy" decoding="async" />
                 </div>
                 <div className="project-card__overlay">
                     <div className="project-card__type-container">
@@ -109,4 +109,4 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
     );
 };
 
-export default ProjectCard;
+export default React.memo(ProjectCard);

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Modal } from "react-bootstrap";
 import { AiFillGithub } from "react-icons/ai";
 import { SiBilibili } from "react-icons/si";
 import { FaLinkedinIn, FaWeixin, FaEnvelope } from "react-icons/fa";
 import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
 import { useLanguage } from "../../context/LanguageContext";
+import { useCloseOnWindowScroll } from "../../hooks/useCloseOnWindowScroll";
 
 const Footer = () => {
   const year =  new Date().getFullYear();
@@ -22,16 +23,7 @@ const Footer = () => {
       email: "zyt680129@gmail.com"
     };
 
-  useEffect(() => {
-    if (!showWechatModal) return;
-    const handleScroll = () => setShowWechatModal(false);
-    window.addEventListener("wheel", handleScroll);
-    window.addEventListener("touchmove", handleScroll);
-    return () => {
-      window.removeEventListener("wheel", handleScroll);
-      window.removeEventListener("touchmove", handleScroll);
-    };
-  }, [showWechatModal]);
+  useCloseOnWindowScroll(showWechatModal, () => setShowWechatModal(false));
 
   const socialLinks = [
     { href: "https://github.com/Magicherry", icon: <AiFillGithub />, ariaLabel: "GitHub" },
@@ -97,4 +89,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default React.memo(Footer);

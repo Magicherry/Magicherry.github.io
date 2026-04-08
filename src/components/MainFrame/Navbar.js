@@ -20,6 +20,7 @@ import wechatQrCode from "../../Assets/about/social/Wechat.jpg";
 import cvFile from "../../Assets/cv/Yuting_Zhou_CV.pdf";
 import cvFileZh from "../../Assets/cv/Yuting_Zhou_CV_zh.pdf";
 import { useLanguage } from "../../context/LanguageContext";
+import { useCloseOnWindowScroll } from "../../hooks/useCloseOnWindowScroll";
 
 const NAV_ITEMS = {
   en: [
@@ -56,20 +57,28 @@ function useNavMode() {
     }
   }, [isSideNavVisible]);
 
-  // Auto-disable on small screens
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const handleResize = () => {
-      if (window.innerWidth < 992 && isSideNavVisible) {
+
+    const mediaQuery = window.matchMedia("(max-width: 991.98px)");
+    const handleBreakpointChange = (event) => {
+      if (event.matches) {
         setIsSideNavVisible(false);
         if (window.localStorage) {
           window.localStorage.setItem("navMode", "top");
         }
       }
     };
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
+
+    handleBreakpointChange(mediaQuery);
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", handleBreakpointChange);
+      return () => mediaQuery.removeEventListener("change", handleBreakpointChange);
+    }
+
+    mediaQuery.addListener(handleBreakpointChange);
+    return () => mediaQuery.removeListener(handleBreakpointChange);
   }, [isSideNavVisible]);
 
   const toggleSideNav = useCallback(() => {
@@ -87,60 +96,51 @@ function useNavMode() {
 
 function useScrollHideNav({ isExpanded, setIsExpanded }) {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isTopNavHidden, setIsTopNavHidden] = useState(false);
-  const [isBottomNavHidden, setIsBottomNavHidden] = useState(false);
-  const lastScrollYRef = useRef(0);
-  const scrollTimeoutRef = useRef(null);
+  const isExpandedRef = useRef(isExpanded);
+  const isScrolledRef = useRef(false);
+
+  useEffect(() => {
+    isExpandedRef.current = isExpanded;
+  }, [isExpanded]);
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
 
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const atBottom = window.innerHeight + scrollY >= document.body.offsetHeight - 10;
-      const isMobile = window.innerWidth < 992;
-      setIsScrolled(scrollY >= 20);
+    let rafId = null;
 
-      if (isExpanded) {
-        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-        scrollTimeoutRef.current = setTimeout(() => setIsExpanded(false), 0);
+    const updateOnScroll = () => {
+      rafId = null;
+
+      const nextIsScrolled = window.scrollY >= 20;
+
+      if (isScrolledRef.current !== nextIsScrolled) {
+        isScrolledRef.current = nextIsScrolled;
+        setIsScrolled(nextIsScrolled);
       }
 
-      const isScrollingDown = scrollY > lastScrollYRef.current;
-      if (isMobile) {
-        setIsTopNavHidden(false);
-      } else {
-        setIsTopNavHidden(false);
+      if (isExpandedRef.current) {
+        setIsExpanded(false);
       }
-
-      if (atBottom) {
-        setIsBottomNavHidden(false);
-      } else if (isScrollingDown && scrollY > 80) {
-        setIsBottomNavHidden(false); // Changed to false to keep it always visible
-      } else {
-        setIsBottomNavHidden(false);
-      }
-
-      lastScrollYRef.current = scrollY;
     };
 
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      if (rafId === null) {
+        rafId = window.requestAnimationFrame(updateOnScroll);
+      }
+    };
+
+    updateOnScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
     };
-  }, [isExpanded, setIsExpanded]);
+  }, [setIsExpanded]);
 
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    if (isBottomNavHidden) {
-      document.body.classList.add("bottom-nav-is-hidden");
-    } else {
-      document.body.classList.remove("bottom-nav-is-hidden");
-    }
-  }, [isBottomNavHidden]);
-
-  return { isScrolled, isTopNavHidden, isBottomNavHidden };
+  return { isScrolled, isTopNavHidden: false, isBottomNavHidden: false };
 }
 
 function NavLinks({ items, linkClassName, iconClassName, onClick, navItemClassName, navLinkProps = {}, hideIcon = false }) {
@@ -212,7 +212,6 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
   const [pillPosition, setPillPosition] = useState(0);
   const [isPillVisible, setIsPillVisible] = useState(true);
   const navContainerRef = useRef(null);
-  const pillRef = useRef(null);
   const navbarRef = useRef(null);
   
   // Calculate the pill position
@@ -227,53 +226,33 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
       const containerWidth = navContainerRef.current.clientWidth - (padding * 2);
       const itemWidth = containerWidth / navItems.length;
       const newPosition = padding + (currentIndex * itemWidth) + (itemWidth / 2);
-      setPillPosition(newPosition);
+      setPillPosition((previousPosition) => (
+        previousPosition === newPosition ? previousPosition : newPosition
+      ));
       setIsPillVisible(true);
     } else {
       setIsPillVisible(false);
     }
   }, [location.pathname, navItems]);
 
-  // Update the pill position based on the route
   useEffect(() => {
     calculatePillPosition();
-  }, [calculatePillPosition, location.pathname]);
-
-  // Watch window size and keep the pill aligned
-  useEffect(() => {
-    const handleResize = () => {
-      // Use a timeout so the DOM finishes updating
-      setTimeout(calculatePillPosition, 10);
-    };
-
-    window.addEventListener('resize', handleResize);
-    // Track orientation changes on mobile
-    window.addEventListener('orientationchange', handleResize);
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleResize);
-    };
   }, [calculatePillPosition]);
 
-  // Use ResizeObserver for precise container sizing
   useEffect(() => {
     if (!navContainerRef.current) return;
 
-    let resizeTimeout;
     const resizeObserver = new ResizeObserver((entries) => {
-      // Debounce to avoid frequent updates
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
+      const entry = entries[0];
+      if (entry?.contentRect.width) {
         calculatePillPosition();
-      }, 100);
+      }
     });
 
     resizeObserver.observe(navContainerRef.current);
 
     return () => {
       resizeObserver.disconnect();
-      clearTimeout(resizeTimeout);
     };
   }, [calculatePillPosition]);
 
@@ -286,16 +265,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
     }
   }, [isSideNavVisible]);
 
-  useEffect(() => {
-    if (!showWechatModal) return;
-    const handleScroll = () => setShowWechatModal(false);
-    window.addEventListener("wheel", handleScroll);
-    window.addEventListener("touchmove", handleScroll);
-    return () => {
-      window.removeEventListener("wheel", handleScroll);
-      window.removeEventListener("touchmove", handleScroll);
-    };
-  }, [showWechatModal]);
+  useCloseOnWindowScroll(showWechatModal, () => setShowWechatModal(false));
 
   const closeNavbar = () => setIsExpanded(false);
 
@@ -573,7 +543,6 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
                 transform: 'translateX(-50%)',
                 opacity: isPillVisible ? 1 : 0
               }}
-              ref={pillRef}
             />
             
               <Nav className="main-nav">
@@ -601,4 +570,4 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
   );
 }
 
-export default NavBar;
+export default React.memo(NavBar);

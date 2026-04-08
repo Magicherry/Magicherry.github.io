@@ -52,6 +52,7 @@ function subscribeToSystemThemeChanges(onChange) {
 function App() {
   const [load, upadateLoad] = useState(true);
   const preloaderTimerRef = useRef(null);
+  const themeTransitionTimerRef = useRef(null);
   const { value: theme, setManualValue: setManualTheme } = useTimedAutoPreference({
     storageKey: THEME_STORAGE_KEY,
     getAutoValue: getSystemTheme,
@@ -74,10 +75,16 @@ function App() {
   }, [load]);
 
   const toggleTheme = useCallback(() => {
-    document.documentElement.classList.add('theme-transition');
+    document.documentElement.classList.add("theme-transition");
     setManualTheme(theme === "dark" ? "light" : "dark");
-    setTimeout(() => {
-      document.documentElement.classList.remove('theme-transition');
+
+    if (themeTransitionTimerRef.current) {
+      clearTimeout(themeTransitionTimerRef.current);
+    }
+
+    themeTransitionTimerRef.current = setTimeout(() => {
+      document.documentElement.classList.remove("theme-transition");
+      themeTransitionTimerRef.current = null;
     }, 400);
   }, [setManualTheme, theme]);
 
@@ -98,6 +105,8 @@ function App() {
 
   // Mouse glow limited to nav panels and buttons (no background bleed)
   useEffect(() => {
+    if (typeof document === "undefined") return undefined;
+
     const selector = [
       ".floating-nav-link",
       ".floating-nav-icon-btn",
@@ -113,7 +122,103 @@ function App() {
     const targets = Array.from(document.querySelectorAll(selector)).filter(
       (el) => !el.closest(".footer")
     );
-    const overlays = new WeakMap();
+    const targetSet = new Set(targets);
+    const overlays = new Map();
+    let activeTarget = null;
+    let activeRect = null;
+    let rafId = null;
+    let pendingClientX = 0;
+    let pendingClientY = 0;
+    let pendingTarget = null;
+
+    const getRecord = (target) => overlays.get(target);
+    const clearFadeTimer = (target) => {
+      const record = getRecord(target);
+      if (record?.fadeTimer) {
+        clearTimeout(record.fadeTimer);
+        record.fadeTimer = null;
+      }
+    };
+    const hideGlow = (target) => {
+      const record = target ? getRecord(target) : null;
+
+      if (record?.overlay) {
+        record.overlay.classList.remove("visible");
+      }
+
+      clearFadeTimer(target);
+
+      if (activeTarget === target) {
+        activeTarget = null;
+        activeRect = null;
+      }
+    };
+
+    const setActiveTarget = (nextTarget) => {
+      if (activeTarget === nextTarget) {
+        return;
+      }
+
+      if (activeTarget) {
+        hideGlow(activeTarget);
+      }
+
+      activeTarget = nextTarget;
+      activeRect = nextTarget ? nextTarget.getBoundingClientRect() : null;
+    };
+
+    const flushPointerUpdate = () => {
+      rafId = null;
+
+      if (!pendingTarget) {
+        if (activeTarget) {
+          hideGlow(activeTarget);
+        }
+        return;
+      }
+
+      if (activeTarget !== pendingTarget || !activeRect) {
+        setActiveTarget(pendingTarget);
+      }
+
+      const record = getRecord(pendingTarget);
+      const rect = activeRect;
+
+      if (!record?.overlay || !rect || rect.width === 0 || rect.height === 0) {
+        return;
+      }
+
+      const x = ((pendingClientX - rect.left) / rect.width) * 100;
+      const y = ((pendingClientY - rect.top) / rect.height) * 100;
+
+      record.overlay.style.setProperty("--glow-x", `${x}%`);
+      record.overlay.style.setProperty("--glow-y", `${y}%`);
+      record.overlay.classList.add("visible");
+    };
+
+    const schedulePointerUpdate = (nextTarget, clientX, clientY) => {
+      pendingTarget = nextTarget;
+      pendingClientX = clientX;
+      pendingClientY = clientY;
+
+      if (rafId === null) {
+        rafId = window.requestAnimationFrame(flushPointerUpdate);
+      }
+    };
+
+    const resolveTarget = (startTarget) => {
+      if (!(startTarget instanceof Element)) {
+        return null;
+      }
+
+      const matchedTarget = startTarget.closest(selector);
+
+      if (!matchedTarget || matchedTarget.closest(".footer") || !targetSet.has(matchedTarget)) {
+        return null;
+      }
+
+      return matchedTarget;
+    };
 
     targets.forEach((el) => {
       // Ensure positioning context for absolute overlay
@@ -125,65 +230,79 @@ function App() {
       const overlay = document.createElement("div");
       overlay.className = "mouse-glow-local";
       el.appendChild(overlay);
-      overlays.set(el, overlay);
-
-      const setGlowPosition = (clientX, clientY) => {
-        const rect = el.getBoundingClientRect();
-        const x = ((clientX - rect.left) / rect.width) * 100;
-        const y = ((clientY - rect.top) / rect.height) * 100;
-        overlay.style.setProperty("--glow-x", `${x}%`);
-        overlay.style.setProperty("--glow-y", `${y}%`);
-        overlay.classList.add("visible");
-      };
-
-      const handleMove = (event) => {
-        setGlowPosition(event.clientX, event.clientY);
-      };
-
-      const handleLeave = () => {
-        overlay.classList.remove("visible");
-      };
-
-      const handleTouchStart = (event) => {
-        const touch = event.touches?.[0];
-        if (!touch) return;
-        setGlowPosition(touch.clientX, touch.clientY);
-
-        // Instant feedback on touch, auto fade
-        const record = overlays.get(el) || {};
-        if (record.fadeTimer) clearTimeout(record.fadeTimer);
-        const fadeTimer = setTimeout(() => {
-          overlay.classList.remove("visible");
-        }, 220);
-        overlays.set(el, { ...record, fadeTimer, overlay, handleMove, handleLeave, handleTouchStart });
-      };
-
-      const handleTouchEnd = () => {
-        overlay.classList.remove("visible");
-      };
-
-      const handleTouchCancel = handleTouchEnd;
-
-      el.addEventListener("mousemove", handleMove);
-      el.addEventListener("mouseleave", handleLeave);
-      el.addEventListener("touchstart", handleTouchStart, { passive: true });
-      el.addEventListener("touchend", handleTouchEnd, { passive: true });
-      el.addEventListener("touchcancel", handleTouchCancel, { passive: true });
-
-      // Store listeners for cleanup
-      overlays.set(el, { overlay, handleMove, handleLeave, handleTouchStart, handleTouchEnd, handleTouchCancel, fadeTimer: null });
+      overlays.set(el, { overlay, fadeTimer: null });
     });
 
+    const handleMouseMove = (event) => {
+      const target = resolveTarget(event.target);
+
+      if (!target) {
+        schedulePointerUpdate(null, 0, 0);
+        return;
+      }
+
+      schedulePointerUpdate(target, event.clientX, event.clientY);
+    };
+
+    const handleMouseOutDocument = (event) => {
+      if (event.relatedTarget === null) {
+        schedulePointerUpdate(null, 0, 0);
+      }
+    };
+
+    const handleWindowBlur = () => {
+      schedulePointerUpdate(null, 0, 0);
+    };
+
+    const handleTouchStart = (event) => {
+      const touch = event.touches?.[0];
+      const target = resolveTarget(event.target);
+
+      if (!touch || !target) {
+        return;
+      }
+
+      const record = getRecord(target);
+
+      clearFadeTimer(target);
+      schedulePointerUpdate(target, touch.clientX, touch.clientY);
+
+      if (record) {
+        record.fadeTimer = setTimeout(() => {
+          hideGlow(target);
+        }, 220);
+      }
+    };
+
+    const handleTouchEnd = () => {
+      if (activeTarget) {
+        hideGlow(activeTarget);
+      }
+    };
+
+    document.addEventListener("mousemove", handleMouseMove, { passive: true });
+    document.addEventListener("mouseout", handleMouseOutDocument);
+    document.addEventListener("touchstart", handleTouchStart, { passive: true });
+    document.addEventListener("touchend", handleTouchEnd, { passive: true });
+    document.addEventListener("touchcancel", handleTouchEnd, { passive: true });
+    window.addEventListener("blur", handleWindowBlur);
+
     return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseout", handleMouseOutDocument);
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchend", handleTouchEnd);
+      document.removeEventListener("touchcancel", handleTouchEnd);
+      window.removeEventListener("blur", handleWindowBlur);
+
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+      }
+
       targets.forEach((el) => {
-        const record = overlays.get(el);
+        const record = getRecord(el);
         if (record) {
-          const { overlay, handleMove, handleLeave, handleTouchStart, handleTouchEnd, handleTouchCancel, fadeTimer } = record;
-          el.removeEventListener("mousemove", handleMove);
-          el.removeEventListener("mouseleave", handleLeave);
-          el.removeEventListener("touchstart", handleTouchStart);
-          el.removeEventListener("touchend", handleTouchEnd);
-          el.removeEventListener("touchcancel", handleTouchCancel);
+          const { overlay, fadeTimer } = record;
           if (fadeTimer) clearTimeout(fadeTimer);
           if (overlay && overlay.parentNode === el) {
             el.removeChild(overlay);
@@ -207,11 +326,14 @@ function App() {
       if (preloaderTimerRef.current) {
         clearTimeout(preloaderTimerRef.current);
       }
+      if (themeTransitionTimerRef.current) {
+        clearTimeout(themeTransitionTimerRef.current);
+      }
     };
   }, []);
 
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <LanguageProvider>
         <Preloader load={load} />
         <div className="App" id={load ? "no-scroll" : "scroll"}>

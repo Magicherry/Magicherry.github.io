@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const DEFAULT_TTL_MS = 1000 * 60 * 60 * 24;
 
@@ -47,43 +47,56 @@ export function useTimedAutoPreference({
   ttlMs = DEFAULT_TTL_MS,
   subscribeToAutoChanges,
 }) {
-  const getResolvedValue = () => {
+  const getResolvedValue = useCallback(() => {
     const stored = readStoredOverride(storageKey, isValid);
     return stored ? stored.value : getAutoValue();
-  };
+  }, [getAutoValue, isValid, storageKey]);
 
   const [value, setValue] = useState(getResolvedValue);
+  const [isAutoMode, setIsAutoMode] = useState(() => !readStoredOverride(storageKey, isValid));
   const expiryTimerRef = useRef(null);
 
+  const clearExpiryTimer = useCallback(() => {
+    if (expiryTimerRef.current) {
+      clearTimeout(expiryTimerRef.current);
+      expiryTimerRef.current = null;
+    }
+  }, []);
+
+  const setAutoValue = useCallback(() => {
+    clearStoredOverride(storageKey);
+    setValue(getAutoValue());
+    setIsAutoMode(true);
+  }, [getAutoValue, storageKey]);
+
+  const scheduleExpiry = useCallback((expiresAt) => {
+    clearExpiryTimer();
+
+    if (!expiresAt || typeof window === "undefined") {
+      return;
+    }
+
+    const delay = Math.max(expiresAt - Date.now(), 0);
+    expiryTimerRef.current = window.setTimeout(() => {
+      setAutoValue();
+      expiryTimerRef.current = null;
+    }, delay);
+  }, [clearExpiryTimer, setAutoValue]);
+
+  const syncFromSource = useCallback(() => {
+    const stored = readStoredOverride(storageKey, isValid);
+
+    if (stored) {
+      setValue(stored.value);
+      setIsAutoMode(false);
+      return stored.expiresAt;
+    }
+
+    setAutoValue();
+    return null;
+  }, [isValid, setAutoValue, storageKey]);
+
   useEffect(() => {
-    const syncFromSource = () => {
-      const stored = readStoredOverride(storageKey, isValid);
-      if (stored) {
-        setValue(stored.value);
-        return stored.expiresAt;
-      }
-
-      clearStoredOverride(storageKey);
-      setValue(getAutoValue());
-      return null;
-    };
-
-    const scheduleExpiry = (expiresAt) => {
-      if (expiryTimerRef.current) {
-        clearTimeout(expiryTimerRef.current);
-        expiryTimerRef.current = null;
-      }
-
-      if (!expiresAt) return;
-
-      const delay = Math.max(expiresAt - Date.now(), 0);
-      expiryTimerRef.current = window.setTimeout(() => {
-        clearStoredOverride(storageKey);
-        setValue(getAutoValue());
-        expiryTimerRef.current = null;
-      }, delay);
-    };
-
     const expiresAt = syncFromSource();
     scheduleExpiry(expiresAt);
 
@@ -109,36 +122,22 @@ export function useTimedAutoPreference({
       if (typeof unsubscribeAutoChanges === "function") {
         unsubscribeAutoChanges();
       }
-      if (expiryTimerRef.current) {
-        clearTimeout(expiryTimerRef.current);
-        expiryTimerRef.current = null;
-      }
+      clearExpiryTimer();
     };
-  }, [getAutoValue, isValid, storageKey, subscribeToAutoChanges]);
+  }, [clearExpiryTimer, scheduleExpiry, subscribeToAutoChanges, syncFromSource]);
 
-  const setManualValue = (nextValue) => {
+  const setManualValue = useCallback((nextValue) => {
     if (!isValid(nextValue)) return;
+
     const expiresAt = writeStoredOverride(storageKey, nextValue, ttlMs);
     setValue(nextValue);
-
-    if (expiryTimerRef.current) {
-      clearTimeout(expiryTimerRef.current);
-      expiryTimerRef.current = null;
-    }
-
-    if (expiresAt) {
-      const delay = Math.max(expiresAt - Date.now(), 0);
-      expiryTimerRef.current = window.setTimeout(() => {
-        clearStoredOverride(storageKey);
-        setValue(getAutoValue());
-        expiryTimerRef.current = null;
-      }, delay);
-    }
-  };
+    setIsAutoMode(false);
+    scheduleExpiry(expiresAt);
+  }, [isValid, scheduleExpiry, storageKey, ttlMs]);
 
   return {
     value,
     setManualValue,
-    isAutoMode: !readStoredOverride(storageKey, isValid),
+    isAutoMode,
   };
 }
