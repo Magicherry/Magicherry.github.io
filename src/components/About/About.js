@@ -28,7 +28,7 @@ function About() {
       <Container >
         <Row className="about__row">
           <Col
-            md={7}
+            lg={7}
             className="about__content-col"
           >
             <h1 className="about__title">
@@ -37,7 +37,7 @@ function About() {
             <Aboutcard />
           </Col>
           <Col
-            md={5}
+            lg={5}
             className="about__image-col about-img"
           >
             <img

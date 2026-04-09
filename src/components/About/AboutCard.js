@@ -51,7 +51,7 @@ const AboutCard = () => {
               </li>
             ))}
           </ul>
-          <ul>
+          <ul className="about-card__activities">
             {activities.map((activity, index) => (
               <li className="about-activity" key={index}>
                 <ImPointRight /> {activity}

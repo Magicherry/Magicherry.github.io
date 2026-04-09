@@ -1894,7 +1894,7 @@ body.homepage .home-about-section {
     max-width: 260px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
     .home__image-col {
         justify-content: center;
         padding-right: 15px;
@@ -2934,6 +2934,11 @@ body.homepage .home-about-section {
     text-align: left;
 }
 
+.about-card__activities {
+    margin: 18px 0 0;
+    padding-left: 0;
+}
+
 .about-card__highlight {
     position: relative;
     padding-left: 0;
@@ -2967,8 +2972,7 @@ body.homepage .home-about-section {
 }
 
 .tech-stack__row {
-    /* justify-content: flex-start; */
-    justify-content: center;
+    justify-content: flex-start;
     padding-bottom: 50px;
     row-gap: 12px;
 }
@@ -3082,6 +3086,10 @@ body.homepage .home-about-section {
 
 
 @media (max-width: 767px) {
+    .tech-stack__row {
+        justify-content: flex-start;
+    }
+
     .tech-icons {
         margin: 6px !important;
         padding: 10px 8px !important;
@@ -3133,6 +3141,67 @@ body.homepage .home-about-section {
     list-style: none !important;
     text-align: left !important;
     padding-left: 1px !important;
+}
+
+@media (max-width: 991px) {
+    .about__row {
+        padding: 0;
+        row-gap: 36px;
+    }
+
+    .about__content-col {
+        padding-top: 16px;
+        padding-bottom: 30px;
+    }
+
+    .about__title {
+        text-align: center;
+        padding-bottom: 16px;
+    }
+
+    .about__image-col,
+    .about-img {
+        padding-top: 28px !important;
+        padding-bottom: 44px !important;
+        text-align: center;
+    }
+
+    .quote-card-view {
+        max-width: 720px;
+        margin: 0 auto;
+    }
+
+    .about__content-col .quote-card-view {
+        margin-bottom: 12px;
+    }
+
+    .quote-card-view .card-body {
+        padding: 0 12px !important;
+    }
+
+    .about-card__highlights {
+        margin-bottom: 16px;
+    }
+
+    .about-card__highlight {
+        margin-bottom: 12px;
+    }
+
+    .about-card__activities {
+        margin-top: 14px;
+    }
+
+    .about-activity {
+        margin-bottom: 10px;
+    }
+
+    .about-card__quote {
+        margin-top: 28px;
+    }
+
+    .about__row + .project-heading {
+        padding-top: 28px !important;
+    }
 }
 
 @media (max-width: 767px) {

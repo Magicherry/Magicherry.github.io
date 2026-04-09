@@ -23,14 +23,14 @@ function Home2() {
                     <br /><br />
                     目前我尤其关注<b className="text-accent">机器学习系统</b>、<b className="text-accent">数据驱动的产品形态</b>，以及能够真正落地的<b className="text-accent">工程实践</b>。我乐于把分析、建模与业务打通，沉淀为稳定、清晰、可持续演进的软件体验。
                     <br /><br />
-                    在技术栈上，我既能做<b className="text-accent">干净、响应迅速的前端界面</b>，也能搭建可靠的<b className="text-accent">后端服务</b>。我对<b className="text-accent">数据库设计、API 设计、数据处理流程，以及可扩展的容器化部署</b>都有持续的实践积累。
+                    在技术栈上，我既参与<b className="text-accent">简洁、响应迅速的前端界面开发</b>，也能搭建<b className="text-accent">稳定可靠的后端服务</b>。在<b className="text-accent">数据库设计、API 设计、数据处理流程，以及容器化部署</b>方面，我都有持续的实践积累。
                     <br /><br />
                     我希望自己做出的东西不仅“能跑”，还应该<b className="text-accent">足够流畅、便于维护、对人友好</b>。如果一个系统既在技术上经得起推敲，用起来又自然顺手，那便是我追求的最理想目标。
                 </>
             ),
             downloadCv: "下载简历",
             findMe: "联系我",
-            connect: <>欢迎通过下面这些平台和我<span className="text-accent">保持联系</span></>,
+            connect: <>欢迎通过以下平台与我 <span className="text-accent">联系或交流</span></>,
             avatarAlt: "头像",
             wechatQrAlt: "微信二维码"
         }
@@ -42,7 +42,7 @@ function Home2() {
                     <br /><br />
                     I am especially interested in <b className="text-accent">ML systems</b> and <b className="text-accent">data-driven products</b> that turn insights into reliable, practical software.
                     <br /><br />
-                    I work across the stack, from crafting <b className="text-accent">clean, responsive interfaces</b> to building dependable <b className="text-accent">back-end services</b>. I am comfortable with <b className="text-accent">databases, API design, and containerized deployments that scale</b>.
+                    I work across the stack, from crafting <b className="text-accent">clean, responsive interfaces</b> to building <b className="text-accent">dependable back-end services</b>. I am comfortable with <b className="text-accent">databases, API design, and containerized deployments that scale</b>.
                     <br /><br />
                     Whenever possible, I strive to turn ideas into products that are <b className="text-accent">fast, maintainable, and a joy</b> to use.
                 </>
@@ -90,7 +90,7 @@ function Home2() {
         <Container fluid className="home-about-section" id="about">
             <Container>
                 <Row className="align-items-center">
-                    <Col md={8} className="home-about-description">
+                    <Col lg={8} className="home-about-description">
                         <h1 className="home-about__title">
                             {copy.title}
                         </h1>
@@ -98,7 +98,7 @@ function Home2() {
                             {copy.body}
                         </p>
                     </Col>
-                    <Col md={4} className="home-avatar">
+                    <Col lg={4} className="home-avatar">
                         <div className="home-avatar-wrapper">
                             <Tilt>
                                 <img

@@ -22,6 +22,7 @@ const techStackIcons = [
 
     // Databases
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" alt="MySQL" style={{ width: "1em", height: "1em", filter: "brightness(1.8) contrast(1.2)" }} />, name: "MySQL", link: "https://www.mysql.com/" },
+    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" alt="PostgreSQL" style={{ width: "1em", height: "1em" }} />, name: "PostgreSQL", link: "https://www.postgresql.org/" },
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" alt="MongoDB" style={{ width: "1em", height: "1em",filter: "brightness(1.2) contrast(1.0)"}} />, name: "MongoDB", link: "https://www.mongodb.com/" },
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redis/redis-original.svg" alt="Redis" style={{ width: "1em", height: "1em" }} />, name: "Redis", link: "https://redis.io/" },
 
