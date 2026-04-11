@@ -732,6 +732,12 @@ button:focus {
     height: 100vh;
 }
 
+/* Keep the full app tree hidden until the splash is dismissed to avoid first-paint text flashes. */
+.App.app-loading {
+    visibility: hidden;
+    pointer-events: none;
+}
+
 /* While preloader is up: hide duplicate “logo” text (nav brand + home hero) to avoid a flash when it fades */
 body.preloader-active .navbar-brand-text,
 body.preloader-active .home-hero-name {

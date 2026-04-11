@@ -336,7 +336,7 @@ function App() {
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <LanguageProvider>
         <Preloader load={load} />
-        <div className="App" id={load ? "no-scroll" : "scroll"}>
+        <div className={`App ${load ? "app-loading" : ""}`} id={load ? "no-scroll" : "scroll"}>
           <div className="app-top-blur" aria-hidden="true" />
           <Navbar triggerPreloader={triggerPreloader} theme={theme} toggleTheme={toggleTheme} />
           <Particle theme={theme} />
