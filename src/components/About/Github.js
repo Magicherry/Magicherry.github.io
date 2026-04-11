@@ -3,10 +3,36 @@ import { GitHubCalendar } from "react-github-calendar";
 import { Row } from "react-bootstrap";
 import { useLanguage } from "../../context/LanguageContext";
 
+const CALENDAR_LABELS = {
+  zh: {
+    months: [
+      "1月",
+      "2月",
+      "3月",
+      "4月",
+      "5月",
+      "6月",
+      "7月",
+      "8月",
+      "9月",
+      "10月",
+      "11月",
+      "12月",
+    ],
+    weekdays: ["日", "一", "二", "三", "四", "五", "六"],
+    totalCount: "去年累计提交了 {{count}} 次贡献",
+    legend: {
+      less: "较少",
+      more: "较多",
+    },
+  },
+};
+
 function Github({ theme }) {
   const { locale } = useLanguage();
   const colorScheme = theme === "light" ? "light" : "dark";
   const [calendarRoot, setCalendarRoot] = useState(null);
+  const labels = CALENDAR_LABELS[locale];
 
   useEffect(() => {
     if (!calendarRoot) {
@@ -71,6 +97,7 @@ function Github({ theme }) {
         blockMargin={5}
         colorScheme={colorScheme}
         fontSize={16}
+        labels={labels}
         theme={{
           light: ["#e5e7eb", "#22d3ee", "#06b6d4", "#0891b2", "#0e7490"],
           dark: ["#21262d", "#0e7490", "#0891b2", "#06b6d4", "#22d3ee"],

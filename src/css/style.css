@@ -2977,6 +2977,28 @@ body.homepage .home-about-section {
     padding-bottom: 20px;
 }
 
+.github__row .react-activity-calendar__scroll-container {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-bg-thumb) transparent;
+}
+
+.github__row .react-activity-calendar__scroll-container::-webkit-scrollbar {
+    height: 5px;
+}
+
+.github__row .react-activity-calendar__scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.github__row .react-activity-calendar__scroll-container::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-bg-thumb);
+    border-radius: 999px;
+}
+
+.github__row .react-activity-calendar__scroll-container::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-bg-thumb-hover);
+}
+
 .tech-stack__row {
     justify-content: flex-start;
     padding-bottom: 50px;
