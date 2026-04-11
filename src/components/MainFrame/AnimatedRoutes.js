@@ -43,7 +43,7 @@ const AnimatedPage = ({ children }) => {
   );
 };
 
-const AnimatedRoutes = () => {
+const AnimatedRoutes = ({ theme }) => {
   const location = useLocation();
 
   return (
@@ -52,7 +52,7 @@ const AnimatedRoutes = () => {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
           <Route path="/project" element={<AnimatedPage><Projects /></AnimatedPage>} />
-          <Route path="/about" element={<AnimatedPage><About /></AnimatedPage>} />
+          <Route path="/about" element={<AnimatedPage><About theme={theme} /></AnimatedPage>} />
           <Route path="/resume" element={<AnimatedPage><Resume /></AnimatedPage>} />
           <Route path="/experiences" element={<AnimatedPage><Experiences /></AnimatedPage>} />
           <Route path="*" element={<Navigate to="/" />} />

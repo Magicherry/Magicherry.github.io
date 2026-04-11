@@ -4,10 +4,10 @@
 </h2>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/React-18.3.1-0f172a?logo=react&logoColor=61DAFB">
+  <img src="https://img.shields.io/badge/React-19.2.1-0f172a?logo=react&logoColor=61DAFB">
   <img src="https://img.shields.io/badge/HTML5-Standard-0f172a?logo=html5&logoColor=E34F26">
   <img src="https://img.shields.io/badge/JavaScript-ES2023-0f172a?logo=javascript&logoColor=F7DF1E">
-  <img src="https://img.shields.io/badge/Node.js-20.x-0f172a?logo=nodedotjs&logoColor=3C873A">
+  <img src="https://img.shields.io/badge/Node.js-20.16%2B-0f172a?logo=nodedotjs&logoColor=3C873A">
   <img src="https://img.shields.io/badge/Vercel-Analytics-0f172a?logo=vercel&logoColor=white">
 </p>
 
@@ -41,7 +41,7 @@ Whether viewed on a desktop or a mobile device, the portfolio adapts seamlesslyâ
 
 ### Content
 
-- **Modern Tech Stack**: Built with React 18, React Router v6, and Bootstrap 5.
+- **Modern Tech Stack**: Built with React 19, React Router v6, and Bootstrap 5.
 - **Project Showcase**: Redesigned Projects section with tag filtering and flexible List/Grid layout toggles.
 - **Professional Tracks**: Dedicated experience timeline using `react-vertical-timeline-component`.
 - **Integrated Resume**: Built-in PDF viewer using `react-pdf`, with separate Chinese and English resume files.
@@ -52,9 +52,11 @@ Whether viewed on a desktop or a mobile device, the portfolio adapts seamlesslyâ
 Clone down this repository. You will need these tools installed:
 
 - `git` (for cloning)
-- `node` 20.x (LTS) and `npm` (bundled with Node)
+- `node` 20.16+ or 22.3+ and `npm` (bundled with Node)
 - Optional: `nvm` for managing Node versions
 - Optional: `vercel` CLI if you plan to deploy with Vercel
+
+> Recommended: use Node `20.16+` to avoid engine warnings from `react-pdf` / `pdfjs-dist`.
 
 ## Local Development
 

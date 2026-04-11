@@ -8,7 +8,7 @@ import laptopImg from "../../Assets/about/about.png";
 import Toolstack from "./Toolstack";
 import { useLanguage } from "../../context/LanguageContext";
 
-function About() {
+function About({ theme }) {
   const { locale } = useLanguage();
   const copy = locale === "zh"
     ? {
@@ -60,7 +60,7 @@ function About() {
         </h1>
         <Toolstack />
 
-        <Github />
+        <Github theme={theme} />
       </Container>
     </Container>
   );

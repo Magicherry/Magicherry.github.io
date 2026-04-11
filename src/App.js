@@ -342,7 +342,7 @@ function App() {
           <Particle theme={theme} />
           <ScrollToTop />
           <div className="content-wrap">
-            <AnimatedRoutes />
+            <AnimatedRoutes theme={theme} />
           </div>
           <Footer />
         </div>
