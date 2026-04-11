@@ -19,8 +19,6 @@ Whether viewed on a desktop or a mobile device, the portfolio adapts seamlesslyâ
 
 ### Previews
 
-#### Desktop
-
 | Dark Mode | Light Mode |
 | :---: | :---: |
 | ![Home (Dark Mode)](preview/DarkMode.png) | ![Home (Light Mode)](preview/LightMode.png) |
@@ -30,22 +28,26 @@ Whether viewed on a desktop or a mobile device, the portfolio adapts seamlesslyâ
 
 ## Highlights & Features
 
+### Appearance
+
 - **Dynamic Theming**: Seamless Light and Dark modes that automatically sync with system preferences, featuring smooth transitions and tailored glassmorphic effects for both themes.
-- **Modern Tech Stack**: Built with React 18, React Router v6, and Bootstrap 5.
-- **Advanced Navigation System**: 
-  - Desktop: Floating glassmorphic top pill navigation with an optional side panel.
-  - Mobile: App-like bottom navigation bar with smooth sliding pill indicators.
-- **Interactive UI/UX**: 
-  - Custom mouse glow effects on buttons and navigation elements.
-  - Scroll-triggered fade-in animations.
-  - Interactive particle background (`@tsparticles/react`).
-- **Project Showcase**: Redesigned Projects section with tag filtering and flexible List/Grid layout toggles.
-- **Professional Tracks**: Dedicated experience timeline using `react-vertical-timeline-component`.
-- **Integrated Resume**: Built-in PDF viewer using `react-pdf` for seamless resume reading.
-- **GitHub Integration**: Live GitHub contribution calendar visualization.
+- **Bilingual Experience**: Built-in Chinese and English switching with automatic browser-language detection and temporary manual override support.
 - **Responsive & Polished**: Mobile-first design with glassmorphic visuals, subtle blurs, and a clean contemporary aesthetic.
 
-## Prerequisites & Setup
+### Navigation & Interaction
+
+- **Advanced Navigation System**: Floating glassmorphic top pill navigation on desktop, with an optional side panel and an app-like bottom navigation bar on mobile.
+- **Interactive UI/UX**: Custom mouse glow effects, scroll-triggered fade-in animations, and an interactive particle background powered by `@tsparticles/react`.
+
+### Content
+
+- **Modern Tech Stack**: Built with React 18, React Router v6, and Bootstrap 5.
+- **Project Showcase**: Redesigned Projects section with tag filtering and flexible List/Grid layout toggles.
+- **Professional Tracks**: Dedicated experience timeline using `react-vertical-timeline-component`.
+- **Integrated Resume**: Built-in PDF viewer using `react-pdf`, with separate Chinese and English resume files.
+- **GitHub Integration**: Live GitHub contribution calendar visualization.
+
+## Prerequisites
 
 Clone down this repository. You will need these tools installed:
 
@@ -72,11 +74,12 @@ The page will reload if you make edits.
 
 Open the project folder and navigate to `/src/components/`.   
 
-Each section is modularized for clarity, making it easy to adjust structure, visuals, or interactions as the portfolio evolves.
+Each section is modularized for clarity, making it easy to adjust structure, visuals, copy, or interactions as the portfolio evolves.
 
-- **Data Customization**: Update your personal information, projects, and experiences in the respective data files (e.g., `src/components/Projects/ProjectData.js`).
+- **Data Customization**: Update your personal information, projects, and experiences in the respective data files (e.g., `src/components/Projects/ProjectData.js` and `src/components/Experiences/ExperienceData.js`).
+- **Localization**: Adjust language behavior in `src/context/LanguageContext.js` and update bilingual copy directly in the related components.
 - **Assets**: Replace images in the `src/Assets/` directory.
-- **Resume**: Replace `src/Assets/cv/Yuting_Zhou_CV.pdf` with your own PDF resume.
+- **Resume**: Replace `src/Assets/cv/Yuting_Zhou_CV.pdf` and `src/Assets/cv/Yuting_Zhou_CV_zh.pdf` with your own PDF resumes.
 
 ## Acknowledgements
 
@@ -88,4 +91,3 @@ Grateful to the open-source community and the following projects for inspiration
 - [React Icons](https://react-icons.github.io/react-icons)
 - [Vercel](https://vercel.com/)
 - Contributors of the original portfolio template by [Soumyajit](https://github.com/soumyajit4419/Portfolio)
-
