@@ -34,8 +34,8 @@ body {
     scroll-behavior: auto !important;
     overflow-x: hidden !important;
     max-width: 100vw !important;
-    /* Put the number font first, so digits use it, and everything else falls back to Raleway */
-    font-family: 'SystemNumbers', "Raleway", serif !important;
+    /* Keep Latin text on the current brand font stack. */
+    font-family: 'SystemNumbers', "Raleway", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: var(--surface-page) !important;
@@ -48,6 +48,11 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: scroll;
+}
+
+html:lang(zh),
+html:lang(zh) body {
+    font-family: 'SystemNumbers', "Raleway", "Source Han Sans SC", "Source Han Sans CN", "Noto Sans CJK SC", "Noto Sans SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif !important;
 }
 
 :root {

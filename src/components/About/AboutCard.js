@@ -13,7 +13,7 @@ const AboutCard = () => {
       "摄影和视频创作"
     ]
     : [
-      "Reading tech blogs",
+      "Read tech blogs & reviews",
       "Playing games",
       "Watching movies & TV",
       "Photography & videography"
