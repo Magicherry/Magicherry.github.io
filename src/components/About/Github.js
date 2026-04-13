@@ -20,7 +20,7 @@ const CALENDAR_LABELS = {
       "12月",
     ],
     weekdays: ["日", "一", "二", "三", "四", "五", "六"],
-    totalCount: "去年累计提交了 {{count}} 次贡献",
+    totalCount: "去年累计 {{count}} 次贡献",
     legend: {
       less: "较少",
       more: "较多",

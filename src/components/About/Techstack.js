@@ -31,6 +31,7 @@ const techStackIcons = [
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg" alt="Kubernetes" style={{ width: "1em", height: "1em" }} />, name: "Kubernetes", link: "https://kubernetes.io/" },
 
     // AI / ML
+    { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apachespark/apachespark-original.svg" alt="Apache Spark" style={{ width: "1em", height: "1em" }} />, name: "Apache Spark", link: "https://spark.apache.org/" },
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pytorch/pytorch-original.svg" alt="PyTorch" style={{ width: "1em", height: "1em" }} />, name: "PyTorch", link: "https://pytorch.org/" },
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow" style={{ width: "1em", height: "1em" }} />, name: "TensorFlow", link: "https://www.tensorflow.org/" },
     { icon: <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/opencv/opencv-original.svg" alt="OpenCV" style={{ width: "1em", height: "1em" }} />, name: "OpenCV", link: "https://opencv.org/" },

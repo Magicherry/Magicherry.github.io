@@ -14,7 +14,7 @@ const AboutCard = () => {
     ]
     : [
       "Read tech blogs & reviews",
-      "Playing games",
+      "Explore games & UX design",
       "Watching movies & TV",
       "Photography & videography"
     ];
