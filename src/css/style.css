@@ -1927,6 +1927,26 @@ body.homepage .home-about-section {
     }
 }
 
+@media (min-width: 992px) and (max-width: 1280px) {
+    body.side-nav-open .home-about-intro-row > .home-about-description,
+    body.side-nav-open .home-about-intro-row > .home-avatar {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    body.side-nav-open .home-about-intro-row > .home-about-description {
+        padding-right: 20px !important;
+        padding-bottom: 0 !important;
+    }
+
+    body.side-nav-open .home-about-intro-row > .home-avatar {
+        align-items: center;
+        padding-right: 15px;
+        padding-top: 2em !important;
+        padding-bottom: 2em !important;
+    }
+}
+
 .home-about-section {
     position: relative;
     padding-bottom: 70px !important;

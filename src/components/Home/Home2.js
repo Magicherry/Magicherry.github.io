@@ -89,7 +89,7 @@ function Home2() {
     return (
         <Container fluid className="home-about-section" id="about">
             <Container>
-                <Row className="align-items-center">
+                <Row className="align-items-center home-about-intro-row">
                     <Col lg={8} className="home-about-description">
                         <h1 className="home-about__title">
                             {copy.title}
