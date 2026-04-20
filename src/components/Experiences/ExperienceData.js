@@ -91,7 +91,7 @@ export const timelines = [
                 },
                 company: {
                     en: "Shanghai Spacecraft Electromechanical Equipment Co., Ltd.",
-                    zh: "上海航天机电设备设备有限公司"
+                    zh: "上海航天机电设备有限公司"
                 },
                 duration: "06/2022 - 09/2022",
                 description: {
