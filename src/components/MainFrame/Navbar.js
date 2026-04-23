@@ -337,14 +337,27 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               <span className="language-toggle-btn__divider">/</span>
               <span className={`language-toggle-btn__option ${locale === "en" ? "active" : ""}`}>EN</span>
             </button>
-            <button
-              type="button"
-              className="theme-toggle-btn mobile-topbar__btn"
-              onClick={toggleTheme}
-              aria-label={copy.toggleTheme}
-            >
-              {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
-            </button>
+            <div className="mobile-topbar__right">
+              <button
+                type="button"
+                className="theme-toggle-btn mobile-topbar__btn"
+                onClick={toggleTheme}
+                aria-label={copy.toggleTheme}
+              >
+                {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
+              </button>
+              <a
+                href="https://github.com/Magicherry/Bits-of-Me"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="github-pill-btn mobile-topbar__btn mobile-topbar__github"
+                aria-label={copy.githubRepository}
+              >
+                <AiFillStar className="star-icon" />
+                <div className="divider" />
+                <AiFillGithub className="github-icon" />
+              </a>
+            </div>
           </div>
 
           <Container className="d-none d-lg-flex align-items-center justify-content-between navbar-top-inner">

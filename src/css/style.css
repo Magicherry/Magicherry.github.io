@@ -617,9 +617,17 @@ button:focus {
 }
 
 #preloader-none {
-    opacity: 0;
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999999;
+    background-color: var(--bg-preloader);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
     pointer-events: none;
     visibility: hidden;
     transition: opacity 0.45s ease, visibility 0.45s ease;
@@ -1163,6 +1171,11 @@ body.preloader-active .home-hero-name {
     transform: translateY(-12px) scale(0.99);
     pointer-events: none;
     transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* Ensure hidden top-nav descendants cannot still receive clicks when side nav is active. */
+.navbar-floating-mode * {
+    pointer-events: none !important;
 }
 
 .floating-nav-container {
@@ -3843,6 +3856,21 @@ body.homepage .home-about-section {
 
     .mobile-topbar__btn {
         flex: 0 0 auto;
+    }
+
+    .mobile-topbar__right {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+        flex: 0 0 auto;
+        margin-left: auto;
+    }
+
+    .mobile-topbar__github {
+        height: 48px;
+        padding: 0 14px;
+        box-shadow: var(--navbar-glass-shadow-sm);
     }
 
     .mobile-topbar .theme-toggle-btn {
