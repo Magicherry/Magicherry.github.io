@@ -3847,6 +3847,7 @@ body.homepage .home-about-section {
     }
 
     .mobile-topbar {
+        --mobile-topbar-control-size: 48px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -3856,32 +3857,40 @@ body.homepage .home-about-section {
 
     .mobile-topbar__btn {
         flex: 0 0 auto;
+        height: var(--mobile-topbar-control-size);
+    }
+
+    .mobile-topbar__left {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        flex: 0 0 auto;
     }
 
     .mobile-topbar__right {
         display: inline-flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 12px;
         flex: 0 0 auto;
         margin-left: auto;
     }
 
     .mobile-topbar__github {
-        height: 48px;
+        height: var(--mobile-topbar-control-size);
         padding: 0 14px;
         box-shadow: var(--navbar-glass-shadow-sm);
     }
 
     .mobile-topbar .theme-toggle-btn {
-        width: 48px;
-        height: 48px;
+        width: var(--mobile-topbar-control-size);
+        height: var(--mobile-topbar-control-size);
         font-size: 1.2rem;
     }
 
-    .mobile-topbar__btn--language {
+    .mobile-topbar .mobile-topbar__btn--language {
         min-width: 82px;
-        height: 48px;
+        height: var(--mobile-topbar-control-size);
         padding: 0 8px;
     }
 

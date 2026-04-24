@@ -326,18 +326,18 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
             onToggle={setIsExpanded}
         >
           <div className="d-lg-none mobile-topbar">
-            <button
-              type="button"
-              className="language-toggle-btn mobile-topbar__btn mobile-topbar__btn--language"
-              onClick={toggleLocale}
-              aria-label={copy.languageToggle}
-              title={copy.languageMode}
-            >
-              <span className={`language-toggle-btn__option ${locale === "zh" ? "active" : ""}`}>中</span>
-              <span className="language-toggle-btn__divider">/</span>
-              <span className={`language-toggle-btn__option ${locale === "en" ? "active" : ""}`}>EN</span>
-            </button>
-            <div className="mobile-topbar__right">
+            <div className="mobile-topbar__left">
+              <button
+                type="button"
+                className="language-toggle-btn mobile-topbar__btn mobile-topbar__btn--language"
+                onClick={toggleLocale}
+                aria-label={copy.languageToggle}
+                title={copy.languageMode}
+              >
+                <span className={`language-toggle-btn__option ${locale === "zh" ? "active" : ""}`}>中</span>
+                <span className="language-toggle-btn__divider">/</span>
+                <span className={`language-toggle-btn__option ${locale === "en" ? "active" : ""}`}>EN</span>
+              </button>
               <button
                 type="button"
                 className="theme-toggle-btn mobile-topbar__btn"
@@ -346,6 +346,8 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               >
                 {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
               </button>
+            </div>
+            <div className="mobile-topbar__right">
               <a
                 href="https://github.com/Magicherry/Bits-of-Me"
                 target="_blank"
