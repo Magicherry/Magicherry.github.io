@@ -338,6 +338,8 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
                 <span className="language-toggle-btn__divider">/</span>
                 <span className={`language-toggle-btn__option ${locale === "en" ? "active" : ""}`}>EN</span>
               </button>
+            </div>
+            <div className="mobile-topbar__right">
               <button
                 type="button"
                 className="theme-toggle-btn mobile-topbar__btn"
@@ -346,8 +348,6 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               >
                 {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
               </button>
-            </div>
-            <div className="mobile-topbar__right">
               <a
                 href="https://github.com/Magicherry/Bits-of-Me"
                 target="_blank"
