@@ -613,7 +613,7 @@ button:focus {
     justify-content: center;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.45s ease, visibility 0.45s ease;
+    transition: opacity 0.24s ease, visibility 0.24s ease;
 }
 
 #preloader-none {
@@ -630,14 +630,14 @@ button:focus {
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
-    transition: opacity 0.45s ease, visibility 0.45s ease;
+    transition: opacity 0.24s ease, visibility 0.24s ease;
 }
 
 .preloader__inner {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    animation: preloader-soft-pulse 1.6s ease-in-out forwards;
+    animation: preloader-soft-pulse 1.5s ease-in-out forwards;
     position: relative;
     flex-direction: column;
     gap: 10px;
@@ -662,7 +662,7 @@ button:focus {
     color: var(--navbar-color-brand);
     text-shadow: 0 0 12px var(--preloader-logo-glow);
     clip-path: inset(0 100% 0 0);
-    animation: preloader-logo-reveal 1.6s ease-in-out forwards;
+    animation: preloader-logo-reveal 1.5s ease-in-out forwards;
 }
 
 .preloader__bar {
@@ -745,13 +745,11 @@ button:focus {
     height: 100vh;
 }
 
-/* Keep the full app tree hidden until the splash is dismissed to avoid first-paint text flashes. */
 .App.app-loading {
     visibility: hidden;
     pointer-events: none;
 }
 
-/* While preloader is up: hide duplicate “logo” text (nav brand + home hero) to avoid a flash when it fades */
 body.preloader-active .navbar-brand-text,
 body.preloader-active .home-hero-name {
     opacity: 0 !important;
@@ -1654,12 +1652,12 @@ a.floating-nav-contact-item:hover {
     }
 
     .footer .row {
-        transition: padding 0.35s ease;
+        transition: padding-left 0.35s ease;
+        will-change: padding-left;
     }
 
     body.side-nav-open .footer .row {
         padding-left: 320px;
-        transition: padding 0.35s ease;
     }
 }
 

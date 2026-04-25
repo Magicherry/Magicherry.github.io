@@ -16,6 +16,7 @@ import { useTimedAutoPreference } from "./hooks/useTimedAutoPreference";
 
 const THEME_STORAGE_KEY = "themePreference";
 const THEME_OVERRIDE_TTL_MS = 1000 * 60 * 60 * 24;
+const PRELOADER_DURATION_MS = 1500;
 
 function getSystemTheme() {
   if (typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
@@ -96,7 +97,7 @@ function App() {
     preloaderTimerRef.current = setTimeout(() => {
       upadateLoad(false);
       preloaderTimerRef.current = null;
-    }, 1600);
+    }, PRELOADER_DURATION_MS);
   }, []);
 
   useEffect(() => {
@@ -319,7 +320,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       upadateLoad(false);
-    }, 1600);
+    }, PRELOADER_DURATION_MS);
 
     return () => {
       clearTimeout(timer);

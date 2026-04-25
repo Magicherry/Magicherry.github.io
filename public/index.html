@@ -18,9 +18,32 @@
   <script>
     (function () {
       try {
-        var t = localStorage.getItem("theme");
-        if (t === "light" || t === "dark") {
-          document.documentElement.setAttribute("data-theme", t);
+        var storedPreference = localStorage.getItem("themePreference");
+        var storedTheme = null;
+
+        if (storedPreference) {
+          var parsedPreference = JSON.parse(storedPreference);
+          if (
+            parsedPreference &&
+            (parsedPreference.value === "light" || parsedPreference.value === "dark") &&
+            typeof parsedPreference.expiresAt === "number" &&
+            Date.now() < parsedPreference.expiresAt
+          ) {
+            storedTheme = parsedPreference.value;
+          } else {
+            localStorage.removeItem("themePreference");
+          }
+        }
+
+        if (!storedTheme) {
+          var legacyTheme = localStorage.getItem("theme");
+          if (legacyTheme === "light" || legacyTheme === "dark") {
+            storedTheme = legacyTheme;
+          }
+        }
+
+        if (storedTheme) {
+          document.documentElement.setAttribute("data-theme", storedTheme);
         } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
           document.documentElement.setAttribute("data-theme", "light");
         } else {
@@ -54,7 +77,7 @@
     content="https://raw.githubusercontent.com/soumyajit4419/Portfolio/master/Images/readme-img.png?token=AK7VCIF5RYEUZZAURELPTAC76U6AK">
 </head>
 
-<body class="preloader-active">
+<body class="homepage preloader-active">
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
 </body>

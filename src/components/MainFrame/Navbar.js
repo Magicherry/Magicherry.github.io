@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import { Navbar, Nav, Container, Modal } from "react-bootstrap";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -257,12 +257,16 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
   }, [calculatePillPosition]);
 
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isSideNavVisible) {
       document.body.classList.add("side-nav-open");
     } else {
       document.body.classList.remove("side-nav-open");
     }
+
+    return () => {
+      document.body.classList.remove("side-nav-open");
+    };
   }, [isSideNavVisible]);
 
   useCloseOnWindowScroll(showWechatModal, () => setShowWechatModal(false));
