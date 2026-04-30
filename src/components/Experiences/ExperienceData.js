@@ -1,4 +1,12 @@
-import { FaFlask, FaBriefcase, FaUsers, FaSubway } from 'react-icons/fa';
+import {
+    FaFlask,
+    FaCode,
+    FaSubway,
+    FaLaptopCode,
+    FaBug,
+    FaProjectDiagram,
+    FaRobot
+} from 'react-icons/fa';
 
 export const timelines = [
     {
@@ -51,13 +59,14 @@ export const timelines = [
             en: "Professional industry experience.",
             zh: "在真实业务环境中参与产品迭代、工程协作与功能交付的实践经历。"
         },
-        icon: FaBriefcase,
+        icon: FaLaptopCode,
         data: [
             {
                 title: {
                     en: "Front-end Engineer",
                     zh: "前端工程师实习生"
                 },
+                icon: FaLaptopCode,
                 department: {
                     en: "Frontend Performance, Real-time Systems, Vue/React",
                     zh: "前端性能优化、实时通信、Vue/React"
@@ -85,6 +94,7 @@ export const timelines = [
                     en: "Software Test Engineer",
                     zh: "软件测试工程师实习生"
                 },
+                icon: FaBug,
                 department: {
                     en: "Test Automation, CI Integration, Quality Assurance",
                     zh: "自动化测试、CI 集成、质量保障"
@@ -118,13 +128,14 @@ export const timelines = [
             en: "Leadership and community involvement.",
             zh: "课堂之外的组织协作、社团参与与持续性的团队活动经历。"
         },
-        icon: FaUsers,
+        icon: FaCode,
         data: [
             {
                 title: {
                     en: "Algorithm Competition Club",
                     zh: "算法竞赛协会"
                 },
+                icon: FaCode,
                 department: {
                     en: "Member",
                     zh: "成员"
@@ -148,6 +159,7 @@ export const timelines = [
                     en: "P.L Software Engineering Club",
                     zh: "P.L 软件工程俱乐部"
                 },
+                icon: FaProjectDiagram,
                 department: {
                     en: "Member",
                     zh: "成员"
@@ -171,6 +183,7 @@ export const timelines = [
                     en: "Robot Enthusiasts Association",
                     zh: "机器人爱好者协会"
                 },
+                icon: FaRobot,
                 department: {
                     en: "Member",
                     zh: "成员"
