@@ -4399,3 +4399,69 @@ html.theme-transition *::after {
     background: hsl(0 0% 100% / 0.5) !important;
     border-color: rgba(21, 20, 15, 0.14) !important;
 }
+
+/* Safari fallback: SVG url() backdrop filters can render as transparent, so use stable frosted glass. */
+.liquid-glass-frosted-fallback .navbar-center-pill,
+.liquid-glass-frosted-fallback [data-liquid-glass-map-target="control"],
+.liquid-glass-frosted-fallback [data-liquid-glass-map-target="panel"],
+.liquid-glass-frosted-fallback [data-liquid-glass-map-target="bottom"],
+.liquid-glass-frosted-fallback .filter-dropdown-toggle,
+.liquid-glass-frosted-fallback .filter-clear-btn,
+.liquid-glass-frosted-fallback .view-switcher-container,
+.liquid-glass-frosted-fallback .like-btn,
+.liquid-glass-frosted-fallback .fork-btn-inner,
+.liquid-glass-frosted-fallback .mobile-theme-toggle-btn,
+.liquid-glass-frosted-fallback .filter-dropdown-menu {
+    background: rgba(15, 23, 42, 0.68) !important;
+    border-color: rgba(255, 255, 255, 0.16) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(165%) !important;
+    backdrop-filter: blur(18px) saturate(165%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 8px 26px rgba(0, 0, 0, 0.22) !important;
+}
+
+.liquid-glass-frosted-fallback [data-liquid-glass-map-target="panel"],
+.liquid-glass-frosted-fallback .filter-dropdown-menu {
+    background: rgba(15, 23, 42, 0.78) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(175%) !important;
+    backdrop-filter: blur(24px) saturate(175%) !important;
+}
+
+[data-theme="light"].liquid-glass-frosted-fallback .navbar-center-pill,
+[data-theme="light"].liquid-glass-frosted-fallback [data-liquid-glass-map-target="control"],
+[data-theme="light"].liquid-glass-frosted-fallback [data-liquid-glass-map-target="bottom"],
+[data-theme="light"].liquid-glass-frosted-fallback .filter-dropdown-toggle,
+[data-theme="light"].liquid-glass-frosted-fallback .filter-clear-btn,
+[data-theme="light"].liquid-glass-frosted-fallback .view-switcher-container,
+[data-theme="light"].liquid-glass-frosted-fallback .like-btn,
+[data-theme="light"].liquid-glass-frosted-fallback .fork-btn-inner,
+[data-theme="light"].liquid-glass-frosted-fallback .mobile-theme-toggle-btn,
+[data-theme="light"] .liquid-glass-frosted-fallback .navbar-center-pill,
+[data-theme="light"] .liquid-glass-frosted-fallback [data-liquid-glass-map-target="control"],
+[data-theme="light"] .liquid-glass-frosted-fallback [data-liquid-glass-map-target="bottom"],
+[data-theme="light"] .liquid-glass-frosted-fallback .filter-dropdown-toggle,
+[data-theme="light"] .liquid-glass-frosted-fallback .filter-clear-btn,
+[data-theme="light"] .liquid-glass-frosted-fallback .view-switcher-container,
+[data-theme="light"] .liquid-glass-frosted-fallback .like-btn,
+[data-theme="light"] .liquid-glass-frosted-fallback .fork-btn-inner,
+[data-theme="light"] .liquid-glass-frosted-fallback .mobile-theme-toggle-btn {
+    background: rgba(255, 255, 255, 0.64) !important;
+    border-color: rgba(21, 20, 15, 0.1) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(165%) !important;
+    backdrop-filter: blur(18px) saturate(165%) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.68),
+        0 8px 26px rgba(17, 17, 26, 0.08),
+        0 14px 42px rgba(17, 17, 26, 0.05) !important;
+}
+
+[data-theme="light"].liquid-glass-frosted-fallback [data-liquid-glass-map-target="panel"],
+[data-theme="light"].liquid-glass-frosted-fallback .filter-dropdown-menu,
+[data-theme="light"] .liquid-glass-frosted-fallback [data-liquid-glass-map-target="panel"],
+[data-theme="light"] .liquid-glass-frosted-fallback .filter-dropdown-menu {
+    background: rgba(255, 255, 255, 0.78) !important;
+    border-color: rgba(21, 20, 15, 0.1) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(175%) !important;
+    backdrop-filter: blur(24px) saturate(175%) !important;
+}

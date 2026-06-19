@@ -136,6 +136,24 @@ function useLiquidGlassMaps() {
   }, []);
 }
 
+function useLiquidGlassFrostedFallback() {
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof document === "undefined") return undefined;
+
+    const userAgent = window.navigator.userAgent;
+    const isSafari = /Safari/i.test(userAgent) && !/Chrome|Chromium|Edg|OPR|SamsungBrowser|Android/i.test(userAgent);
+    if (!isSafari) return undefined;
+
+    document.documentElement.classList.add("liquid-glass-frosted-fallback");
+    document.body.classList.add("liquid-glass-frosted-fallback");
+
+    return () => {
+      document.documentElement.classList.remove("liquid-glass-frosted-fallback");
+      document.body.classList.remove("liquid-glass-frosted-fallback");
+    };
+  }, []);
+}
+
 const NAV_ITEMS = {
   en: [
     { path: "/", icon: AiOutlineHome, label: "Home" },
@@ -280,6 +298,7 @@ function NavLinks({ items, linkClassName, iconClassName, onClick, navItemClassNa
 
 function NavBar({ triggerPreloader, theme, toggleTheme }) {
   useLiquidGlassMaps();
+  useLiquidGlassFrostedFallback();
 
   const { locale, toggleLocale } = useLanguage();
   const [isExpanded, setIsExpanded] = useState(false);
