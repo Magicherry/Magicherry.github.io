@@ -22,6 +22,120 @@ import cvFileZh from "../../Assets/cv/Yuting_Zhou_CV_zh.pdf";
 import { useLanguage } from "../../context/LanguageContext";
 import { useCloseOnWindowScroll } from "../../hooks/useCloseOnWindowScroll";
 
+const LIQUID_GLASS_FILTERS = [
+  { id: "liquid-glass-top", target: "top" },
+  { id: "liquid-glass-control", target: "control" },
+  { id: "liquid-glass-panel", target: "panel" },
+  { id: "liquid-glass-bottom", target: "bottom" }
+];
+
+function buildLiquidGlassMap(width, height) {
+  const radius = Math.round(Math.min(width, height) / 2);
+  const borderRatio = 0.07;
+  const lightness = 50;
+  const alpha = 0.93;
+  const blur = 11;
+  const blend = "difference";
+  const inset = Math.min(width, height) * (borderRatio * 0.5);
+
+  const svg =
+    `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">` +
+    "<defs>" +
+    '<linearGradient id="red" x1="100%" y1="0%" x2="0%" y2="0%"><stop offset="0%" stop-color="#000"/><stop offset="100%" stop-color="red"/></linearGradient>' +
+    '<linearGradient id="blue" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#000"/><stop offset="100%" stop-color="blue"/></linearGradient>' +
+    "</defs>" +
+    `<rect x="0" y="0" width="${width}" height="${height}" fill="black"/>` +
+    `<rect x="0" y="0" width="${width}" height="${height}" rx="${radius}" fill="url(#red)"/>` +
+    `<rect x="0" y="0" width="${width}" height="${height}" rx="${radius}" fill="url(#blue)" style="mix-blend-mode:${blend}"/>` +
+    `<rect x="${inset}" y="${inset}" width="${width - inset * 2}" height="${height - inset * 2}" rx="${radius}" fill="hsl(0 0% ${lightness}% / ${alpha})" style="filter:blur(${blur}px)"/>` +
+    "</svg>";
+
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+
+function LiquidGlassFilterDefs() {
+  return (
+    <svg className="liquid-glass-defs" aria-hidden="true" focusable="false" width="0" height="0">
+      <defs>
+        {LIQUID_GLASS_FILTERS.map(({ id, target }) => (
+          <filter id={id} key={id} colorInterpolationFilters="sRGB">
+            <feImage
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              preserveAspectRatio="none"
+              result="map"
+              data-liquid-glass-map={target}
+            />
+            <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="-50" result="dispRed" />
+            <feColorMatrix in="dispRed" type="matrix" values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="red" />
+            <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="-47" result="dispGreen" />
+            <feColorMatrix in="dispGreen" type="matrix" values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" result="green" />
+            <feDisplacementMap in="SourceGraphic" in2="map" xChannelSelector="R" yChannelSelector="B" scale="-44" result="dispBlue" />
+            <feColorMatrix in="dispBlue" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" result="blue" />
+            <feBlend in="red" in2="green" mode="screen" result="rg" />
+            <feBlend in="rg" in2="blue" mode="screen" result="output" />
+            <feGaussianBlur in="output" stdDeviation="0.7" />
+          </filter>
+        ))}
+      </defs>
+    </svg>
+  );
+}
+
+function useLiquidGlassMaps() {
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof document === "undefined") return undefined;
+
+    const syncMap = (target) => {
+      const surfaces = Array.from(document.querySelectorAll(`[data-liquid-glass-map-target="${target}"]`));
+      const surface = surfaces.find((node) => {
+        const rect = node.getBoundingClientRect();
+        return rect.width > 1 && rect.height > 1;
+      }) || surfaces[0];
+      const map = document.querySelector(`[data-liquid-glass-map="${target}"]`);
+      if (!surface || !map) return;
+
+      const rect = surface.getBoundingClientRect();
+      const width = Math.max(1, Math.round(rect.width));
+      const height = Math.max(1, Math.round(rect.height));
+      const uri = buildLiquidGlassMap(width, height);
+      map.setAttribute("href", uri);
+      map.setAttributeNS("http://www.w3.org/1999/xlink", "href", uri);
+    };
+
+    let mapTimer = 0;
+    const syncAll = () => {
+      LIQUID_GLASS_FILTERS.forEach(({ target }) => syncMap(target));
+    };
+    const scheduleSync = () => {
+      window.clearTimeout(mapTimer);
+      mapTimer = window.setTimeout(syncAll, 140);
+    };
+
+    const observers = [];
+    LIQUID_GLASS_FILTERS.forEach(({ target }) => {
+      document.querySelectorAll(`[data-liquid-glass-map-target="${target}"]`).forEach((surface) => {
+        if (window.ResizeObserver) {
+          const observer = new ResizeObserver(scheduleSync);
+          observer.observe(surface);
+          observers.push(observer);
+        }
+      });
+    });
+
+    syncAll();
+    window.addEventListener("resize", scheduleSync, { passive: true });
+
+    return () => {
+      window.clearTimeout(mapTimer);
+      window.removeEventListener("resize", scheduleSync);
+      observers.forEach((observer) => observer.disconnect());
+    };
+  }, []);
+}
+
 const NAV_ITEMS = {
   en: [
     { path: "/", icon: AiOutlineHome, label: "Home" },
@@ -165,6 +279,8 @@ function NavLinks({ items, linkClassName, iconClassName, onClick, navItemClassNa
 }
 
 function NavBar({ triggerPreloader, theme, toggleTheme }) {
+  useLiquidGlassMaps();
+
   const { locale, toggleLocale } = useLanguage();
   const [isExpanded, setIsExpanded] = useState(false);
   const { isSideNavVisible, toggleSideNav } = useNavMode();
@@ -307,6 +423,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
       <button
         type="button"
         className="language-toggle-btn"
+        data-liquid-glass-map-target="control"
         onClick={toggleLocale}
         aria-label={copy.languageToggle}
         title={copy.languageMode}
@@ -320,6 +437,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
 
   return (
       <>
+        <LiquidGlassFilterDefs />
         <div className="navbar-vignette-mask d-none d-lg-block" />
         <Navbar
             ref={navbarRef}
@@ -334,6 +452,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               <button
                 type="button"
                 className="language-toggle-btn mobile-topbar__btn mobile-topbar__btn--language"
+                data-liquid-glass-map-target="control"
                 onClick={toggleLocale}
                 aria-label={copy.languageToggle}
                 title={copy.languageMode}
@@ -347,6 +466,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               <button
                 type="button"
                 className="theme-toggle-btn mobile-topbar__btn"
+                data-liquid-glass-map-target="control"
                 onClick={toggleTheme}
                 aria-label={copy.toggleTheme}
               >
@@ -357,6 +477,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="github-pill-btn mobile-topbar__btn mobile-topbar__github"
+                data-liquid-glass-map-target="control"
                 aria-label={copy.githubRepository}
               >
                 <AiFillStar className="star-icon" />
@@ -379,7 +500,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
             </div>
 
             {/* Center Column: Pill Navigation Container */}
-            <div className="navbar-center-pill">
+            <div className="navbar-center-pill" data-liquid-glass-map-target="top">
               <button
                 type="button"
                 className={`sidebar-toggle-icon ${isSideNavVisible ? "active" : ""}`}
@@ -407,6 +528,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               <button
                 type="button"
                 className="theme-toggle-btn"
+                data-liquid-glass-map-target="control"
                 onClick={toggleTheme}
                 aria-label={copy.toggleTheme}
               >
@@ -418,6 +540,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="github-pill-btn"
+                data-liquid-glass-map-target="control"
                 aria-label={copy.githubRepository}
               >
                 <AiFillStar className="star-icon" />
@@ -430,20 +553,27 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
         </Navbar>
 
         <div className={`floating-nav-container ${isSideNavVisible ? "show" : ""}`}>
-          <div className="floating-nav-panel">
+          <div className="floating-nav-panel" data-liquid-glass-map-target="panel">
             <div className="floating-nav-header">
               {renderLanguageControls("side")}
               <div className="floating-nav-header-actions">
                 <button
                   type="button"
                   className="theme-toggle-btn"
+                  data-liquid-glass-map-target="control"
                   onClick={toggleTheme}
                   aria-label={copy.toggleTheme}
                   style={{ width: '40px', height: '40px', fontSize: '1.1rem' }}
                 >
                   {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
                 </button>
-                <button type="button" className="floating-nav-close" onClick={toggleSideNav} aria-label={copy.collapseToTopNav}>
+                <button
+                  type="button"
+                  className="floating-nav-close"
+                  data-liquid-glass-map-target="control"
+                  onClick={toggleSideNav}
+                  aria-label={copy.collapseToTopNav}
+                >
                   <FiSidebar />
                 </button>
               </div>
@@ -552,7 +682,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
         {/* Bottom Navigation Bar for Mobile */}
         <div className={`d-lg-none bottom-nav-container ${isBottomNavHidden ? "bottom-nav-hidden" : ""}`}>
           {/* Main navigation buttons with rounded rectangle background */}
-          <div className="main-nav-wrapper" ref={navContainerRef}>
+          <div className="main-nav-wrapper" ref={navContainerRef} data-liquid-glass-map-target="bottom">
             {/* Pill slider */}
             {/* Position and opacity are dynamic (route/container); see style.css header for rationale */}
             <div

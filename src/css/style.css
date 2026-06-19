@@ -4291,3 +4291,111 @@ html.theme-transition *::after {
   transition: background-color 0.4s ease, background-image 0.4s ease, color 0.4s ease, border-color 0.4s ease, fill 0.4s ease, stroke 0.4s ease !important;
   transition-delay: 0s !important;
 }
+
+/*================================================================
+  Liquid Glass Navigation
+================================================================*/
+.liquid-glass-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.navbar-center-pill {
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--navbar-glass-bg);
+    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+    backdrop-filter: blur(18px) saturate(160%) !important;
+    backdrop-filter: url(#liquid-glass-top) blur(8px) saturate(1.55) !important;
+}
+
+[data-liquid-glass-map-target="control"] {
+    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+    backdrop-filter: blur(18px) saturate(160%) !important;
+    backdrop-filter: url(#liquid-glass-control) blur(9px) saturate(1.55) !important;
+}
+
+[data-liquid-glass-map-target="panel"] {
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    backdrop-filter: url(#liquid-glass-panel) blur(12px) saturate(1.58) !important;
+}
+
+[data-liquid-glass-map-target="bottom"] {
+    -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
+    backdrop-filter: blur(15px) saturate(180%) !important;
+    backdrop-filter: url(#liquid-glass-bottom) blur(9px) saturate(1.55) !important;
+}
+
+[data-theme="light"] .navbar-center-pill,
+[data-theme="light"] [data-liquid-glass-map-target="control"],
+[data-theme="light"] [data-liquid-glass-map-target="bottom"] {
+    background: hsl(0 0% 100% / 0.42) !important;
+    border-color: rgba(21, 20, 15, 0.08) !important;
+    box-shadow:
+        inset 0 0 2px 1px rgba(255, 255, 255, 0.55),
+        inset 0 0 10px 4px rgba(255, 255, 255, 0.22),
+        0 6px 24px rgba(17, 17, 26, 0.06),
+        0 12px 40px rgba(17, 17, 26, 0.05) !important;
+}
+
+[data-theme="light"] .navbar-center-pill:hover,
+[data-theme="light"] [data-liquid-glass-map-target="control"]:hover,
+[data-theme="light"] [data-liquid-glass-map-target="bottom"]:hover {
+    border-color: rgba(21, 20, 15, 0.14) !important;
+}
+
+/* Extend liquid glass beyond navigation to the site's glass-like action buttons. */
+.filter-dropdown-toggle,
+.filter-clear-btn,
+.view-switcher-container,
+.like-btn,
+.fork-btn-inner,
+.mobile-theme-toggle-btn {
+    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+    backdrop-filter: blur(18px) saturate(160%) !important;
+    backdrop-filter: url(#liquid-glass-control) blur(9px) saturate(1.55) !important;
+}
+
+.filter-dropdown-menu {
+    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+    backdrop-filter: blur(18px) saturate(160%) !important;
+    backdrop-filter: url(#liquid-glass-panel) blur(12px) saturate(1.58) !important;
+}
+
+[data-theme="light"] .filter-dropdown-toggle,
+[data-theme="light"] .filter-clear-btn,
+[data-theme="light"] .view-switcher-container,
+[data-theme="light"] .like-btn,
+[data-theme="light"] .fork-btn-inner,
+[data-theme="light"] .mobile-theme-toggle-btn {
+    background: hsl(0 0% 100% / 0.42) !important;
+    border-color: rgba(21, 20, 15, 0.08) !important;
+    color: var(--color-text) !important;
+    box-shadow:
+        inset 0 0 2px 1px rgba(255, 255, 255, 0.55),
+        inset 0 0 10px 4px rgba(255, 255, 255, 0.22),
+        0 6px 24px rgba(17, 17, 26, 0.06),
+        0 12px 40px rgba(17, 17, 26, 0.05) !important;
+}
+
+[data-theme="light"] .filter-dropdown-menu {
+    background: hsl(0 0% 100% / 0.56) !important;
+    border-color: rgba(21, 20, 15, 0.08) !important;
+    box-shadow:
+        inset 0 0 2px 1px rgba(255, 255, 255, 0.55),
+        0 12px 36px rgba(17, 17, 26, 0.08) !important;
+}
+
+[data-theme="light"] .filter-dropdown-toggle:hover,
+[data-theme="light"] .filter-clear-btn:hover,
+[data-theme="light"] .view-switcher-container:hover,
+[data-theme="light"] .like-btn:hover,
+[data-theme="light"] .fork-btn-inner:hover,
+[data-theme="light"] .mobile-theme-toggle-btn:hover {
+    background: hsl(0 0% 100% / 0.5) !important;
+    border-color: rgba(21, 20, 15, 0.14) !important;
+}
