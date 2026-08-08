@@ -68,3 +68,12 @@ prof/
 *.tar.gz
 *.zip
 *.orig
+
+# Private resume sources (separate git repo; leading slash keeps
+# src/components/Resume/ tracked)
+/Resume/
+
+# Personal documents containing contact details — not for a public repo.
+# The CV PDFs the site serves live in src/Assets/cv/ and stay tracked.
+/Linkedin.pdf
+/LinkedIn.pdf

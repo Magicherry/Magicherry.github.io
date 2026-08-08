@@ -312,8 +312,8 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
     toggleSidebar: "切换侧边导航",
     toggleTheme: "切换主题",
     collapseToTopNav: "收起为顶部导航",
-    masterTitle: "罗格斯大学 · 计算机科学硕士",
-    location: "美国新泽西州罗格斯大学",
+    roleTitle: "蔚来 · AI Agent 工程师",
+    location: "中国上海",
     downloadCv: "下载简历",
     githubRepository: "GitHub 仓库",
     avatarAlt: "周钰婷头像",
@@ -328,8 +328,8 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
     toggleSidebar: "Toggle sidebar",
     toggleTheme: "Toggle theme",
     collapseToTopNav: "Collapse to top navigation",
-    masterTitle: "M.S. in Computer Science",
-    location: "Rutgers University, NJ, USA",
+    roleTitle: "AI Agent Engineer @ NIO",
+    location: "Shanghai, China",
     downloadCv: "Download CV",
     githubRepository: "GitHub Repository",
     avatarAlt: "Yuting Zhou avatar",
@@ -337,7 +337,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
     languageToggle: "Toggle language",
     languageMode: "Current language",
     email: "zyt680129@gmail.com",
-    phone: "+1 (848) 230-9757"
+    phone: "+86 136 8175 6546"
   };
   const activeCvFile = locale === "zh" ? cvFileZh : cvFile;
   
@@ -610,7 +610,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               </Tilt>
 
               <div className="floating-nav-name">{copy.displayName}</div>
-              <div className="floating-nav-title">{copy.masterTitle}</div>
+              <div className="floating-nav-title">{copy.roleTitle}</div>
               <div className="floating-nav-actions">
                 <a
                   className="floating-nav-icon-btn"
@@ -623,7 +623,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
                 </a>
                 <a
                   className="floating-nav-icon-btn"
-                  href="https://www.linkedin.com/in/yuting-zhou-5140ba299/"
+                  href="https://www.linkedin.com/in/yuting-zhou-magicherry/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn"
@@ -666,7 +666,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               <div className="floating-nav-contact-group">
                 <a
                   className="floating-nav-contact-item"
-                  href="https://www.cs.rutgers.edu/"
+                  href="https://www.nio.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

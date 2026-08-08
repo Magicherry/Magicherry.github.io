@@ -27,7 +27,7 @@ const Footer = () => {
 
   const socialLinks = [
     { href: "https://github.com/Magicherry", icon: <AiFillGithub />, ariaLabel: "GitHub" },
-    { href: "https://www.linkedin.com/in/yuting-zhou-5140ba299/", icon: <FaLinkedinIn />, ariaLabel: "LinkedIn" },
+    { href: "https://www.linkedin.com/in/yuting-zhou-magicherry/", icon: <FaLinkedinIn />, ariaLabel: "LinkedIn" },
     {
       href: "#wechat",
       icon: <FaWeixin />,

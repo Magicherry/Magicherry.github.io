@@ -5,10 +5,53 @@ import {
     FaLaptopCode,
     FaBug,
     FaProjectDiagram,
-    FaRobot
+    FaRobot,
+    FaBriefcase,
+    FaCarSide
 } from 'react-icons/fa';
 
 export const timelines = [
+    {
+        title: {
+            en: "Full-time",
+            zh: "全职"
+        },
+        subtitle: {
+            en: "Building and shipping production systems in industry.",
+            zh: "在企业一线负责系统设计、研发与交付的全职工作经历。"
+        },
+        icon: FaBriefcase,
+        data: [
+            {
+                title: {
+                    en: "AI Agent Engineer & Business Planning Assistant Analyst",
+                    zh: "AI Agent 工程师 & 业务规划助理分析师"
+                },
+                icon: FaCarSide,
+                department: {
+                    en: "Enterprise AI Agents, LLM/RAG, Business Planning",
+                    zh: "企业级 AI Agent、LLM/RAG、业务规划分析"
+                },
+                company: {
+                    en: "Shanghai NIO Automobile Co., Ltd.",
+                    zh: "上海蔚来汽车有限公司"
+                },
+                duration: "06/2026 - Present",
+                description: {
+                    en: [
+                        "Build enterprise AI agent systems for manufacturing operations with LLMs, RAG, and workflow automation.",
+                        "Ship intelligent solutions for manufacturing cost optimization and predictive forecasting.",
+                        "Turn multi-source operational data into decision support used by business teams."
+                    ],
+                    zh: [
+                        "面向制造运营构建企业级 AI Agent 系统，落地 LLM、RAG 与流程自动化。",
+                        "交付制造成本优化与预测性分析的智能化解决方案。",
+                        "将多源运营数据转化为业务团队可用的决策支持。"
+                    ]
+                }
+            }
+        ]
+    },
     {
         title: {
             en: "Research",
@@ -34,7 +77,7 @@ export const timelines = [
                     en: "RUTGERS Center for Advanced Infrastructure and Transportation (CAIT)",
                     zh: "罗格斯大学先进基础设施与交通中心（CAIT）"
                 },
-                duration: "06/2025 - Present",
+                duration: "06/2025 - 05/2026",
                 description: {
                     en: [
                         "Architected scalable data engineering pipelines to merge and reconcile 100k+ multi-source railway incident and delay records, implementing automated deduplication, hierarchical label dictionary construction, and cross-dataset consistency validation.",
