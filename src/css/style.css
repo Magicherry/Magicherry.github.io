@@ -153,7 +153,7 @@ html:lang(zh) body {
     --navbar-bg-item-hover: #5bdef5;
     --navbar-shadow: transparent;
     /* Top nav glass (frosted bar, no dark tint) */
-    --navbar-glass-bg: rgba(255, 255, 255, 0.06);
+    --navbar-glass-bg: rgba(255, 255, 255, 0.035);
     --navbar-glass-border: rgba(210, 200, 185, 0.11);
     --navbar-glass-border-hover: rgba(220, 212, 200, 0.18);
     /* Outer drop matches sidebar panel; inset keeps glass rim */
@@ -163,7 +163,7 @@ html:lang(zh) body {
         inset 0 1px 0 rgba(255, 255, 255, 0.04),
         0 0 12px rgba(0, 0, 0, 0.2),
         0 0 28px rgba(0, 0, 0, 0.12);
-    --navbar-glass-active-bg: rgba(255, 255, 255, 0.14);
+    --navbar-glass-active-bg: rgba(255, 255, 255, 0.1);
     --navbar-glass-active-border: rgba(230, 220, 210, 0.18);
     /* Project cards: darker glass, slightly stronger border so it’s visible */
     --card-glass-bg: rgba(15, 23, 42, 0.55);
@@ -338,7 +338,7 @@ html:lang(zh) body {
     --navbar-bg-item-hover: #e0f2fe;
     --navbar-shadow: transparent;
 
-    --navbar-glass-bg: var(--navbar-bg);
+    --navbar-glass-bg: rgba(255, 255, 255, 0.38);
     --navbar-glass-border: rgba(255, 255, 255, 0.72);
     --navbar-glass-border-hover: rgba(255, 255, 255, 0.95);
     --navbar-glass-shadow:
@@ -348,7 +348,7 @@ html:lang(zh) body {
         inset 0 1px 0 rgba(255, 255, 255, 0.86),
         0 0 16px rgba(0, 0, 0, 0.08),
         0 0 40px rgba(0, 0, 0, 0.055);
-    --navbar-glass-active-bg: rgba(0, 0, 0, 0.06);
+    --navbar-glass-active-bg: rgba(0, 0, 0, 0.045);
     --navbar-glass-active-border: rgba(255, 255, 255, 0.88);
 
     --card-glass-bg: rgba(255, 255, 255, 0.45);
@@ -4333,7 +4333,7 @@ html.theme-transition *::after {
 [data-theme="light"] .navbar-center-pill,
 [data-theme="light"] [data-liquid-glass-map-target="control"],
 [data-theme="light"] [data-liquid-glass-map-target="bottom"] {
-    background: hsl(0 0% 100% / 0.42) !important;
+    background: hsl(0 0% 100% / 0.3) !important;
     border-color: rgba(21, 20, 15, 0.08) !important;
     box-shadow:
         inset 0 0 2px 1px rgba(255, 255, 255, 0.55),
@@ -4372,7 +4372,7 @@ html.theme-transition *::after {
 [data-theme="light"] .like-btn,
 [data-theme="light"] .fork-btn-inner,
 [data-theme="light"] .mobile-theme-toggle-btn {
-    background: hsl(0 0% 100% / 0.42) !important;
+    background: hsl(0 0% 100% / 0.3) !important;
     border-color: rgba(21, 20, 15, 0.08) !important;
     color: var(--color-text) !important;
     box-shadow:
@@ -4383,7 +4383,7 @@ html.theme-transition *::after {
 }
 
 [data-theme="light"] .filter-dropdown-menu {
-    background: hsl(0 0% 100% / 0.56) !important;
+    background: hsl(0 0% 100% / 0.44) !important;
     border-color: rgba(21, 20, 15, 0.08) !important;
     box-shadow:
         inset 0 0 2px 1px rgba(255, 255, 255, 0.55),
@@ -4396,7 +4396,7 @@ html.theme-transition *::after {
 [data-theme="light"] .like-btn:hover,
 [data-theme="light"] .fork-btn-inner:hover,
 [data-theme="light"] .mobile-theme-toggle-btn:hover {
-    background: hsl(0 0% 100% / 0.5) !important;
+    background: hsl(0 0% 100% / 0.38) !important;
     border-color: rgba(21, 20, 15, 0.14) !important;
 }
 
@@ -4412,7 +4412,7 @@ html.theme-transition *::after {
 .liquid-glass-frosted-fallback .fork-btn-inner,
 .liquid-glass-frosted-fallback .mobile-theme-toggle-btn,
 .liquid-glass-frosted-fallback .filter-dropdown-menu {
-    background: rgba(15, 23, 42, 0.68) !important;
+    background: rgba(15, 23, 42, 0.5) !important;
     border-color: rgba(255, 255, 255, 0.16) !important;
     -webkit-backdrop-filter: blur(18px) saturate(165%) !important;
     backdrop-filter: blur(18px) saturate(165%) !important;
@@ -4423,7 +4423,7 @@ html.theme-transition *::after {
 
 .liquid-glass-frosted-fallback [data-liquid-glass-map-target="panel"],
 .liquid-glass-frosted-fallback .filter-dropdown-menu {
-    background: rgba(15, 23, 42, 0.78) !important;
+    background: rgba(15, 23, 42, 0.62) !important;
     -webkit-backdrop-filter: blur(24px) saturate(175%) !important;
     backdrop-filter: blur(24px) saturate(175%) !important;
 }
@@ -4446,7 +4446,7 @@ html.theme-transition *::after {
 [data-theme="light"] .liquid-glass-frosted-fallback .like-btn,
 [data-theme="light"] .liquid-glass-frosted-fallback .fork-btn-inner,
 [data-theme="light"] .liquid-glass-frosted-fallback .mobile-theme-toggle-btn {
-    background: rgba(255, 255, 255, 0.64) !important;
+    background: rgba(255, 255, 255, 0.46) !important;
     border-color: rgba(21, 20, 15, 0.1) !important;
     -webkit-backdrop-filter: blur(18px) saturate(165%) !important;
     backdrop-filter: blur(18px) saturate(165%) !important;
@@ -4460,7 +4460,7 @@ html.theme-transition *::after {
 [data-theme="light"].liquid-glass-frosted-fallback .filter-dropdown-menu,
 [data-theme="light"] .liquid-glass-frosted-fallback [data-liquid-glass-map-target="panel"],
 [data-theme="light"] .liquid-glass-frosted-fallback .filter-dropdown-menu {
-    background: rgba(255, 255, 255, 0.78) !important;
+    background: rgba(255, 255, 255, 0.62) !important;
     border-color: rgba(21, 20, 15, 0.1) !important;
     -webkit-backdrop-filter: blur(24px) saturate(175%) !important;
     backdrop-filter: blur(24px) saturate(175%) !important;
