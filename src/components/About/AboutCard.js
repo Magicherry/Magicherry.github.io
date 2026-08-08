@@ -31,7 +31,7 @@ const AboutCard = () => {
     }
     : {
       highlights: [
-        <>Hello, I am <span className="text-accent">Yuting Zhou</span>, an <span className="text-accent">AI Agent Engineer</span> and <span className="text-accent">Business Planning Assistant Analyst</span> at <span className="text-accent">NIO</span>, holding an M.S. in Computer Science from <span className="text-accent">Rutgers University</span>.</>,
+        <>Hello, I am <span className="text-accent">Yuting Zhou</span>, an <span className="text-accent">AI Agent Engineer</span> and <span className="text-accent">Business Planning Assistant Analyst</span> at <span className="text-accent"><a className="nio-link" href="https://www.nio.com/" target="_blank" rel="noopener noreferrer">NIO</a></span>, holding an M.S. in Computer Science from <span className="text-accent">Rutgers University</span>.</>,
         <>I design and build <span className="text-accent">enterprise AI agent systems</span> for <span className="text-accent">manufacturing operations</span>, working across <span className="text-accent">LLMs &amp; RAG</span>, <span className="text-accent">workflow automation</span>, and <span className="text-accent">AI-driven decision support</span>.</>,
         <>Previously, I researched <span className="text-accent">NLP and LLMs</span> at the <span className="text-accent">Rutgers CAIT Lab</span>, and built <span className="text-accent">large-scale web applications</span> at Tenchii Digital Tech (a Tencent &times; Shanghai Metro joint venture).</>,
         <>Apart from coding, here are some activities I enjoy:</>

@@ -446,6 +446,14 @@ html:lang(zh) body {
     color: var(--color-text-accent) !important;
 }
 
+.nio-link,
+.nio-link:hover,
+.nio-link:focus-visible {
+    color: inherit;
+    font: inherit;
+    text-decoration: none;
+}
+
 /*================================================================
   Utilities (shared; avoid inline duplicates)
 ================================================================*/

@@ -610,7 +610,9 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               </Tilt>
 
               <div className="floating-nav-name">{copy.displayName}</div>
-              <div className="floating-nav-title">{copy.roleTitle}</div>
+              <div className="floating-nav-title">
+                {locale === "zh" ? copy.roleTitle : <>AI Agent Engineer @ <a className="nio-link" href="https://www.nio.com/" target="_blank" rel="noopener noreferrer">NIO</a></>}
+              </div>
               <div className="floating-nav-actions">
                 <a
                   className="floating-nav-icon-btn"

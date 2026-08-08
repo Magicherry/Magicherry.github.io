@@ -36,6 +36,7 @@ export const timelines = [
                     en: "Shanghai NIO Automobile Co., Ltd.",
                     zh: "上海蔚来汽车有限公司"
                 },
+                companyUrl: "https://www.nio.com/",
                 duration: "06/2026 - Present",
                 description: {
                     en: [

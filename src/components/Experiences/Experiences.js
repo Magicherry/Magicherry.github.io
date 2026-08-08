@@ -26,7 +26,13 @@ function ExperienceTimeline({ title, subtitle, data, icon: Icon }) {
                         icon={experience.icon ? <experience.icon /> : <Icon />}
                     >
                         <h3 className="vertical-timeline-element-title">{experience.title[locale]}</h3>
-                        <h5 className="vertical-timeline-element-subtitle">{experience.company[locale]}</h5>
+                        <h5 className="vertical-timeline-element-subtitle">
+                            {experience.companyUrl ? (
+                                <a className="nio-link" href={experience.companyUrl} target="_blank" rel="noopener noreferrer">
+                                    {experience.company[locale]}
+                                </a>
+                            ) : experience.company[locale]}
+                        </h5>
                         <ul className="experience-description">
                             {experience.description[locale].map((item, i) => (
                                 <li key={i}>{item}</li>

@@ -40,7 +40,7 @@ function Home2() {
                 <>
                     I fell in love with programming and have stayed curious ever since.
                     <br /><br />
-                    Today I am an <b className="text-accent">AI Agent Engineer</b> at <b className="text-accent">NIO</b>, building <b className="text-accent">enterprise AI agent systems</b> for manufacturing operations with <b className="text-accent">LLMs &amp; RAG</b>, <b className="text-accent">workflow automation</b>, and <b className="text-accent">AI-driven decision support</b>.
+                    Today I am an <b className="text-accent">AI Agent Engineer</b> at <b className="text-accent"><a className="nio-link" href="https://www.nio.com/" target="_blank" rel="noopener noreferrer">NIO</a></b>, building <b className="text-accent">enterprise AI agent systems</b> for manufacturing operations with <b className="text-accent">LLMs &amp; RAG</b>, <b className="text-accent">workflow automation</b>, and <b className="text-accent">AI-driven decision support</b>.
                     <br /><br />
                     I work across the stack, from crafting <b className="text-accent">clean, responsive interfaces</b> to building <b className="text-accent">dependable back-end services</b>. I am comfortable with <b className="text-accent">databases, API design, and containerized deployments that scale</b>.
                     <br /><br />
