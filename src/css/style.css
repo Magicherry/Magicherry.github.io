@@ -2706,6 +2706,11 @@ body.homepage .home-about-section {
     justify-content: center;
     gap: 5px;
     margin-bottom: 15px;
+    /* The overlay is a column flex container with align-items:center, so this
+       would otherwise shrink-wrap its content - making the width TagRow
+       measures against depend on how many chips it just decided to show.
+       Same reason .project-card__title pins its width. */
+    width: 100%;
 }
 
 .project-card-list-view__tags {
@@ -2719,6 +2724,30 @@ body.homepage .home-about-section {
     .project-card-list-view__tags {
         justify-content: center;
     }
+}
+
+/* Single-line tag rows (see TagRow.js). Chips that do not fit are pulled out
+   of flow instead of unmounted so their widths stay readable on resize.
+   Deliberately no `position: relative` here: under 992px
+   .project-card-list-view__type is absolutely positioned against the card,
+   and giving this row a containing block would drag the badge into it. */
+.tag-row__measure-only {
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.project-card__tag,
+.project-card-list-view__tag {
+    /* Measured out of flow, where shrink-to-fit would otherwise let a
+       two-word tag break and under-report its width. */
+    white-space: nowrap;
+}
+
+.tag-row__more {
+    font-variant-numeric: tabular-nums;
 }
 
 .project-card__tag {

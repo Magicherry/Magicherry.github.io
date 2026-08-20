@@ -3,6 +3,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { BsGithub, BsArrowRight } from "react-icons/bs";
 import { FaLock } from "react-icons/fa";
+import TagRow from "./TagRow";
 import { useLanguage } from "../../context/LanguageContext";
 
 const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, viewMode, type, date }) => {
@@ -31,16 +32,16 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                 </div>
                 <div className="project-card-list-view__content">
                     <Card.Title className="project-card-list-view__title">{localizedTitle}</Card.Title>
-                    <div className="project-card-list-view__tags">
-                        <span className={`project-card-list-view__type ${isCompany ? 'company' : 'personal'}`}>
-                            {localizedType}
-                        </span>
-                        {tags.map((tag, index) => (
-                            <span key={index} className="project-card-list-view__tag">
-                                {tag}
+                    <TagRow
+                        tags={tags}
+                        className="project-card-list-view__tags"
+                        tagClassName="project-card-list-view__tag"
+                        leading={(
+                            <span className={`project-card-list-view__type ${isCompany ? 'company' : 'personal'}`}>
+                                {localizedType}
                             </span>
-                        ))}
-                    </div>
+                        )}
+                    />
                     <Card.Text className="project-card-list-view__description">{localizedDescription}</Card.Text>
                     <div className="project-card-list-view__buttons">
                         {ghLink ? (
@@ -71,13 +72,11 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                             {localizedType}
                         </span>
                     </div>
-                    <div className="project-card__tags">
-                        {tags.map((tag, index) => (
-                            <span key={index} className="project-card__tag">
-                                {tag}
-                            </span>
-                        ))}
-                    </div>
+                    <TagRow
+                        tags={tags}
+                        className="project-card__tags"
+                        tagClassName="project-card__tag"
+                    />
                     <Card.Text className="project-card__description">{localizedDescription}</Card.Text>
                     <div className="project-card__buttons">
                         {ghLink ? (
