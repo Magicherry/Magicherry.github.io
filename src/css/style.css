@@ -255,7 +255,8 @@ html:lang(zh) body {
     --accent-border-soft: rgba(90, 150, 170, 0.32);
     --project-type-company-bg: #ffc107;
     --project-type-company-text: #000;
-    --project-type-personal-bg: #28a745;
+    /* White badge text on the old #28a745 was 3.13:1; this green clears 4.5:1. */
+    --project-type-personal-bg: #1e7e34;
     --project-type-personal-text: #fff;
     --project-tag-bg: rgba(255, 255, 255, 0.08);
     --project-tag-text: rgba(255, 255, 255, 0.8);
@@ -274,7 +275,9 @@ html:lang(zh) body {
     color-scheme: light;
     --color-white: #000;
     --color-text: #171717;
-    --color-text-accent: #0284c7;
+    /* Darker than the #0284c7 used for icons/buttons: as body text on the
+       light page this needed 4.5:1 and only reached 3.76:1 (4.1:1 on cards). */
+    --color-text-accent: #0369a1;
     --color-cta-text: #fff;
     --color-star: #eab308;
     --color-blockquote-footer: #737373;
@@ -426,7 +429,8 @@ html:lang(zh) body {
     
     --project-type-company-bg: #ffc107;
     --project-type-company-text: #000;
-    --project-type-personal-bg: #10b981;
+    /* White badge text on the old #10b981 was only 2.54:1. */
+    --project-type-personal-bg: #047857;
     --project-type-personal-text: #fff;
     --project-tag-bg: rgba(0, 0, 0, 0.06);
     --project-tag-text: rgba(0, 0, 0, 0.7);
@@ -2055,6 +2059,11 @@ body.homepage .home-about-section {
     font-size: 1.8em;
     display: inline-flex;
     align-items: center;
+    /* The glyph alone is only ~29px; pad the hit area out to the 44px
+       touch-target floor without changing how the icon looks. */
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
 }
 
 .footer__social-link:hover {
