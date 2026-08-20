@@ -3834,13 +3834,21 @@ body.homepage .home-about-section {
         justify-content: center;
     }
 
+    /* Touch layout: grow the toolbar so its controls clear the 44px touch
+       target floor. The desktop row stays at 42px/32px. */
     .view-switcher-container {
         width: 100%;
         justify-content: center;
+        height: 52px; /* 44px button + 4px padding top/bottom + 2px border */
     }
 
     .view-switcher__button {
         flex: 1;
+        height: 44px;
+    }
+
+    .filter-dropdown-toggle {
+        min-height: 44px;
     }
 
     .app-top-blur {

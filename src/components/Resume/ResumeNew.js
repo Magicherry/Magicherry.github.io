@@ -7,7 +7,13 @@ import pdfZh from "../../Assets/cv/Yuting_Zhou_CV_zh.pdf";
 import 'react-pdf/dist/Page/TextLayer.css';
 import { useLanguage } from "../../context/LanguageContext";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+// Serve the worker from our own bundle. Pointing at unpkg made the resume
+// page depend on a third-party CDN, and pinned the worker to whatever that
+// URL served rather than the pdfjs-dist version react-pdf is built against.
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+    "pdfjs-dist/build/pdf.worker.min.mjs",
+    import.meta.url
+).toString();
 
 const LoadingSpinner = ({ progress, copy }) => (
     <div className="resume-pdf-container">
