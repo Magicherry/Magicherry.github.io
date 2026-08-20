@@ -1,11 +1,11 @@
 import {
     FaFlask,
-    FaCode,
+    // FaCode,
     FaSubway,
     FaLaptopCode,
     FaBug,
-    FaProjectDiagram,
-    FaRobot,
+    // FaProjectDiagram,
+    // FaRobot,
     FaBriefcase,
     FaCarSide
 } from 'react-icons/fa';
@@ -163,89 +163,89 @@ export const timelines = [
             }
         ]
     },
-    {
-        title: {
-            en: "Extracurricular",
-            zh: "校园活动"
-        },
-        subtitle: {
-            en: "Leadership and community involvement.",
-            zh: "课堂之外的组织协作、社团参与与持续性的团队活动经历。"
-        },
-        icon: FaCode,
-        data: [
-            {
-                title: {
-                    en: "Algorithm Competition Club",
-                    zh: "算法竞赛协会"
-                },
-                icon: FaCode,
-                department: {
-                    en: "Member",
-                    zh: "成员"
-                },
-                company: {
-                    en: "Shanghai Institute of Technology",
-                    zh: "上海应用技术大学"
-                },
-                duration: "09/2022 - 05/2023",
-                description: {
-                    en: [
-                        "Organized club activities and assisted the president in writing course plans."
-                    ],
-                    zh: [
-                        "组织社团活动，并协助社长完善课程规划、活动节奏与整体安排。"
-                    ]
-                }
-            },
-            {
-                title: {
-                    en: "P.L Software Engineering Club",
-                    zh: "P.L 软件工程俱乐部"
-                },
-                icon: FaProjectDiagram,
-                department: {
-                    en: "Member",
-                    zh: "成员"
-                },
-                company: {
-                    en: "Shanghai Institute of Technology",
-                    zh: "上海应用技术大学"
-                },
-                duration: "03/2021 - 05/2023",
-                description: {
-                    en: [
-                        "Responsible for answering questions and resolving doubts for other club members."
-                    ],
-                    zh: [
-                        "负责解答社团成员在学习和练习中的问题，并提供基础的技术支持与经验分享。"
-                    ]
-                }
-            },
-            {
-                title: {
-                    en: "Robot Enthusiasts Association",
-                    zh: "机器人爱好者协会"
-                },
-                icon: FaRobot,
-                department: {
-                    en: "Member",
-                    zh: "成员"
-                },
-                company: {
-                    en: "Shanghai Institute of Technology",
-                    zh: "上海应用技术大学"
-                },
-                duration: "02/2021 - 05/2023",
-                description: {
-                    en: [
-                        "Managed daily club administrative work, prepared equipment and coordinated activity planning"
-                    ],
-                    zh: [
-                        "负责社团日常行政工作、设备准备以及活动协调安排，保证活动可以顺利开展。"
-                    ]
-                }
-            }
-        ]
-    }
+    // {
+    //     title: {
+    //         en: "Extracurricular",
+    //         zh: "校园活动"
+    //     },
+    //     subtitle: {
+    //         en: "Leadership and community involvement.",
+    //         zh: "课堂之外的组织协作、社团参与与持续性的团队活动经历。"
+    //     },
+    //     icon: FaCode,
+    //     data: [
+    //         {
+    //             title: {
+    //                 en: "Algorithm Competition Club",
+    //                 zh: "算法竞赛协会"
+    //             },
+    //             icon: FaCode,
+    //             department: {
+    //                 en: "Member",
+    //                 zh: "成员"
+    //             },
+    //             company: {
+    //                 en: "Shanghai Institute of Technology",
+    //                 zh: "上海应用技术大学"
+    //             },
+    //             duration: "09/2022 - 05/2023",
+    //             description: {
+    //                 en: [
+    //                     "Organized club activities and assisted the president in writing course plans."
+    //                 ],
+    //                 zh: [
+    //                     "组织社团活动，并协助社长完善课程规划、活动节奏与整体安排。"
+    //                 ]
+    //             }
+    //         },
+    //         {
+    //             title: {
+    //                 en: "P.L Software Engineering Club",
+    //                 zh: "P.L 软件工程俱乐部"
+    //             },
+    //             icon: FaProjectDiagram,
+    //             department: {
+    //                 en: "Member",
+    //                 zh: "成员"
+    //             },
+    //             company: {
+    //                 en: "Shanghai Institute of Technology",
+    //                 zh: "上海应用技术大学"
+    //             },
+    //             duration: "03/2021 - 05/2023",
+    //             description: {
+    //                 en: [
+    //                     "Responsible for answering questions and resolving doubts for other club members."
+    //                 ],
+    //                 zh: [
+    //                     "负责解答社团成员在学习和练习中的问题，并提供基础的技术支持与经验分享。"
+    //                 ]
+    //             }
+    //         },
+    //         {
+    //             title: {
+    //                 en: "Robot Enthusiasts Association",
+    //                 zh: "机器人爱好者协会"
+    //             },
+    //             icon: FaRobot,
+    //             department: {
+    //                 en: "Member",
+    //                 zh: "成员"
+    //             },
+    //             company: {
+    //                 en: "Shanghai Institute of Technology",
+    //                 zh: "上海应用技术大学"
+    //             },
+    //             duration: "02/2021 - 05/2023",
+    //             description: {
+    //                 en: [
+    //                     "Managed daily club administrative work, prepared equipment and coordinated activity planning"
+    //                 ],
+    //                 zh: [
+    //                     "负责社团日常行政工作、设备准备以及活动协调安排，保证活动可以顺利开展。"
+    //                 ]
+    //             }
+    //         }
+    //     ]
+    // }
 ];
