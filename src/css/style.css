@@ -2159,6 +2159,43 @@ body.homepage .home-about-section {
 /*================================================================
   Projects
 ================================================================*/
+.project-card-list-view__type-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.project-card__type-container {
+    margin-bottom: 15px;
+}
+
+.project-card-list-view__type,
+.project-card__type {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.project-card-list-view__type.company,
+.project-card__type.company {
+    background-color: var(--project-type-company-bg);
+    color: var(--project-type-company-text);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+}
+
+.project-card-list-view__type.personal,
+.project-card__type.personal {
+    background-color: var(--project-type-personal-bg);
+    color: var(--project-type-personal-text);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+}
+
 .filter-dropdown-container {
     position: relative;
     z-index: 100;
@@ -2188,7 +2225,7 @@ body.homepage .home-about-section {
     transition: all 0.2s ease;
     min-width: 160px;
     max-width: 60vw; /* Responsive max-width based on viewport */
-    height: 42px; /* Matches the sort toggle beside it */
+    height: 42px; /* Set fixed height to match view-switcher container */
     overflow: hidden; /* Ensure contents don't break the pill shape */
 }
 
@@ -2400,23 +2437,443 @@ body.homepage .home-about-section {
     font-weight: 600;
 }
 
+.view-switcher-container {
+    display: inline-flex;
+    background: var(--navbar-glass-bg);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid var(--navbar-glass-border);
+    box-shadow: var(--navbar-glass-shadow);
+    border-radius: var(--button-radius-pill);
+    padding: 4px;
+    gap: 2px;
+    height: 42px; /* Force height to match left side */
+    align-items: center; /* Center buttons vertically */
+    transition: border-color 0.25s ease;
+}
+
+.view-switcher-container:hover {
+    border-color: var(--navbar-glass-border-hover);
+}
+
+.view-switcher__button {
+    background-color: transparent !important;
+    border: none !important;
+    color: var(--color-text-soft) !important;
+    margin-left: 0 !important;
+    transition: all 0.2s ease-out 0s !important;
+    border-radius: 999px !important;
+    padding: 0 16px !important; /* Adjusted padding to rely on height */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none !important;
+    height: 32px; /* 42px container - 8px padding (4px top/bottom) - 2px border */
+}
+
+.view-switcher__button svg {
+    width: 1.2em !important;
+    height: 1.2em !important;
+    display: block;
+    margin: auto;
+    color: inherit !important;
+    transition: color 0.2s ease !important;
+}
+
+.view-switcher__button:hover {
+    background-color: var(--surface-glass-hover) !important;
+    color: var(--color-white) !important;
+    cursor: pointer;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.view-switcher__button:active {
+    transform: scale(var(--button-active-scale)) !important;
+    transition: var(--button-transition-active) !important;
+}
+
+.view-switcher__button--active {
+    background-color: var(--navbar-glass-active-bg) !important;
+    color: var(--navbar-color-brand) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.view-switcher__button--active:hover {
+    background-color: var(--navbar-glass-active-bg) !important;
+    color: var(--navbar-color-brand) !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
 .projects__paragraph {
     color: var(--color-text);
     font-size: 1.5rem;
 }
 
+.projects__row {
+    justify-content: flex-start;
+    padding-bottom: 10px;
+}
+
+/* Match toolbar row horizontal padding to .project-card so both rows align */
 .projects__toolbar {
     padding-left: 25px !important;
     padding-right: 25px !important;
 }
 
 /* GitHub Pill Button for Projects */
+.github-pill-btn-project {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 40px !important;
+    border-radius: var(--button-radius-pill) !important;
+    padding: 0 20px !important;
+    background: var(--github-btn-bg) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-medium) !important;
+    color: var(--github-btn-text) !important;
+    box-shadow: var(--shadow-drop-md) !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    margin: 0 !important; /* Override any grid button margins */
+}
+
+.github-pill-btn-project:hover {
+    transform: scale(1.05) !important;
+    box-shadow: var(--shadow-drop-lg) !important;
+}
+
+.github-pill-btn-project:disabled {
+    opacity: var(--button-disabled-opacity);
+    cursor: not-allowed;
+}
+
+.github-pill-btn-project:active {
+    transform: scale(var(--button-active-scale)) !important;
+    transition: var(--button-transition-active) !important;
+}
+
+.github-pill-btn-project svg {
+    font-size: 1.2rem !important;
+    color: inherit !important;
+}
+
+/* Grid view: smaller pill button and icons in overlay */
+.project-card__buttons .github-pill-btn-project {
+    height: 38px !important;
+    padding: 0 18px !important;
+    font-size: 0.95rem !important;
+}
+
+.project-card__buttons .github-pill-btn-project svg {
+    font-size: 1.1rem !important;
+}
+
+.projects__row.list .project-card {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+}
+
 .project-section {
     position: relative !important;
     z-index: 1;
     padding-top: 170px !important;
     padding-bottom: 30px !important;
     /*background-image: var(--bg-gradient-section) !important;*/
+}
+
+.project-card {
+    padding: 15px 25px !important;
+    height: auto !important;
+    border-radius: 16px !important;
+}
+
+.project-card-wrapper {
+    text-align: center;
+}
+
+.project-card__static-title {
+    margin-top: 25px;
+    color: var(--color-text-accent);
+    font-size: 1.6rem;
+    font-weight: 700 !important;
+}
+
+.card.project-card-grid-view {
+    background: var(--card-glass-bg) !important;
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid var(--card-glass-border) !important;
+    box-shadow: var(--card-glass-shadow) !important;
+    color: var(--color-text) !important;
+    transition: all 0.4s ease 0s, border-color 0.25s ease !important;
+    height: 100% !important;
+    border-radius: 36px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.card.project-card-grid-view:hover {
+    border-color: var(--card-glass-border-hover) !important;
+    transform: scale(1.02) !important;
+    overflow: hidden !important;
+    box-shadow: var(--card-glass-shadow), 0 0 20px 3px var(--card-shadow-project-hover) !important;
+    border-radius: 36px !important;
+}
+
+/* Grid view: image container with internal padding so icon is not flush.
+   border-radius matches image so overflow clipping does not cut shadow into sharp corners. */
+.project-card__image-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 32px;
+    box-sizing: border-box;
+    background: var(--project-image-container-bg);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-card__image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.4s ease-in-out, filter 0.4s ease-in-out;
+}
+
+.project-card-grid-view:hover .project-card__image {
+    transform: scale(1.1);
+}
+
+.project-card__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--project-overlay-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.project-card-grid-view:hover .project-card__overlay {
+    opacity: 1;
+}
+
+.project-card__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    position: relative;
+    width: 100%;
+}
+
+/* Match track timeline cards: .experience-description border-top */
+.project-card__title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    border-bottom: 1px solid var(--border-strong);
+}
+
+.project-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.project-card-list-view__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 991px) {
+    .project-card-list-view__tags {
+        justify-content: center;
+    }
+}
+
+.project-card__tag {
+    background-color: var(--project-tag-bg) !important;
+    color: var(--project-tag-text) !important;
+    padding: 4px 12px !important;
+    border-radius: 999px !important;
+    font-size: 0.85rem !important;
+    border: 1px solid var(--border-subtle) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+}
+
+.project-card-list-view__tag {
+    background-color: var(--project-tag-bg) !important;
+    color: var(--project-tag-text) !important;
+    padding: 4px 12px !important;
+    border-radius: 999px !important;
+    font-size: 0.85rem !important;
+    border: 1px solid var(--border-subtle) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+}
+
+.project-card__description {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.project-card__buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.project-card__date {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--color-text-accent);
+    background: var(--project-date-bg);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    pointer-events: none;
+    border: 1px solid var(--border-subtle);
+}
+
+.project-card__date--grid {
+    right: 12px;
+    bottom: 12px;
+    background: var(--project-date-bg-grid);
+}
+
+.project-card__date--list {
+    right: 18px;
+    bottom: 16px;
+}
+
+/*================================================================
+  Projects - List View
+================================================================*/
+.card.project-card-list-view {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    background: var(--card-glass-bg-list) !important;
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid var(--card-glass-border) !important;
+    box-shadow: var(--card-glass-shadow) !important;
+    border-radius: 36px !important;
+    padding: 20px !important;
+    margin-bottom: 5px !important;
+    transition: all 0.3s ease-in-out, border-color 0.25s ease;
+    color: var(--color-text) !important;
+    text-align: left;
+}
+
+.card.project-card-list-view:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: var(--card-glass-shadow), 0 0 20px 3px var(--card-shadow-project-hover) !important;
+    border-color: var(--card-glass-border-hover) !important;
+}
+
+
+.project-card-list-view__image-container {
+    width: 220px;
+    flex-shrink: 0;
+    margin-right: 25px;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.project-card-list-view__image {
+    width: 100%;
+    border-radius: 14px;
+}
+
+.project-card-list-view__content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+    justify-content: flex-start;
+}
+
+.project-card-list-view__title {
+    font-size: 1.6rem;
+    font-weight: 700 !important;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    position: relative;
+    color: var(--color-text-accent) !important;
+    line-height: 1.2;
+}
+
+.project-card-list-view__title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    border-bottom: 1px solid var(--border-strong);
+}
+
+.project-card-list-view__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    align-items: center;
+}
+
+.project-card-list-view__description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    color: var(--color-text-softer) !important;
+}
+
+.project-card-list-view__buttons {
+    margin-top: auto;
+    display: flex;
+    gap: 12px;
+}
+
+.project-card-list-view__buttons .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .card-body {
@@ -2482,281 +2939,6 @@ body.homepage .home-about-section {
     font-size: 2.3em !important;
     font-weight: 500 !important;
     padding-top: 10px !important;
-}
-
-/*================================================================
-  Projects - App Store chart rows
-
-  One glass panel holding icon / title / action rows, separated by
-  hairlines inset to the text column (App Store charts convention).
-  Row geometry is driven by the three custom properties on the panel so
-  the separator offset can never drift from the icon column.
-================================================================*/
-.project-list-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 0 4px 12px;
-    /* .App centers everything by default; these rows read as a left-aligned
-       list, so opt out here rather than fighting it per element. */
-    text-align: left;
-}
-
-.project-list-header__title {
-    margin: 0;
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--color-text);
-}
-
-.project-list-header__count {
-    font-size: 0.9rem;
-    color: var(--color-text-soft);
-    font-variant-numeric: tabular-nums;
-}
-
-.project-list__empty {
-    padding: 32px 4px;
-    color: var(--color-text-soft);
-    text-align: center;
-}
-
-.project-list {
-    --row-icon-size: 76px;
-    --row-gap: 20px;
-    --row-pad-x: 22px;
-    --row-pad-y: 18px;
-
-    background: var(--card-glass-bg-list);
-    backdrop-filter: blur(18px) saturate(160%);
-    -webkit-backdrop-filter: blur(18px) saturate(160%);
-    border: 1px solid var(--card-glass-border);
-    box-shadow: var(--card-glass-shadow);
-    border-radius: 26px;
-    /* Keeps the first/last row's hover tint inside the rounded corners. */
-    overflow: hidden;
-}
-
-.project-row {
-    position: relative;
-    display: grid;
-    grid-template-columns: var(--row-icon-size) minmax(0, 1fr) auto;
-    grid-template-areas:
-        "icon head action"
-        "icon desc desc"
-        "icon tags tags";
-    column-gap: var(--row-gap);
-    row-gap: 8px;
-    align-content: start;
-    padding: var(--row-pad-y) var(--row-pad-x);
-    text-align: left;
-    transition: background-color 0.2s ease;
-}
-
-.project-row:hover {
-    background-color: var(--surface-glass-hover);
-}
-
-/* Hairline between rows, inset past the icon column. Each row is wrapped by
-   FadeInOnScroll, so this keys off the wrapper rather than the row itself. */
-.project-list > *:not(:first-child) .project-row::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: calc(var(--row-pad-x) + var(--row-icon-size) + var(--row-gap));
-    right: 0;
-    height: 1px;
-    background: var(--border-subtle);
-}
-
-.project-row__icon {
-    grid-area: icon;
-    width: var(--row-icon-size);
-    height: var(--row-icon-size);
-    /* Squircle proportion Apple uses for app icons. */
-    border-radius: 22.5%;
-    object-fit: cover;
-    background: var(--project-image-container-bg);
-    border: 1px solid var(--border-subtle);
-}
-
-.project-row__head {
-    grid-area: head;
-    min-width: 0;
-    align-self: center;
-}
-
-.project-row__title {
-    margin: 0;
-    font-size: 1.15rem;
-    font-weight: 700;
-    line-height: 1.3;
-    color: var(--color-text);
-}
-
-.project-row__meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 6px 0 0;
-    font-size: 0.85rem;
-    color: var(--color-text-soft);
-}
-
-.project-row__type {
-    display: inline-flex;
-    align-items: center;
-    padding: 2px 10px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    line-height: 1.6;
-}
-
-.project-row__type.personal {
-    background-color: var(--project-type-personal-bg);
-    color: var(--project-type-personal-text);
-}
-
-.project-row__type.company {
-    background-color: var(--project-type-company-bg);
-    color: var(--project-type-company-text);
-}
-
-.project-row__date {
-    font-variant-numeric: tabular-nums;
-}
-
-.project-row__action {
-    grid-area: action;
-    align-self: center;
-}
-
-.project-row__get {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 36px;
-    padding: 0 18px;
-    border-radius: var(--button-radius-pill);
-    background: var(--accent-bg-medium);
-    border: 1px solid var(--accent-border-soft);
-    color: var(--color-text-accent);
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: background-color 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
-}
-
-a.project-row__get:hover {
-    background: var(--accent-bg-strong);
-    border-color: var(--card-glass-border-hover);
-    color: var(--color-text-accent);
-    text-decoration: none;
-}
-
-a.project-row__get:active {
-    transform: scale(var(--button-active-scale));
-}
-
-.project-row__get--locked {
-    background: var(--project-tag-bg);
-    border-color: var(--border-subtle);
-    color: var(--color-text-soft);
-    cursor: default;
-}
-
-.project-row__description {
-    grid-area: desc;
-    margin: 0;
-    font-size: 0.92rem;
-    line-height: 1.6;
-    color: var(--color-text-soft);
-    /* Clamp to two lines, and reserve both even when the copy only fills one,
-       so every row in the list keeps the same height. 1.6 line-height x 2. */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    min-height: 3.2em;
-}
-
-.project-row__tags {
-    grid-area: tags;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin: 2px 0 0;
-    padding: 0;
-    list-style: none;
-}
-
-.project-row__tag {
-    padding: 3px 10px;
-    border-radius: 999px;
-    background: var(--project-tag-bg);
-    color: var(--project-tag-text);
-    font-size: 0.78rem;
-    line-height: 1.5;
-    white-space: nowrap;
-}
-
-.project-row__tag--more {
-    background: transparent;
-    border: 1px dashed var(--border-medium);
-    color: var(--color-text-soft);
-}
-
-@media (max-width: 991px) {
-    .project-list {
-        --row-icon-size: 64px;
-        --row-gap: 16px;
-        --row-pad-x: 16px;
-    }
-
-    .project-row__title {
-        font-size: 1.05rem;
-    }
-
-    /* Touch target floor, same as the toolbar controls. */
-    .project-row__get {
-        min-height: 44px;
-    }
-}
-
-@media (max-width: 575px) {
-    .project-list {
-        --row-icon-size: 56px;
-        --row-gap: 14px;
-    }
-
-    /* Too narrow for a title and an action side by side: drop the button to
-       its own full-width row underneath. */
-    .project-row {
-        grid-template-columns: var(--row-icon-size) minmax(0, 1fr);
-        grid-template-areas:
-            "icon head"
-            "desc desc"
-            "tags tags"
-            "action action";
-    }
-
-    .project-row__action {
-        justify-self: stretch;
-        margin-top: 4px;
-    }
-
-    .project-row__get {
-        width: 100%;
-    }
-
-    /* Text now starts at the padding edge, so the hairline does too. */
-    .project-list > *:not(:first-child) .project-row::before {
-        left: var(--row-pad-x);
-    }
 }
 
 /*================================================================
@@ -3652,7 +3834,19 @@ a.project-row__get:active {
         justify-content: center;
     }
 
-    /* Touch layout: clear the 44px touch target floor. */
+    /* Touch layout: grow the toolbar so its controls clear the 44px touch
+       target floor. The desktop row stays at 42px/32px. */
+    .view-switcher-container {
+        width: 100%;
+        justify-content: center;
+        height: 52px; /* 44px button + 4px padding top/bottom + 2px border */
+    }
+
+    .view-switcher__button {
+        flex: 1;
+        height: 44px;
+    }
+
     .filter-dropdown-toggle {
         min-height: 44px;
     }
@@ -4061,6 +4255,44 @@ a.project-row__get:active {
         transition: padding-bottom 0.3s ease-in-out;
     }
 
+    .card.project-card-list-view {
+        flex-direction: column !important;
+    }
+
+    .project-card-list-view__type {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        z-index: 2;
+    }
+
+    .project-card-list-view__image-container {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto 20px auto;
+    }
+
+    .project-card-list-view__content {
+        text-align: center;
+    }
+
+    .project-card-list-view__title,
+    .project-card__title {
+        display: block;
+        width: 100%;
+    }
+
+    .project-card-list-view__tags {
+        justify-content: center;
+    }
+
+    .project-card-list-view__description {
+        text-align: left;
+    }
+
+    .project-card-list-view__buttons {
+        justify-content: center;
+    }
 }
 
 /* Theme Invert for specific icons */
@@ -4144,6 +4376,7 @@ html.theme-transition *::after {
 /* Extend liquid glass beyond navigation to the site's glass-like action buttons. */
 .filter-dropdown-toggle,
 .filter-clear-btn,
+.view-switcher-container,
 .like-btn,
 .fork-btn-inner,
 .mobile-theme-toggle-btn {
@@ -4160,6 +4393,7 @@ html.theme-transition *::after {
 
 [data-theme="light"] .filter-dropdown-toggle,
 [data-theme="light"] .filter-clear-btn,
+[data-theme="light"] .view-switcher-container,
 [data-theme="light"] .like-btn,
 [data-theme="light"] .fork-btn-inner,
 [data-theme="light"] .mobile-theme-toggle-btn {
@@ -4183,6 +4417,7 @@ html.theme-transition *::after {
 
 [data-theme="light"] .filter-dropdown-toggle:hover,
 [data-theme="light"] .filter-clear-btn:hover,
+[data-theme="light"] .view-switcher-container:hover,
 [data-theme="light"] .like-btn:hover,
 [data-theme="light"] .fork-btn-inner:hover,
 [data-theme="light"] .mobile-theme-toggle-btn:hover {
@@ -4197,6 +4432,7 @@ html.theme-transition *::after {
 .liquid-glass-frosted-fallback [data-liquid-glass-map-target="bottom"],
 .liquid-glass-frosted-fallback .filter-dropdown-toggle,
 .liquid-glass-frosted-fallback .filter-clear-btn,
+.liquid-glass-frosted-fallback .view-switcher-container,
 .liquid-glass-frosted-fallback .like-btn,
 .liquid-glass-frosted-fallback .fork-btn-inner,
 .liquid-glass-frosted-fallback .mobile-theme-toggle-btn,
@@ -4222,6 +4458,7 @@ html.theme-transition *::after {
 [data-theme="light"].liquid-glass-frosted-fallback [data-liquid-glass-map-target="bottom"],
 [data-theme="light"].liquid-glass-frosted-fallback .filter-dropdown-toggle,
 [data-theme="light"].liquid-glass-frosted-fallback .filter-clear-btn,
+[data-theme="light"].liquid-glass-frosted-fallback .view-switcher-container,
 [data-theme="light"].liquid-glass-frosted-fallback .like-btn,
 [data-theme="light"].liquid-glass-frosted-fallback .fork-btn-inner,
 [data-theme="light"].liquid-glass-frosted-fallback .mobile-theme-toggle-btn,
@@ -4230,6 +4467,7 @@ html.theme-transition *::after {
 [data-theme="light"] .liquid-glass-frosted-fallback [data-liquid-glass-map-target="bottom"],
 [data-theme="light"] .liquid-glass-frosted-fallback .filter-dropdown-toggle,
 [data-theme="light"] .liquid-glass-frosted-fallback .filter-clear-btn,
+[data-theme="light"] .liquid-glass-frosted-fallback .view-switcher-container,
 [data-theme="light"] .liquid-glass-frosted-fallback .like-btn,
 [data-theme="light"] .liquid-glass-frosted-fallback .fork-btn-inner,
 [data-theme="light"] .liquid-glass-frosted-fallback .mobile-theme-toggle-btn {
