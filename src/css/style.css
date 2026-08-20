@@ -2706,11 +2706,6 @@ body.homepage .home-about-section {
     justify-content: center;
     gap: 5px;
     margin-bottom: 15px;
-    /* The overlay is a column flex container with align-items:center, so this
-       would otherwise shrink-wrap its content - making the width TagRow
-       measures against depend on how many chips it just decided to show.
-       Same reason .project-card__title pins its width. */
-    width: 100%;
 }
 
 .project-card-list-view__tags {
@@ -2739,10 +2734,10 @@ body.homepage .home-about-section {
     pointer-events: none;
 }
 
-.project-card__tag,
 .project-card-list-view__tag {
     /* Measured out of flow, where shrink-to-fit would otherwise let a
-       two-word tag break and under-report its width. */
+       two-word tag break and under-report its width. Grid tags keep the
+       default wrapping - they are not collapsed. */
     white-space: nowrap;
 }
 

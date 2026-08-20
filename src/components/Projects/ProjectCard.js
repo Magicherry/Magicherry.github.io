@@ -72,11 +72,15 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                             {localizedType}
                         </span>
                     </div>
-                    <TagRow
-                        tags={tags}
-                        className="project-card__tags"
-                        tagClassName="project-card__tag"
-                    />
+                    {/* Grid overlay is a detail panel - let its tags wrap in full
+                        rather than collapsing them the way the list rows do. */}
+                    <div className="project-card__tags">
+                        {tags.map((tag, index) => (
+                            <span key={index} className="project-card__tag">
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
                     <Card.Text className="project-card__description">{localizedDescription}</Card.Text>
                     <div className="project-card__buttons">
                         {ghLink ? (
