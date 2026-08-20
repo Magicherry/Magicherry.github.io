@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
-import ProjectCard from "./ProjectCard";
+import { Container } from "react-bootstrap";
+import ProjectRow from "./ProjectRow";
 
 import FadeInOnScroll from "../MainFrame/FadeInOnScroll";
-import { BsGridFill, BsListUl, BsChevronDown, BsCheck } from "react-icons/bs";
+import { BsChevronDown, BsCheck } from "react-icons/bs";
 import { projects } from "./ProjectData";
 import { useLanguage } from "../../context/LanguageContext";
 
@@ -21,8 +21,9 @@ const Projects = () => {
       allGenres: "全部标签",
       sort: "排序",
       clear: "清除",
-      listView: "列表视图",
-      gridView: "网格视图"
+      listLabel: "全部项目",
+      count: (n) => `${n} 个项目`,
+      empty: "没有符合所选标签的项目。"
     }
     : {
       headingPrefix: "My Previous",
@@ -35,16 +36,11 @@ const Projects = () => {
       allGenres: "All Genres",
       sort: "Sort",
       clear: "Clear",
-      listView: "List view",
-      gridView: "Grid view"
+      listLabel: "All Projects",
+      count: (n) => `${n} ${n === 1 ? "project" : "projects"}`,
+      empty: "No projects match the selected tags."
     };
-  const getInitialViewMode = () => {
-    if (typeof window === "undefined") return "list";
-    const stored = window.localStorage ? window.localStorage.getItem("projectsViewMode") : null;
-    return stored === "grid" || stored === "list" ? stored : "list";
-  };
 
-  const [viewMode, setViewMode] = useState(getInitialViewMode);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [selectedTags, setSelectedTags] = useState([]);
   const [sortBy, setSortBy] = useState("dateDesc");
@@ -79,18 +75,12 @@ const Projects = () => {
   }, [filteredProjects, sortBy]);
 
   const handleTagToggle = useCallback((tag) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
+    setSelectedTags(prev =>
+      prev.includes(tag)
         ? prev.filter(t => t !== tag)
         : [...prev, tag]
     );
   }, []);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      window.localStorage.setItem("projectsViewMode", viewMode);
-    }
-  }, [viewMode]);
 
   useEffect(() => {
     setIsInitialLoad(false);
@@ -116,159 +106,142 @@ const Projects = () => {
   }, [isDropdownOpen, isSortDropdownOpen]);
 
   return (
-      <Container fluid className="project-section">
-        
-        <Container>
-          <h1 className="project-heading">
-          {locale === "zh" ? <><strong className="text-accent">{copy.headingAccent}</strong> {copy.headingPrefix}</> : <>{copy.headingPrefix}{copy.headingPrefix ? " " : ""}<strong className="text-accent">{copy.headingAccent}</strong></>}
-          </h1>
-          <p className="section-intro-text">
-            {copy.subtitle}
-          </p>
-          <Row className={`projects__row ${viewMode}`}>
-            <Col md={12} className="projects__toolbar d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-              <div className="d-flex align-items-center gap-2 flex-wrap">
-              <div className="filter-dropdown-container" ref={dropdownRef}>
-                <div className="d-flex align-items-center gap-2">
-                  <button 
-                    className={`filter-dropdown-toggle ${isDropdownOpen ? 'active' : ''}`}
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  >
-                    {selectedTags.length === 0 && (
-                      <span className="filter-dropdown-label">{copy.allGenres}</span>
-                    )}
-                    {selectedTags.length > 0 && (
-                      <div 
-                        className="filter-selected-tags"
-                        onWheel={(e) => {
-                          e.stopPropagation();
-                          e.currentTarget.scrollLeft += e.deltaY;
-                        }}
-                      >
-                        {selectedTags.map(tag => (
-                          <span key={tag} className="filter-selected-tag">
-                            {tag}
-                            <span 
-                              className="filter-tag-remove"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleTagToggle(tag);
-                              }}
-                            >
-                              ×
-                            </span>
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    <BsChevronDown className="dropdown-icon" />
-                  </button>
-                </div>
-                
-                {isDropdownOpen && (
-                  <div className="filter-dropdown-menu">
-                    {allTags.map(tag => {
-                      const isSelected = selectedTags.includes(tag);
-                      return (
-                        <button
-                          key={tag}
-                          className={`filter-dropdown-item ${isSelected ? 'selected' : ''}`}
-                          onClick={() => handleTagToggle(tag)}
-                        >
-                          <span className="item-text">{tag}</span>
-                          {isSelected && <BsCheck className="check-icon" />}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
+    <Container fluid className="project-section">
 
-              <div className="filter-dropdown-container sort-dropdown-container" ref={sortDropdownRef}>
+      <Container>
+        <h1 className="project-heading">
+          {locale === "zh"
+            ? <><strong className="text-accent">{copy.headingAccent}</strong> {copy.headingPrefix}</>
+            : <>{copy.headingPrefix}{copy.headingPrefix ? " " : ""}<strong className="text-accent">{copy.headingAccent}</strong></>}
+        </h1>
+        <p className="section-intro-text">
+          {copy.subtitle}
+        </p>
+
+        <div className="projects__toolbar d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+          <div className="d-flex align-items-center gap-2 flex-wrap">
+            <div className="filter-dropdown-container" ref={dropdownRef}>
+              <div className="d-flex align-items-center gap-2">
                 <button
-                  className={`filter-dropdown-toggle sort-dropdown-toggle ${isSortDropdownOpen ? "active" : ""}`}
-                  onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+                  className={`filter-dropdown-toggle ${isDropdownOpen ? 'active' : ''}`}
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
-                  <span className="filter-dropdown-label">
-                    {copy.sort}: {copy.sortOptions.find(o => o.value === sortBy)?.label ?? copy.sortOptions[0].label}
-                  </span>
+                  {selectedTags.length === 0 && (
+                    <span className="filter-dropdown-label">{copy.allGenres}</span>
+                  )}
+                  {selectedTags.length > 0 && (
+                    <div
+                      className="filter-selected-tags"
+                      onWheel={(e) => {
+                        e.stopPropagation();
+                        e.currentTarget.scrollLeft += e.deltaY;
+                      }}
+                    >
+                      {selectedTags.map(tag => (
+                        <span key={tag} className="filter-selected-tag">
+                          {tag}
+                          <span
+                            className="filter-tag-remove"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleTagToggle(tag);
+                            }}
+                          >
+                            ×
+                          </span>
+                        </span>
+                      ))}
+                    </div>
+                  )}
                   <BsChevronDown className="dropdown-icon" />
                 </button>
-                {isSortDropdownOpen && (
-                  <div className="filter-dropdown-menu">
-                    {copy.sortOptions.map(opt => (
+              </div>
+
+              {isDropdownOpen && (
+                <div className="filter-dropdown-menu">
+                  {allTags.map(tag => {
+                    const isSelected = selectedTags.includes(tag);
+                    return (
                       <button
-                        key={opt.value}
-                        className={`filter-dropdown-item ${sortBy === opt.value ? "selected" : ""}`}
-                        onClick={() => {
-                          setSortBy(opt.value);
-                          setIsSortDropdownOpen(false);
-                        }}
+                        key={tag}
+                        className={`filter-dropdown-item ${isSelected ? 'selected' : ''}`}
+                        onClick={() => handleTagToggle(tag)}
                       >
-                        <span className="item-text">{opt.label}</span>
-                        {sortBy === opt.value && <BsCheck className="check-icon" />}
+                        <span className="item-text">{tag}</span>
+                        {isSelected && <BsCheck className="check-icon" />}
                       </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {(selectedTags.length > 0 || sortBy !== "dateDesc") && (
-                <button
-                  className="filter-clear-btn"
-                  onClick={() => {
-                    setSelectedTags([]);
-                    setSortBy("dateDesc");
-                  }}
-                >
-                  × {copy.clear}
-                </button>
+                    );
+                  })}
+                </div>
               )}
-              </div>
+            </div>
 
-              <div className="view-switcher-container">
-                <Button
-                    variant="outline-primary"
-                    onClick={() => setViewMode("list")}
-                    className={`view-switcher__button ${viewMode === "list" ? "view-switcher__button--active" : ""}`}
-                    aria-label={copy.listView}
-                >
-                  <BsListUl />
-                </Button>
-                <Button
-                    variant="outline-primary"
-                    onClick={() => setViewMode("grid")}
-                    className={`view-switcher__button ${viewMode === "grid" ? "view-switcher__button--active" : ""}`}
-                    aria-label={copy.gridView}
-                >
-                  <BsGridFill />
-                </Button>
-              </div>
-            </Col>
+            <div className="filter-dropdown-container sort-dropdown-container" ref={sortDropdownRef}>
+              <button
+                className={`filter-dropdown-toggle sort-dropdown-toggle ${isSortDropdownOpen ? "active" : ""}`}
+                onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+              >
+                <span className="filter-dropdown-label">
+                  {copy.sort}: {copy.sortOptions.find(o => o.value === sortBy)?.label ?? copy.sortOptions[0].label}
+                </span>
+                <BsChevronDown className="dropdown-icon" />
+              </button>
+              {isSortDropdownOpen && (
+                <div className="filter-dropdown-menu">
+                  {copy.sortOptions.map(opt => (
+                    <button
+                      key={opt.value}
+                      className={`filter-dropdown-item ${sortBy === opt.value ? "selected" : ""}`}
+                      onClick={() => {
+                        setSortBy(opt.value);
+                        setIsSortDropdownOpen(false);
+                      }}
+                    >
+                      <span className="item-text">{opt.label}</span>
+                      {sortBy === opt.value && <BsCheck className="check-icon" />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {(selectedTags.length > 0 || sortBy !== "dateDesc") && (
+              <button
+                className="filter-clear-btn"
+                onClick={() => {
+                  setSelectedTags([]);
+                  setSortBy("dateDesc");
+                }}
+              >
+                × {copy.clear}
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="project-list-header">
+          <h2 className="project-list-header__title">{copy.listLabel}</h2>
+          <span className="project-list-header__count">{copy.count(sortedProjects.length)}</span>
+        </div>
+
+        {sortedProjects.length === 0 ? (
+          <p className="project-list__empty">{copy.empty}</p>
+        ) : (
+          <div className="project-list">
             {sortedProjects.map((project, index) => (
-                <Col
-                    lg={viewMode === "grid" ? 4 : 12}
-                    md={viewMode === "grid" ? 6 : 12}
-                    sm={12}
-                    className="project-card"
-                    key={project.title.en}
-                >
               <FadeInOnScroll
-                key={`${project.title.en}-${viewMode}`}
+                key={project.title.en}
                 delay={index * 40}
                 eager
                 skipAnimation={isInitialLoad}
               >
-                    <ProjectCard
-                        {...project}
-                        viewMode={viewMode}
-                    />
-                  </FadeInOnScroll>
-                </Col>
+                <ProjectRow {...project} />
+              </FadeInOnScroll>
             ))}
-          </Row>
-        </Container>
+          </div>
+        )}
       </Container>
+    </Container>
   );
 };
 
