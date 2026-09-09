@@ -15,12 +15,16 @@ const Footer = () => {
     ? {
       copyright: `版权所有 © 周昱廷 ${year}`,
       wechatQrAlt: "微信二维码",
-      email: "zyt680129@163.com"
+      email: "zyt680129@163.com",
+      emailHint: "发送邮件",
+      social: { GitHub: "GitHub 主页 · @Magicherry", LinkedIn: "LinkedIn 主页", WeChat: "显示微信二维码", Bilibili: "Bilibili 主页" }
     }
     : {
       copyright: `Copyright © Yuting Zhou ${year}`,
       wechatQrAlt: "WeChat QR Code",
-      email: "zyt680129@gmail.com"
+      email: "zyt680129@gmail.com",
+      emailHint: "Send an email",
+      social: { GitHub: "GitHub profile · @Magicherry", LinkedIn: "LinkedIn profile", WeChat: "Show WeChat QR code", Bilibili: "Bilibili channel" }
     };
 
   useCloseOnWindowScroll(showWechatModal, () => setShowWechatModal(false));
@@ -44,7 +48,7 @@ const Footer = () => {
       <Container fluid className="footer">
         <Row className="align-items-center justify-content-center">
           <Col md={4} className="footer-copyright d-flex align-items-center justify-content-center">
-            <a href={`mailto:${copy.email}`} className="email-link footer-email">
+            <a href={`mailto:${copy.email}`} className="email-link footer-email" title={copy.emailHint}>
               <FaEnvelope className="footer-email__icon" aria-hidden="true" />
               <span className="footer-email__text">{copy.email}</span>
             </a>
@@ -62,6 +66,7 @@ const Footer = () => {
                         target={link.onClick ? "_self" : "_blank"}
                         rel="noopener noreferrer"
                         aria-label={link.ariaLabel}
+                        title={copy.social[link.ariaLabel]}
                         onClick={link.onClick}
                     >
                       {link.icon}

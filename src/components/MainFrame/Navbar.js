@@ -324,6 +324,8 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
     displayName: "周昱廷",
     brandName: "YUTING ZHOU",
     toggleSidebar: "切换侧边导航",
+    expandSidebar: "展开侧边导航",
+    goHome: "回到首页",
     toggleTheme: "切换主题",
     themeModes: {
       dark: "深色模式",
@@ -339,13 +341,23 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
     avatarAlt: "周昱廷头像",
     wechatQrAlt: "微信二维码",
     languageToggle: "切换语言",
-    languageMode: "当前语言",
+    languageMode: "切换到 English",
+    socialGithub: "GitHub 主页 · @Magicherry",
+    socialLinkedin: "LinkedIn 主页",
+    socialWechat: "显示微信二维码",
+    socialBilibili: "Bilibili 主页",
+    locationHint: "蔚来 · 中国上海",
+    emailHint: "发送邮件",
+    phoneHint: "拨打电话",
+    downloadCvHint: "下载中文简历（PDF）",
     email: "zyt680129@163.com",
     phone: "+86 13681756546"
   } : {
     displayName: "Yuting Zhou",
     brandName: "YUTING ZHOU",
     toggleSidebar: "Toggle sidebar",
+    expandSidebar: "Open sidebar navigation",
+    goHome: "Back to home",
     toggleTheme: "Toggle theme",
     themeModes: {
       dark: "Dark mode",
@@ -361,7 +373,15 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
     avatarAlt: "Yuting Zhou avatar",
     wechatQrAlt: "WeChat QR Code",
     languageToggle: "Toggle language",
-    languageMode: "Current language",
+    languageMode: "切换到中文",
+    socialGithub: "GitHub profile · @Magicherry",
+    socialLinkedin: "LinkedIn profile",
+    socialWechat: "Show WeChat QR code",
+    socialBilibili: "Bilibili channel",
+    locationHint: "NIO · Shanghai, China",
+    emailHint: "Send an email",
+    phoneHint: "Call this number",
+    downloadCvHint: "Download CV (PDF, English)",
     email: "zyt680129@gmail.com",
     phone: "+86 136 8175 6546"
   };
@@ -491,6 +511,7 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
                 className="github-pill-btn mobile-topbar__btn mobile-topbar__github"
                 data-liquid-glass-map-target="control"
                 aria-label={copy.githubRepository}
+                title={copy.githubRepository}
               >
                 <AiFillStar className="star-icon" />
                 <div className="divider" />
@@ -506,6 +527,7 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
               <button
                 type="button"
                 className="navbar-brand-text"
+                title={copy.goHome}
                 onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}
               >
                 {copy.brandName}
@@ -519,6 +541,7 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
                 className={`sidebar-toggle-icon ${isSideNavVisible ? "active" : ""}`}
                 onClick={toggleSideNav}
                 aria-label={copy.toggleSidebar}
+                title={isSideNavVisible ? copy.collapseToTopNav : copy.expandSidebar}
               >
                 <FiSidebar />
               </button>
@@ -550,6 +573,7 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
                 className="github-pill-btn"
                 data-liquid-glass-map-target="control"
                 aria-label={copy.githubRepository}
+                title={copy.githubRepository}
               >
                 <AiFillStar className="star-icon" />
                 <div className="divider" />
@@ -577,6 +601,7 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
                   data-liquid-glass-map-target="control"
                   onClick={toggleSideNav}
                   aria-label={copy.collapseToTopNav}
+                  title={copy.collapseToTopNav}
                 >
                   <FiSidebar />
                 </button>
@@ -604,7 +629,8 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
                   href="https://github.com/Magicherry"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="GitHub"
+                  aria-label={copy.socialGithub}
+                  title={copy.socialGithub}
                 >
                   <AiFillGithub />
                 </a>
@@ -613,14 +639,16 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
                   href="https://www.linkedin.com/in/yuting-zhou-magicherry/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="LinkedIn"
+                  aria-label={copy.socialLinkedin}
+                  title={copy.socialLinkedin}
                 >
                   <FaLinkedinIn />
                 </a>
                 <a
                   className="floating-nav-icon-btn"
                   href="#wechat"
-                  aria-label="WeChat"
+                  aria-label={copy.socialWechat}
+                  title={copy.socialWechat}
                   onClick={openWechatModal}
                 >
                   <FaWeixin />
@@ -630,7 +658,8 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
                   href="https://space.bilibili.com/155876727"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Bilibili"
+                  aria-label={copy.socialBilibili}
+                  title={copy.socialBilibili}
                 >
                   <SiBilibili />
                 </a>
@@ -655,15 +684,16 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
                   href="https://www.nio.com/"
                   target="_blank"
                   rel="noopener noreferrer"
+                  title={copy.locationHint}
                 >
                   <FiMapPin />
                   <span>{copy.location}</span>
                 </a>
-                <a className="floating-nav-contact-item" href={`mailto:${copy.email}`}>
+                <a className="floating-nav-contact-item" href={`mailto:${copy.email}`} title={copy.emailHint}>
                   <FiMail />
                   <span>{copy.email}</span>
                 </a>
-                <a className="floating-nav-contact-item" href={`tel:${copy.phone.replace(/[^\d+]/g, "")}`}>
+                <a className="floating-nav-contact-item" href={`tel:${copy.phone.replace(/[^\d+]/g, "")}`} title={copy.phoneHint}>
                   <FiPhone />
                   <span>{copy.phone}</span>
                 </a>
@@ -676,6 +706,7 @@ function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="floating-nav-ghost-btn"
+                  title={copy.downloadCvHint}
                 >
                   <AiOutlineDownload />
                   <span>{copy.downloadCv}</span>

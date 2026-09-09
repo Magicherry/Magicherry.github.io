@@ -55,6 +55,7 @@ const DownloadButton = ({ file, copy }) => (
             target="_blank"
             rel="noopener noreferrer"
             className="download-cv-button"
+            title={copy.downloadHint}
         >
             <AiOutlineDownload />
             <span>{copy.download}</span>
@@ -71,7 +72,8 @@ function ResumeNew() {
             errorTitle: "PDF 加载失败。",
             errorFallback: "请稍后再试。",
             download: "下载简历",
-            downloadFileName: "周昱廷-简历.pdf"
+            downloadFileName: "周昱廷-简历.pdf",
+            downloadHint: "下载中文简历（PDF）"
         }
         : {
             loading: "Loading resume…",
@@ -79,7 +81,8 @@ function ResumeNew() {
             errorTitle: "Unable to load the PDF.",
             errorFallback: "Please try again later.",
             download: "Download CV",
-            downloadFileName: "Yuting_Zhou_CV.pdf"
+            downloadFileName: "Yuting_Zhou_CV.pdf",
+            downloadHint: "Download CV (PDF, English)"
         };
     const activePdf = locale === "zh" ? pdfZh : pdf;
     const [width, setWidth] = useState(1200);

@@ -16,12 +16,20 @@ const ProjectCard = ({ imgPath, title, description, ghLink, tags, viewMode, type
         ? {
             github: "GitHub",
             privateRepository: "私有仓库",
-            privateRepoShort: "私有仓库"
+            privateRepoShort: "私有仓库",
+            openRepoHint: "在 GitHub 上查看源码",
+            privateRepoHint: "该项目源码未公开",
+            dateHint: "项目年份",
+            typeHint: "项目类型"
         }
         : {
             github: "GitHub",
             privateRepository: "Private Repository",
-            privateRepoShort: "Private Repo"
+            privateRepoShort: "Private Repo",
+            openRepoHint: "View the source on GitHub",
+            privateRepoHint: "Source for this project is not public",
+            dateHint: "Project year",
+            typeHint: "Project type"
         };
 
     if (viewMode === "list") {
@@ -37,7 +45,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, tags, viewMode, type
                         className="project-card-list-view__tags"
                         tagClassName="project-card-list-view__tag"
                         leading={(
-                            <span className={`project-card-list-view__type ${isCompany ? 'company' : 'personal'}`}>
+                            <span className={`project-card-list-view__type ${isCompany ? 'company' : 'personal'}`} title={copy.typeHint}>
                                 {localizedType}
                             </span>
                         )}
@@ -52,17 +60,18 @@ const ProjectCard = ({ imgPath, title, description, ghLink, tags, viewMode, type
                                 rel="noopener noreferrer"
                                 className="github-pill-btn-project"
                                 aria-label={`${localizedTitle} — ${copy.github}`}
+                                title={copy.openRepoHint}
                             >
                                 <BsGithub /> &nbsp; {copy.github} &nbsp; <BsArrowRight />
                             </Button>
                         ) : (
-                            <Button variant="light" disabled className="github-pill-btn-project">
+                            <Button variant="light" disabled className="github-pill-btn-project" title={copy.privateRepoHint}>
                                 <FaLock /> &nbsp; {copy.privateRepository}
                             </Button>
                         )}
                     </div>
                 </div>
-                {date && <span className="project-card__date project-card__date--list">{date}</span>}
+                {date && <span className="project-card__date project-card__date--list" title={copy.dateHint}>{date}</span>}
             </Card>
         );
     }
@@ -75,7 +84,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, tags, viewMode, type
                 </div>
                 <div className="project-card__overlay">
                     <div className="project-card__type-container">
-                        <span className={`project-card__type ${isCompany ? 'company' : 'personal'}`}>
+                        <span className={`project-card__type ${isCompany ? 'company' : 'personal'}`} title={copy.typeHint}>
                             {localizedType}
                         </span>
                     </div>
@@ -98,6 +107,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, tags, viewMode, type
                                 rel="noopener noreferrer"
                                 className="project-card__button github-pill-btn-project"
                                 aria-label={`${localizedTitle} — ${copy.github}`}
+                                title={copy.openRepoHint}
                             >
                                 <BsGithub /> &nbsp;
                                 {copy.github} &nbsp; <BsArrowRight />
@@ -107,6 +117,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, tags, viewMode, type
                                 variant="light"
                                 disabled
                                 className="project-card__button github-pill-btn-project"
+                                title={copy.privateRepoHint}
                             >
                                 <FaLock /> &nbsp;
                                 {copy.privateRepoShort}
@@ -114,7 +125,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, tags, viewMode, type
                         )}
                     </div>
                 </div>
-                {date && <span className="project-card__date project-card__date--grid">{date}</span>}
+                {date && <span className="project-card__date project-card__date--grid" title={copy.dateHint}>{date}</span>}
             </Card>
             <h5 className="project-card__static-title">{localizedTitle}</h5>
         </div>

@@ -30,6 +30,7 @@ function Home2() {
             ),
             downloadCv: "下载简历",
             downloadFileName: "周昱廷-简历.pdf",
+            downloadCvHint: "下载中文简历（PDF）",
             findMe: "联系我",
             connect: <>欢迎通过以下平台与我 <span className="text-accent">联系或交流</span></>,
             avatarAlt: "头像",
@@ -50,6 +51,7 @@ function Home2() {
             ),
             downloadCv: "Download CV",
             downloadFileName: "Yuting_Zhou_CV.pdf",
+            downloadCvHint: "Download CV (PDF, English)",
             findMe: "FIND ME ON",
             connect: <>Feel free to <span className="text-accent">connect</span> with me</>,
             avatarAlt: "avatar",
@@ -66,16 +68,19 @@ function Home2() {
             href: "https://github.com/Magicherry",
             icon: <AiFillGithub />,
             ariaLabel: "GitHub Profile",
+            hint: locale === "zh" ? "GitHub 主页 · @Magicherry" : "GitHub profile · @Magicherry",
         },
         {
             href: "https://www.linkedin.com/in/yuting-zhou-magicherry/",
             icon: <FaLinkedinIn />,
             ariaLabel: "LinkedIn Profile",
+            hint: locale === "zh" ? "LinkedIn 主页" : "LinkedIn profile",
         },
         {
             href: "#wechat",
             icon: <FaWeixin />,
             ariaLabel: "WeChat Profile",
+            hint: locale === "zh" ? "显示微信二维码" : "Show WeChat QR code",
             onClick: e => {
                 e.preventDefault();
                 setShowWechatModal(true);
@@ -85,6 +90,7 @@ function Home2() {
             href: "https://space.bilibili.com/155876727",
             icon: <SiBilibili />,
             ariaLabel: "Bilibili Profile",
+            hint: locale === "zh" ? "Bilibili 主页" : "Bilibili channel",
         },
     ];
 
@@ -118,6 +124,7 @@ function Home2() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="download-cv-button"
+                                    title={copy.downloadCvHint}
                                 >
                                     <AiOutlineDownload />
                                     <span>{copy.downloadCv}</span>
@@ -139,6 +146,7 @@ function Home2() {
                                         rel="noopener noreferrer"
                                         className="home-social-icons"
                                         aria-label={link.ariaLabel}
+                                        title={link.hint}
                                         onClick={link.onClick}
                                     >
                                         {link.icon}

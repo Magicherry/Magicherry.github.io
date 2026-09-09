@@ -22,7 +22,11 @@ const Projects = () => {
       sort: "排序",
       clear: "清除",
       listView: "列表视图",
-      gridView: "网格视图"
+      gridView: "网格视图",
+      filterHint: "按标签筛选项目",
+      sortHint: "调整排序方式",
+      clearHint: "清除筛选与排序",
+      removeTagHint: "移除此标签"
     }
     : {
       headingPrefix: "My Previous",
@@ -36,7 +40,11 @@ const Projects = () => {
       sort: "Sort",
       clear: "Clear",
       listView: "List view",
-      gridView: "Grid view"
+      gridView: "Grid view",
+      filterHint: "Filter projects by tag",
+      sortHint: "Change the sort order",
+      clearHint: "Clear filters and sorting",
+      removeTagHint: "Remove this tag"
     };
   const getInitialViewMode = () => {
     if (typeof window === "undefined") return "list";
@@ -138,6 +146,7 @@ const Projects = () => {
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     aria-expanded={isDropdownOpen}
                     aria-haspopup="true"
+                    title={copy.filterHint}
                   >
                     {selectedTags.length === 0 && (
                       <span className="filter-dropdown-label">{copy.allGenres}</span>
@@ -160,6 +169,7 @@ const Projects = () => {
                             <span
                               className="filter-tag-remove"
                               aria-hidden="true"
+                              title={`${copy.removeTagHint}: ${tag}`}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleTagToggle(tag);
@@ -203,6 +213,7 @@ const Projects = () => {
                   onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
                   aria-expanded={isSortDropdownOpen}
                   aria-haspopup="true"
+                  title={copy.sortHint}
                 >
                   <span className="filter-dropdown-label">
                     {copy.sort}: {copy.sortOptions.find(o => o.value === sortBy)?.label ?? copy.sortOptions[0].label}
@@ -234,6 +245,7 @@ const Projects = () => {
                 <button
                   type="button"
                   className="filter-clear-btn"
+                  title={copy.clearHint}
                   onClick={() => {
                     setSelectedTags([]);
                     setSortBy("dateDesc");
@@ -250,6 +262,7 @@ const Projects = () => {
                     onClick={() => setViewMode("list")}
                     className={`view-switcher__button ${viewMode === "list" ? "view-switcher__button--active" : ""}`}
                     aria-label={copy.listView}
+                    title={copy.listView}
                 >
                   <BsListUl />
                 </Button>
@@ -258,6 +271,7 @@ const Projects = () => {
                     onClick={() => setViewMode("grid")}
                     className={`view-switcher__button ${viewMode === "grid" ? "view-switcher__button--active" : ""}`}
                     aria-label={copy.gridView}
+                    title={copy.gridView}
                 >
                   <BsGridFill />
                 </Button>

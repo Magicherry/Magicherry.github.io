@@ -112,7 +112,9 @@ const TagRow = ({ tags, className, tagClassName, leading = null }) => {
             <span
                 ref={moreRef}
                 className={`${tagClassName} tag-row__more${hiddenTags.length === 0 ? " tag-row__measure-only" : ""}`}
-                title={hiddenTags.join(", ")}
+                // Empty while nothing is collapsed - the chip is still mounted
+                // for measurement, and title="" is a tooltip with no content.
+                title={hiddenTags.length > 0 ? hiddenTags.join(", ") : undefined}
                 aria-hidden={hiddenTags.length === 0 || undefined}
             >
                 +{hiddenTags.length || tags.length}
