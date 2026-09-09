@@ -4233,15 +4233,26 @@ body.homepage .home-about-section {
         padding-bottom: 60px !important;
     }
 
+    /* Every other section clears the fixed top bar with 112px total. Home was
+       stacking .home-section's 30px + 112px + .home-header's 40px = 182px
+       before its first word, which pushed the hero past the viewport height on
+       a phone. Budget the same ~112px across the three boxes instead. */
     .home-content {
-        padding-top: 112px !important;
+        padding-top: 56px !important;
         padding-bottom: 4rem !important;
     }
 
     .home-header {
-        padding-top: 40px !important;
+        padding-top: 24px !important;
         padding-left: 50px !important;
         padding-right: 50px !important;
+    }
+
+    /* 50px above and below a single line of type left a gap wider than the
+       line itself between the role and the illustration. */
+    .home__typewriter-container {
+        padding-top: 28px;
+        padding-bottom: 28px;
     }
 
     .home-about-description {
