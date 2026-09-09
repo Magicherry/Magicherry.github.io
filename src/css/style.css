@@ -2970,6 +2970,20 @@ body.homepage .home-about-section {
 .about__title {
     font-size: 2.1em;
     padding-bottom: 20px;
+    /* The column inherits text-align:center, which left this heading centred on
+       the 7-col (x=449) while every other heading on the page centres on the
+       page (x=720) - so it read as misaligned against its own left-aligned
+       body copy. Tie it to the text it introduces. Mobile re-centres below. */
+    text-align: left;
+    /* Matches .card-body's inset so the heading shares a left edge with the
+       copy underneath instead of hanging 16px proud of it. */
+    padding-left: 1rem;
+}
+
+/* The quote is left-aligned but its attribution inherited the column's
+   centring, so the two sat on different axes. */
+.about-card__quote + .blockquote-footer {
+    text-align: left;
 }
 
 .about__image-col {
@@ -3262,6 +3276,8 @@ body.homepage .home-about-section {
     .about__title {
         text-align: center;
         padding-bottom: 16px;
+        /* Stacked layout re-centres, so drop the desktop card-body inset. */
+        padding-left: 0;
     }
 
     .about__image-col,
@@ -3855,15 +3871,20 @@ body.homepage .home-about-section {
     }
 
     /* Touch layout: grow the toolbar so its controls clear the 44px touch
-       target floor. The desktop row stays at 42px/32px. */
+       target floor. The desktop row stays at 42px/32px.
+
+       Height is what the touch floor asks for - stretching the control to the
+       full row turned two 16px icons into 162px buttons. Keep it intrinsically
+       sized and widen the buttons just enough to be comfortable. */
     .view-switcher-container {
-        width: 100%;
-        justify-content: center;
         height: 52px; /* 44px button + 4px padding top/bottom + 2px border */
+        /* The toolbar switches to a stretch-aligned column here, which would
+           blow this segmented control out to the full row width. */
+        align-self: flex-end;
     }
 
     .view-switcher__button {
-        flex: 1;
+        min-width: 56px;
         height: 44px;
     }
 
