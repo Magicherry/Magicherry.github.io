@@ -2970,14 +2970,6 @@ body.homepage .home-about-section {
 .about__title {
     font-size: 2.1em;
     padding-bottom: 20px;
-    /* The column inherits text-align:center, which left this heading centred on
-       the 7-col (x=449) while every other heading on the page centres on the
-       page (x=720) - so it read as misaligned against its own left-aligned
-       body copy. Tie it to the text it introduces. Mobile re-centres below. */
-    text-align: left;
-    /* Matches .card-body's inset so the heading shares a left edge with the
-       copy underneath instead of hanging 16px proud of it. */
-    padding-left: 1rem;
 }
 
 /* The quote is left-aligned but its attribution inherited the column's
@@ -3276,8 +3268,6 @@ body.homepage .home-about-section {
     .about__title {
         text-align: center;
         padding-bottom: 16px;
-        /* Stacked layout re-centres, so drop the desktop card-body inset. */
-        padding-left: 0;
     }
 
     .about__image-col,
