@@ -153,13 +153,31 @@ html:lang(zh) body {
     --navbar-shadow: transparent;
     /* Top nav glass (frosted bar, no dark tint) */
     --navbar-glass-bg: rgba(255, 255, 255, 0.035);
+    /* Firmed-up tint once content scrolls under the bar (see .navbar-scrolled) */
+    --navbar-glass-bg-scrolled: rgba(255, 255, 255, 0.085);
     --navbar-glass-border: rgba(210, 200, 185, 0.11);
     --navbar-glass-border-hover: rgba(220, 212, 200, 0.18);
-    /* Outer drop matches sidebar panel; inset keeps glass rim */
-    --navbar-glass-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 0 12px rgba(0, 0, 0, 0.15), 0 0 24px rgba(0, 0, 0, 0.08);
+    /* Glass rim, iOS 27 style: a bright specular along the top edge, a dimmer
+       bounce along the bottom, and a darkened outer edge so the panel keeps its
+       silhouette against busy content instead of dissolving into it. */
+    --glass-specular: rgba(255, 255, 255, 0.18);
+    --glass-bounce: rgba(255, 255, 255, 0.05);
+    /* A crisp ring reads as a rim against dark content. */
+    --glass-edge-shadow: 0 0 0 1px rgba(0, 0, 0, 0.28);
+    /* Opaque stand-in used under Reduce Transparency / Increase Contrast */
+    --surface-solid-glass: rgba(13, 21, 34, 0.97);
+    /* Outer drop matches sidebar panel; insets keep the glass rim */
+    --navbar-glass-shadow:
+        inset 0 1px 0 var(--glass-specular),
+        inset 0 -1px 0 var(--glass-bounce),
+        var(--glass-edge-shadow),
+        0 0 12px rgba(0, 0, 0, 0.15),
+        0 0 24px rgba(0, 0, 0, 0.08);
     /* Social / collapse / theme: lighter than main glass but clearly visible */
     --navbar-glass-shadow-sm:
-        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        inset 0 1px 0 var(--glass-specular),
+        inset 0 -1px 0 var(--glass-bounce),
+        var(--glass-edge-shadow),
         0 0 12px rgba(0, 0, 0, 0.2),
         0 0 28px rgba(0, 0, 0, 0.12);
     --navbar-glass-active-bg: rgba(255, 255, 255, 0.1);
@@ -338,13 +356,27 @@ html:lang(zh) body {
     --navbar-shadow: transparent;
 
     --navbar-glass-bg: rgba(255, 255, 255, 0.38);
+    --navbar-glass-bg-scrolled: rgba(255, 255, 255, 0.62);
     --navbar-glass-border: rgba(255, 255, 255, 0.72);
     --navbar-glass-border-hover: rgba(255, 255, 255, 0.95);
+    /* Light glass leans on the specular far more than the dark theme does; the
+       darkened edge stays subtle so it reads as a rim, not a border. */
+    --glass-specular: rgba(255, 255, 255, 0.95);
+    --glass-bounce: rgba(255, 255, 255, 0.45);
+    /* The same ring on light glass over a light page reads as a gray outline
+       rather than a rim, so light theme gets a soft contact shadow instead -
+       separation without a drawn line. Set to `0 0 0 0 transparent` to disable. */
+    --glass-edge-shadow: 0 1px 2px rgba(17, 17, 26, 0.05);
+    --surface-solid-glass: rgba(255, 255, 255, 0.97);
     --navbar-glass-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.86),
+        inset 0 1px 0 var(--glass-specular),
+        inset 0 -1px 0 var(--glass-bounce),
+        var(--glass-edge-shadow),
         var(--floating-nav-panel-shadow);
     --navbar-glass-shadow-sm:
-        inset 0 1px 0 rgba(255, 255, 255, 0.86),
+        inset 0 1px 0 var(--glass-specular),
+        inset 0 -1px 0 var(--glass-bounce),
+        var(--glass-edge-shadow),
         0 0 16px rgba(0, 0, 0, 0.08),
         0 0 40px rgba(0, 0, 0, 0.055);
     --navbar-glass-active-bg: rgba(0, 0, 0, 0.045);
@@ -915,7 +947,7 @@ body.preloader-active .home-hero-name {
     box-shadow: var(--navbar-glass-shadow);
     z-index: 10;
     white-space: nowrap;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    transition: background 0.3s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .navbar-center-pill:hover {
@@ -4030,7 +4062,13 @@ body.homepage .home-about-section {
         -webkit-backdrop-filter: blur(15px) saturate(180%);
         border-radius: var(--button-radius-pill);
         border: 1px solid var(--navbar-glass-border);
-        box-shadow: var(--shadow-inset-light), var(--shadow-drop-xl);
+        /* Same rim as the top bar - this pill was on a separate shadow token
+           and so kept the old flat highlight while everything else moved on. */
+        box-shadow:
+            inset 0 1px 0 var(--glass-specular),
+            inset 0 -1px 0 var(--glass-bounce),
+            var(--glass-edge-shadow),
+            var(--shadow-drop-xl);
         overflow: hidden;
         transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), z-index 0s, border-color 0.25s ease;
         z-index: 10;
@@ -4286,27 +4324,27 @@ html.theme-transition *::after {
     overflow: hidden;
     isolation: isolate;
     background: var(--navbar-glass-bg);
-    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
-    backdrop-filter: blur(18px) saturate(160%) !important;
-    backdrop-filter: url(#liquid-glass-top) blur(8px) saturate(1.55) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+    backdrop-filter: blur(22px) saturate(160%) !important;
+    backdrop-filter: url(#liquid-glass-top) blur(11px) saturate(1.55) !important;
 }
 
 [data-liquid-glass-map-target="control"] {
-    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
-    backdrop-filter: blur(18px) saturate(160%) !important;
-    backdrop-filter: url(#liquid-glass-control) blur(9px) saturate(1.55) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+    backdrop-filter: blur(22px) saturate(160%) !important;
+    backdrop-filter: url(#liquid-glass-control) blur(12px) saturate(1.55) !important;
 }
 
 [data-liquid-glass-map-target="panel"] {
-    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-    backdrop-filter: blur(24px) saturate(180%) !important;
-    backdrop-filter: url(#liquid-glass-panel) blur(12px) saturate(1.58) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+    backdrop-filter: blur(30px) saturate(180%) !important;
+    backdrop-filter: url(#liquid-glass-panel) blur(16px) saturate(1.58) !important;
 }
 
 [data-liquid-glass-map-target="bottom"] {
-    -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
-    backdrop-filter: blur(15px) saturate(180%) !important;
-    backdrop-filter: url(#liquid-glass-bottom) blur(9px) saturate(1.55) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    backdrop-filter: url(#liquid-glass-bottom) blur(12px) saturate(1.55) !important;
 }
 
 [data-theme="light"] .navbar-center-pill,
@@ -4314,9 +4352,14 @@ html.theme-transition *::after {
 [data-theme="light"] [data-liquid-glass-map-target="bottom"] {
     background: hsl(0 0% 100% / 0.3) !important;
     border-color: rgba(21, 20, 15, 0.08) !important;
+    /* This block overrides --navbar-glass-shadow wholesale, so the rim has to
+       be restated here or light theme silently loses it. Directional specular
+       and bounce replace the old uniform 2px ring; the soft inner glow stays. */
     box-shadow:
-        inset 0 0 2px 1px rgba(255, 255, 255, 0.55),
+        inset 0 1px 0 var(--glass-specular),
+        inset 0 -1px 0 var(--glass-bounce),
         inset 0 0 10px 4px rgba(255, 255, 255, 0.22),
+        var(--glass-edge-shadow),
         0 6px 24px rgba(17, 17, 26, 0.06),
         0 12px 40px rgba(17, 17, 26, 0.05) !important;
 }
@@ -4334,15 +4377,15 @@ html.theme-transition *::after {
 .like-btn,
 .fork-btn-inner,
 .mobile-theme-toggle-btn {
-    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
-    backdrop-filter: blur(18px) saturate(160%) !important;
-    backdrop-filter: url(#liquid-glass-control) blur(9px) saturate(1.55) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(160%) !important;
+    backdrop-filter: blur(22px) saturate(160%) !important;
+    backdrop-filter: url(#liquid-glass-control) blur(12px) saturate(1.55) !important;
 }
 
 .filter-dropdown-menu {
-    -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
-    backdrop-filter: blur(18px) saturate(160%) !important;
-    backdrop-filter: url(#liquid-glass-panel) blur(12px) saturate(1.58) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(180%) !important;
+    backdrop-filter: blur(30px) saturate(180%) !important;
+    backdrop-filter: url(#liquid-glass-panel) blur(16px) saturate(1.58) !important;
 }
 
 [data-theme="light"] .filter-dropdown-toggle,
@@ -4355,8 +4398,10 @@ html.theme-transition *::after {
     border-color: rgba(21, 20, 15, 0.08) !important;
     color: var(--color-text) !important;
     box-shadow:
-        inset 0 0 2px 1px rgba(255, 255, 255, 0.55),
+        inset 0 1px 0 var(--glass-specular),
+        inset 0 -1px 0 var(--glass-bounce),
         inset 0 0 10px 4px rgba(255, 255, 255, 0.22),
+        var(--glass-edge-shadow),
         0 6px 24px rgba(17, 17, 26, 0.06),
         0 12px 40px rgba(17, 17, 26, 0.05) !important;
 }
@@ -4443,4 +4488,61 @@ html.theme-transition *::after {
     border-color: rgba(21, 20, 15, 0.1) !important;
     -webkit-backdrop-filter: blur(24px) saturate(175%) !important;
     backdrop-filter: blur(24px) saturate(175%) !important;
+}
+
+/*================================================================
+  Liquid glass: scroll-firmed toolbar + accessibility adaptation
+================================================================*/
+
+/* At the top of the page the bar can afford to be nearly clear. Once content
+   slides under it, the glass picks up tint and a stronger rim so labels stay
+   legible over whatever is passing beneath - the move iOS 27 makes when
+   content scrolls under a floating bar.
+
+   Skipped under the Safari frosted fallback, which already sits at a much
+   higher base opacity and would overshoot. */
+html:not(.liquid-glass-frosted-fallback) .top-navbar-wrapper.navbar-scrolled .navbar-center-pill,
+html:not(.liquid-glass-frosted-fallback) .top-navbar-wrapper.navbar-scrolled .theme-toggle-btn,
+html:not(.liquid-glass-frosted-fallback) .top-navbar-wrapper.navbar-scrolled .github-pill-btn,
+html:not(.liquid-glass-frosted-fallback) .top-navbar-wrapper.navbar-scrolled .language-toggle-btn {
+    background: var(--navbar-glass-bg-scrolled) !important;
+}
+
+/* iOS 27 made Liquid Glass answer to these settings instead of ignoring them.
+   Refraction and translucency both drop out; the surfaces keep their shape,
+   rim and shadow but sit on a solid fill. */
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+
+    .navbar-center-pill,
+    [data-liquid-glass-map-target],
+    .filter-dropdown-toggle,
+    .filter-clear-btn,
+    .view-switcher-container,
+    .filter-dropdown-menu,
+    .like-btn,
+    .fork-btn-inner {
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+        background: var(--surface-solid-glass) !important;
+        border-color: var(--border-strong) !important;
+    }
+
+    /* The refraction map is pure decoration once the glass is opaque. */
+    .liquid-glass-defs {
+        display: none;
+    }
+}
+
+/* Suppressing Bootstrap's focus ring on the glass controls above left them
+   with no visible focus state at all. Use outline rather than box-shadow so it
+   composes with the glass rim instead of replacing it. */
+.theme-toggle-btn:focus-visible,
+.language-toggle-btn:focus-visible,
+.github-pill-btn:focus-visible,
+.floating-nav-close:focus-visible,
+.sidebar-toggle-icon:focus-visible,
+.filter-dropdown-toggle:focus-visible,
+.filter-clear-btn:focus-visible {
+    outline: 2px solid var(--navbar-color-brand);
+    outline-offset: 3px;
 }
