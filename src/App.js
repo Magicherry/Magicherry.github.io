@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, Suspense, lazy } from "react";
 import Preloader from "./components/MainFrame/Pre";
 import Navbar from "./components/MainFrame/Navbar";
 import Footer from "./components/MainFrame/Footer";
-import Particle from "./components/MainFrame/Particle";
 import {
   BrowserRouter as Router
 } from "react-router-dom";
@@ -13,6 +12,10 @@ import "./css/style.css";
 import AnimatedRoutes from "./components/MainFrame/AnimatedRoutes";
 import { LanguageProvider } from "./context/LanguageContext";
 import { useTimedAutoPreference } from "./hooks/useTimedAutoPreference";
+
+// The particle engine is a decorative background worth ~40 kB gzipped. Splitting
+// it out keeps it off the critical path - it fades in once the page is up.
+const Particle = lazy(() => import("./components/MainFrame/Particle"));
 
 const THEME_STORAGE_KEY = "themePreference";
 const THEME_OVERRIDE_TTL_MS = 1000 * 60 * 60 * 24;
@@ -54,13 +57,22 @@ function App() {
   const [load, upadateLoad] = useState(true);
   const preloaderTimerRef = useRef(null);
   const themeTransitionTimerRef = useRef(null);
-  const { value: theme, setManualValue: setManualTheme } = useTimedAutoPreference({
+  const {
+    value: theme,
+    setManualValue: setManualTheme,
+    setAutoValue: setAutoTheme,
+    isAutoMode: isAutoTheme,
+  } = useTimedAutoPreference({
     storageKey: THEME_STORAGE_KEY,
     getAutoValue: getSystemTheme,
     isValid: isValidTheme,
     ttlMs: THEME_OVERRIDE_TTL_MS,
     subscribeToAutoChanges: subscribeToSystemThemeChanges,
   });
+
+  // `theme` is always a concrete "dark" | "light" for rendering. `themeMode`
+  // is what the visitor actually chose, which adds "auto" on top of those.
+  const themeMode = isAutoTheme ? "auto" : theme;
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -75,9 +87,17 @@ function App() {
     }
   }, [load]);
 
-  const toggleTheme = useCallback(() => {
+  const cycleThemeMode = useCallback(() => {
     document.documentElement.classList.add("theme-transition");
-    setManualTheme(theme === "dark" ? "light" : "dark");
+
+    // dark -> light -> follow device -> dark
+    if (themeMode === "dark") {
+      setManualTheme("light");
+    } else if (themeMode === "light") {
+      setAutoTheme();
+    } else {
+      setManualTheme("dark");
+    }
 
     if (themeTransitionTimerRef.current) {
       clearTimeout(themeTransitionTimerRef.current);
@@ -87,7 +107,7 @@ function App() {
       document.documentElement.classList.remove("theme-transition");
       themeTransitionTimerRef.current = null;
     }, 400);
-  }, [setManualTheme, theme]);
+  }, [setAutoTheme, setManualTheme, themeMode]);
 
   const triggerPreloader = useCallback(() => {
     upadateLoad(true);
@@ -339,8 +359,10 @@ function App() {
         <Preloader load={load} />
         <div className={`App ${load ? "app-loading" : ""}`} id={load ? "no-scroll" : "scroll"}>
           <div className="app-top-blur" aria-hidden="true" />
-          <Navbar triggerPreloader={triggerPreloader} theme={theme} toggleTheme={toggleTheme} />
-          <Particle theme={theme} />
+          <Navbar triggerPreloader={triggerPreloader} themeMode={themeMode} cycleThemeMode={cycleThemeMode} />
+          <Suspense fallback={null}>
+            <Particle theme={theme} />
+          </Suspense>
           <ScrollToTop />
           <div className="content-wrap">
             <AnimatedRoutes theme={theme} />

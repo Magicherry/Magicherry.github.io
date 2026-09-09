@@ -6,7 +6,7 @@ import { FaLock } from "react-icons/fa";
 import TagRow from "./TagRow";
 import { useLanguage } from "../../context/LanguageContext";
 
-const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, viewMode, type, date }) => {
+const ProjectCard = ({ imgPath, title, description, ghLink, tags, viewMode, type, date }) => {
     const { locale } = useLanguage();
     const localizedTitle = typeof title === "string" ? title : title[locale];
     const localizedDescription = typeof description === "string" ? description : description[locale];
@@ -28,7 +28,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
         return (
             <Card className="project-card-list-view">
                 <div className="project-card-list-view__image-container">
-                    <Card.Img src={imgPath} alt="Project preview" className="project-card-list-view__image" loading="lazy" decoding="async" />
+                    <Card.Img src={imgPath} alt={localizedTitle} className="project-card-list-view__image" loading="lazy" decoding="async" />
                 </div>
                 <div className="project-card-list-view__content">
                     <Card.Title className="project-card-list-view__title">{localizedTitle}</Card.Title>
@@ -45,7 +45,14 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                     <Card.Text className="project-card-list-view__description">{localizedDescription}</Card.Text>
                     <div className="project-card-list-view__buttons">
                         {ghLink ? (
-                            <Button variant="light" href={ghLink} target="_blank" className="github-pill-btn-project">
+                            <Button
+                                variant="light"
+                                href={ghLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="github-pill-btn-project"
+                                aria-label={`${localizedTitle} — ${copy.github}`}
+                            >
                                 <BsGithub /> &nbsp; {copy.github} &nbsp; <BsArrowRight />
                             </Button>
                         ) : (
@@ -64,7 +71,7 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
         <div className="project-card-wrapper">
             <Card className="project-card-grid-view">
                 <div className="project-card__image-container">
-                    <Card.Img variant="top" src={imgPath} alt="Project preview" className="project-card__image" loading="lazy" decoding="async" />
+                    <Card.Img variant="top" src={imgPath} alt={localizedTitle} className="project-card__image" loading="lazy" decoding="async" />
                 </div>
                 <div className="project-card__overlay">
                     <div className="project-card__type-container">
@@ -88,7 +95,9 @@ const ProjectCard = ({ imgPath, title, description, ghLink, demoLink, tags, view
                                 variant="light"
                                 href={ghLink}
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 className="project-card__button github-pill-btn-project"
+                                aria-label={`${localizedTitle} — ${copy.github}`}
                             >
                                 <BsGithub /> &nbsp;
                                 {copy.github} &nbsp; <BsArrowRight />

@@ -120,7 +120,9 @@ const Projects = () => {
         
         <Container>
           <h1 className="project-heading">
-          {locale === "zh" ? <><strong className="text-accent">{copy.headingAccent}</strong> {copy.headingPrefix}</> : <>{copy.headingPrefix}{copy.headingPrefix ? " " : ""}<strong className="text-accent">{copy.headingAccent}</strong></>}
+            {locale === "zh"
+              ? <><strong className="text-accent">{copy.headingAccent}</strong> {copy.headingPrefix}</>
+              : <>{copy.headingPrefix} <strong className="text-accent">{copy.headingAccent}</strong></>}
           </h1>
           <p className="section-intro-text">
             {copy.subtitle}
@@ -130,9 +132,12 @@ const Projects = () => {
               <div className="d-flex align-items-center gap-2 flex-wrap">
               <div className="filter-dropdown-container" ref={dropdownRef}>
                 <div className="d-flex align-items-center gap-2">
-                  <button 
+                  <button
+                    type="button"
                     className={`filter-dropdown-toggle ${isDropdownOpen ? 'active' : ''}`}
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    aria-expanded={isDropdownOpen}
+                    aria-haspopup="true"
                   >
                     {selectedTags.length === 0 && (
                       <span className="filter-dropdown-label">{copy.allGenres}</span>
@@ -148,8 +153,13 @@ const Projects = () => {
                         {selectedTags.map(tag => (
                           <span key={tag} className="filter-selected-tag">
                             {tag}
-                            <span 
+                            {/* Pointer-only shortcut. It sits inside the toggle
+                                button, so it cannot be a nested control - keyboard
+                                users deselect from the dropdown list or Clear,
+                                both of which are focusable. */}
+                            <span
                               className="filter-tag-remove"
+                              aria-hidden="true"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleTagToggle(tag);
@@ -172,8 +182,10 @@ const Projects = () => {
                       return (
                         <button
                           key={tag}
+                          type="button"
                           className={`filter-dropdown-item ${isSelected ? 'selected' : ''}`}
                           onClick={() => handleTagToggle(tag)}
+                          aria-pressed={isSelected}
                         >
                           <span className="item-text">{tag}</span>
                           {isSelected && <BsCheck className="check-icon" />}
@@ -186,8 +198,11 @@ const Projects = () => {
 
               <div className="filter-dropdown-container sort-dropdown-container" ref={sortDropdownRef}>
                 <button
+                  type="button"
                   className={`filter-dropdown-toggle sort-dropdown-toggle ${isSortDropdownOpen ? "active" : ""}`}
                   onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+                  aria-expanded={isSortDropdownOpen}
+                  aria-haspopup="true"
                 >
                   <span className="filter-dropdown-label">
                     {copy.sort}: {copy.sortOptions.find(o => o.value === sortBy)?.label ?? copy.sortOptions[0].label}
@@ -199,7 +214,9 @@ const Projects = () => {
                     {copy.sortOptions.map(opt => (
                       <button
                         key={opt.value}
+                        type="button"
                         className={`filter-dropdown-item ${sortBy === opt.value ? "selected" : ""}`}
+                        aria-pressed={sortBy === opt.value}
                         onClick={() => {
                           setSortBy(opt.value);
                           setIsSortDropdownOpen(false);
@@ -215,6 +232,7 @@ const Projects = () => {
 
               {(selectedTags.length > 0 || sortBy !== "dateDesc") && (
                 <button
+                  type="button"
                   className="filter-clear-btn"
                   onClick={() => {
                     setSelectedTags([]);

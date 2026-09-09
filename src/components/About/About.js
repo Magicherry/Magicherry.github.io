@@ -14,12 +14,14 @@ function About({ theme }) {
     ? {
       title: <>进一步了解 <strong className="text-accent">我</strong></>,
       skills: <>我常用的 <strong className="text-accent">技术栈</strong></>,
-      tools: <><strong className="text-accent">工具</strong> 与 <strong className="text-accent">工作流</strong></>
+      tools: <><strong className="text-accent">工具</strong> 与 <strong className="text-accent">工作流</strong></>,
+      imageAlt: "笔记本电脑工作场景插画"
     }
     : {
       title: <>Know Who <strong className="text-accent">I'M</strong></>,
       skills: <>Professional <strong className="text-accent">Skillset </strong></>,
-      tools: <><strong className="text-accent">Tools</strong> I use</>
+      tools: <><strong className="text-accent">Tools</strong> I use</>,
+      imageAlt: "Illustration of a laptop workspace"
     };
 
   return (
@@ -42,7 +44,7 @@ function About({ theme }) {
           >
             <img
               src={laptopImg}
-              alt="about"
+              alt={copy.imageAlt}
               className="img-fluid"
               loading="lazy"
               decoding="async"

@@ -12,10 +12,45 @@ function getParticlesEngineInitPromise() {
   return particlesEngineInitPromise;
 }
 
-function Particle({ theme }) {
-  const [isReady, setIsReady] = useState(false);
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+const COMPACT_VIEWPORT_QUERY = "(max-width: 767px)";
+
+function useMediaQuery(query) {
+  const [matches, setMatches] = useState(() => (
+    typeof window !== "undefined" && window.matchMedia
+      ? window.matchMedia(query).matches
+      : false
+  ));
 
   useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return undefined;
+
+    const mediaQuery = window.matchMedia(query);
+    const handleChange = (event) => setMatches(event.matches);
+
+    setMatches(mediaQuery.matches);
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
+
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }, [query]);
+
+  return matches;
+}
+
+function Particle({ theme }) {
+  const [isReady, setIsReady] = useState(false);
+  const prefersReducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
+  const isCompactViewport = useMediaQuery(COMPACT_VIEWPORT_QUERY);
+
+  useEffect(() => {
+    // Nothing to initialise when the field will not be drawn at all.
+    if (prefersReducedMotion) return undefined;
+
     let mounted = true;
 
     getParticlesEngineInitPromise().then(() => {
@@ -27,7 +62,7 @@ function Particle({ theme }) {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   const particleColor = theme === "light" ? "#0284c7" : "#38bdf8";
 
@@ -42,7 +77,9 @@ function Particle({ theme }) {
           value: "transparent",
         },
       },
-      fpsLimit: 120,
+      // The field drifts at speed 0.4; anything past display refresh is spent
+      // redrawing a near-identical frame, so cap it and let phones idle.
+      fpsLimit: 60,
       particles: {
         color: {
           value: particleColor,
@@ -69,7 +106,9 @@ function Particle({ theme }) {
             enable: true,
             area: 800,
           },
-          value: 120, // 节点数量
+          // Link-drawing cost grows with the square of the node count, which is
+          // what makes this expensive on phone GPUs.
+          value: isCompactViewport ? 45 : 120,
         },
         opacity: {
           value: 0.3,
@@ -94,10 +133,10 @@ function Particle({ theme }) {
       },
       detectRetina: true,
     }),
-    [particleColor]
+    [isCompactViewport, particleColor]
   );
 
-  if (!isReady) {
+  if (prefersReducedMotion || !isReady) {
     return null;
   }
 

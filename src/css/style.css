@@ -149,7 +149,6 @@ html:lang(zh) body {
     --navbar-bg-mobile: rgba(15, 23, 42, 0.7);
     --navbar-color-brand: rgb(16, 227, 246);
     --navbar-color-brand-hover: rgb(3, 248, 248);
-    --navbar-color-toggler: #50c0f4;
     --navbar-bg-item-hover: #5bdef5;
     --navbar-shadow: transparent;
     /* Top nav glass (frosted bar, no dark tint) */
@@ -242,9 +241,7 @@ html:lang(zh) body {
     --surface-overlay-dark: rgba(3, 7, 18, 0.65);
     --surface-overlay-dark-soft: rgba(3, 7, 18, 0.6);
     --surface-overlay-dark-strong: rgba(3, 7, 18, 0.75);
-    --surface-nav-collapse: rgba(15, 23, 42, 0.95);
     --shadow-inset-soft: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    --navbar-collapse-shadow: inset 0 -1.2px 1.2px rgba(255, 255, 255, 0.2), 0 -6px 32px 0 rgba(0, 0, 0, 0.2);
     --blur-top-gradient: linear-gradient(180deg, rgba(3, 7, 18, 0.92) 0%, rgba(15, 23, 42, 0.78) 32%, rgba(15, 23, 42, 0.42) 62%, rgba(15, 23, 42, 0.14) 84%, rgba(15, 23, 42, 0) 100%);
     --blur-mask-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.26) 36%, rgba(0, 0, 0, 0.12) 72%, rgba(0, 0, 0, 0) 100%);
     --preloader-logo-glow: rgba(90, 150, 170, 0.3);
@@ -337,7 +334,6 @@ html:lang(zh) body {
     --navbar-bg-mobile: rgba(245, 245, 247, 0.85);
     --navbar-color-brand: #0284c7;
     --navbar-color-brand-hover: #0369a1;
-    --navbar-color-toggler: #0284c7;
     --navbar-bg-item-hover: #e0f2fe;
     --navbar-shadow: transparent;
 
@@ -413,11 +409,7 @@ html:lang(zh) body {
     --surface-overlay-dark: rgba(255, 255, 255, 0.65);
     --surface-overlay-dark-soft: rgba(255, 255, 255, 0.6);
     --surface-overlay-dark-strong: rgba(255, 255, 255, 0.75);
-    --surface-nav-collapse: rgba(255, 255, 255, 0.95);
     --shadow-inset-soft: inset 0 1px 0 rgba(255, 255, 255, 0.75);
-    --navbar-collapse-shadow:
-        inset 0 -1.2px 1.2px rgba(0, 0, 0, 0.055),
-        0 -8px 42px 0 rgba(0, 0, 0, 0.105);
     --blur-top-gradient: linear-gradient(180deg, rgba(245, 245, 247, 0.92) 0%, rgba(255, 255, 255, 0.78) 32%, rgba(255, 255, 255, 0.42) 62%, rgba(255, 255, 255, 0.14) 84%, rgba(255, 255, 255, 0) 100%);
     --blur-mask-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.26) 36%, rgba(0, 0, 0, 0.12) 72%, rgba(0, 0, 0, 0) 100%);
     --preloader-logo-glow: rgba(2, 132, 199, 0.2);
@@ -829,56 +821,6 @@ body.preloader-active .home-hero-name {
     box-shadow: none !important;
 }
 
-.navbar-toggler {
-    position: relative !important;
-    background-color: transparent !important;
-    border-color: transparent !important;
-}
-
-.navbar-toggler span {
-    display: block !important;
-    background-color: var(--navbar-color-toggler) !important;
-    height: 4px !important;
-    width: 27px !important;
-    margin-top: 5px !important;
-    margin-bottom: 5px !important;
-    transform: rotate(0deg) !important;
-    left: 0 !important;
-    opacity: 1 !important;
-}
-
-.navbar-toggler:focus,
-.navbar-toggler:active {
-    outline: 0 !important;
-}
-
-.navbar-toggler span:nth-child(1),
-.navbar-toggler span:nth-child(3) {
-    transition: transform 0.35s ease-in-out !important;
-}
-
-.navbar-toggler:not(.collapsed) span:nth-child(1) {
-    position: absolute !important;
-    left: 12px !important;
-    top: 10px !important;
-    transform: rotate(135deg) !important;
-    opacity: 0.9 !important;
-}
-
-.navbar-toggler:not(.collapsed) span:nth-child(2) {
-    height: 12px !important;
-    visibility: hidden !important;
-    background-color: transparent !important;
-}
-
-.navbar-toggler:not(.collapsed) span:nth-child(3) {
-    position: absolute !important;
-    left: 12px !important;
-    top: 10px !important;
-    transform: rotate(-135deg) !important;
-    opacity: 0.9 !important;
-}
-
 .navbar-vignette-mask {
     position: fixed;
     top: 0;
@@ -927,7 +869,12 @@ body.preloader-active .home-hero-name {
     z-index: 10;
 }
 
+/* Rendered as a <button> so it is reachable by keyboard - strip the UA chrome. */
 .navbar-brand-text {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
     font-weight: 700;
     letter-spacing: 0.6px;
     color: var(--navbar-color-brand);
@@ -941,15 +888,15 @@ body.preloader-active .home-hero-name {
     text-shadow: 0 0 8px var(--accent-glow-strong);
 }
 
-.navbar-brand-text--zh {
-    font-size: 1.62rem;
-    letter-spacing: 0.18em;
-    padding-left: 0.08em;
-}
-
 .navbar-brand-text:hover {
     text-shadow: 0 0 16px rgba(110, 205, 255, 0.8), 0 0 4px rgba(110, 205, 255, 0.4);
     color: var(--color-white);
+}
+
+.navbar-brand-text:focus-visible {
+    outline: 2px solid var(--navbar-color-brand);
+    outline-offset: 4px;
+    border-radius: 6px;
 }
 
 .navbar-center-pill {
@@ -3157,6 +3104,27 @@ body.homepage .home-about-section {
     filter: brightness(1.35) contrast(1.08);
 }
 
+/* Cursor ships one mark per background. Show the variant that matches the
+   site theme rather than the OS one - see Toolstack.js. */
+.tech-icons__icon .tech-icon-cursor {
+    display: inline-flex;
+    align-items: center;
+}
+
+.tech-icons__icon .tech-icon-cursor__on-dark,
+[data-theme="light"] .tech-icons__icon .tech-icon-cursor__on-dark {
+    display: none;
+}
+
+.tech-icons__icon .tech-icon-cursor__on-light,
+[data-theme="dark"] .tech-icons__icon .tech-icon-cursor__on-dark {
+    display: inline-block;
+}
+
+[data-theme="dark"] .tech-icons__icon .tech-icon-cursor__on-light {
+    display: none;
+}
+
 /* FastAPI: official white SVG as mask, filled with brand teal */
 .tech-icons__icon .tech-icon-fastapi-brand {
     display: inline-block;
@@ -3551,10 +3519,6 @@ body.homepage .home-about-section {
     transform: translateY(0);
 }
 
-.bottom-nav-hidden {
-    transform: translateY(100%);
-}
-
 .bottom-nav {
     display: flex;
     justify-content: space-around;
@@ -3889,10 +3853,6 @@ body.homepage .home-about-section {
         background: transparent !important;
     }
 
-    .top-navbar-wrapper.navbar-hidden {
-        transform: translateY(-130%) !important;
-    }
-
     .mobile-topbar {
         --mobile-topbar-control-size: 48px;
         display: flex;
@@ -3959,32 +3919,6 @@ body.homepage .home-about-section {
         white-space: nowrap;
     }
 
-    .navbar-toggler {
-        flex-shrink: 0;
-    }
-
-    .navbar-collapse.show,
-    .navbar-collapse.collapsing {
-        position: absolute;
-        top: 70px;
-        left: 1rem;
-        right: 1rem;
-        width: calc(100% - 2rem);
-        background: var(--surface-nav-collapse);
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        box-shadow: var(--navbar-collapse-shadow);
-        padding: 1rem;
-        border-radius: 30px;
-        border: 1px solid var(--border-subtle);
-    }
-
-    .navbar-collapse .navbar-nav {
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-    }
-
     .navbar-nav .nav-item {
         margin: 0;
         width: 100%;
@@ -4002,7 +3936,7 @@ body.homepage .home-about-section {
         display: none !important;
     }
 
-    .navbar-collapse .navbar-nav .nav-item a.active {
+    .navbar-center-nav .nav-item a.active {
         color: var(--navbar-color-brand) !important;
     }
 
@@ -4047,10 +3981,6 @@ body.homepage .home-about-section {
         z-index: 1000;
         transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15);
         background: transparent;
-    }
-
-    .bottom-nav-container.bottom-nav-hidden {
-        transform: translateX(-50%) translateY(calc(100% + 32px));
     }
 
     .mobile-theme-toggle-btn {

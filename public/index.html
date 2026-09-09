@@ -5,12 +5,20 @@
   <meta charset="utf-8" />
   <link rel="icon" href="%PUBLIC_URL%/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0f1c23" />
+  <!-- Match the two palettes in style.css so the browser chrome does not stay
+       dark while the page is rendered light (and vice versa). -->
+  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f1c23" media="(prefers-color-scheme: dark)" />
   <meta name="description"
     content="Yuting Zhou — AI Agent Engineer at NIO. Enterprise AI agent systems, LLM/RAG, workflow automation, and AI-driven decision support. M.S. in Computer Science, Rutgers University." />
+  <meta name="author" content="Yuting Zhou" />
+  <link rel="canonical" href="https://magicherry.github.io/" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
+  <!-- The Stacks page pulls every tech/tool icon from these two CDNs. -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdn.simpleicons.org" crossorigin>
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <title>Yuting Zhou | AI Agent Engineer @ NIO</title>
 
@@ -58,23 +66,45 @@
   <!-- Google / Search Engine Tags -->
   <meta itemprop="name" content="Yuting Zhou | AI Agent Engineer @ NIO">
   <meta itemprop="description" content="AI Agent Engineer at NIO. Building enterprise AI agent systems for manufacturing operations with LLMs, RAG, and workflow automation.">
-  <meta itemprop="image"
-    content="https://raw.githubusercontent.com/soumyajit4419/Portfolio/master/Images/readme-img.png?token=AK7VCIF5RYEUZZAURELPTAC76U6AK">
+  <meta itemprop="image" content="https://magicherry.github.io/favicon.png">
 
-  <!-- Facebook Meta Tags -->
-  <meta property="og:url" content="https://yutingzhouwebsite.vercel.app">
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Bits of Me">
+  <meta property="og:url" content="https://magicherry.github.io/">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="zh_CN">
   <meta property="og:title" content="Yuting Zhou | AI Agent Engineer @ NIO">
   <meta property="og:description" content="AI Agent Engineer at NIO. Building enterprise AI agent systems for manufacturing operations with LLMs, RAG, and workflow automation.">
-  <meta property="og:image"
-    content="https://raw.githubusercontent.com/soumyajit4419/Portfolio/master/Images/readme-img.png?token=AK7VCIF5RYEUZZAURELPTAC76U6AK">
+  <meta property="og:image" content="https://magicherry.github.io/favicon.png">
+  <meta property="og:image:alt" content="Yuting Zhou — personal portfolio">
 
   <!-- Twitter Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Yuting Zhou | AI Agent Engineer @ NIO">
   <meta name="twitter:description" content="AI Agent Engineer at NIO. Building enterprise AI agent systems for manufacturing operations with LLMs, RAG, and workflow automation.">
-  <meta name="twitter:image"
-    content="https://raw.githubusercontent.com/soumyajit4419/Portfolio/master/Images/readme-img.png?token=AK7VCIF5RYEUZZAURELPTAC76U6AK">
+  <meta name="twitter:image" content="https://magicherry.github.io/favicon.png">
+  <meta name="twitter:image:alt" content="Yuting Zhou — personal portfolio">
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Yuting Zhou",
+      "alternateName": "周昱廷",
+      "url": "https://magicherry.github.io/",
+      "image": "https://magicherry.github.io/favicon.png",
+      "jobTitle": "AI Agent Engineer",
+      "worksFor": { "@type": "Organization", "name": "NIO", "url": "https://www.nio.com/" },
+      "alumniOf": { "@type": "CollegeOrUniversity", "name": "Rutgers University" },
+      "knowsAbout": ["AI Agents", "Large Language Models", "Retrieval-Augmented Generation", "Workflow Automation", "Full-stack Development"],
+      "sameAs": [
+        "https://github.com/Magicherry",
+        "https://www.linkedin.com/in/yuting-zhou-magicherry/",
+        "https://space.bilibili.com/155876727"
+      ]
+    }
+  </script>
 </head>
 
 <body class="homepage preloader-active">

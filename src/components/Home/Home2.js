@@ -29,6 +29,7 @@ function Home2() {
                 </>
             ),
             downloadCv: "下载简历",
+            downloadFileName: "周昱廷-简历.pdf",
             findMe: "联系我",
             connect: <>欢迎通过以下平台与我 <span className="text-accent">联系或交流</span></>,
             avatarAlt: "头像",
@@ -48,6 +49,7 @@ function Home2() {
                 </>
             ),
             downloadCv: "Download CV",
+            downloadFileName: "Yuting_Zhou_CV.pdf",
             findMe: "FIND ME ON",
             connect: <>Feel free to <span className="text-accent">connect</span> with me</>,
             avatarAlt: "avatar",
@@ -112,6 +114,7 @@ function Home2() {
                             <div className="d-flex justify-content-center w-100 home-about-actions">
                                 <a
                                     href={activeCvFile}
+                                    download={copy.downloadFileName}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="download-cv-button"

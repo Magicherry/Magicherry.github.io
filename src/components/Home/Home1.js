@@ -13,13 +13,15 @@ function Home1() {
       greeting: "你好呀！",
       intro: "我是",
       name: "周昱廷",
-      waveLabel: "挥手"
+      waveLabel: "挥手",
+      heroAlt: "一位开发者在多屏工位前工作的插画"
     }
     : {
       greeting: "Hi There!",
       intro: "I'M",
       name: "YUTING ZHOU",
-      waveLabel: "wave"
+      waveLabel: "wave",
+      heroAlt: "Illustration of a developer working at a multi-screen desk"
     };
 
   return (
@@ -50,7 +52,7 @@ function Home1() {
             <Col md={5} className="home__image-col">
               <img
                 src={homeLogo}
-                alt="home pic"
+                alt={copy.heroAlt}
                 className="img-fluid home__image"
                 decoding="async"
                 fetchPriority="high"

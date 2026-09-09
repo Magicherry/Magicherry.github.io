@@ -64,10 +64,12 @@ export function useTimedAutoPreference({
   }, []);
 
   const setAutoValue = useCallback(() => {
+    // Returning to auto retires any override countdown still in flight.
+    clearExpiryTimer();
     clearStoredOverride(storageKey);
     setValue(getAutoValue());
     setIsAutoMode(true);
-  }, [getAutoValue, storageKey]);
+  }, [clearExpiryTimer, getAutoValue, storageKey]);
 
   const scheduleExpiry = useCallback((expiresAt) => {
     clearExpiryTimer();
@@ -138,6 +140,9 @@ export function useTimedAutoPreference({
   return {
     value,
     setManualValue,
+    // Drops the stored override and hands control back to the auto source
+    // (system theme / browser language) until the visitor picks again.
+    setAutoValue,
     isAutoMode,
   };
 }

@@ -33,6 +33,11 @@ function Github({ theme }) {
   const colorScheme = theme === "light" ? "light" : "dark";
   const [calendarRoot, setCalendarRoot] = useState(null);
   const labels = CALENDAR_LABELS[locale];
+  // The calendar reads GitHub's public API, which rate-limits by IP. Say so in
+  // the visitor's language instead of surfacing the raw English fetch error.
+  const errorMessage = locale === "zh"
+    ? "暂时无法加载 GitHub 贡献数据，请稍后再试。"
+    : "Could not load GitHub contributions right now. Please try again later.";
 
   useEffect(() => {
     if (!calendarRoot) {
@@ -98,6 +103,7 @@ function Github({ theme }) {
         colorScheme={colorScheme}
         fontSize={16}
         labels={labels}
+        errorMessage={errorMessage}
         theme={{
           light: ["#e5e7eb", "#22d3ee", "#06b6d4", "#0891b2", "#0e7490"],
           dark: ["#21262d", "#0e7490", "#0891b2", "#06b6d4", "#22d3ee"],

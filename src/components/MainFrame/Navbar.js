@@ -10,7 +10,7 @@ import {
   AiOutlineDownload,
   AiFillStar
 } from "react-icons/ai";
-import { MdWorkOutline, MdDarkMode, MdLightMode } from "react-icons/md";
+import { MdWorkOutline, MdDarkMode, MdLightMode, MdComputer } from "react-icons/md";
 import { FiSidebar, FiMapPin, FiMail, FiPhone } from "react-icons/fi";
 import { FaLinkedinIn, FaWeixin } from "react-icons/fa";
 import { SiBilibili } from "react-icons/si";
@@ -182,23 +182,23 @@ function useNavMode() {
 
   const [isSideNavVisible, setIsSideNavVisible] = useState(getInitial);
 
-  // Persist
+  // Single writer for the persisted value - the toggle and the breakpoint
+  // handler both just move state and let this mirror it.
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       window.localStorage.setItem("navMode", isSideNavVisible ? "side" : "top");
     }
   }, [isSideNavVisible]);
 
+  // Subscribe once: the side nav has no place below lg, so force it closed
+  // whenever the viewport crosses under the breakpoint.
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") return undefined;
 
     const mediaQuery = window.matchMedia("(max-width: 991.98px)");
     const handleBreakpointChange = (event) => {
       if (event.matches) {
         setIsSideNavVisible(false);
-        if (window.localStorage) {
-          window.localStorage.setItem("navMode", "top");
-        }
       }
     };
 
@@ -211,29 +211,18 @@ function useNavMode() {
 
     mediaQuery.addListener(handleBreakpointChange);
     return () => mediaQuery.removeListener(handleBreakpointChange);
-  }, [isSideNavVisible]);
-
-  const toggleSideNav = useCallback(() => {
-    setIsSideNavVisible((prev) => {
-      const next = !prev;
-      if (typeof window !== "undefined" && window.localStorage) {
-        window.localStorage.setItem("navMode", next ? "side" : "top");
-      }
-      return next;
-    });
   }, []);
 
-  return { isSideNavVisible, toggleSideNav, setIsSideNavVisible };
+  const toggleSideNav = useCallback(() => {
+    setIsSideNavVisible((prev) => !prev);
+  }, []);
+
+  return { isSideNavVisible, toggleSideNav };
 }
 
-function useScrollHideNav({ isExpanded, setIsExpanded }) {
+function useScrolledPastTop() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const isExpandedRef = useRef(isExpanded);
   const isScrolledRef = useRef(false);
-
-  useEffect(() => {
-    isExpandedRef.current = isExpanded;
-  }, [isExpanded]);
 
   useEffect(() => {
     if (typeof window === "undefined") return undefined;
@@ -248,10 +237,6 @@ function useScrollHideNav({ isExpanded, setIsExpanded }) {
       if (isScrolledRef.current !== nextIsScrolled) {
         isScrolledRef.current = nextIsScrolled;
         setIsScrolled(nextIsScrolled);
-      }
-
-      if (isExpandedRef.current) {
-        setIsExpanded(false);
       }
     };
 
@@ -270,23 +255,53 @@ function useScrollHideNav({ isExpanded, setIsExpanded }) {
         window.cancelAnimationFrame(rafId);
       }
     };
-  }, [setIsExpanded]);
+  }, []);
 
-  return { isScrolled, isTopNavHidden: false, isBottomNavHidden: false };
+  return isScrolled;
 }
 
-function NavLinks({ items, linkClassName, iconClassName, onClick, navItemClassName, navLinkProps = {}, hideIcon = false }) {
+const THEME_MODE_ICONS = {
+  dark: MdDarkMode,
+  light: MdLightMode,
+  auto: MdComputer
+};
+
+/**
+ * Three-state theme control: dark -> light -> follow device -> dark.
+ *
+ * The icon shows the mode currently in effect rather than the one the next
+ * click would select - with only two states "show me the next one" was
+ * unambiguous, but with three it is not.
+ */
+function ThemeToggleButton({ themeMode, cycleThemeMode, copy, className = "", style }) {
+  const Icon = THEME_MODE_ICONS[themeMode] ?? MdComputer;
+
+  return (
+    <button
+      type="button"
+      className={`theme-toggle-btn ${className}`.trim()}
+      data-theme-mode={themeMode}
+      data-liquid-glass-map-target="control"
+      onClick={cycleThemeMode}
+      aria-label={`${copy.toggleTheme} (${copy.themeModes[themeMode]})`}
+      title={copy.themeModes[themeMode]}
+      style={style}
+    >
+      <Icon />
+    </button>
+  );
+}
+
+function NavLinks({ items, linkClassName, iconClassName, hideIcon = false }) {
   return items.map((item) => {
     const IconComponent = item.icon;
     return (
-      <Nav.Item key={item.path} className={navItemClassName}>
+      <Nav.Item key={item.path}>
         <Nav.Link
           as={NavLink}
           to={item.path}
           end={item.path === "/"}
-          onClick={onClick}
           className={linkClassName}
-          {...navLinkProps}
         >
           {!hideIcon && <IconComponent className={iconClassName} />}
           <span>{item.label}</span>
@@ -296,14 +311,13 @@ function NavLinks({ items, linkClassName, iconClassName, onClick, navItemClassNa
   });
 }
 
-function NavBar({ triggerPreloader, theme, toggleTheme }) {
+function NavBar({ triggerPreloader, themeMode, cycleThemeMode }) {
   useLiquidGlassMaps();
   useLiquidGlassFrostedFallback();
 
   const { locale, toggleLocale } = useLanguage();
-  const [isExpanded, setIsExpanded] = useState(false);
   const { isSideNavVisible, toggleSideNav } = useNavMode();
-  const { isScrolled, isTopNavHidden, isBottomNavHidden } = useScrollHideNav({ isExpanded, setIsExpanded });
+  const isScrolled = useScrolledPastTop();
   const [showWechatModal, setShowWechatModal] = useState(false);
   const navItems = NAV_ITEMS[locale];
   const copy = locale === "zh" ? {
@@ -311,12 +325,18 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
     brandName: "YUTING ZHOU",
     toggleSidebar: "切换侧边导航",
     toggleTheme: "切换主题",
+    themeModes: {
+      dark: "深色模式",
+      light: "浅色模式",
+      auto: "跟随设备"
+    },
     collapseToTopNav: "收起为顶部导航",
     roleTitle: "蔚来 · AI Agent 工程师",
     location: "中国上海",
     downloadCv: "下载简历",
+    downloadFileName: "周昱廷-简历.pdf",
     githubRepository: "GitHub 仓库",
-    avatarAlt: "周钰婷头像",
+    avatarAlt: "周昱廷头像",
     wechatQrAlt: "微信二维码",
     languageToggle: "切换语言",
     languageMode: "当前语言",
@@ -327,10 +347,16 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
     brandName: "YUTING ZHOU",
     toggleSidebar: "Toggle sidebar",
     toggleTheme: "Toggle theme",
+    themeModes: {
+      dark: "Dark mode",
+      light: "Light mode",
+      auto: "Follow device"
+    },
     collapseToTopNav: "Collapse to top navigation",
     roleTitle: "AI Agent Engineer @ NIO",
     location: "Shanghai, China",
     downloadCv: "Download CV",
+    downloadFileName: "Yuting_Zhou_CV.pdf",
     githubRepository: "GitHub Repository",
     avatarAlt: "Yuting Zhou avatar",
     wechatQrAlt: "WeChat QR Code",
@@ -347,8 +373,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
   const [pillPosition, setPillPosition] = useState(0);
   const [isPillVisible, setIsPillVisible] = useState(true);
   const navContainerRef = useRef(null);
-  const navbarRef = useRef(null);
-  
+
   // Calculate the pill position
   const calculatePillPosition = useCallback(() => {
     const currentIndex = navItems.findIndex(item =>
@@ -406,36 +431,10 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
 
   useCloseOnWindowScroll(showWechatModal, () => setShowWechatModal(false));
 
-  const closeNavbar = () => setIsExpanded(false);
-
-  const handleToggleSideNav = () => {
-    toggleSideNav();
-    closeNavbar();
-  };
-
   const openWechatModal = (event) => {
     event.preventDefault();
     setShowWechatModal(true);
   };
-
-  // Close the menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (navbarRef.current && !navbarRef.current.contains(event.target) && isExpanded) {
-        closeNavbar();
-      }
-    };
-
-    if (isExpanded) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('touchstart', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
-    };
-  }, [isExpanded]);
 
   const renderLanguageControls = (variant = "top") => (
     <div className={`language-control-group ${variant === "side" ? "language-control-group--side" : ""}`}>
@@ -459,12 +458,9 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
         <LiquidGlassFilterDefs />
         <div className="navbar-vignette-mask d-none d-lg-block" />
         <Navbar
-            ref={navbarRef}
-            expanded={isExpanded}
             fixed="top"
             expand="lg"
-            className={`top-navbar-wrapper ${isTopNavHidden ? "navbar-hidden" : ""} ${isScrolled ? "navbar-scrolled" : ""} ${isSideNavVisible ? "navbar-floating-mode" : ""}`}
-            onToggle={setIsExpanded}
+            className={`top-navbar-wrapper ${isScrolled ? "navbar-scrolled" : ""} ${isSideNavVisible ? "navbar-floating-mode" : ""}`}
         >
           <div className="d-lg-none mobile-topbar">
             <div className="mobile-topbar__left">
@@ -482,15 +478,12 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               </button>
             </div>
             <div className="mobile-topbar__right">
-              <button
-                type="button"
-                className="theme-toggle-btn mobile-topbar__btn"
-                data-liquid-glass-map-target="control"
-                onClick={toggleTheme}
-                aria-label={copy.toggleTheme}
-              >
-                {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
-              </button>
+              <ThemeToggleButton
+                themeMode={themeMode}
+                cycleThemeMode={cycleThemeMode}
+                copy={copy}
+                className="mobile-topbar__btn"
+              />
               <a
                 href="https://github.com/Magicherry/Bits-of-Me"
                 target="_blank"
@@ -510,12 +503,13 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
             
             {/* Left Column: Brand */}
             <div className="navbar-brand-col">
-              <span
+              <button
+                type="button"
                 className="navbar-brand-text"
                 onClick={() => { navigate("/"); if (triggerPreloader) { triggerPreloader(); } }}
               >
                 {copy.brandName}
-              </span>
+              </button>
             </div>
 
             {/* Center Column: Pill Navigation Container */}
@@ -523,36 +517,31 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               <button
                 type="button"
                 className={`sidebar-toggle-icon ${isSideNavVisible ? "active" : ""}`}
-                onClick={handleToggleSideNav}
+                onClick={toggleSideNav}
                 aria-label={copy.toggleSidebar}
               >
                 <FiSidebar />
               </button>
-              <Navbar.Toggle aria-controls="responsive-navbar-nav" className="d-lg-none" />
-              <Navbar.Collapse id="responsive-navbar-nav">
-                <Nav className="mx-auto" defaultActiveKey="#home">
-                  <NavLinks
-                    items={navItems}
-                    linkClassName=""
-                    iconClassName="navbar-icon"
-                    onClick={closeNavbar}
-                    hideIcon={true}
-                  />
-                </Nav>
-              </Navbar.Collapse>
+              {/* Desktop-only container (d-none d-lg-flex), so the links are always
+                  laid out - no collapse/toggle machinery involved. Below lg the
+                  bottom nav bar takes over. */}
+              <Nav className="mx-auto navbar-center-nav">
+                <NavLinks
+                  items={navItems}
+                  linkClassName=""
+                  iconClassName="navbar-icon"
+                  hideIcon={true}
+                />
+              </Nav>
             </div>
 
             {/* Right Column: GitHub & Theme Toggle */}
             <div className="navbar-right-col" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <button
-                type="button"
-                className="theme-toggle-btn"
-                data-liquid-glass-map-target="control"
-                onClick={toggleTheme}
-                aria-label={copy.toggleTheme}
-              >
-                {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
-              </button>
+              <ThemeToggleButton
+                themeMode={themeMode}
+                cycleThemeMode={cycleThemeMode}
+                copy={copy}
+              />
               {renderLanguageControls()}
               <a
                 href="https://github.com/Magicherry/Bits-of-Me"
@@ -576,16 +565,12 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
             <div className="floating-nav-header">
               {renderLanguageControls("side")}
               <div className="floating-nav-header-actions">
-                <button
-                  type="button"
-                  className="theme-toggle-btn"
-                  data-liquid-glass-map-target="control"
-                  onClick={toggleTheme}
-                  aria-label={copy.toggleTheme}
+                <ThemeToggleButton
+                  themeMode={themeMode}
+                  cycleThemeMode={cycleThemeMode}
+                  copy={copy}
                   style={{ width: '40px', height: '40px', fontSize: '1.1rem' }}
-                >
-                  {theme === "dark" ? <MdLightMode /> : <MdDarkMode />}
-                </button>
+                />
                 <button
                   type="button"
                   className="floating-nav-close"
@@ -658,7 +643,6 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               <NavLinks
                 items={navItems}
                 linkClassName="floating-nav-link"
-                onClick={closeNavbar}
               />
             </Nav>
 
@@ -688,6 +672,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
               <div className="floating-nav-footer">
                 <a
                   href={activeCvFile}
+                  download={copy.downloadFileName}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="floating-nav-ghost-btn"
@@ -701,7 +686,7 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
         </div>
 
         {/* Bottom Navigation Bar for Mobile */}
-        <div className={`d-lg-none bottom-nav-container ${isBottomNavHidden ? "bottom-nav-hidden" : ""}`}>
+        <div className="d-lg-none bottom-nav-container">
           {/* Main navigation buttons with rounded rectangle background */}
           <div className="main-nav-wrapper" ref={navContainerRef} data-liquid-glass-map-target="bottom">
             {/* Pill slider */}
@@ -719,7 +704,6 @@ function NavBar({ triggerPreloader, theme, toggleTheme }) {
                 <NavLinks
                 items={navItems}
                 linkClassName="main-nav-link"
-                onClick={closeNavbar}
               />
             </Nav>
           </div>

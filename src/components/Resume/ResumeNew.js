@@ -49,6 +49,9 @@ const DownloadButton = ({ file, copy }) => (
     <div className="d-flex justify-content-center">
         <a
             href={file}
+            // The bundled asset carries a content hash in its URL; name the
+            // saved file explicitly so visitors do not get Yuting_Zhou_CV.a1b2c3.pdf.
+            download={copy.downloadFileName}
             target="_blank"
             rel="noopener noreferrer"
             className="download-cv-button"
@@ -67,14 +70,16 @@ function ResumeNew() {
             loadingProgress: "简历加载进度",
             errorTitle: "PDF 加载失败。",
             errorFallback: "请稍后再试。",
-            download: "下载简历"
+            download: "下载简历",
+            downloadFileName: "周昱廷-简历.pdf"
         }
         : {
             loading: "Loading resume…",
             loadingProgress: "Resume loading progress",
             errorTitle: "Unable to load the PDF.",
             errorFallback: "Please try again later.",
-            download: "Download CV"
+            download: "Download CV",
+            downloadFileName: "Yuting_Zhou_CV.pdf"
         };
     const activePdf = locale === "zh" ? pdfZh : pdf;
     const [width, setWidth] = useState(1200);
