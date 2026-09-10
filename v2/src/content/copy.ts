@@ -91,10 +91,20 @@ export const ui = {
         '我真正在意的，是做出来的东西**足够快、便于维护、对人友好**。既能经得起技术推敲，也能让人用得自然顺手。',
       ],
     } satisfies Localized<readonly string[]>,
-    interests: {
-      en: ['Tech writing & product teardowns', 'Games & interaction design', 'Film, series & documentaries', 'Photography & video'],
-      zh: ['技术博客与产品评测', '游戏与交互设计', '电影、剧集与纪录片', '摄影与视频创作'],
-    } satisfies Localized<readonly string[]>,
+    /*
+     * Each carries an `id` rather than an icon. The icon is a React component,
+     * and this file is the one place the site keeps as plain data - so About.tsx
+     * maps the id to a glyph and the content layer never imports a component.
+     * Keying on an id also means reordering this list cannot silently hand an
+     * entry the wrong icon, which an index-aligned array would.
+     */
+    interests: [
+      { id: 'writing', label: { en: 'Tech writing & product teardowns', zh: '技术博客与产品评测' } },
+      { id: 'games', label: { en: 'Games & interaction design', zh: '游戏与交互设计' } },
+      { id: 'f1', label: { en: 'Formula 1 race weekends', zh: 'F1 赛事' } },
+      { id: 'film', label: { en: 'Film, series & documentaries', zh: '电影、剧集与纪录片' } },
+      { id: 'photo', label: { en: 'Photography & video', zh: '摄影与视频创作' } },
+    ] satisfies readonly { id: string; label: Localized }[],
     quote: {
       en: 'No matter what your dream is, you have to dedicate yourself entirely to it.',
       zh: '无论你的梦想是什么，你都必须全身心投入其中。',

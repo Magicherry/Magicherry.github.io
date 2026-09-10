@@ -1,5 +1,13 @@
+import type { ComponentType } from 'react'
 import { motion } from 'motion/react'
-import { LuChevronRight, LuQuote } from 'react-icons/lu'
+import {
+  LuCamera,
+  LuClapperboard,
+  LuFlag,
+  LuGamepad2,
+  LuNotebookPen,
+  LuQuote,
+} from 'react-icons/lu'
 import Section from '@/components/Section'
 import Reveal, { revealItem } from '@/components/Reveal'
 import RichText from '@/components/RichText'
@@ -7,6 +15,20 @@ import GlassSurface from '@/components/glass/GlassSurface'
 import { useLocale } from '@/lib/i18n'
 import { ui } from '@/content/copy'
 import styles from './About.module.css'
+
+/*
+ * One glyph per interest, replacing the chevron that used to repeat down the
+ * list. A row of identical chevrons is pure decoration - it says "list", which
+ * the <ul> already said. These say what the entry is, so the column scans
+ * without being read.
+ */
+const INTEREST_ICONS: Record<string, ComponentType> = {
+  writing: LuNotebookPen,
+  games: LuGamepad2,
+  f1: LuFlag,
+  film: LuClapperboard,
+  photo: LuCamera,
+}
 
 export default function About() {
   const { t } = useLocale()
@@ -29,12 +51,20 @@ export default function About() {
                 {t({ en: 'Off the clock', zh: '工作之外' })}
               </h3>
               <ul>
-                {t(ui.about.interests).map((interest) => (
-                  <li key={interest}>
-                    <LuChevronRight aria-hidden="true" />
-                    <span>{interest}</span>
-                  </li>
-                ))}
+                {ui.about.interests.map((interest) => {
+                  const Icon = INTEREST_ICONS[interest.id]
+                  return (
+                    <li key={interest.id}>
+                      {/* Decorative: the label right beside it already says
+                          what this is, so an accessible name would be read
+                          out twice. */}
+                      <span className={styles['interestIcon']} aria-hidden="true">
+                        {Icon ? <Icon /> : null}
+                      </span>
+                      <span>{t(interest.label)}</span>
+                    </li>
+                  )
+                })}
               </ul>
             </GlassSurface>
           </Reveal>

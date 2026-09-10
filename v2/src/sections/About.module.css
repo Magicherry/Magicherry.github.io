@@ -63,20 +63,25 @@
   transition: color var(--dur-fast) var(--ease-enter);
 }
 
-.interests li:hover {
-  color: var(--fg);
-}
-
-.interests li svg {
+.interestIcon {
   flex: none;
+  display: grid;
+  place-items: center;
   font-size: 1rem;
-  margin-top: 0.15em;
+  /* Nudged to sit on the first line's optical centre rather than the row's: the
+     longer labels wrap to two lines in the narrow column. */
+  margin-top: 0.1em;
   color: var(--accent);
   transition: transform var(--dur-base) var(--ease-enter);
 }
 
-.interests li:hover svg {
-  transform: translateX(3px);
+/*
+ * A lift, not the sideways nudge the chevron had. A chevron points somewhere and
+ * sliding it along its own axis reads as "go"; these glyphs are labels, and
+ * sliding a camera to the right means nothing.
+ */
+.interests li:hover .interestIcon {
+  transform: scale(1.12);
 }
 
 /* ------------------------------------------------------------------ quote */
