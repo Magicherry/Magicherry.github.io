@@ -88,14 +88,19 @@
 /* No rule down the side - the quote mark above the text already announces it,
    and the two together were two devices doing one job. */
 .quote {
-  position: relative;
   padding: var(--space-5);
 }
 
+/*
+ * In flow, not absolutely positioned. Pinned at --space-3 inside a box padded
+ * by --space-5, a 1.35rem glyph reached 9.6px past the text's own edge on both
+ * axes and sat on the first line's opening characters. Letting it take a line
+ * of its own makes the collision structurally impossible rather than a matter
+ * of two offsets happening to clear each other at one font size.
+ */
 .quoteMark {
-  position: absolute;
-  top: var(--space-3);
-  left: var(--space-3);
+  display: block;
+  margin-bottom: var(--space-2);
   font-size: 1.35rem;
   color: var(--accent);
   opacity: 0.28;
