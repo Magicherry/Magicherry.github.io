@@ -74,6 +74,28 @@ function viewportExtent() {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
+/*
+ * What the phone paints its toolbars with - and deliberately *not* `--bg-base`.
+ *
+ * The base token is the colour underneath the aurora, near-black at #04060b. It
+ * is never what any edge of the page actually looks like: by the time the aurora
+ * and the vignette have composited, the top and bottom of the viewport sit
+ * several stops lighter. Handing the browser the base value paints the toolbar
+ * far darker than the page it borders, which is the black band on iOS and
+ * Android - the seam is the whole symptom, not the darkness.
+ *
+ * These two are sampled from the composited backdrop at the viewport edges. The
+ * aurora drifts, so no single value tracks it exactly; being within a stop is
+ * the difference between a seam and none.
+ *
+ * KEEP IN SYNC with the pre-paint script in index.html, which sets the same
+ * attribute before this module has parsed.
+ */
+const THEME_COLOR: Record<Theme, string> = {
+  dark: '#0a1520',
+  light: '#eef2f8',
+}
+
 const isTheme = (value: unknown): value is Theme => value === 'dark' || value === 'light'
 
 const getSystemTheme = (): Theme =>
@@ -100,7 +122,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // Keeps the browser UI (address bar, scrollbar gutter) in step with the page.
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', theme === 'light' ? '#f6f7fa' : '#04060b')
+      ?.setAttribute('content', THEME_COLOR[theme])
   }, [theme])
 
   const cycle = useCallback(

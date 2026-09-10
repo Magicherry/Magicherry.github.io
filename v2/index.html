@@ -4,7 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="theme-color" content="#04060b" />
+    <!--
+      Sampled from the composited backdrop at the viewport edge, not from
+      --bg-base. The base token is the near-black *under* the aurora and is never
+      what any edge of the page actually looks like; handing it to the browser
+      paints the toolbars darker than the page they border, which is the black
+      band phones show above and below the content.
+
+      KEEP IN SYNC with THEME_COLOR in src/lib/theme.tsx.
+    -->
+    <meta name="theme-color" content="#0a1520" />
 
     <title>Daniel Zhou — AI Agent Engineer & Front-end Developer</title>
     <meta
@@ -52,7 +61,7 @@
           document.documentElement.dataset.theme = theme
           document
             .querySelector('meta[name="theme-color"]')
-            .setAttribute('content', theme === 'light' ? '#f6f7fa' : '#04060b')
+            .setAttribute('content', theme === 'light' ? '#eef2f8' : '#0a1520')
         } catch (e) {
           /* localStorage can throw in private modes; the dark default stands. */
         }
