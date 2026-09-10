@@ -16,38 +16,30 @@
 }
 
 .stage {
-  position: relative;
-  overflow: hidden;
   padding: var(--space-2) var(--space-4);
 }
 
-.glyph {
+/*
+ * Sized as a wordmark, not a monogram. Two letters could take 12vw and cap at
+ * 5.5rem; ten letters at that size run past 480px and would overflow any phone.
+ * The tracking eases off for the same reason - a hard negative letterspace is a
+ * monogram treatment, and at word length it just makes the letters collide.
+ */
+.wordmark {
   display: block;
-  font-size: clamp(3rem, 12vw, 5.5rem);
+  font-size: clamp(1.65rem, 7vw, 3rem);
   font-weight: 700;
-  letter-spacing: var(--tracking-tighter);
+  letter-spacing: var(--tracking-tight);
   line-height: 1;
-  color: var(--fg-strong);
+  color: var(--accent);
 }
 
-/* A specular bar raking across the monogram - the same highlight the glass
-   surfaces carry, introduced before any glass is on screen. */
-.sweep {
-  position: absolute;
-  inset: -40% auto;
-  left: 0;
-  width: 42%;
-  background: linear-gradient(
-    100deg,
-    transparent,
-    color-mix(in srgb, var(--glass-specular) 70%, transparent),
-    transparent
-  );
-  filter: blur(6px);
-  mix-blend-mode: overlay;
-  pointer-events: none;
-}
-
+/*
+ * The one progress indicator on this screen. A specular bar used to rake across
+ * the wordmark as well, which read as a glint over a 120px monogram - but over a
+ * 270px wordmark it crosses slowly enough to look like a second progress bar
+ * sitting directly above the real one, so it is gone.
+ */
 .meter {
   justify-self: center;
   width: min(180px, 40vw);

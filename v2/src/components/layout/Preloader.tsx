@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { usePrefersReducedMotion } from '@/lib/hooks/useMediaQuery'
+import { profile } from '@/content/profile'
 import styles from './Preloader.module.css'
 
 const SESSION_KEY = 'v2:seen-intro'
@@ -81,20 +82,13 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
         >
           <div className={styles['stage']}>
             <motion.span
-              className={styles['glyph']}
+              className={styles['wordmark']}
               initial={{ opacity: 0, scale: 0.9, filter: 'blur(12px)' }}
               animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
-              YZ
+              {profile.handle}
             </motion.span>
-
-            <motion.span
-              className={styles['sweep']}
-              initial={{ x: '-130%' }}
-              animate={{ x: '130%' }}
-              transition={{ duration: 1.1, ease: [0.5, 0, 0.2, 1], delay: 0.15 }}
-            />
           </div>
 
           <div className={styles['meter']}>

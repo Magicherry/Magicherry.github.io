@@ -1,10 +1,18 @@
 import type { Localized } from './types'
+import openaiMark from '@/assets/marks/openai.svg'
 
 /**
  * Icons are served from jsDelivr rather than bundled. 35 marks would add real
  * weight to the bundle for decoration that sits below the fold; each <img> is
  * lazy + async-decoded and the grid reserves its box, so a slow or blocked CDN
  * degrades to a labelled cell instead of a layout shift.
+ *
+ * One exception, and it is the reason to keep this comment honest: OpenAI's
+ * mark is bundled. `cdn.simpleicons.org/openai` started returning 404 even
+ * though the npm package still ships `icons/openai.svg` - the render service's
+ * slug index and the package contents drifted apart. A mark that has already
+ * disappeared once is not worth re-hosting on a second catalogue, and one 1.5 kB
+ * file inlines as a data URI rather than costing a request at all.
  */
 const devicon = (path: string) =>
   `https://cdn.jsdelivr.net/gh/devicons/devicon@2.17.0/icons/${path}.svg`
@@ -114,7 +122,7 @@ export const toolStack: readonly StackGroup[] = [
     label: { en: 'AI Coding', zh: 'AI 编程' },
     items: [
       { name: 'Claude Code', icon: `${simple('claude')}/CC785C`, href: 'https://www.anthropic.com/claude-code' },
-      { name: 'Codex', icon: simple('openai'), href: 'https://developers.openai.com/codex', adaptive: true },
+      { name: 'Codex', icon: openaiMark, href: 'https://developers.openai.com/codex', adaptive: true },
       { name: 'Copilot', icon: simple('githubcopilot'), href: 'https://github.com/features/copilot', adaptive: true },
       {
         name: 'DeepSeek Harness',
