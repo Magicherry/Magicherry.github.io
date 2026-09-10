@@ -1,0 +1,136 @@
+/*
+ * Everything behind the glass, in as few compositor layers as the effect allows.
+ *
+ * This used to be eight full-viewport layers - base, four aurora blobs, the dot
+ * canvas, a grain sheet and a vignette - and every one of them had to be blended
+ * again on each composite. At 4K that is eight passes over eight million pixels
+ * for a background nobody is looking at directly.
+ *
+ * It is now four. Nothing was removed: the grain and vignette became extra
+ * `background-image` layers on the root element (a paint-time cost inside one
+ * layer, not a layer of their own), and the four blobs were paired onto two
+ * elements that drift against each other. What makes the aurora feel alive is
+ * the *relationship* between the colours changing, and two counter-drifting
+ * pairs preserve that at half the fill rate.
+ */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+  overflow: hidden;
+  background-color: var(--bg-base);
+  background-image:
+    /*
+     * Film grain, very low opacity. Large flat gradients band badly on 8-bit
+     * panels; noise dithers the steps away and is the cheapest thing that stops
+     * a dark gradient looking like a JPEG artefact. Static - it used to jitter,
+     * which forced a recomposite several times a second for no visible gain.
+     */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),
+    /* Pulls the eye to the centre column and stops the aurora fighting the nav. */
+    radial-gradient(
+      ellipse 120% 80% at 50% 0%,
+      transparent 30%,
+      color-mix(in srgb, var(--bg-base) 62%, transparent) 100%
+    );
+  background-repeat: repeat, no-repeat;
+  background-size: 160px 160px, 100% 100%;
+}
+
+/* --------------------------------------------------------------- aurora */
+.aurora {
+  position: absolute;
+  inset: -20%;
+  opacity: var(--aurora-opacity);
+  transition: opacity var(--dur-slow) var(--ease-enter);
+  /* Beneath the grain and vignette painted on .backdrop, above nothing else. */
+  z-index: -1;
+}
+
+.field {
+  position: absolute;
+  inset: 0;
+  display: block;
+  will-change: transform;
+}
+
+/*
+ * Two gradients per element rather than one blob per element. Painting two
+ * radial gradients into a single layer costs one extra paint; giving each its
+ * own element costs another full-viewport layer forever.
+ */
+.fieldA {
+  background-image:
+    radial-gradient(
+      52% 52% at 14% 10%,
+      var(--aurora-1) 0%,
+      color-mix(in srgb, var(--aurora-1) 52%, transparent) 36%,
+      transparent 72%
+    ),
+    radial-gradient(
+      40% 40% at 34% 88%,
+      var(--aurora-3) 0%,
+      color-mix(in srgb, var(--aurora-3) 52%, transparent) 36%,
+      transparent 72%
+    );
+  animation: driftA 44s steps(150) infinite alternate;
+}
+
+.fieldB {
+  background-image:
+    radial-gradient(
+      46% 46% at 88% 26%,
+      var(--aurora-2) 0%,
+      color-mix(in srgb, var(--aurora-2) 52%, transparent) 36%,
+      transparent 72%
+    ),
+    radial-gradient(
+      36% 36% at 72% 76%,
+      var(--aurora-4) 0%,
+      color-mix(in srgb, var(--aurora-4) 52%, transparent) 36%,
+      transparent 72%
+    );
+  animation: driftB 57s steps(180) infinite alternate;
+}
+
+/*
+ * Transform-only keyframes: no layout, no paint, no re-rasterise.
+ *
+ * `steps()` rather than a continuous curve, and this is the most valuable line
+ * in the file. The nav genuinely samples what is behind it, so every frame in
+ * which the aurora moves is a frame in which the nav must re-run its blur and
+ * displacement pass. Continuous drift meant 60 of those a second, forever.
+ *
+ * Each step now holds for ~290ms, so the backdrop changes roughly three times a
+ * second instead of sixty. The motion is 9vw over 44 seconds - about 2px per
+ * step, across a blob with no hard edge anywhere in it, under a layer of noise.
+ * It is not perceptible, and it is the difference between a background that is
+ * free and one that is not.
+ */
+@keyframes driftA {
+  to {
+    transform: translate3d(9vw, 7vh, 0) scale(1.12);
+  }
+}
+
+@keyframes driftB {
+  to {
+    transform: translate3d(-8vw, -6vh, 0) scale(0.92);
+  }
+}
+
+/* ----------------------------------------------------------------- grid */
+.grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .field {
+    animation: none;
+  }
+}

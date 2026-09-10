@@ -1,79 +1,32 @@
-# Bytecode and cache files
-__pycache__/
-*.py[cod]
-*$py.class
+# Repo-level ignores only. Each version owns its own build tooling and keeps its
+# own .gitignore (v1/.gitignore, v2/.gitignore); this file covers what sits
+# above them or would be a mistake anywhere in the tree.
 
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints/
-
-# Virtual environments
-env/
-venv/
-ENV/
-.venv/
-
-# IDE and editor settings
-.idea/
-.vscode/
-*.sublime-workspace
-*.sublime-project
-
-# System files
-.DS_Store
-Thumbs.db
-ehthumbs.db
-Icon?
-
-# Python distribution and packaging
-build/
+# Dependencies and build output, at any depth.
 node_modules/
 dist/
-*.egg-info/
-*.egg
-*.manifest
-*.spec
+build/
 
-# Logs and temporary files
+# Editor and OS noise
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+
+# Logs and scratch
 *.log
 *.tmp
-*.swp
 *.bak
-
-# Custom output folders
-Output_Schedule/
-Output_Actual/
-image/
-
-# Unit test / coverage results
-htmlcov/
-.tox/
-.coverage
-.cache/
-.pytest_cache/
-
-# MyPy and Pyre type checker
-.mypy_cache/
-.pyre/
-
-# Profile and test result files
-prof/
-*.prof
-*.pid
-
-# Others (optional, safe to exclude)
-*.sqlite3
-*.db
-
-*.tgz
-*.tar.gz
-*.zip
 *.orig
 
-# Private resume sources (separate git repo; leading slash keeps
-# src/components/Resume/ tracked)
-/Resume/
+# Private resume sources: a separate git repo of its own, so committing it would
+# record an unresolvable gitlink rather than the files. Anchored, because an
+# unanchored `Resume/` would also swallow v1/src/components/Resume/, which is
+# application code and has to stay tracked.
+/v1/Resume/
 
-# Personal documents containing contact details — not for a public repo.
-# The CV PDFs the site serves live in src/Assets/cv/ and stay tracked.
-/Linkedin.pdf
-/LinkedIn.pdf
+# Personal documents carrying contact details - not for a public repo. The CV
+# PDFs the site actually serves live in each version's assets and stay tracked.
+/v1/Linkedin.pdf
+/v1/LinkedIn.pdf

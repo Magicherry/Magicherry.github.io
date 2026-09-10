@@ -1,0 +1,65 @@
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-preloader);
+  display: grid;
+  place-content: center;
+  gap: var(--space-6);
+  background: var(--bg-base);
+  /* The curtain must be opaque enough that the aurora underneath does not read
+     through it, or the lift-away has nothing to reveal. */
+  background-image: radial-gradient(
+    ellipse 80% 60% at 50% 40%,
+    color-mix(in srgb, var(--accent) 12%, transparent),
+    transparent 70%
+  );
+}
+
+.stage {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-2) var(--space-4);
+}
+
+.glyph {
+  display: block;
+  font-size: clamp(3rem, 12vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tighter);
+  line-height: 1;
+  color: var(--fg-strong);
+}
+
+/* A specular bar raking across the monogram - the same highlight the glass
+   surfaces carry, introduced before any glass is on screen. */
+.sweep {
+  position: absolute;
+  inset: -40% auto;
+  left: 0;
+  width: 42%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    color-mix(in srgb, var(--glass-specular) 70%, transparent),
+    transparent
+  );
+  filter: blur(6px);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.meter {
+  justify-self: center;
+  width: min(180px, 40vw);
+  height: 2px;
+  border-radius: var(--radius-full);
+  background: var(--fg-ghost);
+  overflow: hidden;
+}
+
+.meterFill {
+  display: block;
+  height: 100%;
+  transform-origin: 0 50%;
+  background: var(--accent);
+}

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="theme-color" content="#04060b" />
+
+    <title>Daniel Zhou — AI Agent Engineer & Front-end Developer</title>
+    <meta
+      name="description"
+      content="Portfolio of Daniel Zhou (Magicherry) — AI Agent Engineer at NIO, building enterprise agent systems and obsessively detailed interfaces."
+    />
+    <meta name="author" content="Daniel Zhou" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Daniel Zhou — AI Agent Engineer & Front-end Developer" />
+    <meta
+      property="og:description"
+      content="Enterprise AI agents by day, interface details by night. Selected work, experience and contact."
+    />
+    <meta property="og:url" content="https://Magicherry.github.io/" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="preconnect" href="https://cdn.simpleicons.org" crossorigin />
+
+    <script>
+      /*
+       * Theme, applied before first paint.
+       *
+       * React cannot do this: by the time the bundle has parsed and the effect
+       * has run, the browser has already painted at least one frame. On a light
+       * -mode device that frame is a full-screen white flash, and on a dark one
+       *  it is the reverse. Six lines of blocking script buy a correct first
+       * paint, which is the one trade where blocking the parser is worth it.
+       */
+      ;(function () {
+        try {
+          var raw = localStorage.getItem('v2:theme')
+          var theme = null
+          if (raw) {
+            var parsed = JSON.parse(raw)
+            // expiresAt === null means the choice never lapses.
+            if (parsed && (parsed.expiresAt === null || Date.now() < parsed.expiresAt)) {
+              theme = parsed.value
+            }
+          }
+          if (theme !== 'dark' && theme !== 'light') {
+            theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+          }
+          document.documentElement.dataset.theme = theme
+          document
+            .querySelector('meta[name="theme-color"]')
+            .setAttribute('content', theme === 'light' ? '#f6f7fa' : '#04060b')
+        } catch (e) {
+          /* localStorage can throw in private modes; the dark default stands. */
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

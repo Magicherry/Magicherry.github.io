@@ -1,0 +1,25 @@
+.line {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  min-height: 1.4em;
+  color: var(--accent);
+  font-weight: 560;
+  letter-spacing: var(--tracking-tight);
+}
+
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  border-radius: 1px;
+  background: currentColor;
+  box-shadow: 0 0 10px -1px currentColor;
+  animation: blink 1.05s steps(2, jump-none) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.1;
+  }
+}

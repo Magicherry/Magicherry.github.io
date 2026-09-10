@@ -1,0 +1,35 @@
+.section {
+  scroll-margin-top: 96px;
+}
+
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.headMain {
+  min-width: 0;
+  flex: 1 1 32ch;
+}
+
+.headAside {
+  flex: 0 0 auto;
+  padding-bottom: 6px;
+}
+
+.body {
+  margin-top: clamp(2.25rem, 5vw, 3.5rem);
+}
+
+@media (max-width: 760px) {
+  .head {
+    align-items: flex-start;
+  }
+
+  .headAside {
+    padding-bottom: 0;
+  }
+}

@@ -1,0 +1,156 @@
+.panel {
+  display: grid;
+  gap: var(--space-6);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: var(--space-2);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--fg);
+  transition:
+    background-color var(--dur-fast) var(--ease-enter),
+    transform var(--dur-base) var(--ease-gel),
+    color var(--dur-fast) var(--ease-enter);
+}
+
+.link:hover {
+  transform: translateX(3px);
+  /* The brand colour surfaces here instead - one row lit at a time. Entries with
+     no usable brand hue (GitHub's near-black) fall back to a neutral wash. */
+  background: color-mix(in srgb, var(--brand, var(--fg)) 10%, transparent);
+  color: var(--fg-strong);
+}
+
+.linkIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  /*
+   * No tile behind the mark. Each logo already has its own silhouette and its own
+   * colour; a container around it adds an edge that belongs to neither. The box
+   * is kept only as a fixed-width track so every row's text starts at the same x.
+   */
+  color: var(--accent);
+  font-size: 1.5rem;
+  transition: transform var(--dur-base) var(--ease-gel);
+}
+
+.link:hover .linkIcon {
+  transform: scale(1.08);
+}
+
+.linkIcon img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+/* GitHub's mark is #181717 and disappears against a dark card. */
+:global([data-theme='dark']) .linkIcon img[data-adaptive] {
+  filter: invert(1) brightness(1.6);
+}
+
+.linkText {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.linkLabel {
+  font-size: var(--text-sm);
+  font-weight: 580;
+  color: var(--fg);
+}
+
+.linkHint {
+  font-size: var(--text-2xs);
+  color: var(--fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.linkArrow {
+  margin-left: auto;
+  flex: none;
+  font-size: 1.05rem;
+  opacity: 0;
+  transform: translate3d(-4px, 4px, 0);
+  transition:
+    opacity var(--dur-base) var(--ease-enter),
+    transform var(--dur-base) var(--ease-enter);
+}
+
+.link:hover .linkArrow {
+  opacity: 0.7;
+  transform: none;
+}
+
+.cta {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+}
+
+/* ---------------------------------------------------------------- overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: grid;
+  place-items: center;
+  padding: var(--space-5);
+  background: var(--scrim);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
+.qr {
+  max-width: min(90vw, 340px);
+}
+
+.qrCard {
+  position: relative;
+  padding: var(--space-4);
+}
+
+.qrCard img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.qrClose {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--fg);
+  color: var(--bg-base);
+  cursor: pointer;
+  box-shadow: var(--shadow-lift);
+  transition: transform var(--dur-fast) var(--ease-gel);
+}
+
+.qrClose:hover {
+  transform: scale(1.08) rotate(90deg);
+}

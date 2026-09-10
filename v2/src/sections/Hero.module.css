@@ -1,0 +1,381 @@
+.hero {
+  position: relative;
+  /* svh, not vh: on mobile Safari and Chrome the URL bar makes 100vh taller
+     than the visible viewport, which pushes the scroll cue off-screen at exactly
+     the moment it is meant to be inviting a scroll. */
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  padding-block: clamp(6rem, 16vh, 9rem) clamp(5rem, 12vh, 7rem);
+  overflow: clip;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5rem);
+}
+
+/* ------------------------------------------------------------------- copy */
+.copy {
+  min-width: 0;
+}
+
+/*
+ * The greeting and the name are two different registers - one conversational,
+ * one a statement - and at 4px they were reading as a single wrapped line. The
+ * gap survives `.nameClip`'s negative margin because the matching padding inside
+ * it adds the same amount back.
+ */
+.title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xl);
+  font-weight: 500;
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-muted);
+}
+
+.wave {
+  display: inline-block;
+  transform-origin: 72% 78%;
+  animation: wave 2.6s var(--ease-inout) infinite;
+}
+
+@keyframes wave {
+  0%,
+  55%,
+  100% {
+    transform: rotate(0deg);
+  }
+  62% {
+    transform: rotate(16deg);
+  }
+  70% {
+    transform: rotate(-9deg);
+  }
+  78% {
+    transform: rotate(13deg);
+  }
+  86% {
+    transform: rotate(-5deg);
+  }
+}
+
+/*
+ * The mask the name rises out of. It must not be transformed itself - only the
+ * gradient element inside it is - or the gradient stops clipping to the text.
+ * The vertical padding keeps descenders from being shaved mid-rise; the matching
+ * negative margin keeps that padding out of the layout.
+ */
+.nameClip {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.12em;
+  margin-block: -0.12em;
+}
+
+/* The element that moves. Kept free of a gradient of its own so the one on
+   `.name` inside it is the only thing clipping to text. */
+.nameLine {
+  display: block;
+  font-size: var(--text-4xl);
+  font-weight: 500;
+  /* Not --tracking-tighter: at -0.045em the Chinese characters start to crowd
+     each other, and CJK has no kerning slack to give. */
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.12;
+  color: var(--fg-muted);
+}
+
+.name {
+  font-size: inherit;
+  /*
+   * Flat. Weight and colour already separate the name from the "I am" leading
+   * it - 660 against 500, foreground against muted - so a gradient was adding a
+   * second signal for a distinction that was already clear. It also takes the
+   * whole `background-clip: text` mechanism out of the hero, and with it the
+   * layer-promotion trap that made the name render as nothing.
+   */
+  font-weight: 660;
+  color: var(--fg-strong);
+}
+
+.role {
+  margin-top: var(--space-4);
+  font-size: var(--text-xl);
+  min-height: 1.7em;
+}
+
+.actions {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* ------------------------------------------------------------- card facts */
+.facts {
+  display: grid;
+  gap: 7px;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+.facts li {
+  display: flex;
+  /* Not `center`: two job titles wrap to a second line in English, and centring
+     would drag the icon down to the middle of the block. The icon is within a
+     pixel of the first line box's height, so pinning to the top reads level. */
+  align-items: start;
+  gap: 8px;
+  min-width: 0;
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  color: var(--fg-muted);
+}
+
+.facts svg {
+  flex: none;
+  font-size: 0.95rem;
+  color: var(--accent);
+}
+
+.company {
+  color: var(--fg-strong);
+  font-weight: 560;
+  box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--accent) 55%, transparent);
+  transition: color var(--dur-fast) var(--ease-enter);
+}
+
+.company:hover {
+  color: var(--accent);
+}
+
+/* --------------------------------------------------------------- showcase */
+.showcase {
+  /* The perspective origin lives on the wrapper so the tilt pivots around the
+     card's own centre rather than the viewport's. */
+  perspective: 1100px;
+  perspective-origin: 50% 50%;
+  display: grid;
+  place-items: center;
+}
+
+.stack {
+  position: relative;
+  width: min(100%, 380px);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.chip {
+  position: absolute;
+  border-radius: var(--radius-lg);
+  /* Purely decorative slabs behind the card. They move with the pointer, so a
+     backdrop pass here would re-blur on every mouse event for no visual gain -
+     a translucent fill reads identically at this opacity. */
+  background: linear-gradient(140deg, color-mix(in srgb, var(--fg) 11%, transparent), transparent);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  pointer-events: none;
+}
+
+.chipA {
+  inset: -7% -11% 42% 30%;
+  transform: translateZ(-60px) rotate(6deg);
+  opacity: 0.75;
+}
+
+.chipB {
+  inset: 52% 44% -9% -13%;
+  transform: translateZ(-100px) rotate(-8deg);
+  opacity: 0.55;
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-5);
+  display: grid;
+  gap: var(--space-4);
+  transform: translateZ(40px);
+  --surface-specular-size: 300px;
+}
+
+.portrait {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  aspect-ratio: 1;
+  background: var(--portrait-bed);
+}
+
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* A hair of extra contrast so the portrait holds its own against the
+     saturation lift the glass applies to everything behind it. */
+  filter: saturate(1.06) contrast(1.03);
+}
+
+.cardMeta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.cardName {
+  font-size: var(--text-lg);
+  font-weight: 620;
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-strong);
+}
+
+.cardHandle {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--fg-faint);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+.stats li {
+  display: grid;
+  gap: 2px;
+  text-align: center;
+}
+
+.statValue {
+  font-size: var(--text-lg);
+  font-weight: 640;
+  letter-spacing: var(--tracking-tight);
+  color: var(--accent);
+}
+
+.statLabel {
+  font-size: var(--text-2xs);
+  line-height: 1.35;
+  color: var(--fg-faint);
+}
+
+/* ------------------------------------------------------------- scroll cue */
+.scrollCue {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1.5rem, 4vh, 2.5rem);
+  translate: -50% 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--fg-muted);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color var(--dur-base) var(--ease-enter);
+}
+
+.scrollCue:hover {
+  color: var(--accent);
+}
+
+.scrollCue svg {
+  font-size: 1rem;
+  animation: nudge 2.1s var(--ease-inout) infinite;
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  45% {
+    transform: translateY(4px);
+  }
+}
+
+/* =============================================================== responsive */
+@media (max-width: 980px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2.5rem, 8vw, 4rem);
+  }
+
+  /*
+   * The card follows the copy rather than leading it. Stacked, a 480px-tall
+   * portrait card above the heading means a phone opens on an avatar and you
+   * have to scroll to find whose site this is.
+   */
+  .showcase {
+    /* No tilt at this width, so the 3D context is pure cost - and `translateZ`
+       under a perspective renders the card ~4% larger than its layout box,
+       which is enough to graze whatever sits next to it. */
+    perspective: none;
+  }
+
+  .stack {
+    width: min(100%, 300px);
+    transform-style: flat;
+  }
+
+  .card {
+    padding: var(--space-4);
+    transform: none;
+  }
+
+}
+
+@media (max-width: 760px) {
+  .hero {
+    /* Room for the docked bottom nav. */
+    padding-bottom: 8rem;
+    min-height: auto;
+    padding-top: 6rem;
+  }
+
+  .scrollCue {
+    display: none;
+  }
+
+  .chipA,
+  .chipB {
+    display: none;
+  }
+
+  /* The card is now below the fold-worthy part, so it can afford to be a little
+     tighter - and 300px of portrait on a 390px screen is most of the width. */
+  .stack {
+    width: min(100%, 270px);
+  }
+
+  .title {
+    gap: var(--space-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave,
+  .scrollCue svg {
+    animation: none;
+  }
+}

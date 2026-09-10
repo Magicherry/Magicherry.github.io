@@ -1,0 +1,160 @@
+import type { Localized } from './types'
+import cvEn from '@/assets/cv/Yuting_Zhou_CV.pdf'
+import cvZh from '@/assets/cv/Yuting_Zhou_CV_zh.pdf'
+import avatar from '@/assets/avatar/avatar.png'
+import portrait from '@/assets/photo/head-cutout.png'
+import wechatQr from '@/assets/about/social/Wechat.jpg'
+
+export const profile = {
+  /** The small mark in the nav capsule. */
+  avatar,
+  /** The full-bleed photo on the hero card. */
+  portrait,
+  wechatQr,
+  name: { en: 'Daniel Zhou', zh: '周昱廷' } satisfies Localized,
+  handle: 'Magicherry',
+  /*
+   * The facts on the hero card. Titles and company are separate fields rather
+   * than one pre-joined string so the company can carry its own link, and so the
+   * two locales are not each responsible for getting the "@" in the right place.
+   */
+  current: {
+    /* Two concurrent titles at one employer, so they share the company suffix
+       rather than each getting a row of their own. */
+    titles: [
+      { en: 'AI Agent Engineer', zh: 'AI Agent 工程师' },
+      { en: 'Business Planning Assistant', zh: '业务规划助理' },
+    ] satisfies readonly Localized[],
+    company: { en: 'NIO', zh: '蔚来' } satisfies Localized,
+    companyUrl: 'https://www.nio.com/',
+  },
+  location: { en: 'Shanghai, China', zh: '中国 · 上海' } satisfies Localized,
+  cv: { en: cvEn, zh: cvZh } satisfies Localized,
+  /* The saved-as name, not the asset path - the PDFs are copied in from the
+     Resume repo and keep their filenames there. */
+  cvFileName: { en: 'Daniel_Zhou_CV.pdf', zh: '周昱廷-简历.pdf' } satisfies Localized,
+} as const
+
+/** Strings the typewriter cycles through under the hero name. */
+export const roles: Localized<readonly string[]> = {
+  en: [
+    'AI Agent Engineer',
+    'Front-end Developer',
+    'Full-stack Developer',
+    'Business Planning Analyst',
+    'Machine Learning Engineer',
+    'Creative Developer',
+  ],
+  zh: [
+    'AI Agent 工程师',
+    '前端开发工程师',
+    '全栈开发工程师',
+    '业务规划分析师',
+    '机器学习工程师',
+    '创意开发者',
+  ],
+}
+
+/** Wraps a value that happens to read the same in every locale. */
+const same = (value: string): Localized => ({ en: value, zh: value })
+
+export interface SocialLink {
+  id: string
+  label: Localized
+  /** Localized because the email address differs by locale - see below. */
+  href: Localized
+  /**
+   * The line under the label. For the platforms it describes where the link
+   * goes; for email and phone it *is* the address, because that is the thing a
+   * visitor actually wants to read and copy.
+   */
+  hint: Localized
+  /**
+   * The platform's own mark, in its own colours. Absent for email and phone,
+   * which are protocols rather than products and have no official logo - those
+   * fall back to a line icon in the site's accent.
+   *
+   * `cdn.simpleicons.org/<slug>` with no colour parameter serves the brand's
+   * registered hex, so the colours here are the official ones rather than
+   * something eyeballed.
+   */
+  mark?: string
+  /** Brand hex, used to tint the row on hover. Omitted where it reads badly in
+   *  one of the two themes. */
+  brand?: string
+  /** Near-black marks that would vanish against a dark background. */
+  adaptive?: boolean
+  /** Renders a QR overlay instead of navigating. */
+  overlay?: 'wechat'
+}
+
+// LinkedIn was withdrawn from simple-icons over trademark, so its mark comes
+// from devicon instead - still the official asset, just a different host.
+const simpleMark = (slug: string) => `https://cdn.simpleicons.org/${slug}`
+
+/*
+ * Email is locale-aware, matching what the two CVs already do: the English
+ * resume prints the Gmail address, the Chinese one the 163 address. A reader on
+ * the Chinese side of the site is likely mailing from inside the GFW, where
+ * Gmail is a dead end.
+ *
+ * Everything here is already public in the downloadable CV, so putting it in the
+ * page adds convenience rather than exposure - with the caveat that plain text
+ * in HTML is far easier to harvest than the same string inside a PDF.
+ */
+export const socials: readonly SocialLink[] = [
+  {
+    id: 'email',
+    label: { en: 'Email', zh: '邮箱' },
+    href: { en: 'mailto:zyt680129@gmail.com', zh: 'mailto:zyt680129@163.com' },
+    hint: { en: 'zyt680129@gmail.com', zh: 'zyt680129@163.com' },
+  },
+  {
+    id: 'phone',
+    label: { en: 'Phone', zh: '电话' },
+    href: same('tel:+8613681756546'),
+    hint: same('+86 136 8175 6546'),
+  },
+  {
+    id: 'github',
+    label: same('GitHub'),
+    href: same('https://github.com/Magicherry'),
+    hint: { en: '@Magicherry', zh: '@Magicherry' },
+    mark: simpleMark('github'),
+    // #181717 - invisible on a dark card, so the mark is inverted there and the
+    // hover tint falls back to the site accent.
+    adaptive: true,
+  },
+  {
+    id: 'linkedin',
+    label: same('LinkedIn'),
+    href: same('https://www.linkedin.com/in/yuting-zhou-magicherry/'),
+    hint: { en: 'yuting-zhou-magicherry', zh: 'yuting-zhou-magicherry' },
+    mark: 'https://cdn.jsdelivr.net/gh/devicons/devicon@2.17.0/icons/linkedin/linkedin-original.svg',
+    brand: '#0076b2',
+  },
+  {
+    id: 'wechat',
+    label: { en: 'WeChat', zh: '微信' },
+    href: same('#wechat'),
+    hint: { en: 'Show QR code', zh: '显示二维码' },
+    mark: simpleMark('wechat'),
+    brand: '#07c160',
+    overlay: 'wechat',
+  },
+  {
+    id: 'bilibili',
+    label: same('Bilibili'),
+    href: same('https://space.bilibili.com/155876727'),
+    hint: { en: 'space.bilibili.com', zh: 'Bilibili 主页' },
+    mark: simpleMark('bilibili'),
+    brand: '#00a1d6',
+  },
+]
+
+/** Headline numbers for the hero's stat strip. */
+export const stats: readonly { value: string; label: Localized }[] = [
+  { value: '2026', label: { en: 'MSc graduate', zh: '届硕士毕业生' } },
+  { value: '9', label: { en: 'Past projects', zh: '个历史项目' } },
+  { value: '2', label: { en: 'Languages spoken', zh: '门工作语言' } },
+]

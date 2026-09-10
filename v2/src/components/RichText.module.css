@@ -1,0 +1,69 @@
+/*
+ * Prose emphasis: the theme colour plus a little weight, and nothing else. This
+ * is v1's treatment - there an emphasised phrase was a `<b class="text-accent">`
+ * and that was the whole of it.
+ */
+.accentBody {
+  color: var(--accent);
+  font-weight: 560;
+}
+
+/* Headings carry their own weight; only the colour changes. */
+.accentHeading {
+  color: var(--accent);
+  font-weight: inherit;
+}
+
+.aside {
+  color: var(--fg-muted);
+  font-style: italic;
+}
+
+.link {
+  color: var(--accent);
+  font-weight: 560;
+  text-decoration: none;
+  position: relative;
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-enter);
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dur-base) var(--ease-enter);
+}
+
+.link:hover {
+  color: var(--accent-soft);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/*
+ * The gap itself. About a sixth of an em - enough to separate the run from the
+ * Han characters beside it without opening a word space. Applied only where the
+ * parser found an adjacent ideograph.
+ */
+.accentBody[data-gap-before],
+.accentHeading[data-gap-before],
+.link[data-gap-before] {
+  margin-inline-start: 0.16em;
+}
+
+.accentBody[data-gap-after],
+.accentHeading[data-gap-after],
+.link[data-gap-after] {
+  margin-inline-end: 0.16em;
+}

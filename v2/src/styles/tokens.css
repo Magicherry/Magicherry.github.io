@@ -1,0 +1,347 @@
+/*
+ * Design tokens.
+ *
+ * Two-tier system: a *palette* tier holds raw values and never appears in
+ * component CSS; a *semantic* tier maps palette entries onto roles and is the
+ * only thing components reference. Theming therefore only ever rewrites the
+ * semantic tier, which is why the whole site can swap appearance by flipping
+ * one attribute on <html> without a single component knowing about it.
+ */
+
+:root {
+  /* ----------------------------------------------------------------- palette
+   *
+   * Carried over from v1, whose signature is the bright cyan `rgb(3, 232, 248)`.
+   *
+   * There is no second brand hue any more. One arrived when the design leaned on
+   * gradients; with those flattened it had nothing left to do but tint a single
+   * chip, so the palette is now cyan plus neutrals - and green, once, for "live".
+   */
+  --p-cyan-200: #a5f3fc;
+  --p-cyan-400: #03e8f8;
+  --p-cyan-500: #06b6d4;
+
+  --p-sky-600: #0284c7;
+  --p-sky-700: #0369a1;
+
+  --p-amber-400: #fbbf24;
+
+  --p-ink-950: #04060b;
+  --p-ink-900: #070a12;
+  --p-ink-800: #0d1018;
+  --p-ink-700: #141824;
+
+  --p-paper-50: #ffffff;
+  --p-paper-100: #f6f7fa;
+  --p-paper-200: #eceef4;
+  --p-paper-300: #dfe3ec;
+
+  /* ------------------------------------------------------------------- type */
+  /*
+   * No webfont is downloaded. On Apple hardware this resolves to SF Pro - the
+   * exact typeface the Liquid Glass language was drawn against - and on Windows
+   * to Segoe UI Variable. Both are already resident, so first paint carries the
+   * final typography with zero layout shift and zero network cost.
+   */
+  --font-sans:
+    ui-sans-serif, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    'Segoe UI Variable Display', 'Segoe UI', Inter, system-ui, 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  /*
+   * The CJK families at the end are not decoration. Every face before them is
+   * Latin-only, so a Chinese glyph in a mono run falls through to the browser's
+   * last-resort CJK font - typically unhinted and rendered at the wrong weight,
+   * which is exactly what "blurry" looks like at 13px. Naming PingFang / YaHei
+   * explicitly keeps Latin monospaced and hands Chinese to a face that was
+   * actually drawn for these sizes.
+   */
+  --font-mono:
+    ui-monospace, 'SF Mono', SFMono-Regular, 'Cascadia Code', 'JetBrains Mono',
+    'Roboto Mono', Menlo, Consolas, 'PingFang SC', 'Microsoft YaHei',
+    'Noto Sans SC', monospace;
+
+  /* Fluid scale:每一级在 375px 到 1440px 之间线性插值，避免断点处的跳变 */
+  --text-2xs: clamp(0.65rem, 0.62rem + 0.14vw, 0.72rem);
+  --text-xs: clamp(0.74rem, 0.71rem + 0.16vw, 0.82rem);
+  --text-sm: clamp(0.83rem, 0.79rem + 0.2vw, 0.93rem);
+  --text-base: clamp(0.95rem, 0.9rem + 0.24vw, 1.06rem);
+  --text-lg: clamp(1.08rem, 1rem + 0.36vw, 1.28rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.62vw, 1.6rem);
+  --text-2xl: clamp(1.55rem, 1.28rem + 1.12vw, 2.25rem);
+  --text-3xl: clamp(2rem, 1.5rem + 2.1vw, 3.25rem);
+  /*
+   * The display step. Retuned down from a 5rem ceiling: the hero line is a whole
+   * sentence ("I am Daniel Zhou.") rather than a single word, so the old size
+   * filled most of the column and shouted. It still clears --text-3xl, which is
+   * what section titles use, so the hero keeps the top of the hierarchy.
+   *
+   * (--text-5xl used to sit above this and was never referenced by anything.)
+   */
+  --text-4xl: clamp(2.1rem, 1.4rem + 2.9vw, 3.6rem);
+
+  --leading-tight: 1.08;
+  --leading-snug: 1.28;
+  --leading-normal: 1.55;
+  --leading-relaxed: 1.78;
+
+  --tracking-tighter: -0.045em;
+  --tracking-tight: -0.022em;
+  --tracking-normal: -0.008em;
+  --tracking-wide: 0.06em;
+  --tracking-widest: 0.18em;
+
+  /* ------------------------------------------------------------------ space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
+  --radius-xl: 34px;
+  --radius-full: 999px;
+
+  --shell-max: 1180px;
+  --shell-pad: clamp(1.15rem, 4vw, 2.75rem);
+  /*
+   * Scaled by viewport *width*, not height. It used to be `clamp(5rem, 11vh,
+   * 9rem)`, and vh is the wrong axis for this: a phone and a laptop are within a
+   * few hundred pixels of each other vertically, so mobile inherited a
+   * desktop-sized gap while the content column beside it shrank by two thirds -
+   * which is what made the rhythm read as too airy on a phone and correct on a
+   * desktop. Width is the dimension that actually changes.
+   */
+  --section-gap: clamp(3.4rem, 2.4rem + 4.6vw, 6rem);
+
+  /* ----------------------------------------------------------------- motion */
+  /*
+   * Named by intent, not by curve. `--ease-exit` is deliberately faster and
+   * flatter than `--ease-enter`: things should leave without asking to be
+   * watched, and arrive with enough overshoot to feel physical.
+   */
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.5, 0, 0.75, 0);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-gel: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --dur-instant: 90ms;
+  --dur-fast: 180ms;
+  --dur-base: 320ms;
+  --dur-slow: 620ms;
+  --dur-slower: 1100ms;
+
+  --z-canvas: 0;
+  --z-content: 10;
+  --z-nav: 60;
+  --z-overlay: 80;
+  --z-preloader: 100;
+
+  /*
+   * The hero portrait is a cutout, so this tile is the surface the subject
+   * stands on rather than a tint over whatever is behind it. It lives up here
+   * in the theme-independent tier on purpose: the photo was lit against white
+   * paper, and a dark bed contradicts that lighting - the rim light along the
+   * hair ends up brighter than the ground it sits on, which reads as a badly
+   * composited cutout. So both themes get the same paper. Palette values, not
+   * `--accent`, because that token is two stops apart between themes and would
+   * pull the bed with it.
+   */
+  --portrait-bed: color-mix(in srgb, var(--p-sky-700) 11%, var(--p-paper-50));
+}
+
+/* ============================================================= dark (default) */
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg-base: var(--p-ink-950);
+  --bg-raised: var(--p-ink-800);
+  --bg-sunken: #020306;
+
+  --fg: #f2f5fb;
+  --fg-strong: #ffffff;
+  --fg-muted: rgba(233, 240, 252, 0.62);
+  --fg-faint: rgba(233, 240, 252, 0.38);
+  --fg-ghost: rgba(233, 240, 252, 0.14);
+
+  --accent: var(--p-cyan-400);
+  --accent-soft: var(--p-cyan-200);
+  --accent-deep: var(--p-cyan-500);
+  --accent-warm: var(--p-amber-400);
+  --accent-contrast: #04141a;
+
+  /*
+   * The one hue on this site that is not the brand: "currently here". Green
+   * reads as live almost universally, and it is the only place a second colour
+   * earns its keep - so it is a named role rather than a hex repeated in two
+   * stylesheets.
+   */
+  --status-live: #34d399;
+
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.16);
+
+  /* Aurora field behind the glass. Glass only reads as glass when there is
+   * something worth refracting behind it, so these are saturated on purpose -
+   * by the time you see them through 22px of blur they are a faint wash. Same
+   * four hues v1 used in its background mesh, minus the violet. */
+  --aurora-1: rgba(3, 232, 248, 0.42);
+  --aurora-2: rgba(59, 130, 246, 0.42);
+  --aurora-3: rgba(45, 212, 191, 0.28);
+  --aurora-4: rgba(56, 189, 248, 0.32);
+  --aurora-opacity: 1;
+
+  /* ------------------------------------------------------------ glass tier */
+  /*
+   * Two fills, because there are two kinds of surface. A *live* surface really
+   * samples what is behind it and can afford a barely-there tint; a *flat* one
+   * never runs a backdrop pass, so it has to carry its own contrast or the text
+   * on it sits directly on the aurora.
+   */
+  --glass-tint: rgba(255, 255, 255, 0.05);
+  --glass-tint-strong: rgba(255, 255, 255, 0.085);
+  /*
+   * Lifted off near-black. At rgba(10,14,22,.62) the panels were darker than the
+   * page behind them, which inverts what glass does: a sheet over a lit backdrop
+   * should read as *brighter* than the wall, not as a hole cut into it. A paler
+   * base at a lower alpha also lets more of the aurora through, so the surfaces
+   * pick up some of the colour they are supposed to be sitting in front of.
+   */
+  --glass-fill: rgba(21, 27, 40, 0.52);
+  --glass-fill-strong: rgba(255, 255, 255, 0.06);
+  --glass-blur: 18px;
+  --glass-saturate: 172%;
+  --glass-brightness: 1.06;
+
+  /*
+   * Rim lighting.
+   *
+   * The lit edge is 20% white, not 55%. A 1px line at half opacity running the
+   * full width of a panel is the single clearest tell of cheap glassmorphism:
+   * real glass catches light on the facet turned toward the source and loses it
+   * within a few pixels, so a uniform bright stroke reads as a drawn border
+   * rather than as an edge.
+   *
+   * The shaded edge is genuinely dark. It used to be white at 6% - a second,
+   * dimmer highlight - which meant the panel was lit from above *and* below and
+   * had no bottom at all.
+   */
+  --glass-rim-light: rgba(255, 255, 255, 0.2);
+  --glass-rim-dark: rgba(0, 0, 0, 0.3);
+  --glass-inner-glow: rgba(255, 255, 255, 0.085);
+  --glass-inner-shade: rgba(3, 6, 14, 0.55);
+  /*
+   * Three falloffs rather than one. A single wide blur puts the panel a fixed
+   * distance off the page; a tight contact shadow plus a mid and an ambient one
+   * describe an object resting *on* something, which is most of what makes a
+   * surface look expensive.
+   */
+  --glass-drop:
+    0 1px 2px -1px rgba(0, 0, 0, 0.5),
+    0 10px 24px -14px rgba(0, 0, 0, 0.6),
+    0 30px 60px -34px rgba(0, 0, 0, 0.7);
+  --glass-specular: rgba(255, 255, 255, 0.26);
+
+  --scrim: rgba(3, 5, 10, 0.72);
+  --shadow-lift: 0 30px 70px -32px rgba(0, 0, 0, 0.9);
+}
+
+/* ==================================================================== light */
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg-base: var(--p-paper-100);
+  --bg-raised: var(--p-paper-50);
+  --bg-sunken: var(--p-paper-200);
+
+  --fg: #10131a;
+  --fg-strong: #05070c;
+  --fg-muted: rgba(16, 19, 26, 0.66);
+  --fg-faint: rgba(16, 19, 26, 0.44);
+  --fg-ghost: rgba(16, 19, 26, 0.12);
+
+  /* v1's light accent was #0369a1. The bright cyan has nowhere near enough
+     contrast on paper, so light mode drops the same hue two stops rather than
+     trying to reuse the dark value. */
+  --accent: var(--p-sky-700);
+  --accent-soft: var(--p-sky-600);
+  --accent-deep: #075985;
+  --accent-warm: #b45309;
+  --accent-contrast: #ffffff;
+
+  /* Two stops darker than the dark-mode green: #34d399 on paper is barely
+     legible at this size. */
+  --status-live: #059669;
+
+  --line: rgba(9, 14, 24, 0.09);
+  --line-strong: rgba(9, 14, 24, 0.16);
+
+  /*
+   * Stronger than they look like they should be, and this is the reason light
+   * mode's glass reads at all. Refraction, blur and a saturation lift all work
+   * on *what is behind the sheet*; over a near-uniform #f6f7fa there is nothing
+   * for any of them to act on, and the nav ends up looking like a plain white
+   * pill. These give it something to bend.
+   */
+  --aurora-1: rgba(6, 182, 212, 0.4);
+  --aurora-2: rgba(59, 130, 246, 0.36);
+  --aurora-3: rgba(45, 212, 191, 0.26);
+  --aurora-4: rgba(56, 189, 248, 0.34);
+  --aurora-opacity: 0.92;
+
+  /*
+   * Light-mode glass is not dark-mode glass inverted. A white sheet over a white
+   * page has no contrast to refract, so the tint goes *up* while the rim goes
+   * down - the depth cue moves from the highlight to the drop shadow.
+   */
+  /*
+   * The live tint drops well below the flat fill. A sampling surface only has to
+   * be *tinted*; at 58% white it was closer to opaque, which threw away the very
+   * thing it had just spent a blur pass collecting. 32% is about the floor - much
+   * less and the aurora stops being a wash and starts being a picture.
+   */
+  --glass-tint: rgba(255, 255, 255, 0.32);
+  --glass-tint-strong: rgba(255, 255, 255, 0.5);
+  --glass-fill: rgba(255, 255, 255, 0.72);
+  --glass-fill-strong: rgba(255, 255, 255, 0.42);
+  --glass-blur: 22px;
+  --glass-saturate: 230%;
+  /*
+   * Below 1, and this is the correction that matters most on paper. Brightening
+   * a near-white backdrop drives it toward clipping and erases the colour the
+   * saturation lift just produced - the pane spends three passes collecting
+   * detail and the fourth throws it away. Real glass absorbs a little light: a
+   * sheet over a bright scene reads slightly darker and punchier than the wall,
+   * never brighter. `contrast` is the term that was missing, and it is a whole
+   * function rather than a number so dark mode runs zero extra passes.
+   */
+  --glass-brightness: 0.97;
+  --glass-contrast: contrast(1.16);
+
+  /*
+   * On paper the depth cue moves from the highlight to the shadow: a white lit
+   * edge on a white sheet is invisible, so the *shaded* edge and the contact
+   * shadow are what give the panel a body. Both are stronger here than their
+   * dark-mode counterparts for that reason.
+   */
+  --glass-rim-light: rgba(255, 255, 255, 0.95);
+  --glass-rim-dark: rgba(9, 14, 24, 0.16);
+  --glass-inner-glow: rgba(255, 255, 255, 0.5);
+  --glass-inner-shade: rgba(9, 14, 24, 0.09);
+  --glass-drop:
+    0 1px 2px -1px rgba(15, 23, 42, 0.16),
+    0 10px 24px -12px rgba(15, 23, 42, 0.24),
+    0 30px 60px -34px rgba(15, 23, 42, 0.3);
+  --glass-specular: rgba(255, 255, 255, 0.75);
+
+  --scrim: rgba(246, 247, 250, 0.76);
+  --shadow-lift: 0 26px 60px -34px rgba(15, 23, 42, 0.4);
+}

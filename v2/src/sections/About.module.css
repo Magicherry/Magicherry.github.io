@@ -1,0 +1,124 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+/* ------------------------------------------------------------------ prose */
+.prose {
+  display: grid;
+  gap: var(--space-5);
+  max-width: 68ch;
+}
+
+.paragraph {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--fg-muted);
+}
+
+/* The opening paragraph carries the section; give it more presence than the
+   three that follow rather than setting every one at the same weight. */
+.paragraph:first-child {
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+}
+
+/* ------------------------------------------------------------------- side */
+.side {
+  display: grid;
+  gap: var(--space-5);
+  position: sticky;
+  top: 110px;
+}
+
+.interests {
+  padding: var(--space-5);
+}
+
+.sideTitle {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+.interests ul {
+  margin-top: var(--space-4);
+  display: grid;
+  gap: var(--space-3);
+}
+
+.interests li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  color: var(--fg);
+  transition: color var(--dur-fast) var(--ease-enter);
+}
+
+.interests li:hover {
+  color: var(--fg);
+}
+
+.interests li svg {
+  flex: none;
+  font-size: 1rem;
+  margin-top: 0.15em;
+  color: var(--accent);
+  transition: transform var(--dur-base) var(--ease-enter);
+}
+
+.interests li:hover svg {
+  transform: translateX(3px);
+}
+
+/* ------------------------------------------------------------------ quote */
+/* No rule down the side - the quote mark above the text already announces it,
+   and the two together were two devices doing one job. */
+.quote {
+  position: relative;
+  padding: var(--space-5);
+}
+
+.quoteMark {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  font-size: 1.35rem;
+  color: var(--accent);
+  opacity: 0.28;
+}
+
+.quote blockquote {
+  font-size: var(--text-base);
+  font-style: italic;
+  line-height: var(--leading-relaxed);
+  color: var(--fg);
+}
+
+.quote figcaption {
+  margin-top: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  color: var(--fg-faint);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .side {
+    position: static;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    align-items: start;
+  }
+}

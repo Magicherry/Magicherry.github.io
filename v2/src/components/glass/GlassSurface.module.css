@@ -1,0 +1,300 @@
+/*
+ * A glass surface is six stacked optical layers. Removing any one of them is
+ * what makes most CSS "glassmorphism" read as grey plastic:
+ *
+ *   1  backdrop      blur + saturation lift + (where supported) edge refraction
+ *   2  body fill     a directional wash, brighter where the light enters
+ *   3  rim ring      1px gradient border, lit top-left -> shaded bottom-right
+ *   4  inner glow    light that has entered the slab and scattered
+ *   5  specular      a moving highlight that tracks the pointer
+ *   6  drop shadow   contact shadow proving the sheet floats above the page
+ *
+ * Only layer 1 is expensive, and only layer 1 is optional - see `.live` below.
+ * Layers 2-6 are what actually carry the material; a flat surface keeps all of
+ * them and is nearly indistinguishable over a soft gradient background.
+ */
+
+.surface {
+  position: relative;
+  border-radius: var(--surface-radius, var(--radius-lg));
+  background-color: var(--glass-fill);
+  background-image: linear-gradient(
+    var(--surface-light-angle, 152deg),
+    var(--glass-fill-strong) 0%,
+    transparent 46%,
+    transparent 100%
+  );
+  /*
+   * The rim, as four stacked hairlines plus one interior falloff. A single
+   * border cannot express a full outline, a lit top edge and a shaded bottom
+   * edge at once, and box-shadow costs nothing to composite.
+   *
+   * The last line is the one that changed character: it used to be a
+   * `0 0 32px -10px` glow radiating from every edge, which fills the middle of
+   * the panel with haze and is why the material read as milky plastic. Offset
+   * down and given a hard negative spread, the same token becomes a band of
+   * light entering from *above* and falling off - which is what light does.
+   */
+  box-shadow:
+    var(--glass-drop),
+    inset 0 0 0 1px var(--line),
+    inset 0 1px 0 0 var(--glass-rim-light),
+    inset 0 -1px 0 0 var(--glass-rim-dark),
+    inset 0 16px 26px -28px var(--glass-inner-glow);
+  transition:
+    transform var(--dur-base) var(--ease-gel),
+    box-shadow var(--dur-base) var(--ease-enter),
+    background-color var(--dur-base) var(--ease-enter);
+}
+
+/*
+ * ============================================================== the live tier
+ *
+ * `backdrop-filter` is a per-element pass over the whole region behind it, and
+ * it is re-run every frame the backdrop changes. The aurora behind this site
+ * animates forever, so *every* live surface costs a full blur pass every frame,
+ * permanently - 26 of them was the entire reason the page stuttered.
+ *
+ * So sampling is opt-in, and the default is flat. The handful of surfaces that
+ * earn it are the ones a visitor actually looks through: the nav, the hero slab,
+ * the contact panel. Content cards fake it with fill + rim + specular and cost
+ * nothing.
+ */
+.live {
+  background-color: var(--glass-tint);
+  background-image: linear-gradient(
+    var(--surface-light-angle, 152deg),
+    var(--glass-tint-strong) 0%,
+    transparent 46%,
+    transparent 100%
+  );
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
+    brightness(var(--glass-brightness)) var(--glass-contrast, );
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
+    brightness(var(--glass-brightness)) var(--glass-contrast, );
+}
+
+/*
+ * Refraction tier, gated on the runtime probe rather than @supports because
+ * Safari answers the feature query truthfully and then renders nothing.
+ *
+ * The empty fallback is load-bearing: `var(--glass-refract, none)` would expand
+ * to `... brightness(1.06) none`, which is not a valid filter list, so the whole
+ * declaration would be dropped and the surface would lose its blur entirely.
+ * `--glass-contrast` holds a whole `contrast()` function for the same reason:
+ * only light mode needs it, and a token holding a bare number would have to be
+ * defined in both themes or take the filter list down with it.
+ */
+:global([data-refraction='on']) .live {
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
+    brightness(var(--glass-brightness)) var(--glass-contrast, ) var(--glass-refract, );
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
+    brightness(var(--glass-brightness)) var(--glass-contrast, ) var(--glass-refract, );
+}
+
+/* ------------------------------------------------------------------ variants */
+.thin {
+  --glass-refract: url('#glass-thin');
+  --glass-blur: 12px;
+}
+
+.regular {
+  --glass-refract: url('#glass-regular');
+}
+
+/* The chromatic map runs three displacement passes, so it is reserved for the
+   nav - the smallest live surface on the page and the most-looked-at. */
+.thick {
+  --glass-refract: url('#glass-thick');
+  --glass-blur: 24px;
+}
+
+/* ---------------------------------------------------------------- rim (3) */
+/*
+ * A *true* gradient ring - lit on the light-entry side, shaded opposite - only
+ * on live surfaces. `mask-composite` forces an offscreen buffer per element,
+ * which is affordable once and wasteful twenty-six times; everything else keeps
+ * the box-shadow hairlines above, which at 1px look near-identical.
+ */
+.live {
+  /* The gradient ring replaces the flat outline rather than sitting over it. */
+  box-shadow:
+    var(--glass-drop),
+    inset 0 1px 0 0 var(--glass-rim-light),
+    inset 0 -1px 0 0 var(--glass-rim-dark),
+    inset 0 16px 26px -28px var(--glass-inner-glow);
+}
+.live::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    var(--surface-light-angle, 152deg),
+    var(--glass-rim-light) 0%,
+    color-mix(in srgb, var(--glass-rim-light) 22%, transparent) 26%,
+    transparent 48%,
+    transparent 58%,
+    var(--glass-rim-dark) 100%
+  );
+  /* Ring trick: fill the whole box, then punch out everything inside the 1px
+     padding so only the border band survives. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.9;
+  transition: opacity var(--dur-base) var(--ease-enter);
+}
+
+/* ----------------------------------------------------------- specular (5) */
+/*
+ * Scoped to `.interactive`, because `usePointerGlow` only runs on interactive
+ * surfaces - every other `::after` was a permanently invisible layer that still
+ * created a `mix-blend-mode` group for the compositor to resolve. Seventeen of
+ * the twenty-six surfaces on this page were paying for a highlight that could
+ * never appear.
+ */
+.interactive {
+  /* Contains the blend so it composites against this surface, not the page. */
+  isolation: isolate;
+}
+
+.interactive::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  background: radial-gradient(
+    var(--surface-specular-size, 220px) circle at var(--gx, 50%) var(--gy, -20%),
+    var(--glass-specular) 0%,
+    color-mix(in srgb, var(--glass-specular) 26%, transparent) 34%,
+    transparent 68%
+  );
+  /* `normal` until the highlight is actually on screen. A blend mode makes the
+     compositor read back its backdrop into an offscreen buffer, and it does that
+     whether or not the layer is visible - so nine idle cards were each holding a
+     blend group open for a highlight at opacity 0. */
+  mix-blend-mode: normal;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-slow) var(--ease-enter);
+}
+
+:global([data-theme='light']) .surface {
+  --glass-specular-blend: soft-light;
+}
+
+.interactive[data-lit='true']::after {
+  mix-blend-mode: var(--glass-specular-blend, screen);
+  opacity: 1;
+}
+
+/* ------------------------------------------------------------- interaction */
+.interactive {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Lifting raises the drop shadow with it, rather than adding a ring of colour -
+   the shadow growing is what says "this moved toward you". */
+.interactive:hover {
+  transform: translate3d(0, -3px, 0);
+  box-shadow:
+    0 2px 4px -2px rgba(0, 0, 0, 0.45),
+    0 16px 34px -18px rgba(0, 0, 0, 0.6),
+    0 40px 76px -38px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 1px color-mix(in srgb, var(--accent) 22%, var(--line)),
+    inset 0 1px 0 0 color-mix(in srgb, var(--glass-rim-light), #fff 25%),
+    inset 0 -1px 0 0 var(--glass-rim-dark),
+    inset 0 16px 26px -28px var(--glass-inner-glow);
+}
+
+/*
+ * The "gel" press. Real Liquid Glass squashes toward the touch point and
+ * springs back; a symmetric scale is the cheap approximation that still reads
+ * correctly, provided the release curve overshoots.
+ */
+.interactive:active {
+  transform: scale(0.978);
+  transition-duration: var(--dur-instant);
+}
+
+.interactive:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------- fallbacks */
+
+/*
+ * Three tiers, and only the top one is engine-specific:
+ *
+ *   refraction   Chromium, probe passes  -> blur + displacement (see `.live` above)
+ *   frost        anything with backdrop-filter -> blur + saturation, no url()
+ *   opaque       no backdrop-filter at all     -> this block
+ *
+ * The middle tier needs no rule of its own: `.live` states the plain blur
+ * unconditionally and the refraction is *appended* under `[data-refraction=on]`,
+ * so Safari and Firefox land on frosted glass by falling through rather than by
+ * being special-cased.
+ *
+ * This last tier is where the design has to give something up. `--glass-fill` is
+ * 52% alpha, which is a fine tint when a blur pass has already destroyed the
+ * detail underneath - and unreadable when it has not: the nav overlaps scrolling
+ * content, so its labels would sit directly on moving body text. So transparency
+ * is what gets traded away, not legibility. The rim, inner glow, specular and
+ * drop shadow all survive, and those are what carry the material anyway.
+ */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .live {
+    background-color: color-mix(in srgb, var(--bg-raised) 92%, var(--bg-base));
+    background-image: linear-gradient(
+      var(--surface-light-angle, 152deg),
+      var(--glass-fill-strong) 0%,
+      transparent 46%,
+      transparent 100%
+    );
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .surface,
+  .live {
+    background-color: color-mix(in srgb, var(--bg-raised) 92%, var(--bg-base));
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface,
+  .live::before,
+  .interactive::after {
+    transition-duration: 1ms;
+  }
+
+  .interactive:hover {
+    transform: none;
+  }
+}
+
+/*
+ * Phones pay triple for the chromatic variant - three displacement passes on a
+ * shared GPU. Step it down to the single-pass map; the dispersion is invisible
+ * at that size anyway.
+ */
+@media (max-width: 720px) {
+  .thick {
+    --glass-refract: url('#glass-regular');
+    --glass-blur: 18px;
+  }
+}

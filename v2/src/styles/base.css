@@ -1,0 +1,272 @@
+@import './tokens.css';
+
+/* =========================================================== reset & shell */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  /*
+   * No `scroll-behavior: smooth` here. Smooth scrolling is owned by Lenis, and
+   * the CSS property fights it - the two easings compound into a scroll that
+   * overshoots and crawls back.
+   */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-gutter: stable;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--bg-base);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  /*
+   * `clip`, never `hidden`. `overflow-x: hidden` silently turns <body> into a
+   * scroll container, and every `position: sticky` descendant then sticks to a
+   * box that does not scroll - which is why the About sidebar would quietly
+   * stop working. `clip` trims the same overflow without creating a scrollport.
+   */
+  overflow-x: clip;
+}
+
+img,
+svg,
+canvas,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:where(h1, h2, h3, h4) {
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/*
+ * Greyscale smoothing thins every stroke. On a dark background that is a
+ * correction - light text on dark otherwise blooms. On a light background it is
+ * the opposite: it takes weight away from text that had none to spare, which
+ * reads as blur. So it is scoped to the theme that benefits.
+ */
+[data-theme='dark'] body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--fg-strong);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/*
+ * ========================================================== theme switching
+ *
+ * The switch is a View Transition: the browser snapshots the page before and
+ * after, and a circle opens over the new snapshot from wherever the toggle was
+ * pressed. The origin and radius arrive as custom properties set on <html> just
+ * before the transition starts - the pseudo-element tree inherits from there.
+ *
+ * The reveal is a *CSS* animation rather than one attached in `ready.then()`,
+ * and that is the whole point of writing it here. A script-added animation is
+ * racing the transition's own lifecycle: on the very first switch the machinery
+ * is cold, `ready` resolves late, and by the time the callback runs the default
+ * animations have finished and the transition has already been torn down - so
+ * the animation lands on nothing and the browser's plain centred cross-fade is
+ * what you see. Declared in CSS it exists the moment the pseudo-elements do,
+ * and the transition cannot end before it.
+ *
+ * The default cross-fade is turned off, because the reveal *is* the animation -
+ * leaving it on would fade the old snapshot out from under the circle and turn
+ * a clean edge into mush.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+
+/* The old theme just sits there and gets covered. */
+::view-transition-old(root) {
+  animation: none;
+  z-index: 0;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+  /* `both` matters: the "from" clip applies before the first frame, so the new
+     snapshot can never flash unclipped while the animation starts up. */
+  animation: theme-reveal 640ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0px at var(--reveal-x, 50%) var(--reveal-y, 0px));
+  }
+  to {
+    clip-path: circle(var(--reveal-r, 150vmax) at var(--reveal-x, 50%) var(--reveal-y, 0px));
+  }
+}
+
+/* ================================================================== layout */
+
+#root {
+  position: relative;
+  z-index: var(--z-content);
+  isolation: isolate;
+}
+
+.shell {
+  width: 100%;
+  max-width: var(--shell-max);
+  margin-inline: auto;
+  padding-inline: var(--shell-pad);
+}
+
+.section {
+  position: relative;
+  padding-block: var(--section-gap);
+}
+
+/*
+ * Anchor navigation moves focus to the target section so keyboard and
+ * screen-reader users land where the page just scrolled. Those elements get
+ * `tabindex="-1"` at that moment; drawing the standard 2px ring around a
+ * full-height section would be alarming rather than helpful.
+ */
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+/* ============================================================== typography */
+
+.sectionTitle {
+  font-size: var(--text-3xl);
+  font-weight: 620;
+  letter-spacing: var(--tracking-tighter);
+  max-width: 18ch;
+}
+
+.lede {
+  margin-top: var(--space-4);
+  max-width: 62ch;
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--fg-muted);
+}
+
+/* ================================================================= a11y */
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  translate: -50% -200%;
+  z-index: var(--z-preloader);
+  padding: 10px 18px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: translate var(--dur-base) var(--ease-enter);
+}
+
+.skip-link:focus-visible {
+  translate: -50% 0;
+}
+
+/* Locks the page while the preloader owns the screen. */
+body[data-locked='true'] {
+  overflow: hidden;
+}
+
+/* ============================================================== scrollbar */
+
+@supports selector(::-webkit-scrollbar) {
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: var(--radius-full);
+    background-clip: content-box;
+    background-color: var(--fg-ghost);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+}
+
+/* ============================================================ reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,368 @@
+.wrap {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  left: 50%;
+  translate: -50% 0;
+  z-index: var(--z-nav);
+  /* 100% (of the initial containing block), not 100vw: `vw` includes the
+     scrollbar gutter, which would push the bar a few pixels off-centre on
+     desktop and overflow the page at intermediate widths. */
+  width: min(calc(100% - 24px), 940px);
+  display: flex;
+  justify-content: center;
+}
+
+/*
+ * Three explicit tracks, not flex with `margin: 0 auto` on the links.
+ *
+ * Auto margins centre an item in the space *left over* by its siblings, so the
+ * links only land on the bar's true centre if the wordmark and the controls
+ * happen to be the same width. They are not - the mark is ~136px, the controls
+ * ~78px - which pushed the labels 29px right of centre. Matched `1fr` tracks on
+ * either side make the middle column the actual centre of the bar, whatever the
+ * two sides end up measuring.
+ */
+.bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 7px 8px 7px 10px;
+  --surface-specular-size: 320px;
+}
+
+/* --------------------------------------------------------------- wordmark */
+/* Columns are assigned explicitly so hiding the wordmark at narrow widths
+   cannot let the links reflow into its track. */
+.mark {
+  grid-column: 1;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px 10px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--fg);
+  cursor: pointer;
+  font: inherit;
+  flex: none;
+}
+
+.markGlyph {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--bg-base);
+}
+
+.markGlyph img {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.markText {
+  font-size: var(--text-sm);
+  font-weight: 580;
+  letter-spacing: var(--tracking-tight);
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ links */
+.links {
+  grid-column: 2;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 13px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: none;
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: var(--tracking-normal);
+  white-space: nowrap;
+  cursor: pointer;
+  /*
+   * Full-strength foreground at rest, as in v1. Muting the labels made the whole
+   * bar look disabled, and it also flattened the contrast the active state needs
+   * to work against - going from grey to accent is a smaller step than going
+   * from full foreground to accent.
+   */
+  color: var(--fg);
+  transition: color var(--dur-base) var(--ease-enter);
+}
+
+.link:hover {
+  color: var(--fg-strong);
+}
+
+/*
+ * v1 tinted the active item's *text* with the brand colour rather than reversing
+ * it out of a filled pill. The label leads, the pill is only the ground it sits
+ * on - so the fill below is deliberately faint.
+ */
+.link[data-active] {
+  color: var(--accent);
+  font-weight: 560;
+}
+
+/* Sized in rem, not em. Inheriting from --text-sm left these at ~13px, which
+   reads as a smudge next to the label rather than an icon. */
+.linkIcon {
+  position: relative;
+  z-index: 1;
+  font-size: 1.12rem;
+}
+
+.linkText {
+  position: relative;
+  z-index: 1;
+}
+
+/*
+ * Just a wash. No outline, no rim, no glow.
+ *
+ * The accent-coloured label is what marks the position; the pill only needs to
+ * give it somewhere to sit. Every edge added here competes with that - and the
+ * bar this sits inside already has its own rim, so a second ring 8px in reads as
+ * a border on a border.
+ */
+.indicator {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------- controls */
+.controls {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.iconBtn {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 37px;
+  height: 37px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  color: var(--fg);
+  font: inherit;
+  font-size: 1.12rem;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-enter),
+    background-color var(--dur-fast) var(--ease-enter),
+    transform var(--dur-fast) var(--ease-gel);
+}
+
+.iconBtn:hover {
+  color: var(--fg-strong);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.iconBtn:active {
+  transform: scale(0.9);
+}
+
+.iconBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.iconBtnTag {
+  position: absolute;
+  right: -1px;
+  bottom: -2px;
+  padding: 0 3px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+/*
+ * ================================================================== topbar
+ *
+ * Mounted only at docked-nav widths (see Nav.tsx). Language pins left, theme
+ * pins right, each in its own capsule rather than sharing one bar - a single
+ * centred cluster would read as a second navigation element competing with the
+ * one at the bottom of the screen.
+ */
+.topbar {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left));
+  right: max(12px, env(safe-area-inset-right));
+  z-index: var(--z-nav);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+/* The bar itself is a transparent rail; only the buttons take input, so the
+   strip across the top of the page never swallows a tap or a scroll. */
+.topbar .iconBtn {
+  pointer-events: auto;
+  width: 44px;
+  height: 44px;
+  font-size: var(--text-lg);
+  color: var(--fg);
+  background: var(--glass-tint);
+  box-shadow:
+    inset 0 0 0 1px var(--line-strong),
+    inset 0 1px 0 var(--glass-rim-light),
+    var(--glass-drop);
+  -webkit-backdrop-filter: blur(18px) saturate(var(--glass-saturate)) var(--glass-contrast, );
+  backdrop-filter: blur(18px) saturate(var(--glass-saturate)) var(--glass-contrast, );
+}
+
+:global([data-refraction='on']) .topbar .iconBtn {
+  -webkit-backdrop-filter: blur(18px) saturate(var(--glass-saturate)) var(--glass-contrast, )
+    url('#glass-thin');
+  backdrop-filter: blur(18px) saturate(var(--glass-saturate)) var(--glass-contrast, )
+    url('#glass-thin');
+}
+
+/* These float free over the page rather than sitting on a bar, and `--glass-tint`
+   is 5% alpha - readable only because a blur pass has already flattened whatever
+   is behind them. With no blur they need a real bed. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .topbar .iconBtn {
+    background: color-mix(in srgb, var(--bg-raised) 92%, var(--bg-base));
+  }
+}
+
+.topbar .iconBtnTag {
+  right: -2px;
+  bottom: -1px;
+  font-size: 9px;
+}
+
+/* -------------------------------------------------------------- progress */
+.progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: calc(var(--z-nav) + 1);
+  height: 2px;
+  transform-origin: 0 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px -2px var(--accent);
+  pointer-events: none;
+}
+
+/* ================================================================ tablet */
+@media (max-width: 900px) {
+  .link {
+    padding: 8px 11px;
+  }
+}
+
+/*
+ * ================================================================= phone
+ *
+ * Below 760px the bar moves to the bottom of the screen. This is not a
+ * shrink-to-fit fallback - it is the correct place for it: a floating top bar
+ * covers content on a short viewport and sits at the far end of the thumb's
+ * reach, while a docked bottom bar is exactly where iOS puts navigation.
+ */
+@media (max-width: 760px) {
+  .wrap {
+    top: auto;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    /* Capped as v1 capped it. Left to stretch, five items across a 740px tablet
+       give 148px-wide cells with a 20px icon adrift in the middle of each. */
+    width: min(calc(100% - 20px), 460px);
+  }
+
+  /* The wordmark and controls have both left the bar at this width, so it
+     collapses to a single full-width track of links. */
+  .bar {
+    grid-template-columns: 1fr;
+    padding: 6px;
+  }
+
+  .mark {
+    display: none;
+  }
+
+  .links {
+    grid-column: 1;
+    justify-self: stretch;
+    gap: 0;
+  }
+
+  /*
+   * Equal shares of the bar, as in v1 - not shrink-to-fit.
+   *
+   * Without this each item is only as wide as its own label, and since the
+   * mobile layout stacks the icon above the text, a two-character label like
+   * "关于" comes out ~44px wide against ~49px tall. The active pill then drawn
+   * around it is a *portrait* rectangle. Filling the track makes every cell
+   * landscape and every pill the same size, whatever the label says.
+   */
+  .links > li {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .link {
+    width: 100%;
+    flex-direction: column;
+    gap: 3px;
+    padding: 7px 8px;
+    font-size: var(--text-2xs);
+  }
+
+  .linkIcon {
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .linkText {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar,
+  .markText,
+  .link,
+  .iconBtn {
+    transition-duration: 1ms;
+  }
+}

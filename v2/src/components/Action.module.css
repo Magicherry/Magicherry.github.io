@@ -1,0 +1,112 @@
+.action {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 12px 22px;
+  border: 0;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 560;
+  letter-spacing: var(--tracking-normal);
+  white-space: nowrap;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    transform var(--dur-base) var(--ease-gel),
+    box-shadow var(--dur-base) var(--ease-enter),
+    color var(--dur-fast) var(--ease-enter),
+    background-color var(--dur-fast) var(--ease-enter);
+}
+
+/* Pointer-tracked sheen, shared by the filled and glass tones. */
+.action::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    140px circle at var(--gx, 50%) var(--gy, 50%),
+    color-mix(in srgb, var(--glass-specular) 65%, transparent),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-enter);
+}
+
+.action[data-lit='true']::after {
+  opacity: 1;
+}
+
+.action:active {
+  transform: scale(0.965);
+  transition-duration: var(--dur-instant);
+}
+
+.action:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------- primary */
+.primary {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  box-shadow:
+    0 12px 30px -14px color-mix(in srgb, var(--accent) 85%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #fff 45%, transparent);
+}
+
+.primary:hover {
+  transform: translate3d(0, -2px, 0);
+  box-shadow:
+    0 18px 40px -14px color-mix(in srgb, var(--accent) 90%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent);
+}
+
+/* ------------------------------------------------------------------ glass */
+.glass {
+  /* Flat, like every other surface outside the nav: this button sits over the
+     aurora, which animates forever, so a backdrop pass here would re-run for the
+     entire life of the page. */
+  background-color: var(--glass-fill);
+  color: var(--fg);
+  box-shadow:
+    inset 0 0 0 1px var(--line-strong),
+    inset 0 1px 0 var(--glass-rim-light),
+    0 10px 26px -18px rgba(0, 0, 0, 0.8);
+}
+
+.glass:hover {
+  transform: translate3d(0, -2px, 0);
+  color: var(--fg-strong);
+  background-color: color-mix(in srgb, var(--fg) 12%, var(--glass-fill));
+}
+
+/* --------------------------------------------------------------- contents */
+.icon,
+.trailing {
+  display: inline-flex;
+  font-size: 1.08em;
+}
+
+.trailing {
+  transition: transform var(--dur-base) var(--ease-enter);
+}
+
+.action:hover .trailing {
+  transform: translate3d(3px, -3px, 0);
+}
+
+.label {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action,
+  .action:hover {
+    transform: none;
+  }
+}
