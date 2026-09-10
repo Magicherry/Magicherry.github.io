@@ -98,21 +98,29 @@ const THEME_COLOR: Record<Theme, string> = {
 
 const isTheme = (value: unknown): value is Theme => value === 'dark' || value === 'light'
 
-const getSystemTheme = (): Theme =>
-  typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: light)').matches
-    ? 'light'
-    : 'dark'
+/*
+ * Dark for everyone on a first visit, `prefers-color-scheme` included.
+ *
+ * This site is designed dark: the aurora, the rim lighting and the refraction
+ * are all tuned against a near-black ground, and light mode is a second,
+ * separately tuned design rather than the same palette inverted. Opening on the
+ * one the work was composed for is the right first impression - and the toggle
+ * is in the nav, one tap away, with the choice then kept for good.
+ *
+ * KEEP IN SYNC with the pre-paint script in index.html, which picks the same
+ * default before this module has parsed.
+ */
+const DEFAULT_THEME: Theme = 'dark'
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   /*
-   * The device only supplies the *first* value. After that the visitor's choice
-   * is permanent (`ttlMs: null`) and nothing subscribes to system changes - a
-   * page that re-themes itself under you at sunset because the OS did is not
-   * following a preference, it is overriding one.
+   * Nothing subscribes to system changes, and the visitor's choice is permanent
+   * (`ttlMs: null`) - a page that re-themes itself under you at sunset because
+   * the OS did is not following a preference, it is overriding one.
    */
   const { value: theme, setValue } = useTimedPreference<Theme>({
     storageKey: 'v2:theme',
-    getAutoValue: getSystemTheme,
+    getAutoValue: () => DEFAULT_THEME,
     isValid: isTheme,
     ttlMs: null,
   })

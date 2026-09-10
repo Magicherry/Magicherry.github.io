@@ -38,11 +38,14 @@
       /*
        * Theme, applied before first paint.
        *
-       * React cannot do this: by the time the bundle has parsed and the effect
-       * has run, the browser has already painted at least one frame. On a light
-       * -mode device that frame is a full-screen white flash, and on a dark one
-       *  it is the reverse. Six lines of blocking script buy a correct first
-       * paint, which is the one trade where blocking the parser is worth it.
+       * A first visit needs none of this - <html> is already stamped dark, which
+       * is now the default for everyone. This exists for the returning visitor
+       * who chose light: their preference lives in localStorage, and React
+       * cannot read it in time. By the time the bundle has parsed and the effect
+       * has run the browser has already painted a frame, and that frame would be
+       * a full-screen flash of the theme they explicitly turned off. A few lines
+       * of blocking script is the one trade where stalling the parser is worth
+       * it.
        */
       ;(function () {
         try {
@@ -55,8 +58,12 @@
               theme = parsed.value
             }
           }
+          // Dark is the default for a first visit, `prefers-color-scheme`
+          // included - the site is designed against a near-black ground and
+          // light mode is a separate design, not an inversion. KEEP IN SYNC
+          // with DEFAULT_THEME in src/lib/theme.tsx.
           if (theme !== 'dark' && theme !== 'light') {
-            theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+            theme = 'dark'
           }
           document.documentElement.dataset.theme = theme
           document
