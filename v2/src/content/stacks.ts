@@ -1,5 +1,12 @@
 import type { Localized } from './types'
 import openaiMark from '@/assets/marks/openai.svg'
+/*
+ * fnOS is in neither catalogue. Its official wordmark sets the bull glyph beside
+ * near-black CJK type, which vanishes on the dark theme, and its app icon is a
+ * filled blue tile rather than the flat glyph every other mark here is - so this
+ * is the bull alone, cropped from the official logo and squared.
+ */
+import fnosMark from '@/assets/marks/fnos.png'
 
 /**
  * Icons are served from jsDelivr rather than bundled. 35 marks would add real
@@ -145,7 +152,9 @@ export const toolStack: readonly StackGroup[] = [
     items: [
       { name: 'Windows', icon: devicon('windows11/windows11-original'), href: 'https://www.microsoft.com/windows' },
       { name: 'macOS', icon: devicon('apple/apple-original'), href: 'https://www.apple.com/macos/', adaptive: true },
-      { name: 'Linux', icon: devicon('linux/linux-original'), href: 'https://ubuntu.com/desktop/' },
+      { name: 'Ubuntu', icon: devicon('ubuntu/ubuntu-original'), href: 'https://ubuntu.com/desktop/' },
+      { name: 'Fedora', icon: devicon('fedora/fedora-original'), href: 'https://fedoraproject.org/' },
+      { name: 'fnOS', icon: fnosMark, href: 'https://www.fnnas.com/' },
     ],
   },
   {

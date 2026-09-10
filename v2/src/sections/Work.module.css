@@ -86,9 +86,20 @@
   height: 8px;
   border-radius: 50%;
   background: var(--fg-faint);
-  transition: background-color var(--dur-base) var(--ease-enter);
+  /* Both properties, because the lit state adds a glow. Transitioning only the
+     colour made the glow snap on while the fill eased in. */
+  transition:
+    background-color var(--dur-base) var(--ease-enter),
+    box-shadow var(--dur-base) var(--ease-enter);
 }
 
+/*
+ * `data-lit` is written by Work.tsx as the rail's head passes each node, and
+ * `data-current` covers the role that is still running. They render the same,
+ * but they are not the same fact: the current role is lit before you have
+ * scrolled to it at all.
+ */
+.nodeCore[data-lit],
 .nodeCore[data-current] {
   background: var(--accent);
   box-shadow: 0 0 12px 1px var(--accent);
