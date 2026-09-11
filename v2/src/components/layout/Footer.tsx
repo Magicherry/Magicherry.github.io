@@ -1,13 +1,11 @@
-import { LuArrowUp } from 'react-icons/lu'
+import { LuGithub } from 'react-icons/lu'
 import { useLocale } from '@/lib/i18n'
-import { useScrollNav } from '@/lib/scroll'
 import { ui } from '@/content/copy'
 import { profile } from '@/content/profile'
 import styles from './Footer.module.css'
 
 export default function Footer() {
   const { t } = useLocale()
-  const { scrollTo } = useScrollNav()
   const year = new Date().getFullYear()
 
   return (
@@ -21,14 +19,23 @@ export default function Footer() {
           © {year} {profile.name.en}. {t(ui.footer.rights)}
         </p>
 
-        <button
-          type="button"
-          className={styles['top']}
-          onClick={() => scrollTo('home')}
-          aria-label={t(ui.actions.backToTop)}
+        {/*
+          * This column used to hold a second back-to-top button. By the time the
+          * footer is on screen you are as far down the page as it goes, which is
+          * precisely when the floating one is showing - two identical controls
+          * within sixty pixels of each other, and the one down here was the
+          * poorer of the two, with no progress on it.
+          */}
+        <a
+          className={styles['source']}
+          href={profile.repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={t(ui.footer.sourceHint)}
         >
-          <LuArrowUp aria-hidden="true" />
-        </button>
+          <LuGithub aria-hidden="true" />
+          <span>{t(ui.footer.source)}</span>
+        </a>
       </div>
     </footer>
   )

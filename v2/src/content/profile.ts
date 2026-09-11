@@ -33,6 +33,10 @@ export const profile = {
   /* The saved-as name, not the asset path - the PDFs are copied in from the
      Resume repo and keep their filenames there. */
   cvFileName: { en: 'Daniel_Zhou_CV.pdf', zh: '周昱廷-简历.pdf' } satisfies Localized,
+  /* This site's own repository. Not `Localized` and not in the social list: it
+     is one URL in either language, and it is the page you are standing on
+     rather than a way to reach the person who wrote it. */
+  repo: 'https://github.com/Magicherry/Magicherry.github.io',
 } as const
 
 /** Strings the typewriter cycles through under the hero name. */

@@ -114,6 +114,19 @@ export const ui = {
   footer: {
     motto: { en: 'Keep frosty & curious.', zh: '保持好奇，持续探索。' },
     rights: { en: 'All rights reserved.', zh: '保留所有权利。' },
+    /*
+     * The repository behind *this page*, not the profile the contact section
+     * already links to. A site whose whole argument is "an engineer built this"
+     * should be willing to show the receipts.
+     *
+     * Deliberately not `ui.actions.source`, which every project card uses and
+     * which held exactly this string. The word is the same but the referent is
+     * not - on a card "Source" means that project's, here it means the page you
+     * are standing on - and only one of the two can afford to leave it implied.
+     * Do not merge them back together.
+     */
+    source: { en: "This site's source", zh: '本站源码' },
+    sourceHint: { en: 'Open the repository on GitHub', zh: '在 GitHub 上打开仓库' },
   },
   a11y: {
     wechatQr: { en: 'WeChat QR code', zh: '微信二维码' },
