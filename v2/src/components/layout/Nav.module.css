@@ -32,6 +32,42 @@
   --surface-specular-size: 320px;
 }
 
+/*
+ * Light mode: the nav opts out of the theme's glass tokens and pins its own.
+ *
+ * Light-mode panels now wear a flat white rim at full strength, all the way
+ * round. That works for a panel resting on the page - it is a deliberate outline
+ * over a static backdrop, and where the rim disappears into the pale background
+ * the drop shadow takes over.
+ *
+ * Neither half of that holds for the nav. It is fixed over *moving* content, so
+ * a bright even stroke sits directly on whatever body text is passing under it,
+ * and the graded rim - lit at one corner, shaded at the other - is what keeps the
+ * bar reading as an object rather than as a sticker. The shadow has the same
+ * problem in reverse: a wide ambient under a fixed element does not fall onto
+ * anything, it smears across a hundred vertical pixels of scrolling text.
+ *
+ * So the nav keeps the graded rim and the tighter contact shadow - the values the
+ * rest of the site has since moved on from, held here rather than in the theme.
+ *
+ * Keep in step with the light block of tokens.css if these roles are retuned -
+ * these are pins, not independent design decisions.
+ */
+:global([data-theme='light']) .bar,
+:global([data-theme='light']) .topbar .iconBtn {
+  --glass-edge: rgba(15, 23, 42, 0.13);
+  --glass-rim-light: rgba(255, 255, 255, 0.7);
+  --glass-rim-far: rgba(9, 14, 24, 0.11);
+  --glass-inner-shade: rgba(15, 23, 42, 0.1);
+}
+
+:global([data-theme='light']) .bar {
+  --glass-drop:
+    0 1px 2px -1px rgba(15, 23, 42, 0.16),
+    0 10px 24px -12px rgba(15, 23, 42, 0.24),
+    0 30px 60px -34px rgba(15, 23, 42, 0.3);
+}
+
 /* --------------------------------------------------------------- wordmark */
 /* Columns are assigned explicitly so hiding the wordmark at narrow widths
    cannot let the links reflow into its track. */
@@ -200,17 +236,34 @@
   outline-offset: 2px;
 }
 
+/*
+ * The target language, as a chip on the button's own edge.
+ *
+ * It used to be sized by padding and a unitless line-height, which on a *round*
+ * button is the wrong way to place anything: the result was a ~13px blob parked
+ * past the bottom-right corner, out where the circle has already curved away, so
+ * it read as a stray notification dot rather than as part of the control. Given
+ * an explicit box and a line-height equal to its height, the chip is a circle for
+ * a single glyph and a capsule for two, and the offsets put its centre on the
+ * button's arc - straddling the edge instead of floating beside it.
+ */
 .iconBtnTag {
   position: absolute;
-  right: -1px;
+  right: -2px;
   bottom: -2px;
+  display: grid;
+  place-items: center;
+  min-width: 15px;
+  height: 15px;
   padding: 0 3px;
   border-radius: var(--radius-full);
   background: var(--accent);
   color: var(--accent-contrast);
-  font-size: 8px;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
   font-weight: 700;
-  line-height: 1.45;
+  line-height: 1;
+  letter-spacing: 0.02em;
 }
 
 /*
@@ -233,21 +286,57 @@
   pointer-events: none;
 }
 
-/* The bar itself is a transparent rail; only the buttons take input, so the
-   strip across the top of the page never swallows a tap or a scroll. */
+/*
+ * The bar itself is a transparent rail; only the buttons take input, so the strip
+ * across the top of the page never swallows a tap or a scroll.
+ *
+ * Unlike every other control on the site these two float completely free - no bar
+ * behind them, nothing to sit on - so each one is a small glass object in its own
+ * right and has to carry the whole build itself.
+ *
+ * Two things were wrong with that build, and both showed up worst on paper:
+ *
+ *   the fill      `--glass-tint` is the token for a surface with a *bar's* worth
+ *                 of area to collect backdrop through. At 32% white over a pale
+ *                 page, a 44px disc of it collected almost nothing, and what you
+ *                 actually saw was the dark 1px ring with nothing inside it - a
+ *                 wireframe circle rather than a button. `--glass-tint-strong` is
+ *                 the role for a small surface that still has to read as glass.
+ *   the shadow    `--glass-drop` is tuned for panels: its second layer alone is a
+ *                 24px blur at 24% ink. Under a 44px circle that is a bruise, not
+ *                 a contact shadow. These get a two-layer drop scaled to their own
+ *                 size instead.
+ */
 .topbar .iconBtn {
+  --topbar-drop:
+    0 1px 2px -1px rgba(0, 0, 0, 0.5),
+    0 8px 16px -10px rgba(0, 0, 0, 0.55);
+
   pointer-events: auto;
   width: 44px;
   height: 44px;
   font-size: var(--text-lg);
   color: var(--fg);
-  background: var(--glass-tint);
+  background: var(--glass-tint-strong);
   box-shadow:
-    inset 0 0 0 1px var(--line-strong),
+    inset 0 0 0 1px var(--glass-edge),
     inset 0 1px 0 var(--glass-rim-light),
-    var(--glass-drop);
+    var(--topbar-drop);
   -webkit-backdrop-filter: blur(18px) saturate(var(--glass-saturate)) var(--glass-contrast, );
   backdrop-filter: blur(18px) saturate(var(--glass-saturate)) var(--glass-contrast, );
+}
+
+:global([data-theme='light']) .topbar .iconBtn {
+  --topbar-drop:
+    0 1px 2px -1px rgba(15, 23, 42, 0.14),
+    0 8px 16px -10px rgba(15, 23, 42, 0.2);
+}
+
+/* Restated because `.topbar .iconBtn` above outranks the generic `.iconBtn:hover`
+   on source order and would otherwise strand these two with no hover state. */
+.topbar .iconBtn:hover {
+  color: var(--fg-strong);
+  background: color-mix(in srgb, var(--accent) 16%, var(--glass-tint-strong));
 }
 
 :global([data-refraction='on']) .topbar .iconBtn {
@@ -266,10 +355,22 @@
   }
 }
 
+/*
+ * Scaled with the larger button so the chip keeps the same visual weight, and
+ * given a shadow of its own. Half of it overhangs the button onto the aurora, and
+ * the accent fill is a near neighbour of the aurora's own hues in both themes - a
+ * lift is what stops the two running together. Deliberately a shadow rather than
+ * the usual ring in the container's ground colour: the container here is
+ * translucent glass, so there is no single ground colour to ring it with.
+ */
 .topbar .iconBtnTag {
-  right: -2px;
-  bottom: -1px;
-  font-size: 9px;
+  right: -3px;
+  bottom: -3px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-size: 9.5px;
+  box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.5);
 }
 
 /* -------------------------------------------------------------- progress */
