@@ -129,7 +129,11 @@ export const ui = {
     sourceHint: { en: 'Open the repository on GitHub', zh: '在 GitHub 上打开仓库' },
   },
   a11y: {
+    /* Named per platform rather than a single "QR code": this is the whole of
+       what a screen reader gets for an image that is otherwise unreadable, and
+       which app it opens is the only useful thing to say about it. */
     wechatQr: { en: 'WeChat QR code', zh: '微信二维码' },
+    xiaohongshuQr: { en: 'Xiaohongshu QR code', zh: '小红书二维码' },
     avatar: { en: 'Portrait of Daniel Zhou', zh: '周昱廷的头像' },
   },
 } as const

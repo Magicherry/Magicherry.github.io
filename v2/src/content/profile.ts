@@ -1,4 +1,6 @@
 import type { Localized } from './types'
+// Safe in this direction only: copy.ts imports nothing but `./types`.
+import { ui } from './copy'
 import cvEn from '@/assets/cv/Yuting_Zhou_CV.pdf'
 import cvZh from '@/assets/cv/Yuting_Zhou_CV_zh.pdf'
 import avatar from '@/assets/avatar/avatar.png'
@@ -10,7 +12,6 @@ export const profile = {
   avatar,
   /** The full-bleed photo on the hero card. */
   portrait,
-  wechatQr,
   name: { en: 'Daniel Zhou', zh: '周昱廷' } satisfies Localized,
   handle: 'Magicherry',
   /*
@@ -88,8 +89,20 @@ export interface SocialLink {
   brand?: string
   /** Near-black marks that would vanish against a dark background. */
   adaptive?: boolean
-  /** Renders a QR overlay instead of navigating. */
-  overlay?: 'wechat'
+  /**
+   * Opens a QR overlay instead of navigating, and carries the code with it.
+   *
+   * This used to be `overlay: 'wechat'`, with the image and its alt text
+   * hardcoded at the other end in Contact.tsx - which meant the *mechanism* was
+   * general but the page could only ever show one code. Holding the asset on the
+   * entry that needs it makes a second one data, not a branch.
+   *
+   * A code rather than a link because these are phone-first apps: a desktop
+   * visitor cannot follow the URL anyway, and a phone visitor can long-press the
+   * image. The alt text is localized because it is the only thing a screen
+   * reader gets - "QR code" alone does not say whose, or for what.
+   */
+  qr?: { image: string; alt: Localized }
 }
 
 // LinkedIn was withdrawn from simple-icons over trademark, so its mark comes
@@ -144,7 +157,7 @@ export const socials: readonly SocialLink[] = [
     hint: { en: 'Show QR code', zh: '显示二维码' },
     mark: simpleMark('wechat'),
     brand: '#07c160',
-    overlay: 'wechat',
+    qr: { image: wechatQr, alt: ui.a11y.wechatQr },
   },
   {
     id: 'bilibili',

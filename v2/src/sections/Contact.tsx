@@ -7,7 +7,7 @@ import Reveal from '@/components/Reveal'
 import Action from '@/components/Action'
 import GlassSurface from '@/components/glass/GlassSurface'
 import { useLocale } from '@/lib/i18n'
-import { profile, socials } from '@/content/profile'
+import { profile, socials, type SocialLink } from '@/content/profile'
 import { ui } from '@/content/copy'
 import styles from './Contact.module.css'
 
@@ -23,7 +23,13 @@ const FALLBACK_ICONS: Record<string, IconType> = {
 
 export default function Contact() {
   const { t } = useLocale()
-  const [qrOpen, setQrOpen] = useState(false)
+  /*
+   * Which code is open, not whether one is. The overlay used to be a boolean
+   * reading a hardcoded `profile.wechatQr`, which made it a component that could
+   * show exactly one image; holding the entry means a second platform is a row
+   * of data rather than another branch in here.
+   */
+  const [qrFor, setQrFor] = useState<SocialLink | null>(null)
   const openerRef = useRef<HTMLElement | null>(null)
 
   /*
@@ -33,9 +39,9 @@ export default function Contact() {
    * the top of the document rather than from the link they were on.
    */
   useEffect(() => {
-    if (!qrOpen) return
+    if (!qrFor) return
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setQrOpen(false)
+      if (event.key === 'Escape') setQrFor(null)
     }
     document.body.dataset['locked'] = 'true'
     window.addEventListener('keydown', onKey)
@@ -46,7 +52,7 @@ export default function Contact() {
       openerRef.current?.focus()
       openerRef.current = null
     }
-  }, [qrOpen])
+  }, [qrFor])
 
   return (
     <Section
@@ -59,7 +65,7 @@ export default function Contact() {
           <div className={styles['links']}>
             {socials.map((social) => {
               const Fallback = FALLBACK_ICONS[social.id] ?? LuMail
-              const isOverlay = social.overlay === 'wechat'
+              const hasQr = Boolean(social.qr)
               const href = t(social.href)
               /*
                * mailto: and tel: must not open in a new tab - the handoff to the
@@ -80,11 +86,11 @@ export default function Contact() {
                   rel={isExternal ? 'noopener noreferrer' : undefined}
                   title={t(social.hint)}
                   onClick={
-                    isOverlay
+                    hasQr
                       ? (event) => {
                           event.preventDefault()
                           openerRef.current = event.currentTarget
-                          setQrOpen(true)
+                          setQrFor(social)
                         }
                       : undefined
                   }
@@ -130,17 +136,17 @@ export default function Contact() {
       </Reveal>
 
       <AnimatePresence>
-        {qrOpen ? (
+        {qrFor?.qr ? (
           <motion.div
             className={styles['overlay']}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            onClick={() => setQrOpen(false)}
+            onClick={() => setQrFor(null)}
             role="dialog"
             aria-modal="true"
-            aria-label={t(ui.a11y.wechatQr)}
+            aria-label={t(qrFor.qr.alt)}
           >
             <motion.div
               className={styles['qr']}
@@ -154,13 +160,13 @@ export default function Contact() {
                 <button
                   type="button"
                   className={styles['qrClose']}
-                  onClick={() => setQrOpen(false)}
+                  onClick={() => setQrFor(null)}
                   aria-label={t(ui.actions.close)}
                   autoFocus
                 >
                   <LuX aria-hidden="true" />
                 </button>
-                <img src={profile.wechatQr} alt={t(ui.a11y.wechatQr)} width={280} height={280} />
+                <img src={qrFor.qr.image} alt={t(qrFor.qr.alt)} width={280} height={280} />
               </GlassSurface>
             </motion.div>
           </motion.div>
