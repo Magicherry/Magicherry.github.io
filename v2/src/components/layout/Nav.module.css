@@ -373,18 +373,6 @@
   box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.5);
 }
 
-/* -------------------------------------------------------------- progress */
-.progress {
-  position: fixed;
-  inset: 0 0 auto 0;
-  z-index: calc(var(--z-nav) + 1);
-  height: 2px;
-  transform-origin: 0 50%;
-  background: var(--accent);
-  box-shadow: 0 0 12px -2px var(--accent);
-  pointer-events: none;
-}
-
 /* ================================================================ tablet */
 @media (max-width: 900px) {
   .link {

@@ -1,0 +1,119 @@
+.wrap {
+  position: fixed;
+  right: max(clamp(1rem, 2.4vw, 1.75rem), env(safe-area-inset-right));
+  bottom: max(clamp(1rem, 2.4vw, 1.75rem), env(safe-area-inset-bottom));
+  z-index: var(--z-nav);
+  /* The transform is motion's; this only has to promote the layer so the fade
+     does not repaint the fixed corner of the page on every frame. */
+  will-change: transform, opacity;
+}
+
+/*
+ * No frame. Every edge layer the glass system would draw is switched off here,
+ * in every theme and in every state.
+ *
+ * A panel's rim describes where a sheet of glass ends, and it is worth a
+ * hairline because nothing else does that job. This button already has a circle
+ * on it - one the scroll position is drawing - and a rim a couple of pixels
+ * outside that reads as a second, duller ring competing with the real one. The
+ * fill, the inner glow, the specular and the shadow all stay, so it is still the
+ * same material; it simply has no outline of its own.
+ *
+ * `--glass-edge-hover` and `--glass-rim-lit` have to go too: the hover state
+ * restates the whole box-shadow, and without them the frame would reappear the
+ * moment a pointer touched it.
+ */
+.button {
+  --glass-edge: transparent;
+  --glass-rim-light: transparent;
+  --glass-rim-far: transparent;
+  --glass-inner-shade: transparent;
+  --glass-edge-hover: transparent;
+  --glass-rim-lit: transparent;
+  /* Smaller than a panel's, because the highlight has to read inside 48px. */
+  --surface-specular-size: 90px;
+
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  color: var(--fg);
+  font: inherit;
+}
+
+.button:hover {
+  color: var(--accent);
+}
+
+/*
+ * The ring is now the button's only circle, and it is still held in rather than
+ * run along the edge: `r: 21` against a 24 centre puts the 2.5px stroke between
+ * 19.75 and 22.25, leaving 1.75px of surface outside it. Flush with the edge it
+ * would read as a border the button happens to have; inset, it reads as a gauge
+ * drawn on its face - which is what it is, since it measures the page rather
+ * than bounding the control.
+ */
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Zero at twelve o'clock. */
+  transform: rotate(-90deg);
+  pointer-events: none;
+  overflow: visible;
+}
+
+.ring circle {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.track {
+  stroke: var(--line-strong);
+}
+
+.bar {
+  stroke: var(--accent);
+}
+
+.icon {
+  position: relative;
+  font-size: 1.05rem;
+  transition: transform var(--dur-base) var(--ease-gel);
+}
+
+/* Nudged toward where it is about to take you. */
+.button:hover .icon {
+  transform: translateY(-2px);
+}
+
+/*
+ * Above the docked nav, not beside it.
+ *
+ * Below 760px the nav leaves the top of the screen and parks along the bottom
+ * edge, where this button already lives. The bar is capped at 460px and centred,
+ * so on a tablet there is room to its right and on a phone there is none - which
+ * makes "beside" a layout that works until it suddenly overlaps. Stacking clears
+ * it at every width for the cost of one offset.
+ */
+@media (max-width: 760px) {
+  .wrap {
+    right: max(14px, env(safe-area-inset-right));
+    bottom: calc(max(12px, env(safe-area-inset-bottom)) + 74px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon {
+    transition-duration: 1ms;
+  }
+
+  .button:hover .icon {
+    transform: none;
+  }
+}

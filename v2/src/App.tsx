@@ -1,6 +1,7 @@
 import GlassDefs from './components/glass/GlassDefs'
 import Backdrop from './components/fx/Backdrop'
-import Nav, { ScrollProgress } from './components/layout/Nav'
+import Nav from './components/layout/Nav'
+import BackToTop from './components/layout/BackToTop'
 import Preloader from './components/layout/Preloader'
 import Footer from './components/layout/Footer'
 import Hero from './sections/Hero'
@@ -27,8 +28,8 @@ function Shell() {
       <GlassDefs />
       <Backdrop />
       <Preloader onDone={markReady} />
-      <ScrollProgress />
       <Nav />
+      <BackToTop />
 
       {/*
        * Sections are in the DOM from the first commit, so the curtain lifts onto

@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { motion, useMotionValueEvent, useScroll } from 'motion/react'
+import { motion } from 'motion/react'
 import type { IconType } from 'react-icons'
 import {
   LuBriefcase,
@@ -198,26 +197,5 @@ export default function Nav() {
         </GlassSurface>
       </motion.header>
     </>
-  )
-}
-
-/** Reading-progress hairline pinned to the top edge of the viewport. */
-export function ScrollProgress() {
-  const { scrollYProgress } = useScroll()
-  const [visible, setVisible] = useState(false)
-
-  useMotionValueEvent(scrollYProgress, 'change', (value) => setVisible(value > 0.005))
-
-  return (
-    <motion.div
-      className={styles['progress']}
-      style={{ scaleX: scrollYProgress }}
-      animate={{ opacity: visible ? 1 : 0 }}
-      transition={{ duration: 0.3 }}
-      // Decorative: the same information is already carried by the nav
-      // indicator, and a continuously changing progressbar role is pure noise
-      // for a screen reader.
-      aria-hidden="true"
-    />
   )
 }
