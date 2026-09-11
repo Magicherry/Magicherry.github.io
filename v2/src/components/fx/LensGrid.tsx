@@ -252,7 +252,14 @@ export default function LensGrid() {
     const tick = () => {
       lensX += (targetX - lensX) * 0.12
       lensY += (targetY - lensY) * 0.12
-      power += (targetPower - power) * 0.12
+      /*
+       * Asymmetric on purpose: in fast, out slow. Appearing is a response and
+       * has to feel like one - at the position easing's own 0.12 the lens spent
+       * roughly four tenths of a second arriving, which is most of a swipe, so
+       * a quick flick was over before the field had finished answering it.
+       * Leaving is not a response to anything and can take its time.
+       */
+      power += (targetPower - power) * (targetPower > power ? 0.24 : 0.09)
       draw()
 
       if (
@@ -277,37 +284,58 @@ export default function LensGrid() {
       frame = requestAnimationFrame(tick)
     }
 
-    const onPointerMove = (event: PointerEvent) => {
-      /*
-       * Arriving from nothing, the lens is placed rather than driven there.
-       *
-       * Easing in from wherever it was last released would drag a bright wake
-       * across the whole field on every touch - and on a phone "arriving from
-       * nothing" is not the edge case it is with a mouse, it is what every
-       * single interaction looks like. Only the fade is animated on arrival;
-       * position picks up its easing for the rest of the gesture.
-       */
+    /**
+     * Aim the lens at a point and light it.
+     *
+     * Arriving from nothing, the lens is *placed* rather than driven there.
+     * Easing in from wherever it was last released would drag a bright wake
+     * across the whole field - and on a phone "arriving from nothing" is not the
+     * edge case it is with a mouse, it is what every interaction looks like.
+     * Only the fade is animated on arrival; position picks up its easing for the
+     * rest of the gesture.
+     */
+    const aim = (x: number, y: number) => {
       if (targetPower === 0) {
-        lensX = event.clientX
-        lensY = event.clientY
+        lensX = x
+        lensY = y
       }
-      targetX = event.clientX
-      targetY = event.clientY
+      targetX = x
+      targetY = y
       targetPower = 1
       wake()
     }
 
-    const onPointerRelease = (event: PointerEvent) => {
-      // A mouse still exists after its button comes up, and a click should not
-      // put the lens out. A finger genuinely stops existing.
-      if (event.pointerType === 'mouse') return
+    const release = () => {
       targetPower = 0
       wake()
     }
 
-    const onPointerLeave = () => {
-      targetPower = 0
-      wake()
+    const onPointerMove = (event: PointerEvent) => aim(event.clientX, event.clientY)
+
+    /*
+     * Touch is tracked through the *touch* events, not the pointer ones, and that
+     * is the whole reason the field reacts to a swipe at all.
+     *
+     * The browser withdraws the pointer the instant it decides a touch is a
+     * scroll: `pointercancel` fires and `pointermove` simply stops. Since a
+     * scroll is what nearly every touch on a page like this turns into, driving
+     * the lens from pointer events meant it lit up for a few milliseconds at the
+     * start of a swipe and then went out for the rest of it - reacting to
+     * everything except the gesture people actually make.
+     *
+     * A passive `touchmove` keeps firing for the entire scroll, so the lens
+     * follows the finger the whole way down the page. `touchstart` lights it on
+     * contact rather than waiting for the first movement, which is the difference
+     * between the field answering a touch and the field noticing one.
+     */
+    const onTouch = (event: TouchEvent) => {
+      const touch = event.touches[0]
+      if (touch) aim(touch.clientX, touch.clientY)
+    }
+
+    const onTouchEnd = (event: TouchEvent) => {
+      // Lifting one of two fingers is not the end of the gesture.
+      if (event.touches.length === 0) release()
     }
 
     /*
@@ -336,21 +364,27 @@ export default function LensGrid() {
     resize()
     window.addEventListener('resize', resize, { passive: true })
     if (lens) {
+      // Mouse. `pointerup` is deliberately not listened for - a cursor still
+      // exists after its button comes up, and clicking should not put the lens
+      // out. Only leaving the window does.
       window.addEventListener('pointermove', onPointerMove, { passive: true })
-      // `pointercancel` matters more than it looks: the browser fires it instead
-      // of `pointerup` the moment it decides a touch is a scroll, which is most
-      // of the gestures this will ever see.
-      window.addEventListener('pointerup', onPointerRelease, { passive: true })
-      window.addEventListener('pointercancel', onPointerRelease, { passive: true })
-      document.addEventListener('pointerleave', onPointerLeave, { passive: true })
+      document.addEventListener('pointerleave', release, { passive: true })
+
+      // Touch. Passive, so following the finger can never delay a scroll.
+      window.addEventListener('touchstart', onTouch, { passive: true })
+      window.addEventListener('touchmove', onTouch, { passive: true })
+      window.addEventListener('touchend', onTouchEnd, { passive: true })
+      window.addEventListener('touchcancel', onTouchEnd, { passive: true })
     }
 
     return () => {
       window.removeEventListener('resize', resize)
       window.removeEventListener('pointermove', onPointerMove)
-      window.removeEventListener('pointerup', onPointerRelease)
-      window.removeEventListener('pointercancel', onPointerRelease)
-      document.removeEventListener('pointerleave', onPointerLeave)
+      document.removeEventListener('pointerleave', release)
+      window.removeEventListener('touchstart', onTouch)
+      window.removeEventListener('touchmove', onTouch)
+      window.removeEventListener('touchend', onTouchEnd)
+      window.removeEventListener('touchcancel', onTouchEnd)
       themeObserver.disconnect()
       if (themeFrame) cancelAnimationFrame(themeFrame)
       if (frame) cancelAnimationFrame(frame)
