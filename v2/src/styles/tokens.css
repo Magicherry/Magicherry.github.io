@@ -233,11 +233,32 @@
    * The shaded edge is genuinely dark. It used to be white at 6% - a second,
    * dimmer highlight - which meant the panel was lit from above *and* below and
    * had no bottom at all.
+   *
+   * The *far* rim is the exception, and it is not a contradiction of that. A
+   * thick transparent slab lit from one corner catches light twice: directly, on
+   * the facet turned toward the source, and again on the opposite rim, where
+   * light that crossed the body leaves it. The two corners in between get
+   * neither. So this is half the near rim - light that has been through the
+   * glass, not light that bounced off it - and it only reads as a second light
+   * source if it gets anywhere near the same strength.
    */
   --glass-rim-light: rgba(255, 255, 255, 0.2);
-  --glass-rim-dark: rgba(0, 0, 0, 0.3);
+  --glass-rim-far: rgba(255, 255, 255, 0.1);
+  /* The outer contour. Dark mode has no use for one of its own - a translucent
+     panel over a near-black page is already separated by being lighter than it -
+     so it defers to the generic hairline. Light mode does not, see below. */
+  --glass-edge: var(--line);
   --glass-inner-glow: rgba(255, 255, 255, 0.085);
-  --glass-inner-shade: rgba(3, 6, 14, 0.55);
+  /* No interior shading here on purpose. Dark mode's bottom edge is *transmitted
+     light* (`--glass-rim-far`), and a dark wash creeping in from the same corner
+     would be arguing with it. Light mode, where the far rim is a shadow rather
+     than a highlight, is the case this layer exists for. */
+  --glass-inner-shade: transparent;
+  /* Hover states for the two above. Tokens rather than literals because light
+     mode answers `transparent` to both - it has no rim at all, so a hover that
+     drew one would be conjuring an edge that does not otherwise exist. */
+  --glass-edge-hover: color-mix(in srgb, var(--accent) 22%, var(--line));
+  --glass-rim-lit: color-mix(in srgb, var(--glass-rim-light), #fff 25%);
   /*
    * Three falloffs rather than one. A single wide blur puts the panel a fixed
    * distance off the page; a tight contact shadow plus a mid and an ambient one
@@ -248,6 +269,17 @@
     0 1px 2px -1px rgba(0, 0, 0, 0.5),
     0 10px 24px -14px rgba(0, 0, 0, 0.6),
     0 30px 60px -34px rgba(0, 0, 0, 0.7);
+  /* The same stack, further from the page - a hovered surface has moved toward
+     you, and the shadow growing is the whole signal. A token because it was
+     hardcoded black, which is correct in exactly one of the two themes. */
+  --glass-drop-lift:
+    0 2px 4px -2px rgba(0, 0, 0, 0.45),
+    0 16px 34px -18px rgba(0, 0, 0, 0.6),
+    0 40px 76px -38px rgba(0, 0, 0, 0.7);
+  /* One falloff, for surfaces too small to justify three: the hero's secondary
+     button, a project's icon tile. Same reason for existing as the two above -
+     both call sites had literal black in them. */
+  --glass-drop-sm: 0 10px 22px -14px rgba(0, 0, 0, 0.75);
   --glass-specular: rgba(255, 255, 255, 0.26);
 
   --scrim: rgba(3, 5, 10, 0.72);
@@ -327,19 +359,72 @@
   --glass-contrast: contrast(1.16);
 
   /*
-   * On paper the depth cue moves from the highlight to the shadow: a white lit
-   * edge on a white sheet is invisible, so the *shaded* edge and the contact
-   * shadow are what give the panel a body. Both are stronger here than their
-   * dark-mode counterparts for that reason.
+   * ------------------------------------------------- a full white rim on paper
+   *
+   * Light mode's edge is one thing: white, at full strength, all the way round.
+   * Not the graded rim dark mode runs - no lit corner, no shaded corner, no
+   * directional falloff. The panel is outlined.
+   *
+   * Which means these three tokens stop describing three different phenomena and
+   * start describing one. Dark mode's geometry survives underneath (the contour
+   * ring, then two diagonal hairlines at the corners the light enters and leaves)
+   * but with every value white and near-opaque it resolves to a single even
+   * stroke, very slightly hotter at those two corners. That is the intent - it is
+   * a drawn rim, not simulated optics, and trying to have it both ways is what
+   * makes this look muddy.
+   *
+   * Known consequence, and it is the reason the shadow below stays heavy: a white
+   * rim only reads where the panel crosses something darker - the aurora, mostly.
+   * Over the pale page background it vanishes into the fill, and there the drop
+   * shadow is once again the only thing holding the panel off the paper.
+   *
+   * The nav re-declares all of these (Nav.module.css) and keeps the graded rim.
    */
-  --glass-rim-light: rgba(255, 255, 255, 0.95);
-  --glass-rim-dark: rgba(9, 14, 24, 0.16);
+  --glass-rim-light: rgba(255, 255, 255, 1);
+  --glass-rim-far: rgba(255, 255, 255, 0.85);
+  --glass-edge: rgba(255, 255, 255, 0.92);
+  /* Stays off. An interior dark falloff under a bright white outline is the one
+     combination that reads as neither - the rim says the light is everywhere and
+     the shade says it is behind you. */
+  --glass-inner-shade: transparent;
+  /* A broad wash at the corner the light arrives from - a gradient across the
+     body rather than a line at the boundary, so it sits under the rim rather
+     than competing with it. */
   --glass-inner-glow: rgba(255, 255, 255, 0.5);
-  --glass-inner-shade: rgba(9, 14, 24, 0.09);
+  /* Hover takes the rim to pure white on every edge. With the rest of the stroke
+     already at full strength there is nowhere else for the state to go, so the
+     lift and the shadow carry most of the signal. */
+  --glass-edge-hover: #ffffff;
+  --glass-rim-lit: #ffffff;
+  /*
+   * Five falloffs, and the near layers are firmer than they would otherwise be
+   * because a white rim buys separation from the aurora and none at all from the
+   * pale page - over the background this is still the only thing holding the
+   * panel off the paper. The old stack topped out at 30% ink under a tight -34px
+   * spread, which concentrates the dark right at the panel and gives the shadow
+   * a visible outline: the look of a card lying on a page. Glass over paper does
+   * the opposite - a definite but shallow contact, then a very large, very faint
+   * ambient with no edge you can point at. The deep negative spreads mean small
+   * surfaces (pills, chips) skip the wide layers entirely, which is also how it
+   * should be: a 30px chip has no business casting a 96px shadow.
+   */
   --glass-drop:
-    0 1px 2px -1px rgba(15, 23, 42, 0.16),
-    0 10px 24px -12px rgba(15, 23, 42, 0.24),
-    0 30px 60px -34px rgba(15, 23, 42, 0.3);
+    0 1px 2px -1px rgba(15, 23, 42, 0.1),
+    0 3px 6px -3px rgba(15, 23, 42, 0.1),
+    0 10px 22px -10px rgba(15, 23, 42, 0.12),
+    0 28px 52px -26px rgba(15, 23, 42, 0.16),
+    0 56px 96px -56px rgba(15, 23, 42, 0.2);
+  /*
+   * The hover lift. This is the token's whole reason for existing: the lift was
+   * hardcoded to black at 0.45/0.6/0.7, which is a dark-mode shadow, and on paper
+   * it dropped a near-opaque black pool under every card the pointer touched.
+   */
+  --glass-drop-lift:
+    0 2px 4px -2px rgba(15, 23, 42, 0.1),
+    0 14px 28px -14px rgba(15, 23, 42, 0.16),
+    0 36px 66px -30px rgba(15, 23, 42, 0.2),
+    0 68px 112px -62px rgba(15, 23, 42, 0.24);
+  --glass-drop-sm: 0 8px 18px -10px rgba(15, 23, 42, 0.16);
   --glass-specular: rgba(255, 255, 255, 0.75);
 
   --scrim: rgba(246, 247, 250, 0.76);

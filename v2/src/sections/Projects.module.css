@@ -97,7 +97,7 @@
   box-shadow:
     inset 0 0 0 1px var(--line-strong),
     inset 0 1px 0 var(--glass-rim-light),
-    0 8px 18px -12px rgba(0, 0, 0, 0.7);
+    var(--glass-drop-sm);
   transition:
     transform var(--dur-base) var(--ease-gel),
     box-shadow var(--dur-base) var(--ease-enter);

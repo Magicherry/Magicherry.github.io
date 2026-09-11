@@ -4,7 +4,8 @@
  *
  *   1  backdrop      blur + saturation lift + (where supported) edge refraction
  *   2  body fill     a directional wash, brighter where the light enters
- *   3  rim ring      1px gradient border, lit top-left -> shaded bottom-right
+ *   3  rim ring      1px border, lit at the corner the light enters and again
+ *                    at the one it leaves; dark at the two in between
  *   4  inner glow    light that has entered the slab and scattered
  *   5  specular      a moving highlight that tracks the pointer
  *   6  drop shadow   contact shadow proving the sheet floats above the page
@@ -25,22 +26,40 @@
     transparent 100%
   );
   /*
-   * The rim, as four stacked hairlines plus one interior falloff. A single
-   * border cannot express a full outline, a lit top edge and a shaded bottom
-   * edge at once, and box-shadow costs nothing to composite.
+   * The rim, as three stacked hairlines plus one interior falloff. A single
+   * border cannot express a full outline, a lit near corner and a lit far
+   * corner at once, and box-shadow costs nothing to composite.
    *
-   * The last line is the one that changed character: it used to be a
-   * `0 0 32px -10px` glow radiating from every edge, which fills the middle of
-   * the panel with haze and is why the material read as milky plastic. Offset
-   * down and given a hard negative spread, the same token becomes a band of
-   * light entering from *above* and falling off - which is what light does.
+   * The two directional hairlines are offset *diagonally*, and that is the
+   * whole trick. An inset shadow at `0 1px` paints a band of even thickness
+   * along the entire top edge - which is a drawn border, not an edge catching
+   * light, and on a wide panel it reads as a fluorescent tube laid across the
+   * top. Offset to `1px 1px` the same shadow is displaced along the light's own
+   * axis, so its thickness now follows how far each part of the rim is turned
+   * away from the source: 1.4px at the top-left corner, 1px along the top and
+   * left edges, and tapering to *nothing* as it rounds the top-right and
+   * bottom-left. `-1px -1px` mirrors it onto the far corner. Four hairlines
+   * became three because the shaded edge is no longer a separate layer - the
+   * two corners nobody lit are the shading.
+   *
+   * The last two lines are the interior, and they are the same geometry mirrored
+   * across the light axis. The glow used to be a `0 0 32px -10px` haze radiating
+   * from every edge, which fills the middle of the panel and is why the material
+   * read as milky plastic; offset along the diagonal with a hard negative spread
+   * it becomes light entering at one corner and falling off within a pixel or
+   * two, which is what light does. The shade is its opposite number - the far
+   * corner darkening over ~20px rather than stopping at a hairline - and it is
+   * how the slab reads as having thickness instead of an outline. Dark mode sets
+   * that token to `transparent`: its far corner is already lit by transmitted
+   * light, and the two would be arguing.
    */
   box-shadow:
     var(--glass-drop),
-    inset 0 0 0 1px var(--line),
-    inset 0 1px 0 0 var(--glass-rim-light),
-    inset 0 -1px 0 0 var(--glass-rim-dark),
-    inset 0 16px 26px -28px var(--glass-inner-glow);
+    inset 0 0 0 1px var(--glass-edge),
+    inset 1px 1px 0 0 var(--glass-rim-light),
+    inset -1px -1px 0 0 var(--glass-rim-far),
+    inset 16px 16px 26px -28px var(--glass-inner-glow),
+    inset -16px -16px 26px -28px var(--glass-inner-shade);
   transition:
     transform var(--dur-base) var(--ease-gel),
     box-shadow var(--dur-base) var(--ease-enter),
@@ -111,8 +130,11 @@
 
 /* ---------------------------------------------------------------- rim (3) */
 /*
- * A *true* gradient ring - lit on the light-entry side, shaded opposite - only
- * on live surfaces. `mask-composite` forces an offscreen buffer per element,
+ * A *true* gradient ring - lit where the light enters and again where it leaves,
+ * dark across the middle - only on live surfaces, because it runs the length of
+ * `--surface-light-angle` and so places the two bright arcs on exactly the
+ * corners the hairlines above approximate. `mask-composite` forces an offscreen
+ * buffer per element,
  * which is affordable once and wasteful twenty-six times; everything else keeps
  * the box-shadow hairlines above, which at 1px look near-identical.
  */
@@ -120,9 +142,10 @@
   /* The gradient ring replaces the flat outline rather than sitting over it. */
   box-shadow:
     var(--glass-drop),
-    inset 0 1px 0 0 var(--glass-rim-light),
-    inset 0 -1px 0 0 var(--glass-rim-dark),
-    inset 0 16px 26px -28px var(--glass-inner-glow);
+    inset 1px 1px 0 0 var(--glass-rim-light),
+    inset -1px -1px 0 0 var(--glass-rim-far),
+    inset 16px 16px 26px -28px var(--glass-inner-glow),
+    inset -16px -16px 26px -28px var(--glass-inner-shade);
 }
 .live::before {
   content: '';
@@ -137,7 +160,7 @@
     color-mix(in srgb, var(--glass-rim-light) 22%, transparent) 26%,
     transparent 48%,
     transparent 58%,
-    var(--glass-rim-dark) 100%
+    var(--glass-rim-far) 100%
   );
   /* Ring trick: fill the whole box, then punch out everything inside the 1px
      padding so only the border band survives. */
@@ -205,17 +228,18 @@
 }
 
 /* Lifting raises the drop shadow with it, rather than adding a ring of colour -
-   the shadow growing is what says "this moved toward you". */
+   the shadow growing is what says "this moved toward you". The stack is a token
+   because it used to be literal black here, which is a shadow for exactly one of
+   the two themes; on paper it pooled under every card the pointer touched. */
 .interactive:hover {
   transform: translate3d(0, -3px, 0);
   box-shadow:
-    0 2px 4px -2px rgba(0, 0, 0, 0.45),
-    0 16px 34px -18px rgba(0, 0, 0, 0.6),
-    0 40px 76px -38px rgba(0, 0, 0, 0.7),
-    inset 0 0 0 1px color-mix(in srgb, var(--accent) 22%, var(--line)),
-    inset 0 1px 0 0 color-mix(in srgb, var(--glass-rim-light), #fff 25%),
-    inset 0 -1px 0 0 var(--glass-rim-dark),
-    inset 0 16px 26px -28px var(--glass-inner-glow);
+    var(--glass-drop-lift),
+    inset 0 0 0 1px var(--glass-edge-hover),
+    inset 1px 1px 0 0 var(--glass-rim-lit),
+    inset -1px -1px 0 0 var(--glass-rim-far),
+    inset 16px 16px 26px -28px var(--glass-inner-glow),
+    inset -16px -16px 26px -28px var(--glass-inner-shade);
 }
 
 /*
