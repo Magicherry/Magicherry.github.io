@@ -6,6 +6,18 @@ import cvZh from '@/assets/cv/Yuting_Zhou_CV_zh.pdf'
 import avatar from '@/assets/avatar/avatar.png'
 import portrait from '@/assets/photo/head-cutout.png'
 import wechatQr from '@/assets/about/social/Wechat.jpg'
+/*
+ * Bundled rather than served from a CDN like every other mark here, because
+ * there is no icon CDN that carries it: simple-icons has only the monochrome
+ * glyph, and the rounded-square app icon exists solely on xiaohongshu.com. That
+ * leaves hotlinking `picasso-static.xiaohongshu.com/fe-platform/<sha1>.png`,
+ * which is a content-hashed path that rotates whenever they redeploy - and a
+ * dead mark is worse than a locally-held 2.4kB.
+ *
+ * It is their `apple-touch-icon` at 180x180. The favicon is the same artwork but
+ * 32x32 inside an .ico, which is under half the pixels this needs on a 2x screen.
+ */
+import xiaohongshuMark from '@/assets/marks/xiaohongshu.png'
 
 export const profile = {
   /** The small mark in the nav capsule. */
@@ -90,6 +102,12 @@ export interface SocialLink {
   /** Near-black marks that would vanish against a dark background. */
   adaptive?: boolean
   /**
+   * The mark is a full app icon with its own background, not a glyph on
+   * transparent. It gets a corner radius so its ground is clipped to a squircle
+   * rather than left as a hard-edged square among silhouettes.
+   */
+  tile?: boolean
+  /**
    * Opens a QR overlay instead of navigating, and carries the code with it.
    *
    * This used to be `overlay: 'wechat'`, with the image and its alt text
@@ -166,6 +184,31 @@ export const socials: readonly SocialLink[] = [
     hint: { en: 'space.bilibili.com', zh: 'Bilibili 主页' },
     mark: simpleMark('bilibili'),
     brand: '#00a1d6',
+  },
+  {
+    id: 'xiaohongshu',
+    /*
+     * `rednote`, and the lowercase is the brand's rather than a slip - it is how
+     * the app has been listed in both stores since the 2024-25 rebrand (RED ->
+     * REDnote -> rednote). "Xiaohongshu" is the pinyin of the Chinese name and
+     * what international press uses, but it is not the English brand, and this
+     * site already resolves that the same way one line above: 微信's English
+     * label is WeChat, not Weixin.
+     *
+     * The id stays `xiaohongshu` because it keys the simple-icons slug.
+     */
+    label: { en: 'rednote', zh: '小红书' },
+    href: same('https://www.xiaohongshu.com/user/profile/64c5b9f2000000000e024af2'),
+    /* The number rather than the URL, for the same reason GitHub's hint is the
+       handle: that path is a 24-character object id nobody reads, while the
+       Xiaohongshu ID is what you would actually type into the app's search. */
+    hint: { en: 'ID 6193834538', zh: '小红书号 6193834538' },
+    mark: xiaohongshuMark,
+    /* The only mark on this list that is a *tile* rather than a glyph - the app
+       icon carries its own red ground, so it needs the corner radius the others
+       have no use for. See `.linkIcon img[data-tile]`. */
+    tile: true,
+    brand: '#ff2442',
   },
 ]
 

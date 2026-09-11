@@ -62,6 +62,22 @@
   filter: invert(1) brightness(1.6);
 }
 
+/*
+ * App icons rather than glyphs.
+ *
+ * Every other mark in this list is a silhouette on transparent, which is why the
+ * comment above says no tile is drawn behind them - they have their own. An app
+ * icon breaks that: it arrives with a solid ground, and at 28px square among six
+ * silhouettes a hard-cornered block is the loudest thing in the column.
+ *
+ * 23% is roughly iOS's own corner ratio, so the artwork is clipped to the shape
+ * it was drawn for. It also makes the source's own corners moot - opaque or
+ * transparent, they end up outside the clip either way.
+ */
+.linkIcon img[data-tile] {
+  border-radius: 23%;
+}
+
 .linkText {
   display: grid;
   gap: 1px;

@@ -105,6 +105,7 @@ export default function Contact() {
                         loading="lazy"
                         decoding="async"
                         data-adaptive={social.adaptive || undefined}
+                        data-tile={social.tile || undefined}
                       />
                     ) : (
                       <Fallback aria-hidden="true" />
