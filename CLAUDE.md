@@ -66,7 +66,9 @@ Theme switching in `lib/theme.tsx` uses the View Transitions API to reveal the n
 
 ### Scroll and motion
 
-`SECTION_IDS` in `lib/scroll.tsx` is the single source of truth for the nav, the anchor targets and the IntersectionObserver section spy — adding a section means adding it there and giving the `<Section>` the matching `id`. One Lenis instance owns all scrolling and is skipped entirely under `prefers-reduced-motion` (native scrolling instead); nothing else should call `window.scrollTo` for in-page navigation.
+`SECTION_IDS` in `lib/scroll.tsx` defines the section *vocabulary* — the anchor targets, the IntersectionObserver spy, and the `SectionId` type. It is not the nav's list: `Nav.tsx` keeps its own `ITEMS` array (typed `Exclude<SectionId, 'home'>`, so it carries the icon and label a bare id cannot). **Adding a section means three edits, not one** — `SECTION_IDS`, `ITEMS`, and a `<Section>` with the matching `id`. The type catches a typo, not an omission.
+
+One Lenis instance owns all scrolling and is skipped entirely under `prefers-reduced-motion` (native scrolling instead); nothing else should call `window.scrollTo` for in-page navigation.
 
 `<Reveal>` is the only scroll-entrance primitive: opacity and transform only (never animate `filter: blur()` — it is not a compositor property and the grids run a dozen at once), fires `once` by default, and renders a plain tag under reduced motion.
 

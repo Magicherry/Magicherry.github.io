@@ -26,15 +26,14 @@
 
   --p-amber-400: #fbbf24;
 
+  /* Only the stops the semantic tier actually reaches for. A palette is not a
+     ramp to be completed - an unreferenced stop is a colour nobody chose. */
   --p-ink-950: #04060b;
-  --p-ink-900: #070a12;
   --p-ink-800: #0d1018;
-  --p-ink-700: #141824;
 
   --p-paper-50: #ffffff;
   --p-paper-100: #f6f7fa;
   --p-paper-200: #eceef4;
-  --p-paper-300: #dfe3ec;
 
   /* ------------------------------------------------------------------- type */
   /*

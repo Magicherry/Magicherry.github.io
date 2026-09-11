@@ -34,7 +34,9 @@ const CHANNEL_MATRIX = {
 
 function GlassFilter({ variant }: { variant: Variant }) {
   const { id, scale, chromatic, ...map } = variant
-  const href = useMemo(() => buildDisplacementMap(map), [map.radius, map.inset, map.blur]) // eslint-disable-line react-hooks/exhaustive-deps
+  // Depends on the map's *fields*, not on the rest object, which the spread
+  // above makes fresh on every render and would defeat the memo entirely.
+  const href = useMemo(() => buildDisplacementMap(map), [map.radius, map.inset, map.blur])
 
   return (
     <filter

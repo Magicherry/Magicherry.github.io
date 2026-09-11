@@ -156,10 +156,12 @@ src/
 
 ## Deployment
 
-Not wired up yet. The repository's `.github/workflows/deploy.yml` still builds
-from the repository root, which no longer holds a `package.json`. Pointing it at
-`v2/` (build → `dist/`) is all that is needed when this goes live; `v1/` is kept
-as an archive.
+`.github/workflows/deploy.yml` runs on every push to `main`: `npm ci` and
+`npm run build` in `v2/`, then publishes `v2/dist` to GitHub Pages. Nothing is
+deployed from the repository root, and `v1/` is kept only as an archive.
+
+Note that `vite build` does not typecheck. `npm run build` runs `tsc -b` first
+and that is the gate — CI fails on a type error, not on a broken bundle.
 
 ## Acknowledgements
 

@@ -39,7 +39,3 @@ export function useMediaQuery(query: string, serverFallback = false): boolean {
 export function usePrefersReducedMotion(): boolean {
   return useMediaQuery('(prefers-reduced-motion: reduce)')
 }
-
-export function useIsCoarsePointer(): boolean {
-  return useMediaQuery('(hover: none)')
-}

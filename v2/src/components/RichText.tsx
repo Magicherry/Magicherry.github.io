@@ -54,7 +54,7 @@ function spacingProps(source: string, start: number, end: number) {
   }
 }
 
-export function parseRichText(source: string, tone: EmphasisTone = 'body'): ReactNode[] {
+function parseRichText(source: string, tone: EmphasisTone = 'body'): ReactNode[] {
   const nodes: ReactNode[] = []
   let cursor = 0
   let match: RegExpExecArray | null
