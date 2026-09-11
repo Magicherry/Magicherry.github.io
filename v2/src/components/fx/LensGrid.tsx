@@ -12,10 +12,9 @@ import styles from './Backdrop.module.css'
  *
  * Cost control, in order of importance:
  *
- *   - without a pointer to follow (`interactive={false}`) there is no lens and
- *     therefore no animation at all: the field is rasterised straight onto the
- *     visible canvas, once, and from then on the layer is an ordinary static
- *     texture. That is the whole reason this can run on a phone;
+ *   - under `prefers-reduced-motion` there is no lens and therefore no animation
+ *     at all: the field is rasterised straight onto the visible canvas, once, and
+ *     from then on the layer is an ordinary static texture;
  *   - the *static* field is rasterised once into an offscreen canvas and blitted
  *     as a single image each frame. Redrawing ~1,900 individual `arc()` calls
  *     per pointer event, which is what this did originally, is the difference
@@ -32,21 +31,15 @@ const LENS_RADIUS = 190
 const LENS_STRENGTH = 26
 /** Below this, the eased pointer has effectively arrived; stop the loop. */
 const SETTLE_EPSILON = 0.35
+/** Same idea for the fade: below this the lens is fully in or fully out. */
+const POWER_EPSILON = 0.004
 
-interface LensGridProps {
-  /**
-   * Whether the field follows the pointer. False renders the grid and stops -
-   * no listeners, no frames - which is what touch devices get.
-   */
-  interactive?: boolean
-}
-
-export default function LensGrid({ interactive = true }: LensGridProps) {
+export default function LensGrid() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const reducedMotion = usePrefersReducedMotion()
-  // Reduced motion has always meant "draw the field, never move it"; a device
-  // with no fine pointer now lands in exactly the same state.
-  const lens = interactive && !reducedMotion
+  // The only thing that takes the lens away. It used to also require a fine
+  // pointer, which meant a phone got a field it could not touch.
+  const lens = !reducedMotion
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -88,6 +81,21 @@ export default function LensGrid({ interactive = true }: LensGridProps) {
     let targetY = -9999
     let lensX = -9999
     let lensY = -9999
+    /*
+     * How *present* the lens is, 0..1, eased on the same clock as its position.
+     *
+     * A cursor is always somewhere, so the lens used to need only a position -
+     * and "gone" was expressed by easing that position to -9999, i.e. by flying
+     * the lens off the corner of the screen. A finger is not always somewhere.
+     * It appears, drags, and ceases to exist, and a lens that answered every
+     * lift by streaking off to the top-left would turn each scroll into a comet.
+     *
+     * Separating presence from position lets the lens fade up where it is first
+     * touched and fade back down where it is released, without ever travelling
+     * somewhere nobody pointed at.
+     */
+    let power = 0
+    let targetPower = 0
     let frame = 0
     let running = false
 
@@ -95,12 +103,15 @@ export default function LensGrid({ interactive = true }: LensGridProps) {
       getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
 
     let hotColor = readVar('--accent', '#03e8f8')
+    // Kept alongside, because the fade has to be able to repaint a lensed dot
+    // exactly as the field drew it.
+    let restColor = readVar('--fg-ghost', 'rgba(255,255,255,0.14)')
 
     /** Rasterises the untouched grid once. Everything else just blits this. */
     const renderField = () => {
       fieldCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
       fieldCtx.clearRect(0, 0, width, height)
-      fieldCtx.fillStyle = readVar('--fg-ghost', 'rgba(255,255,255,0.14)')
+      fieldCtx.fillStyle = restColor
       fieldCtx.beginPath()
       for (let row = 0; row < rows; row += 1) {
         for (let col = 0; col < cols; col += 1) {
@@ -121,7 +132,8 @@ export default function LensGrid({ interactive = true }: LensGridProps) {
       ctx.clearRect(0, 0, width, height)
       ctx.drawImage(field, 0, 0, width, height)
 
-      if (lensX < -1000) return
+      // Fully released: the blit above is already the whole picture.
+      if (power < POWER_EPSILON) return
 
       /*
        * Punch the lens area out of the blitted field before drawing the
@@ -141,32 +153,58 @@ export default function LensGrid({ interactive = true }: LensGridProps) {
       const minRow = Math.max(0, Math.floor((lensY - LENS_RADIUS - originY) / SPACING))
       const maxRow = Math.min(rows - 1, Math.ceil((lensY + LENS_RADIUS - originY) / SPACING))
 
-      ctx.fillStyle = hotColor
-      for (let row = minRow; row <= maxRow; row += 1) {
-        for (let col = minCol; col <= maxCol; col += 1) {
-          const x = originX + col * SPACING
-          const y = originY + row * SPACING
-          const dx = x - lensX
-          const dy = y - lensY
-          const distanceSq = dx * dx + dy * dy
-          if (distanceSq > LENS_RADIUS * LENS_RADIUS) continue
+      /*
+       * Two passes while the lens is fading, one once it has arrived.
+       *
+       * The clip above removed the field's own dots from this circle, so at
+       * power 0 something has to put them back or releasing a touch would punch
+       * a hole in the grid. The rest pass is that: the same dots, undisplaced, in
+       * the field's colour, at `1 - power`. The hot pass then rises over it.
+       *
+       * Both ends land exactly where they should - at power 1 the rest pass is
+       * skipped and this is the original lens; at power 0 the hot pass is skipped
+       * and the circle is indistinguishable from the blit it replaced.
+       */
+      const rest = 1 - power
+      for (let pass = rest > POWER_EPSILON ? 0 : 1; pass < 2; pass += 1) {
+        const hot = pass === 1
+        if (hot && power < POWER_EPSILON) continue
+        ctx.fillStyle = hot ? hotColor : restColor
 
-          const distance = Math.sqrt(distanceSq) || 0.0001
-          const falloff = 1 - distance / LENS_RADIUS
-          // Cubic falloff: a linear one makes the lens boundary visible as a
-          // hard ring, which reads as a shader bug rather than as glass.
-          const push = falloff * falloff * falloff * LENS_STRENGTH
+        for (let row = minRow; row <= maxRow; row += 1) {
+          for (let col = minCol; col <= maxCol; col += 1) {
+            const x = originX + col * SPACING
+            const y = originY + row * SPACING
+            const dx = x - lensX
+            const dy = y - lensY
+            const distanceSq = dx * dx + dy * dy
+            if (distanceSq > LENS_RADIUS * LENS_RADIUS) continue
 
-          ctx.globalAlpha = 0.25 + falloff * 0.75
-          ctx.beginPath()
-          ctx.arc(
-            x + (dx / distance) * push,
-            y + (dy / distance) * push,
-            DOT_RADIUS + falloff * 1.5,
-            0,
-            Math.PI * 2,
-          )
-          ctx.fill()
+            if (!hot) {
+              ctx.globalAlpha = rest
+              ctx.beginPath()
+              ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2)
+              ctx.fill()
+              continue
+            }
+
+            const distance = Math.sqrt(distanceSq) || 0.0001
+            const falloff = 1 - distance / LENS_RADIUS
+            // Cubic falloff: a linear one makes the lens boundary visible as a
+            // hard ring, which reads as a shader bug rather than as glass.
+            const push = falloff * falloff * falloff * LENS_STRENGTH * power
+
+            ctx.globalAlpha = (0.25 + falloff * 0.75) * power
+            ctx.beginPath()
+            ctx.arc(
+              x + (dx / distance) * push,
+              y + (dy / distance) * push,
+              DOT_RADIUS + falloff * 1.5 * power,
+              0,
+              Math.PI * 2,
+            )
+            ctx.fill()
+          }
         }
       }
       ctx.globalAlpha = 1
@@ -214,11 +252,17 @@ export default function LensGrid({ interactive = true }: LensGridProps) {
     const tick = () => {
       lensX += (targetX - lensX) * 0.12
       lensY += (targetY - lensY) * 0.12
+      power += (targetPower - power) * 0.12
       draw()
 
-      if (Math.abs(targetX - lensX) < SETTLE_EPSILON && Math.abs(targetY - lensY) < SETTLE_EPSILON) {
+      if (
+        Math.abs(targetX - lensX) < SETTLE_EPSILON &&
+        Math.abs(targetY - lensY) < SETTLE_EPSILON &&
+        Math.abs(targetPower - power) < POWER_EPSILON
+      ) {
         lensX = targetX
         lensY = targetY
+        power = targetPower
         draw()
         running = false
         frame = 0
@@ -234,14 +278,35 @@ export default function LensGrid({ interactive = true }: LensGridProps) {
     }
 
     const onPointerMove = (event: PointerEvent) => {
+      /*
+       * Arriving from nothing, the lens is placed rather than driven there.
+       *
+       * Easing in from wherever it was last released would drag a bright wake
+       * across the whole field on every touch - and on a phone "arriving from
+       * nothing" is not the edge case it is with a mouse, it is what every
+       * single interaction looks like. Only the fade is animated on arrival;
+       * position picks up its easing for the rest of the gesture.
+       */
+      if (targetPower === 0) {
+        lensX = event.clientX
+        lensY = event.clientY
+      }
       targetX = event.clientX
       targetY = event.clientY
+      targetPower = 1
+      wake()
+    }
+
+    const onPointerRelease = (event: PointerEvent) => {
+      // A mouse still exists after its button comes up, and a click should not
+      // put the lens out. A finger genuinely stops existing.
+      if (event.pointerType === 'mouse') return
+      targetPower = 0
       wake()
     }
 
     const onPointerLeave = () => {
-      targetX = -9999
-      targetY = -9999
+      targetPower = 0
       wake()
     }
 
@@ -272,12 +337,19 @@ export default function LensGrid({ interactive = true }: LensGridProps) {
     window.addEventListener('resize', resize, { passive: true })
     if (lens) {
       window.addEventListener('pointermove', onPointerMove, { passive: true })
+      // `pointercancel` matters more than it looks: the browser fires it instead
+      // of `pointerup` the moment it decides a touch is a scroll, which is most
+      // of the gestures this will ever see.
+      window.addEventListener('pointerup', onPointerRelease, { passive: true })
+      window.addEventListener('pointercancel', onPointerRelease, { passive: true })
       document.addEventListener('pointerleave', onPointerLeave, { passive: true })
     }
 
     return () => {
       window.removeEventListener('resize', resize)
       window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerup', onPointerRelease)
+      window.removeEventListener('pointercancel', onPointerRelease)
       document.removeEventListener('pointerleave', onPointerLeave)
       themeObserver.disconnect()
       if (themeFrame) cancelAnimationFrame(themeFrame)
