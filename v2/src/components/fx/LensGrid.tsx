@@ -12,6 +12,10 @@ import styles from './Backdrop.module.css'
  *
  * Cost control, in order of importance:
  *
+ *   - without a pointer to follow (`interactive={false}`) there is no lens and
+ *     therefore no animation at all: the field is rasterised straight onto the
+ *     visible canvas, once, and from then on the layer is an ordinary static
+ *     texture. That is the whole reason this can run on a phone;
  *   - the *static* field is rasterised once into an offscreen canvas and blitted
  *     as a single image each frame. Redrawing ~1,900 individual `arc()` calls
  *     per pointer event, which is what this did originally, is the difference
@@ -29,9 +33,20 @@ const LENS_STRENGTH = 26
 /** Below this, the eased pointer has effectively arrived; stop the loop. */
 const SETTLE_EPSILON = 0.35
 
-export default function LensGrid() {
+interface LensGridProps {
+  /**
+   * Whether the field follows the pointer. False renders the grid and stops -
+   * no listeners, no frames - which is what touch devices get.
+   */
+  interactive?: boolean
+}
+
+export default function LensGrid({ interactive = true }: LensGridProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const reducedMotion = usePrefersReducedMotion()
+  // Reduced motion has always meant "draw the field, never move it"; a device
+  // with no fine pointer now lands in exactly the same state.
+  const lens = interactive && !reducedMotion
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -42,8 +57,15 @@ export default function LensGrid() {
     // draw/tick closures below.
     const ctx: CanvasRenderingContext2D = context
 
-    const field = document.createElement('canvas')
-    const fieldCtx = field.getContext('2d')
+    /*
+     * The offscreen copy exists so that a moving lens can blit the untouched
+     * grid instead of re-running ~1,900 arcs per frame. With no lens there are
+     * no frames, so it would be a second full-viewport backing store bought to
+     * save work nobody is doing - the field goes straight onto the visible
+     * canvas instead.
+     */
+    const field = lens ? document.createElement('canvas') : canvas
+    const fieldCtx = field === canvas ? ctx : field.getContext('2d')
     if (!fieldCtx) return
 
     /*
@@ -92,6 +114,10 @@ export default function LensGrid() {
     }
 
     const draw = () => {
+      // Static field: `renderField` painted the visible canvas directly and
+      // there is nothing to composite on top of it.
+      if (!lens) return
+
       ctx.clearRect(0, 0, width, height)
       ctx.drawImage(field, 0, 0, width, height)
 
@@ -147,14 +173,33 @@ export default function LensGrid() {
     }
 
     const resize = () => {
-      width = window.innerWidth
-      height = window.innerHeight
+      const nextWidth = window.innerWidth
+      const nextHeight = window.innerHeight
+
+      /*
+       * A shrink at the same width is ignored, and that is what makes the field
+       * affordable on a phone.
+       *
+       * Collapsing and re-showing the URL bar changes `innerHeight` and fires
+       * `resize`, repeatedly, during a single flick - and honouring each one
+       * would re-rasterise ~1,900 arcs in the middle of a scroll, which is the
+       * exact cost this canvas used to be kept off mobile to avoid. The field is
+       * a uniform grid inside a fixed, `overflow: hidden` wrapper, so a canvas
+       * left *taller* than the viewport is indistinguishable from one that fits.
+       * Keeping the tallest height ever seen means the bar can come and go for
+       * free, and only a genuine growth or a rotation (which changes the width)
+       * has to be paid for.
+       */
+      if (nextWidth === width && nextHeight <= height) return
+
+      width = nextWidth
+      height = nextHeight
       cols = Math.ceil(width / SPACING) + 1
       rows = Math.ceil(height / SPACING) + 1
       originX = (width - (cols - 1) * SPACING) / 2
       originY = (height - (rows - 1) * SPACING) / 2
 
-      for (const surface of [canvas, field]) {
+      for (const surface of field === canvas ? [canvas] : [canvas, field]) {
         surface.width = Math.round(width * dpr)
         surface.height = Math.round(height * dpr)
       }
@@ -225,7 +270,7 @@ export default function LensGrid() {
 
     resize()
     window.addEventListener('resize', resize, { passive: true })
-    if (!reducedMotion) {
+    if (lens) {
       window.addEventListener('pointermove', onPointerMove, { passive: true })
       document.addEventListener('pointerleave', onPointerLeave, { passive: true })
     }
@@ -238,7 +283,7 @@ export default function LensGrid() {
       if (themeFrame) cancelAnimationFrame(themeFrame)
       if (frame) cancelAnimationFrame(frame)
     }
-  }, [reducedMotion])
+  }, [lens])
 
   return <canvas ref={canvasRef} className={styles['grid']} aria-hidden="true" />
 }

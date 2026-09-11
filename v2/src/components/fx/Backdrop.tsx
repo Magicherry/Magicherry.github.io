@@ -21,9 +21,20 @@ const LensGrid = lazy(() => import('./LensGrid'))
  * dot canvas. See the stylesheet for why that number matters.
  */
 export default function Backdrop() {
-  // Below tablet width the canvas competes with scrolling for the same GPU and
-  // the pointer that drives it does not exist.
-  const showGrid = useMediaQuery('(min-width: 900px) and (hover: hover)')
+  /*
+   * The field is drawn everywhere; only the *lens* needs a pointer.
+   *
+   * These used to be one gate - `(min-width: 900px) and (hover: hover)` - which
+   * bundled two unrelated concerns and took the dots off phones entirely. They
+   * separate cleanly: a static field costs one rasterisation and then composites
+   * as a plain texture, which a phone does not notice, while the lens tracks a
+   * cursor. On touch `pointermove` only fires while a finger is down, so a
+   * lensed field would lurch around mid-scroll and pay for a rAF loop to do it.
+   *
+   * Width has nothing to do with either, so it is no longer asked about: a
+   * narrow desktop window has a mouse and should get the lens.
+   */
+  const pointerLens = useMediaQuery('(hover: hover) and (pointer: fine)')
 
   return (
     <div className={styles['backdrop']} aria-hidden="true">
@@ -34,11 +45,9 @@ export default function Backdrop() {
         <span className={`${styles['field']} ${styles['fieldB']}`} />
       </div>
 
-      {showGrid ? (
-        <Suspense fallback={null}>
-          <LensGrid />
-        </Suspense>
-      ) : null}
+      <Suspense fallback={null}>
+        <LensGrid interactive={pointerLens} />
+      </Suspense>
     </div>
   )
 }
