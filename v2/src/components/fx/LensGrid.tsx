@@ -22,7 +22,7 @@ import styles from './Backdrop.module.css'
  *   - only the ~100 dots inside the lens are computed per frame;
  *   - the animation loop *stops completely* once the lens settles, so an idle
  *     page runs zero frames rather than 60 empty ones a second;
- *   - DPR is capped at 2, above which the dots are sub-pixel anyway.
+ *   - DPR is capped at 1.5, above which the dots are sub-pixel anyway.
  */
 
 const SPACING = 34
@@ -77,22 +77,21 @@ export default function LensGrid() {
 
     // Where the pointer is, and where the lens has eased to. Chasing the target
     // rather than snapping is what gives the field its viscous, liquid feel.
-    let targetX = -9999
-    let targetY = -9999
-    let lensX = -9999
-    let lensY = -9999
+    // Both start at the origin and it does not matter: nothing reads a position
+    // until `power` has risen, and `aim` places the lens before it does.
+    let targetX = 0
+    let targetY = 0
+    let lensX = 0
+    let lensY = 0
     /*
-     * How *present* the lens is, 0..1, eased on the same clock as its position.
+     * How *present* the lens is, 0..1, eased on its own clock.
      *
-     * A cursor is always somewhere, so the lens used to need only a position -
-     * and "gone" was expressed by easing that position to -9999, i.e. by flying
-     * the lens off the corner of the screen. A finger is not always somewhere.
-     * It appears, drags, and ceases to exist, and a lens that answered every
-     * lift by streaking off to the top-left would turn each scroll into a comet.
-     *
-     * Separating presence from position lets the lens fade up where it is first
-     * touched and fade back down where it is released, without ever travelling
-     * somewhere nobody pointed at.
+     * A cursor is always somewhere, so presence used to be implied by position:
+     * "gone" meant easing the lens off the corner of the screen. A finger is not
+     * always somewhere - it appears, drags, and ceases to exist - and a lens
+     * that answered every lift by streaking to the top-left would turn each
+     * scroll into a comet. Held separately, it fades up where a touch lands and
+     * back down where it is released, never travelling somewhere nobody pointed.
      */
     let power = 0
     let targetPower = 0
@@ -154,57 +153,62 @@ export default function LensGrid() {
       const maxRow = Math.min(rows - 1, Math.ceil((lensY + LENS_RADIUS - originY) / SPACING))
 
       /*
-       * Two passes while the lens is fading, one once it has arrived.
+       * The rest pass, and only while the lens is fading.
        *
-       * The clip above removed the field's own dots from this circle, so at
-       * power 0 something has to put them back or releasing a touch would punch
-       * a hole in the grid. The rest pass is that: the same dots, undisplaced, in
-       * the field's colour, at `1 - power`. The hot pass then rises over it.
-       *
-       * Both ends land exactly where they should - at power 1 the rest pass is
-       * skipped and this is the original lens; at power 0 the hot pass is skipped
-       * and the circle is indistinguishable from the blit it replaced.
+       * The clip above took the field's own dots out of this circle, so on the
+       * way in or out something has to put them back - otherwise releasing a
+       * touch would punch a hole in the grid. These are those dots: same places,
+       * no displacement, the field's own colour, at `1 - power`. Neither colour
+       * nor alpha varies across them, so the whole pass is one path and one fill,
+       * exactly as `renderField` draws the field itself.
        */
       const rest = 1 - power
-      for (let pass = rest > POWER_EPSILON ? 0 : 1; pass < 2; pass += 1) {
-        const hot = pass === 1
-        if (hot && power < POWER_EPSILON) continue
-        ctx.fillStyle = hot ? hotColor : restColor
-
+      if (rest > POWER_EPSILON) {
+        ctx.fillStyle = restColor
+        ctx.globalAlpha = rest
+        ctx.beginPath()
         for (let row = minRow; row <= maxRow; row += 1) {
           for (let col = minCol; col <= maxCol; col += 1) {
             const x = originX + col * SPACING
             const y = originY + row * SPACING
             const dx = x - lensX
             const dy = y - lensY
-            const distanceSq = dx * dx + dy * dy
-            if (distanceSq > LENS_RADIUS * LENS_RADIUS) continue
-
-            if (!hot) {
-              ctx.globalAlpha = rest
-              ctx.beginPath()
-              ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2)
-              ctx.fill()
-              continue
-            }
-
-            const distance = Math.sqrt(distanceSq) || 0.0001
-            const falloff = 1 - distance / LENS_RADIUS
-            // Cubic falloff: a linear one makes the lens boundary visible as a
-            // hard ring, which reads as a shader bug rather than as glass.
-            const push = falloff * falloff * falloff * LENS_STRENGTH * power
-
-            ctx.globalAlpha = (0.25 + falloff * 0.75) * power
-            ctx.beginPath()
-            ctx.arc(
-              x + (dx / distance) * push,
-              y + (dy / distance) * push,
-              DOT_RADIUS + falloff * 1.5 * power,
-              0,
-              Math.PI * 2,
-            )
-            ctx.fill()
+            if (dx * dx + dy * dy > LENS_RADIUS * LENS_RADIUS) continue
+            ctx.moveTo(x + DOT_RADIUS, y)
+            ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2)
           }
+        }
+        ctx.fill()
+      }
+
+      // The lens itself, rising over the pass above. At power 1 that pass is
+      // skipped and this is exactly the lens it has always been.
+      ctx.fillStyle = hotColor
+      for (let row = minRow; row <= maxRow; row += 1) {
+        for (let col = minCol; col <= maxCol; col += 1) {
+          const x = originX + col * SPACING
+          const y = originY + row * SPACING
+          const dx = x - lensX
+          const dy = y - lensY
+          const distanceSq = dx * dx + dy * dy
+          if (distanceSq > LENS_RADIUS * LENS_RADIUS) continue
+
+          const distance = Math.sqrt(distanceSq) || 0.0001
+          const falloff = 1 - distance / LENS_RADIUS
+          // Cubic falloff: a linear one makes the lens boundary visible as a
+          // hard ring, which reads as a shader bug rather than as glass.
+          const push = falloff * falloff * falloff * LENS_STRENGTH * power
+
+          ctx.globalAlpha = (0.25 + falloff * 0.75) * power
+          ctx.beginPath()
+          ctx.arc(
+            x + (dx / distance) * push,
+            y + (dy / distance) * push,
+            DOT_RADIUS + falloff * 1.5 * power,
+            0,
+            Math.PI * 2,
+          )
+          ctx.fill()
         }
       }
       ctx.globalAlpha = 1
@@ -310,7 +314,12 @@ export default function LensGrid() {
       wake()
     }
 
-    const onPointerMove = (event: PointerEvent) => aim(event.clientX, event.clientY)
+    // Mouse and pen. Touch has its own handlers below and would otherwise be
+    // aimed twice with the same coordinates until the browser cancels it.
+    const onPointerMove = (event: PointerEvent) => {
+      if (event.pointerType === 'touch') return
+      aim(event.clientX, event.clientY)
+    }
 
     /*
      * Touch is tracked through the *touch* events, not the pointer ones, and that
@@ -354,7 +363,12 @@ export default function LensGrid() {
       if (themeFrame) return
       themeFrame = requestAnimationFrame(() => {
         themeFrame = 0
+        // Both, and `restColor` is the one that bites: the themes put the field
+        // on opposite sides of the background it sits on - pale dots on ink in
+        // dark, ink dots on paper in light - so carrying the old value across a
+        // switch does not tint the grid, it erases it.
         hotColor = readVar('--accent', hotColor)
+        restColor = readVar('--fg-ghost', restColor)
         renderField()
         draw()
       })
@@ -364,9 +378,9 @@ export default function LensGrid() {
     resize()
     window.addEventListener('resize', resize, { passive: true })
     if (lens) {
-      // Mouse. `pointerup` is deliberately not listened for - a cursor still
-      // exists after its button comes up, and clicking should not put the lens
-      // out. Only leaving the window does.
+      // Mouse and pen. `pointerup` is deliberately not listened for - a cursor
+      // still exists after its button comes up, and clicking should not put the
+      // lens out. Only leaving the window does.
       window.addEventListener('pointermove', onPointerMove, { passive: true })
       document.addEventListener('pointerleave', release, { passive: true })
 
