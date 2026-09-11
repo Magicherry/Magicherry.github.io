@@ -13,7 +13,7 @@ import styles from './Projects.module.css'
 type Filter = ProjectDomain | 'all'
 
 export default function Projects() {
-  const { t } = useLocale()
+  const { t, locale } = useLocale()
   const reducedMotion = usePrefersReducedMotion()
   const [filter, setFilter] = useState<Filter>('all')
 
@@ -51,9 +51,13 @@ export default function Projects() {
                 aria-pressed={isActive}
                 onClick={() => setFilter(entry.id)}
               >
+                {/* Locale-scoped for the same reason as the nav indicator: the
+                    pill should travel when you pick a different filter, not when
+                    every chip around it changes width at once. See Nav.tsx. */}
                 {isActive ? (
                   <motion.span
-                    layoutId="filter-pill"
+                    key={locale}
+                    layoutId={`filter-pill-${locale}`}
                     className={styles['chipPill']}
                     transition={{ type: 'spring', stiffness: 480, damping: 40 }}
                   />

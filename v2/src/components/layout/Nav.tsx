@@ -88,7 +88,7 @@ function Controls() {
 }
 
 export default function Nav() {
-  const { t } = useLocale()
+  const { t, locale } = useLocale()
   const { active, scrollTo } = useScrollNav()
 
   /*
@@ -161,10 +161,22 @@ export default function Nav() {
                      * travels between items rather than cross-fading. That is the
                      * difference between the nav reading as an object and reading
                      * as two CSS states.
+                     *
+                     * Scoped to the locale, and the key forces a remount with it,
+                     * because a layout animation answers "the active item moved"
+                     * and a locale switch is not that. Every label changes width
+                     * at once and the bar's `1fr auto 1fr` centre column resizes
+                     * under them, so the pill's box moves a long way for a reason
+                     * that has nothing to do with navigation - and the spring
+                     * cheerfully flings it across the bar to get there. A layoutId
+                     * that has never existed has nothing to travel from, so the
+                     * pill simply redraws where it already is. Within one locale
+                     * the id is constant and the travel is exactly as before.
                      */}
                     {isActive ? (
                       <motion.span
-                        layoutId="nav-indicator"
+                        key={locale}
+                        layoutId={`nav-indicator-${locale}`}
                         className={styles['indicator']}
                         transition={{ type: 'spring', stiffness: 420, damping: 38, mass: 0.8 }}
                       />
