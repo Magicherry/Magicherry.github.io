@@ -33,6 +33,33 @@ export default function Contact() {
   const openerRef = useRef<HTMLElement | null>(null)
 
   /*
+   * Which row has just been copied, so its hint can say so for a moment.
+   *
+   * A copy leaves no trace anywhere on screen - the clipboard is invisible - so
+   * without this the row is indistinguishable from one that did nothing at all.
+   */
+  const [copiedId, setCopiedId] = useState<string | null>(null)
+  const copyTimer = useRef<number | undefined>(undefined)
+
+  useEffect(() => () => window.clearTimeout(copyTimer.current), [])
+
+  const copyHandle = async (value: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(value)
+    } catch {
+      /*
+       * No clipboard: an insecure context, or the user declined. Say nothing
+       * rather than claim success - the handle is already printed in the hint
+       * beside the label, so it can still be read off and typed.
+       */
+      return
+    }
+    setCopiedId(id)
+    window.clearTimeout(copyTimer.current)
+    copyTimer.current = window.setTimeout(() => setCopiedId(null), 1600)
+  }
+
+  /*
    * Escape closes, the page underneath must not scroll, and focus goes back to
    * whatever opened the overlay. That last part is the one most often skipped:
    * without it a keyboard user closes the dialog and their next Tab starts from
@@ -65,7 +92,8 @@ export default function Contact() {
           <div className={styles['links']}>
             {socials.map((social) => {
               const Fallback = FALLBACK_ICONS[social.id] ?? LuMail
-              const hasQr = Boolean(social.qr)
+              // Rows that do something here instead of going somewhere.
+              const intercepts = Boolean(social.qr || social.copy)
               const href = t(social.href)
               /*
                * mailto: and tel: must not open in a new tab - the handoff to the
@@ -86,11 +114,15 @@ export default function Contact() {
                   rel={isExternal ? 'noopener noreferrer' : undefined}
                   title={t(social.hint)}
                   onClick={
-                    hasQr
+                    intercepts
                       ? (event) => {
                           event.preventDefault()
-                          openerRef.current = event.currentTarget
-                          setQrFor(social)
+                          if (social.qr) {
+                            openerRef.current = event.currentTarget
+                            setQrFor(social)
+                          } else if (social.copy) {
+                            void copyHandle(social.copy, social.id)
+                          }
                         }
                       : undefined
                   }
@@ -113,7 +145,14 @@ export default function Contact() {
                   </span>
                   <span className={styles['linkText']}>
                     <span className={styles['linkLabel']}>{t(social.label)}</span>
-                    <span className={styles['linkHint']}>{t(social.hint)}</span>
+                    {/* Live only on the rows that can change, so the other six
+                        are not announced every time the locale switches. */}
+                    <span
+                      className={styles['linkHint']}
+                      aria-live={social.copy ? 'polite' : undefined}
+                    >
+                      {copiedId === social.id ? t(ui.actions.copied) : t(social.hint)}
+                    </span>
                   </span>
                   {isExternal ? <LuArrowUpRight className={styles['linkArrow']} aria-hidden="true" /> : null}
                 </a>

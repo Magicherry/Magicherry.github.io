@@ -121,6 +121,18 @@ export interface SocialLink {
    * reader gets - "QR code" alone does not say whose, or for what.
    */
   qr?: { image: string; alt: Localized }
+  /**
+   * Puts this string on the clipboard instead of navigating.
+   *
+   * For the handles that are not addresses. Discord is the case it exists for:
+   * a profile URL there is `/users/<numeric id>`, there is no route for a
+   * username, so the handle cannot be turned into a link no matter how it is
+   * dressed up - and a row that looks like a link and 404s is worse than one
+   * that plainly hands you the name. Copying is also what you actually do with
+   * it, since the only way to use a Discord handle is to paste it into Add
+   * Friend.
+   */
+  copy?: string
 }
 
 // LinkedIn was withdrawn from simple-icons over trademark, so its mark comes
@@ -176,6 +188,18 @@ export const socials: readonly SocialLink[] = [
     mark: simpleMark('wechat'),
     brand: '#07c160',
     qr: { image: wechatQr, alt: ui.a11y.wechatQr },
+  },
+  {
+    id: 'discord',
+    label: same('Discord'),
+    /* Never followed - the click is intercepted - but a real fragment rather
+       than `#`, so the row still has a target if scripting is off. */
+    href: same('#discord'),
+    /* The handle itself, because it is the thing you take away from this row. */
+    hint: same('magicherry'),
+    copy: 'magicherry',
+    mark: simpleMark('discord'),
+    brand: '#5865f2',
   },
   {
     id: 'bilibili',

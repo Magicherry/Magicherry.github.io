@@ -24,6 +24,7 @@ export const ui = {
     scroll: { en: 'Scroll', zh: '向下滚动' },
     close: { en: 'Close', zh: '关闭' },
     backToTop: { en: 'Back to top', zh: '回到顶部' },
+    copied: { en: 'Copied', zh: '已复制' },
   },
   /* Labelled by what pressing it *does*, not by the state it is in. */
   theme: {
