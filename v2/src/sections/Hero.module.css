@@ -351,16 +351,58 @@
     perspective: none;
   }
 
+  /*
+   * One column, so the card stops being a poster and becomes a profile row.
+   *
+   * Side by side it was a 380px column beside the copy and the proportion read
+   * correctly. Alone in a column two or three times that wide, the same card
+   * capped at 300px is a phone widget stranded in the middle of a tablet - and
+   * every part of it suffers at that width at once: a square portrait 300px
+   * across is 300px of scroll spent on decoration, the role line wraps mid
+   * phrase, and three stat columns get 82px each to fit a number and a label.
+   *
+   * Wider, with the portrait beside the name rather than above it, buys all of
+   * that back. The avatar is still there - sized like an avatar rather than like
+   * a hero image - and the card loses roughly a third of its height.
+   */
   .stack {
-    width: min(100%, 300px);
+    width: min(100%, 460px);
     transform-style: flat;
   }
 
   .card {
     padding: var(--space-4);
     transform: none;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'portrait meta'
+      'facts facts'
+      'stats stats';
   }
 
+  .portrait {
+    grid-area: portrait;
+    width: 92px;
+  }
+
+  .cardMeta {
+    grid-area: meta;
+    /* Stacked and vertically centred against the portrait. The name and handle
+       sat at opposite ends of a `space-between` row, and there is no far edge to
+       justify against once the text column is a couple of hundred pixels. */
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 3px;
+  }
+
+  .facts {
+    grid-area: facts;
+  }
+
+  .stats {
+    grid-area: stats;
+  }
 }
 
 @media (max-width: 760px) {
@@ -380,11 +422,8 @@
     display: none;
   }
 
-  /* The card is now below the fold-worthy part, so it can afford to be a little
-     tighter - and 300px of portrait on a 390px screen is most of the width. */
-  .stack {
-    width: min(100%, 270px);
-  }
+  /* No width override here: the 460px cap above is already past any phone's
+     column, so the card simply takes the width it is given. */
 
   .title {
     gap: var(--space-2);
