@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, useMotionValue, useScroll, useSpring, useTransform, type Variants } from 'motion/react'
 import { LuArrowDown, LuArrowUpRight, LuBriefcase, LuDownload, LuMapPin } from 'react-icons/lu'
 import GlassSurface from '@/components/glass/GlassSurface'
@@ -116,18 +116,63 @@ export default function Hero() {
 
   /* ---------------------------------------------------------- scroll parallax */
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] })
+
+  /*
+   * Both effects are switched off through a *motion value*, and never by
+   * withholding the `style` prop. That distinction is load-bearing, and getting
+   * it wrong is what made the hero copy vanish.
+   *
+   * Motion writes `transform` and `opacity` straight to the element; React never
+   * sees them and so never cleans them up. Dropping the `style` prop therefore
+   * does not undo them - it only stops anything updating them, freezing whatever
+   * was last painted onto the element permanently. Scroll a desktop window until
+   * the copy has faded out, drag it narrower than 981px, and the copy keeps the
+   * `opacity: 0` it was mid-fade at, with nothing left listening to put it back:
+   * greeting, name, role and both buttons gone until a reload, on a layout where
+   * the effect that hid them is not even supposed to run. (The card gives it
+   * away - it stays parked at the `+14%` the same frozen frame left it at, which
+   * is why it sits too low in the section.)
+   *
+   * Bound permanently and gated by a multiplier, switching off is an action
+   * rather than an absence: the gate goes to 0, opacity is driven back to 1 and
+   * both offsets back to 0, and the element ends up in the state the CSS expects.
+   */
+  const parallaxGate = useMotionValue(parallax ? 1 : 0)
+  useEffect(() => {
+    parallaxGate.set(parallax ? 1 : 0)
+  }, [parallax, parallaxGate])
+
   // The hero recedes as it leaves rather than simply scrolling off: the copy
   // drifts up faster than the page and dims, so the next section reads as
   // arriving *over* it.
-  const copyY = useTransform(scrollYProgress, [0, 1], ['0%', '-22%'])
-  const copyOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0])
-  const cardY = useTransform(scrollYProgress, [0, 1], ['0%', '14%'])
+  const copyY = useTransform<number, string>(
+    [scrollYProgress, parallaxGate],
+    ([p, gate]) => `${-22 * p * gate}%`,
+  )
+  const copyOpacity = useTransform<number, number>(
+    [scrollYProgress, parallaxGate],
+    // Clamped by hand - the input/output-range form of useTransform clamps for
+    // you, the function form does not, and progress keeps climbing past 1.
+    ([p, gate]) => 1 - Math.min(p / 0.75, 1) * gate,
+  )
+  const cardY = useTransform<number, string>(
+    [scrollYProgress, parallaxGate],
+    ([p, gate]) => `${14 * p * gate}%`,
+  )
 
-  // Spread rather than `style={cond ? undefined : {...}}`: under
-  // exactOptionalPropertyTypes an explicit `undefined` is not the same as an
-  // absent prop, and motion's style type rejects it.
-  const withParallax = <T extends object>(style: T) => (parallax ? { style } : {})
-  const withTilt = <T extends object>(style: T) => (tilt ? { style } : {})
+  /*
+   * The tilt needs no gate, because its inputs are already something we own: a
+   * pointer that cannot move the card while `tilt` is false. Zeroing them here
+   * covers the one case the pointer handlers cannot - the pointer never leaving,
+   * because the *breakpoint* moved rather than the cursor - and the spring then
+   * unwinds the card to flat instead of stranding it mid-rotation.
+   */
+  useEffect(() => {
+    if (!tilt) {
+      px.set(0)
+      py.set(0)
+    }
+  }, [px, py, tilt])
 
   const nameTarget = t(profile.name)
 
@@ -139,7 +184,7 @@ export default function Hero() {
           variants={stage}
           initial="hidden"
           animate={phase}
-          {...withParallax({ y: copyY, opacity: copyOpacity })}
+          style={{ y: copyY, opacity: copyOpacity }}
         >
           {/*
             * Greeting, name, cycling role - v1's hero, unchanged. The status
@@ -203,19 +248,19 @@ export default function Hero() {
           animate={phase}
           onPointerMove={handlePointer}
           onPointerLeave={resetPointer}
-          {...withParallax({ y: cardY })}
+          style={{ y: cardY }}
         >
-          <motion.div ref={cardRef} className={styles['stack']} {...withTilt({ rotateX, rotateY })}>
+          <motion.div ref={cardRef} className={styles['stack']} style={{ rotateX, rotateY }}>
             {/* Two chips behind the card, offset in Z and moving at a different
                 rate, which is what sells the stack as having real depth. */}
             <motion.div
               className={`${styles['chip']} ${styles['chipA']}`}
-              {...withTilt({ x: shiftX, y: shiftY })}
+              style={{ x: shiftX, y: shiftY }}
               aria-hidden="true"
             />
             <motion.div
               className={`${styles['chip']} ${styles['chipB']}`}
-              {...withTilt({ x: chipBX, y: chipBY })}
+              style={{ x: chipBX, y: chipBY }}
               aria-hidden="true"
             />
 

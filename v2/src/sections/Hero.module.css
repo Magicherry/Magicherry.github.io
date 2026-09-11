@@ -7,7 +7,25 @@
   display: grid;
   align-items: center;
   padding-block: clamp(6rem, 16vh, 9rem) clamp(5rem, 12vh, 7rem);
-  overflow: clip;
+  /*
+   * Clipped on the x axis only.
+   *
+   * The card stack deliberately paints outside its layout box: the chips sit at
+   * negative insets (`chipB` hangs 9% below the card), `translateZ(40px)` under
+   * the perspective renders the card a few percent larger than it measures, and
+   * the scroll parallax then pushes the whole stack down by 14% of its own
+   * height. Against a bottom padding of at most 7rem that overhang does not fit,
+   * and a full `clip` sliced it - the chip's 1px ring simply stopped in mid-air
+   * along the section's bottom edge, partway down a screen the visitor was still
+   * looking at.
+   *
+   * Nothing sits immediately below the hero but the next section's top padding,
+   * so letting the overhang paint there costs nothing and is what the receding
+   * parallax wants anyway. The x axis keeps its clip because the chips also
+   * reach 11-13% past the stack on both sides; `body` already clips that at the
+   * same boundary, so this is a local guard rather than the only one.
+   */
+  overflow: clip visible;
 }
 
 .grid {
