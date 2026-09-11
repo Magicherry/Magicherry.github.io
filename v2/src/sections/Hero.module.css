@@ -352,56 +352,27 @@
   }
 
   /*
-   * One column, so the card stops being a poster and becomes a profile row.
+   * Wider once it stands alone.
    *
-   * Side by side it was a 380px column beside the copy and the proportion read
-   * correctly. Alone in a column two or three times that wide, the same card
-   * capped at 300px is a phone widget stranded in the middle of a tablet - and
-   * every part of it suffers at that width at once: a square portrait 300px
-   * across is 300px of scroll spent on decoration, the role line wraps mid
-   * phrase, and three stat columns get 82px each to fit a number and a label.
+   * Side by side, 300px was a column beside the copy and the proportion read
+   * correctly. Alone in a column two or three times that wide it reads as a
+   * phone widget stranded in the middle of a tablet, and the contents feel it
+   * first: the role line wraps mid-phrase and three stat columns get 82px each
+   * to fit a number and a label.
    *
-   * Wider, with the portrait beside the name rather than above it, buys all of
-   * that back. The avatar is still there - sized like an avatar rather than like
-   * a hero image - and the card loses roughly a third of its height.
+   * The portrait stays on top at full width rather than shrinking to an avatar
+   * beside the name - it is the card, and the extra height is the point of it.
+   * Which is what caps this at 360 and not more: the portrait is square, so
+   * every pixel of width here is also a pixel of scroll.
    */
   .stack {
-    width: min(100%, 460px);
+    width: min(100%, 360px);
     transform-style: flat;
   }
 
   .card {
     padding: var(--space-4);
     transform: none;
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas:
-      'portrait meta'
-      'facts facts'
-      'stats stats';
-  }
-
-  .portrait {
-    grid-area: portrait;
-    width: 92px;
-  }
-
-  .cardMeta {
-    grid-area: meta;
-    /* Stacked and vertically centred against the portrait. The name and handle
-       sat at opposite ends of a `space-between` row, and there is no far edge to
-       justify against once the text column is a couple of hundred pixels. */
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 3px;
-  }
-
-  .facts {
-    grid-area: facts;
-  }
-
-  .stats {
-    grid-area: stats;
   }
 }
 
@@ -422,8 +393,13 @@
     display: none;
   }
 
-  /* No width override here: the 460px cap above is already past any phone's
-     column, so the card simply takes the width it is given. */
+  /* Still a step tighter than the tablet cap, but only a step. The card sits
+     below the fold-worthy part of the hero, so it can afford to give some width
+     back - and on a 390px screen the shell's own padding is already holding it
+     off both edges, which is the margin that was really wanted here. */
+  .stack {
+    width: min(100%, 320px);
+  }
 
   .title {
     gap: var(--space-2);
