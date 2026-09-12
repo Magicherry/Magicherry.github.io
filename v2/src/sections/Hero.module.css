@@ -430,6 +430,34 @@
     display: none;
   }
 
+  /*
+   * Centred, and only here.
+   *
+   * Left alignment earns its keep when there is a second column to align
+   * against - the copy's ragged right edge answers the card beside it. On a
+   * phone there is no second column: the card has moved below and is centred in
+   * the shell, so a left-aligned block above a centred one reads as a mistake
+   * rather than as a choice.
+   *
+   * Not extended up to the 980px breakpoint where the grid first collapses,
+   * though. The column there is most of a tablet wide, and centring a greeting,
+   * a name and a cycling role across ~900px gives every line a different centre
+   * - the text appears to shuffle sideways as the typewriter types.
+   */
+  .copy {
+    text-align: center;
+  }
+
+  /* The greeting is an inline-flex row and the name a block, so neither is moved
+     by `text-align` on its own - the column has to centre its items too. */
+  .title {
+    align-items: center;
+  }
+
+  .actions {
+    justify-content: center;
+  }
+
   /* Still a step tighter than the tablet cap, but only a step. The card sits
      below the fold-worthy part of the hero, so it can afford to give some width
      back - and on a 390px screen the shell's own padding is already holding it
