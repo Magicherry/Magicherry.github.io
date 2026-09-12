@@ -60,14 +60,11 @@
  * or, worse, a leftover track ringing a finished button. The handover is the
  * point: the arc was the progress, the fill *is* the arrival.
  *
- * Nothing here touches the drop shadow or the glass wash any more, and both of
- * those were deliberate retreats. Tinting the shadow meant overriding
- * `--glass-drop` with a two-layer stack where the theme supplies three or five,
- * and box-shadow lists of unequal length are not interpolable - so the shadow
- * jumped in one frame under a fill that took the full duration. The wash stays
- * for the same reason in reverse: `background-image: none` cannot be
- * transitioned at all, and a white gradient raking one corner of a blue disc is
- * a lit surface, which is what every other surface here does anyway.
+ * Nothing here touches the drop shadow, and that was a deliberate retreat.
+ * Tinting it meant overriding `--glass-drop` with a two-layer stack where the
+ * theme supplies three or five, and box-shadow lists of unequal length are not
+ * interpolable - so the shadow jumped in one frame under a fill that took the
+ * full duration.
  */
 /*
  * Restated in full, and through `.wrap .button` so it outranks `.surface`
@@ -88,8 +85,27 @@
     color var(--dur-slow) var(--ease-enter);
 }
 
+/*
+ * Filled, the disc also sheds the two white layers the glass build paints over
+ * every surface, because on a saturated ground they stop being light and start
+ * being a smear. Light mode is where it showed: `--glass-fill-strong` is 42%
+ * white there and `--glass-inner-glow` 50%, and both rake the same top-left
+ * corner along `--surface-light-angle`, so the accent disc arrived with a pale
+ * blotch across it.
+ *
+ * They come off by different means, which is the fiddly part. The inner glow is
+ * a colour inside a box-shadow layer, so turning it transparent keeps the layer
+ * count identical and the change interpolates with everything else. The wash is
+ * a `background-image`, which no browser transitions - it can only be dropped
+ * outright. That is acceptable only because of what it is worth at rest: 42%
+ * white over a 72%-white fill on a near-white card is close to invisible, so
+ * losing it at the start of the fade costs nothing you can see, where keeping it
+ * costs a blotch for the whole 620ms and every frame after.
+ */
 .button[data-complete] {
   background-color: var(--accent);
+  background-image: none;
+  --glass-inner-glow: transparent;
   color: var(--accent-contrast);
 }
 
