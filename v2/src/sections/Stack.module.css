@@ -110,6 +110,19 @@
   filter: invert(1) brightness(1.6);
 }
 
+/*
+ * The few logos that are tiles rather than silhouettes.
+ *
+ * Both of the ones here arrive with their own rounded corners already, so this
+ * is a guarantee rather than a correction: it costs nothing when the vendor has
+ * rounded the artwork and saves a hard-edged square from sitting among thirty
+ * transparent glyphs when they have not. 20% matches the `rx: 8` on LangChain's
+ * own 40-unit viewBox, so their shape is what sets the radius for the rest.
+ */
+.icon img[data-tile] {
+  border-radius: 20%;
+}
+
 .name {
   font-size: var(--text-xs);
   line-height: 1.3;

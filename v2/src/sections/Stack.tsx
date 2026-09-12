@@ -17,7 +17,15 @@ function Mark({ item }: { item: StackItem }) {
       title={item.name}
     >
       <span className={styles['icon']} data-adaptive={item.adaptive || undefined}>
-        <img src={item.icon} alt="" width={22} height={22} loading="lazy" decoding="async" />
+        <img
+          src={item.icon}
+          alt=""
+          width={22}
+          height={22}
+          loading="lazy"
+          decoding="async"
+          data-tile={item.tile || undefined}
+        />
       </span>
       <span className={styles['name']}>{item.name}</span>
     </a>

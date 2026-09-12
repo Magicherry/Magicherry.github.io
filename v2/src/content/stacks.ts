@@ -7,6 +7,39 @@ import openaiMark from '@/assets/marks/openai.svg'
  * is the bull alone, cropped from the official logo and squared.
  */
 import fnosMark from '@/assets/marks/fnos.png'
+/*
+ * Straight from each vendor's own site, because simple-icons cannot represent
+ * either one. Every icon in that catalogue is a single monochrome path filled
+ * with the brand's registered hex, which works for a logo that *is* a
+ * silhouette and fails for a logo that is a coloured tile: LM Studio's
+ * registered hex is #000000, so the catalogue hands back a black rectangle of
+ * bars where the real mark is a violet gradient, and LangChain's blue glyph
+ * loses the near-black ground it is drawn on.
+ *
+ * LangChain publishes theirs as a 550-byte SVG, so that is what this is - the
+ * rounded rect and two strokes, vector and exact. LM Studio ships no vector at
+ * all; the 192x192 PNG behind their favicon and apple-touch-icon is the largest
+ * official raster there is.
+ */
+import langchainMark from '@/assets/marks/langchain.svg'
+import lmstudioMark from '@/assets/marks/lmstudio.png'
+/*
+ * Django, Flask and Gin, likewise from the projects themselves.
+ *
+ * Flask is the one that was actually wrong rather than merely generic. devicon
+ * draws it as a black horn, so it carried `adaptive` to survive the dark theme -
+ * but the icon the project ships is teal (#3babc3), legible on both grounds and
+ * needing no inversion at all. The flag was correcting a problem the real logo
+ * does not have.
+ *
+ * Django's is a tile, dark green with a white "dj", so it drops `adaptive` for
+ * the same reason the two above do: inverting a coloured ground recolours it.
+ * Gin's is the gopher-in-a-glass mascot - the catalogue reduces it to a plain
+ * martini outline, which is a different drawing, not a simplified one.
+ */
+import djangoMark from '@/assets/marks/django.png'
+import flaskMark from '@/assets/marks/flask.svg'
+import ginMark from '@/assets/marks/gin.png'
 
 /**
  * Icons are served from jsDelivr rather than bundled. 35 marks would add real
@@ -14,12 +47,13 @@ import fnosMark from '@/assets/marks/fnos.png'
  * lazy + async-decoded and the grid reserves its box, so a slow or blocked CDN
  * degrades to a labelled cell instead of a layout shift.
  *
- * One exception, and it is the reason to keep this comment honest: OpenAI's
- * mark is bundled. `cdn.simpleicons.org/openai` started returning 404 even
- * though the npm package still ships `icons/openai.svg` - the render service's
- * slug index and the package contents drifted apart. A mark that has already
- * disappeared once is not worth re-hosting on a second catalogue, and one 1.5 kB
- * file inlines as a data URI rather than costing a request at all.
+ * The exceptions are all above, and they fall into two kinds. OpenAI's is a
+ * failure: `cdn.simpleicons.org/openai` started returning 404 even though the
+ * npm package still ships `icons/openai.svg`, the render service's slug index
+ * and the package contents having drifted apart - and a mark that has already
+ * disappeared once is not worth re-hosting on a second catalogue. The rest are
+ * a mismatch: fnOS, LangChain and LM Studio have logos the catalogues cannot
+ * carry, being coloured tiles rather than silhouettes.
  */
 const devicon = (path: string) =>
   `https://cdn.jsdelivr.net/gh/devicons/devicon@2.17.0/icons/${path}.svg`
@@ -31,6 +65,14 @@ export interface StackItem {
   href: string
   /** Marks that are near-black or near-white and vanish in one of the themes. */
   adaptive?: boolean
+  /**
+   * The mark is a filled tile with its own ground, not a glyph on transparent.
+   *
+   * Gets a corner radius so a vendor who shipped a hard-edged square lands in
+   * the same shape as one who rounded it themselves. Never combine with
+   * `adaptive`: inverting a coloured tile does not rescue it, it recolours it.
+   */
+  tile?: boolean
 }
 
 export interface StackGroup {
@@ -69,9 +111,9 @@ export const techStack: readonly StackGroup[] = [
       { name: 'Node.js', icon: devicon('nodejs/nodejs-original'), href: 'https://nodejs.org/' },
       { name: 'Spring Boot', icon: devicon('spring/spring-original'), href: 'https://spring.io/projects/spring-boot' },
       { name: 'FastAPI', icon: simple('fastapi'), href: 'https://fastapi.tiangolo.com/' },
-      { name: 'Django', icon: devicon('django/django-plain'), href: 'https://www.djangoproject.com/', adaptive: true },
-      { name: 'Flask', icon: devicon('flask/flask-original'), href: 'https://flask.palletsprojects.com/', adaptive: true },
-      { name: 'Gin', icon: simple('gin'), href: 'https://gin-gonic.com/' },
+      { name: 'Django', icon: djangoMark, href: 'https://www.djangoproject.com/', tile: true },
+      { name: 'Flask', icon: flaskMark, href: 'https://flask.palletsprojects.com/' },
+      { name: 'Gin', icon: ginMark, href: 'https://gin-gonic.com/' },
     ],
   },
   {
@@ -91,8 +133,10 @@ export const techStack: readonly StackGroup[] = [
     items: [
       { name: 'PyTorch', icon: devicon('pytorch/pytorch-original'), href: 'https://pytorch.org/' },
       { name: 'TensorFlow', icon: devicon('tensorflow/tensorflow-original'), href: 'https://www.tensorflow.org/' },
-      { name: 'LangChain', icon: simple('langchain'), href: 'https://www.langchain.com/' },
+      { name: 'LangChain', icon: langchainMark, href: 'https://www.langchain.com/', tile: true },
+      { name: 'LangGraph', icon: simple('langgraph'), href: 'https://www.langchain.com/langgraph' },
       { name: 'Ollama', icon: simple('ollama'), href: 'https://ollama.com/', adaptive: true },
+      { name: 'LM Studio', icon: lmstudioMark, href: 'https://lmstudio.ai/', tile: true },
     ],
   },
   {
@@ -128,12 +172,17 @@ export const toolStack: readonly StackGroup[] = [
     id: 'ai',
     label: { en: 'AI Coding', zh: 'AI 编程' },
     items: [
-      { name: 'Claude Code', icon: `${simple('claude')}/CC785C`, href: 'https://www.anthropic.com/claude-code' },
+      /* These two used to pin a hex - /CC785C and /4D6BFE - which is exactly the
+         eyeballing the note at the top of this file says the catalogue exists to
+         avoid. Both had since drifted from the registered values (#D97757 and
+         #5786FE), so the override was making them subtly wrong rather than
+         safer. Dropped: no colour parameter means the brand's own hex. */
+      { name: 'Claude Code', icon: simple('claude'), href: 'https://www.anthropic.com/claude-code' },
       { name: 'Codex', icon: openaiMark, href: 'https://developers.openai.com/codex', adaptive: true },
       { name: 'Copilot', icon: simple('githubcopilot'), href: 'https://github.com/features/copilot', adaptive: true },
       {
         name: 'DeepSeek Harness',
-        icon: `${simple('deepseek')}/4D6BFE`,
+        icon: simple('deepseek'),
         href: 'https://github.com/deepseek-ai/DeepSeek-Harness',
       },
     ],
