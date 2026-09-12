@@ -2,6 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { usePrefersReducedMotion } from '@/lib/hooks/useMediaQuery'
 import styles from './Typewriter.module.css'
 
+/**
+ * Stands in for the typed text between words. Named and escaped rather than
+ * pasted in: a literal zero-width space is invisible in an editor, which makes
+ * it the kind of character someone deletes while tidying whitespace and cannot
+ * see they have removed. See the comment at the render site for what it holds up.
+ */
+const ZWSP = '\u200B'
+
 const TYPE_MS = 62
 const DELETE_MS = 32
 const HOLD_MS = 1650
@@ -78,7 +86,25 @@ export default function Typewriter({
 
   return (
     <span className={styles['line']}>
-      <span aria-hidden="true">{text}</span>
+      {/*
+       * The zero-width space is what stops the page twitching between words.
+       *
+       * `.line` is an `inline-flex` and this span is its first flex item, which
+       * makes two things depend on the span having content. Its height: empty,
+       * it is a flex item with nothing in it and contributes 0, so the line's
+       * height falls back to the caret's 1.05em where a moment ago it was the
+       * text's 1.55em line-height. And its baseline: an inline-flex takes its
+       * baseline from its first item, and an item with no baseline to give makes
+       * the box fall back to aligning by its bottom edge instead - so the whole
+       * line hops vertically inside the paragraph at the same time as the
+       * paragraph changes height.
+       *
+       * Both go away if the span is never truly empty. U+200B renders nothing,
+       * measures nothing horizontally, and still generates the line box that
+       * fixes the height and the baseline for good. It sits inside an
+       * `aria-hidden` span, so no assistive tech ever sees it.
+       */}
+      <span aria-hidden="true">{text || ZWSP}</span>
       <span className={styles['caret']} aria-hidden="true" />
       <span className="visually-hidden">{words.join(', ')}</span>
     </span>

@@ -1,8 +1,15 @@
+/*
+ * No `min-height`. It used to carry 1.4em, propping the line up for the frames
+ * between words when the text span emptied and the box collapsed to the caret's
+ * 1.05em - but 1.4em is *below* the 1.55em the line actually measures with text
+ * in it, so it set the floor of a two-value oscillation instead of removing it.
+ * The zero-width space in the component fixes the height at one value, which is
+ * what this was reaching for, and leaves this with nothing to do.
+ */
 .line {
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  min-height: 1.4em;
   color: var(--accent);
   font-weight: 560;
   letter-spacing: var(--tracking-tight);
