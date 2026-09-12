@@ -80,12 +80,36 @@ export default function Preloader({ onDone }: { onDone: () => void }) {
           transition={{ duration: 0.85, ease: [0.76, 0, 0.24, 1] }}
           aria-hidden="true"
         >
+          {/*
+           * Mark over name over meter, which is the account-screen column: the
+           * thing you recognise first, what it is called, and then the one piece
+           * of state. The wordmark used to stand alone and carry the whole screen
+           * at 3rem; with a mark above it, it can step back to being a caption
+           * for it.
+           */}
           <div className={styles['stage']}>
+            <motion.img
+              className={styles['brand']}
+              src={profile.avatar}
+              alt=""
+              width={164}
+              height={164}
+              /* First paint of the session, and the nav and hero card reuse the
+                 same file - so fetching it here warms them both. */
+              fetchPriority="high"
+              decoding="async"
+              initial={reducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.86, filter: 'blur(14px)' }}
+              animate={reducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              transition={{ duration: reducedMotion ? 0.2 : 0.75, ease: [0.16, 1, 0.3, 1] }}
+            />
+
             <motion.span
               className={styles['wordmark']}
-              initial={{ opacity: 0, scale: 0.9, filter: 'blur(12px)' }}
-              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 10, filter: 'blur(10px)' }}
+              animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, filter: 'blur(0px)' }}
+              /* A beat behind the mark, so the two read as a sequence rather than
+                 as one block arriving with a soft edge. */
+              transition={{ duration: reducedMotion ? 0.2 : 0.7, delay: reducedMotion ? 0 : 0.14, ease: [0.16, 1, 0.3, 1] }}
             >
               {profile.handle}
             </motion.span>

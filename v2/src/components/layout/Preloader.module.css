@@ -16,7 +16,40 @@
 }
 
 .stage {
+  display: grid;
+  justify-items: center;
+  /* Opened up with the mark. 1rem under a 100px circle is a caption; under a
+     160px one it is a collision. */
+  gap: var(--space-5);
   padding: var(--space-2) var(--space-4);
+}
+
+/*
+ * The mark, lit rather than framed.
+ *
+ * The artwork already ends in its own pale circle, so a border here would be a
+ * second edge a pixel outside the first. What it does need is separation from a
+ * near-black screen, and the halo does that without drawing anything: a hairline
+ * of accent at the boundary, then a wide accent bloom that sits in the same hue
+ * as the radial already behind it - so the mark reads as the source of that glow
+ * rather than as a sticker on top of it.
+ */
+.brand {
+  /*
+   * Sized to be the subject of the screen, not an ornament above the name.
+   * The artwork is a small owl inside a lot of pale circle, so it carries much
+   * less ink than its box suggests - at ~100px the bird itself was barely 60px
+   * and read as a favicon that had wandered in. The glow widens with it: a
+   * bloom tuned to a 100px source is a tight ring around a 160px one.
+   */
+  width: clamp(120px, 32vw, 164px);
+  height: clamp(120px, 32vw, 164px);
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent),
+    0 0 78px -12px color-mix(in srgb, var(--accent) 45%, transparent),
+    0 26px 58px -30px rgba(0, 0, 0, 0.7);
 }
 
 /*
@@ -24,10 +57,14 @@
  * 5.5rem; ten letters at that size run past 480px and would overflow any phone.
  * The tracking eases off for the same reason - a hard negative letterspace is a
  * monogram treatment, and at word length it just makes the letters collide.
+ *
+ * A step down from the 3rem it held when it was alone on the screen. With the
+ * mark above it there are two things competing to be looked at first, and the
+ * one that should win is the one you recognise without reading.
  */
 .wordmark {
   display: block;
-  font-size: clamp(1.65rem, 7vw, 3rem);
+  font-size: clamp(1.35rem, 5.4vw, 2.1rem);
   font-weight: 700;
   letter-spacing: var(--tracking-tight);
   line-height: 1;
