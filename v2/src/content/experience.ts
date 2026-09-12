@@ -154,7 +154,13 @@ export interface Education {
 export const education: readonly Education[] = [
   {
     degree: { en: 'M.S. in Computer Science', zh: '计算机科学 硕士' },
-    school: { en: 'Rutgers University', zh: '罗格斯大学' },
+    /* The campus, not just the university. Rutgers is three of them and the
+       degree is from one - and the Chinese side has to name it too, or the two
+       readings of the same card stop agreeing. */
+    school: {
+      en: 'Rutgers University-New Brunswick',
+      zh: '罗格斯大学新布朗斯维克分校',
+    },
     duration: '2024 — 2026',
     crest: rutgersCrest,
     url: 'https://www.cs.rutgers.edu/',
