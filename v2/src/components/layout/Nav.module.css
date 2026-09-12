@@ -146,8 +146,22 @@
   transition: color var(--dur-base) var(--ease-enter);
 }
 
-.link:hover {
-  color: var(--fg-strong);
+/*
+ * Hover reaches the accent, which is where the active item already lives - so
+ * hovering previews the colour the label is about to take rather than nudging it
+ * a shade brighter. The pill and the 560 weight are what still separate the two.
+ *
+ * Behind `hover: hover`, and that guard is doing real work now. `:hover` sticks
+ * after a tap on a touch device, and this same `.link` is the docked mobile nav:
+ * an unguarded rule would leave the label you last tapped sitting in the accent
+ * colour alongside whichever item the scroll spy actually made active - two
+ * items claiming to be current. At `--fg-strong` that was too faint to matter;
+ * at the accent it would be a lie.
+ */
+@media (hover: hover) {
+  .link:hover {
+    color: var(--accent);
+  }
 }
 
 /*
