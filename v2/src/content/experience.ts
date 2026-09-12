@@ -32,7 +32,9 @@ export const roles: readonly Role[] = [
       en: 'AI Agent Engineer & Business Planning Assistant Analyst',
       zh: 'AI Agent 工程师 & 业务规划助理分析师',
     },
-    company: { en: 'NIO Inc.', zh: '上海蔚来汽车有限公司' },
+    /* The registered name on both sides, as the CV prints it. The Chinese side
+       already matched; "NIO Inc." was the English one drifting. */
+    company: { en: 'Shanghai NIO Automobile Co., Ltd.', zh: '上海蔚来汽车有限公司' },
     companyUrl: 'https://www.nio.com/',
     focus: {
       en: 'Enterprise AI Agents · LLM/RAG · Business Planning',

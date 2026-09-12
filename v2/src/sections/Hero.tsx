@@ -1,6 +1,13 @@
 import { useEffect, useRef } from 'react'
 import { motion, useMotionValue, useScroll, useSpring, useTransform, type Variants } from 'motion/react'
-import { LuArrowDown, LuArrowUpRight, LuBriefcase, LuDownload, LuMapPin } from 'react-icons/lu'
+import {
+  LuArrowDown,
+  LuArrowUpRight,
+  LuBriefcase,
+  LuBuilding2,
+  LuDownload,
+  LuMapPin,
+} from 'react-icons/lu'
 import GlassSurface from '@/components/glass/GlassSurface'
 import Action from '@/components/Action'
 import Typewriter from '@/components/fx/Typewriter'
@@ -282,10 +289,23 @@ export default function Hero() {
               </div>
 
               <ul className={styles['facts']}>
+                {/*
+                  * Role and employer on separate rows, each with its own glyph.
+                  *
+                  * Joined by "@" they were one long string in a ~300px column,
+                  * so the line always wrapped - and it wrapped wherever the text
+                  * happened to run out, which left the company dangling on a
+                  * second line with no icon beside it and nothing to say it was
+                  * still part of the row above. Two facts, two rows, two icons,
+                  * matching the location beneath them.
+                  */}
                 <li>
                   <LuBriefcase aria-hidden="true" />
+                  <span>{profile.current.titles.map(t).join(' & ')}</span>
+                </li>
+                <li>
+                  <LuBuilding2 aria-hidden="true" />
                   <span>
-                    {profile.current.titles.map(t).join(' & ')} @{' '}
                     <a
                       className={styles['company']}
                       href={profile.current.companyUrl}

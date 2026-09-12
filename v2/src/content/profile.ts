@@ -38,7 +38,13 @@ export const profile = {
       { en: 'AI Agent Engineer', zh: 'AI Agent 工程师' },
       { en: 'Business Planning Assistant', zh: '业务规划助理' },
     ] satisfies readonly Localized[],
-    company: { en: 'NIO', zh: '蔚来' } satisfies Localized,
+    /* The registered name, as the CV prints it, now that it has a row to itself
+       - "NIO" was a shorthand the old `title @ company` line could not afford to
+       spell out. */
+    company: {
+      en: 'Shanghai NIO Automobile Co., Ltd.',
+      zh: '上海蔚来汽车有限公司',
+    } satisfies Localized,
     companyUrl: 'https://www.nio.com/',
   },
   location: { en: 'Shanghai, China', zh: '中国 · 上海' } satisfies Localized,

@@ -167,10 +167,21 @@
   color: var(--accent);
 }
 
+/*
+ * No rule under it. On its own row the company is already the strongest thing
+ * in the list - foreground weight against three muted lines - and an accent
+ * underline running the width of a registered company name was drawing a second
+ * horizontal into a block whose whole structure is horizontal rows.
+ *
+ * The cost is that at rest it no longer looks like a link; the colour shift on
+ * hover is all that says so, and touch has no hover at all. Acceptable here
+ * because it is a footnote to the fact, not a call to action - the same reason
+ * the Work timeline's company sets itself apart with colour and a glyph rather
+ * than a rule.
+ */
 .company {
   color: var(--fg-strong);
   font-weight: 560;
-  box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--accent) 55%, transparent);
   transition: color var(--dur-fast) var(--ease-enter);
 }
 
