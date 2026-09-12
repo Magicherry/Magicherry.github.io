@@ -47,6 +47,7 @@ export const ui = {
     },
     stack: {
       title: { en: 'Professional **Skillset**', zh: '我常用的**技术栈**' },
+      certifications: { en: 'Certifications', zh: '专业认证' },
       tools: { en: 'Tools I Use', zh: '工具与工作流' },
     },
     work: {

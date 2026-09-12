@@ -166,3 +166,57 @@ export const toolStack: readonly StackGroup[] = [
     ],
   },
 ]
+
+/**
+ * Professional certifications, as printed on the CV.
+ *
+ * Issuer and credential are separate fields rather than one string, because the
+ * issuer is the only part with a logo and the two localize independently: the
+ * Chinese CV keeps NVIDIA's course titles in English but writes the other two
+ * issuers as 阿里云 and 华为. Splitting them means neither has to be invented in
+ * the locale the CV does not spell out.
+ */
+export interface Certification {
+  id: string
+  /** The credential, without the issuer - that is the line beneath it. */
+  name: Localized
+  issuer: Localized
+  icon: string
+  /**
+   * The issuer's certification programme, not a verification link. These are
+   * printed credentials rather than badges with public proof URLs, so the link
+   * says what the qualification *is* instead of implying it can be checked here.
+   */
+  href: string
+}
+
+export const certifications: readonly Certification[] = [
+  {
+    id: 'nvidia-nlp',
+    name: { en: 'Transformer-Based NLP', zh: 'Transformer-Based NLP' },
+    issuer: { en: 'NVIDIA', zh: 'NVIDIA' },
+    icon: simple('nvidia'),
+    href: 'https://www.nvidia.com/en-us/training/',
+  },
+  {
+    id: 'nvidia-dl',
+    name: { en: 'Intro to Deep Learning', zh: 'Intro to Deep Learning' },
+    issuer: { en: 'NVIDIA', zh: 'NVIDIA' },
+    icon: simple('nvidia'),
+    href: 'https://www.nvidia.com/en-us/training/',
+  },
+  {
+    id: 'aliyun-aca',
+    name: { en: 'ACA (Big Data)', zh: 'ACA（大数据）' },
+    issuer: { en: 'Alibaba Cloud', zh: '阿里云' },
+    icon: simple('alibabacloud'),
+    href: 'https://edu.alibabacloud.com/certification',
+  },
+  {
+    id: 'huawei-hcia',
+    name: { en: 'HCIA (Intelligent Computing)', zh: 'HCIA（智能计算）' },
+    issuer: { en: 'Huawei', zh: '华为' },
+    icon: simple('huawei'),
+    href: 'https://e.huawei.com/en/talent/cert/',
+  },
+]

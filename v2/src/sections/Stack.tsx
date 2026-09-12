@@ -3,7 +3,7 @@ import Section from '@/components/Section'
 import Reveal, { revealItem } from '@/components/Reveal'
 import GlassSurface from '@/components/glass/GlassSurface'
 import { useLocale } from '@/lib/i18n'
-import { techStack, toolStack, type StackItem } from '@/content/stacks'
+import { certifications, techStack, toolStack, type StackItem } from '@/content/stacks'
 import { ui } from '@/content/copy'
 import styles from './Stack.module.css'
 
@@ -47,8 +47,42 @@ export default function Stack() {
         ))}
       </div>
 
-      <Reveal className={styles['tools']} stagger={0.06}>
-        <h3 className={styles['toolsTitle']}>{t(ui.sections.stack.tools)}</h3>
+      {/*
+        * Before the tools, not after. The section runs skills -> credentials ->
+        * tools, which is the order they carry weight in: what someone else
+        * certified is a stronger claim than which editor I open.
+        */}
+      <Reveal className={styles['block']} stagger={0.06}>
+        <h3 className={styles['blockTitle']}>{t(ui.sections.stack.certifications)}</h3>
+
+        <ul className={styles['certs']}>
+          {certifications.map((cert) => (
+            <motion.li key={cert.id} variants={revealItem}>
+              <a
+                className={styles['cert']}
+                href={cert.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                /* Issuer first here, because the tooltip has no layout to say
+                   which line is which - "NVIDIA - Transformer-Based NLP" reads
+                   as a credential, the reverse reads as two loose nouns. */
+                title={`${t(cert.issuer)} — ${t(cert.name)}`}
+              >
+                <span className={styles['certIcon']}>
+                  <img src={cert.icon} alt="" width={26} height={26} loading="lazy" decoding="async" />
+                </span>
+                <span className={styles['certText']}>
+                  <span className={styles['certName']}>{t(cert.name)}</span>
+                  <span className={styles['certIssuer']}>{t(cert.issuer)}</span>
+                </span>
+              </a>
+            </motion.li>
+          ))}
+        </ul>
+      </Reveal>
+
+      <Reveal className={styles['block']} stagger={0.06}>
+        <h3 className={styles['blockTitle']}>{t(ui.sections.stack.tools)}</h3>
 
         {/* One labelled row per category. A definition list is the honest
             element here: each row really is a term and the things under it. */}
