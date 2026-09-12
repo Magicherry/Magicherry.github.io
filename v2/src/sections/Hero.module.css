@@ -458,6 +458,83 @@
     justify-content: center;
   }
 
+  /*
+   * Bigger, and sized in vw rather than stepped up a fixed amount.
+   *
+   * The shared tokens both bottom out on a phone - `--text-4xl` sits on its
+   * 2.1rem floor below ~420px and `--text-xl` on 1.25rem below ~560px - so every
+   * handset from a 360px Android to a 430px Pro Max was getting identical type
+   * on a column 70px wider. A viewport unit inside the clamp gives that width
+   * back to the reader instead of leaving it as margin.
+   *
+   * The ceilings are the wrap points, measured against the longest string each
+   * line has to carry. For the name that is "I am Daniel Zhou." (the Chinese
+   * reading is six glyphs and has room to spare); for the role it is "Machine
+   * Learning Engineer", which is the real constraint on that line and why it
+   * lands well under the greeting's own ceiling despite them sharing a token
+   * today.
+   */
+  .greeting {
+    font-size: clamp(1.35rem, 5.6vw, 1.6rem);
+  }
+
+  .nameLine {
+    /* 10vw, not 10.5: at the wider coefficient a 360px screen lands within a
+       pixel of wrapping, and one-line on most phones with two on the narrowest
+       is a worse outcome than a slightly smaller line everywhere. */
+    font-size: clamp(2.2rem, 10vw, 3.1rem);
+  }
+
+  /*
+   * Insurance rather than a fix: if the line ever wraps it has to break after
+   * "I am", because a name split across two lines is worse than a long one.
+   *
+   * The failure mode if the name itself ever outgrows the column is a clip, not
+   * a wrap - `.hero` is `overflow: clip` on the x axis. Worth knowing, not worth
+   * guarding today: "Daniel Zhou." occupies 258px of a 393px column at the top
+   * of the clamp, so there is half a name of headroom.
+   */
+  .name {
+    white-space: nowrap;
+  }
+
+  .role {
+    font-size: clamp(1.4rem, 6vw, 1.65rem);
+  }
+
+  /*
+   * Chinese gets its own scale, and it is not because there happens to be room.
+   *
+   * A Han glyph carries several times the stroke count of a Latin letter in the
+   * same em, so the two are not equally legible at one font-size - CJK needs to
+   * be set larger to read as comfortably. Holding both locales to one value
+   * meant the English measurement was setting the Chinese size, and the English
+   * strings are much the longer: "Machine Learning Engineer" is 12.4em against
+   * "AI Agent 工程师"'s 7.4em, and "I am Daniel Zhou." 8.1em against 5.8em.
+   * The role line was the worse off of the two, sitting at half the size its own
+   * text could have taken.
+   *
+   * `:lang(zh)` rather than a `:global` selector on the root: `i18n.tsx` already
+   * writes `document.documentElement.lang` on every switch, and language-range
+   * matching means `zh` catches the `zh-CN` it sets. The type scale simply reads
+   * the same fact the rest of the page does.
+   *
+   * Mobile only. The shared tokens do not bottom out on a desktop and the column
+   * is wide enough there that neither locale is being squeezed - this is a
+   * correction to a floor, not a new bilingual type system.
+   */
+  .greeting:lang(zh) {
+    font-size: clamp(1.5rem, 6.2vw, 1.75rem);
+  }
+
+  .nameLine:lang(zh) {
+    font-size: clamp(2.85rem, 12.8vw, 3.5rem);
+  }
+
+  .role:lang(zh) {
+    font-size: clamp(1.75rem, 7.7vw, 2.1rem);
+  }
+
   /* Still a step tighter than the tablet cap, but only a step. The card sits
      below the fold-worthy part of the hero, so it can afford to give some width
      back - and on a 390px screen the shell's own padding is already holding it
