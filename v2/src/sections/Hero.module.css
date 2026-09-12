@@ -247,9 +247,35 @@
   background: var(--portrait-bed);
 }
 
+/*
+ * Two declarations against the white hairline that used to appear under the
+ * photo, and no mask - softening the boundary was tried at three widths and read
+ * as the picture dissolving every time, which is a much louder problem than the
+ * one it was solving.
+ *
+ * The line is a clipping artefact, not a border. A rounded `overflow: hidden`
+ * box antialiases what it clips, so wherever the container's edge lands between
+ * device pixels the photo's last row is blended with what sits behind it. Behind
+ * it is `--portrait-bed`, near-white paper because the portrait is a real cutout
+ * and needs something to stand on - and the bottom of this photo is a black
+ * shirt running the full width. Every other edge blends white into white and is
+ * invisible; that one blends white into black and reads as a drawn line.
+ *
+ * So the image is given a pixel more height than its box. `object-fit: cover`
+ * means that costs a hair more crop on a photo nobody is measuring, the extra
+ * row is clipped away, and the blend at the edge now happens between two rows of
+ * the image rather than against the bed. A fractional scale would do the same
+ * job but would have to compose with any transform the card puts here later; a
+ * length does not.
+ *
+ * `display: block` is the second half: as an inline element the image sits on a
+ * text baseline, an unrelated and well-known source of gaps under images that
+ * has no business being involved in this at all.
+ */
 .portrait img {
+  display: block;
   width: 100%;
-  height: 100%;
+  height: calc(100% + 1px);
   object-fit: cover;
   /* A hair of extra contrast so the portrait holds its own against the
      saturation lift the glass applies to everything behind it. */
