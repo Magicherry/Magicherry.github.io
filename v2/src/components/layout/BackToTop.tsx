@@ -32,8 +32,17 @@ export default function BackToTop() {
   const reducedMotion = usePrefersReducedMotion()
   const { scrollY, scrollYProgress } = useScroll()
   const [visible, setVisible] = useState(false)
+  const [complete, setComplete] = useState(false)
 
   useMotionValueEvent(scrollY, 'change', (value) => setVisible(value > APPEAR_AT))
+  /*
+   * 0.995, not 1. The ring's own stroke has round caps, so at 99.5% its two ends
+   * are already overlapping - the last half-percent is about 0.7px of arc and
+   * cannot be seen. Waiting for an exact 1 would mean the fill never arrives on
+   * the devices that land at 0.9997, which is most of them once a URL bar or a
+   * sub-pixel scroll height is involved.
+   */
+  useMotionValueEvent(scrollYProgress, 'change', (value) => setComplete(value >= 0.995))
 
   return (
     <motion.div
@@ -57,6 +66,7 @@ export default function BackToTop() {
         interactive
         lightAngle={120}
         className={styles['button']}
+        data-complete={complete || undefined}
         onClick={() => scrollTo('home')}
         aria-label={t(ui.actions.backToTop)}
         title={t(ui.actions.backToTop)}
@@ -68,12 +78,12 @@ export default function BackToTop() {
          * what lets `pathLength` stay a plain 0..1 value.
          */}
         <svg className={styles['ring']} viewBox="0 0 48 48" aria-hidden="true">
-          <circle className={styles['track']} cx="24" cy="24" r="21" />
+          <circle className={styles['track']} cx="24" cy="24" r="22.5" />
           <motion.circle
             className={styles['bar']}
             cx="24"
             cy="24"
-            r="21"
+            r="22.5"
             style={{ pathLength: scrollYProgress }}
           />
         </svg>

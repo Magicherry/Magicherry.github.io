@@ -49,12 +49,73 @@
 }
 
 /*
- * The ring is now the button's only circle, and it is still held in rather than
- * run along the edge: `r: 21` against a 24 centre puts the 2.5px stroke between
- * 19.75 and 22.25, leaving 1.75px of surface outside it. Flush with the edge it
- * would read as a border the button happens to have; inset, it reads as a gauge
- * drawn on its face - which is what it is, since it measures the page rather
- * than bounding the control.
+ * Bottom of the page: the gauge fills in.
+ *
+ * The attribute rather than a class so the selector outranks `.surface`, whose
+ * fill and gradient are what this has to replace - two single-class rules would
+ * be settled by whichever stylesheet the bundler happened to emit second.
+ *
+ * The ring goes as the fill arrives. They are reporting the same fact, and a
+ * completed stroke sitting on a solid disc of its own colour is either invisible
+ * or, worse, a leftover track ringing a finished button. The handover is the
+ * point: the arc was the progress, the fill *is* the arrival.
+ *
+ * Nothing here touches the drop shadow or the glass wash any more, and both of
+ * those were deliberate retreats. Tinting the shadow meant overriding
+ * `--glass-drop` with a two-layer stack where the theme supplies three or five,
+ * and box-shadow lists of unequal length are not interpolable - so the shadow
+ * jumped in one frame under a fill that took the full duration. The wash stays
+ * for the same reason in reverse: `background-image: none` cannot be
+ * transitioned at all, and a white gradient raking one corner of a blue disc is
+ * a lit surface, which is what every other surface here does anyway.
+ */
+/*
+ * Restated in full, and through `.wrap .button` so it outranks `.surface`
+ * whatever order the bundler emits the two stylesheets in.
+ *
+ * Two reasons it has to be here. `.surface` transitions transform, box-shadow
+ * and background-color but *not* `color` - fine for a panel, which never changes
+ * its text colour, and the whole reason the arrow used to flip to its contrast
+ * shade in a single frame while the disc faded under it. And filling up is an
+ * arrival rather than a hover, so it earns a slower curve than the 320ms the
+ * pointer states use; the lift keeps the quick one.
+ */
+.wrap .button {
+  transition:
+    transform var(--dur-base) var(--ease-gel),
+    box-shadow var(--dur-base) var(--ease-enter),
+    background-color var(--dur-slow) var(--ease-enter),
+    color var(--dur-slow) var(--ease-enter);
+}
+
+.button[data-complete] {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Or the arrow turns accent-on-accent and disappears. */
+.button[data-complete]:hover {
+  color: var(--accent-contrast);
+}
+
+.button[data-complete] .ring {
+  opacity: 0;
+}
+
+/*
+ * The ring runs along the disc's own edge, and that is a correction.
+ *
+ * Held in at `r: 21` it looked better in isolation - a gauge drawn on the
+ * button's face rather than a border it happens to have - but it made the button
+ * appear to grow when it filled. The stroke's outer edge sat at radius 22.25
+ * while the disc's is 24, and at rest the glass is translucent enough that the
+ * *ring* is what the eye takes for the boundary. Filling it hands that job to
+ * the disc, 1.75px further out, and the button reads ~7% wider in a single
+ * transition without a pixel of it actually moving.
+ *
+ * `r: 22.5` with a 2.5px stroke spans 21.25 to 23.75, a quarter-pixel inside the
+ * disc - clear of the edge for antialiasing, and close enough that there is now
+ * one boundary rather than two. Only its colour changes.
  */
 .ring {
   position: absolute;
@@ -65,6 +126,9 @@
   transform: rotate(-90deg);
   pointer-events: none;
   overflow: visible;
+  /* Matched to the fill's duration, so the ring leaving and the disc filling are
+     one movement rather than two of different lengths. */
+  transition: opacity var(--dur-slow) var(--ease-enter);
 }
 
 .ring circle {
