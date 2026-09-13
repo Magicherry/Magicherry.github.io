@@ -312,13 +312,21 @@
 }
 
 /*
- * Phones pay triple for the chromatic variant - three displacement passes on a
- * shared GPU. Step it down to the single-pass map; the dispersion is invisible
- * at that size anyway.
+ * No width downgrade for `.thick`, and that is a decision rather than an
+ * omission. It used to drop to the single-pass map and 18px of blur below
+ * 720px, on the grounds that phones pay triple for three displacement passes.
+ *
+ * Two things retired it. The first is intent: `.thick` has exactly one consumer,
+ * the nav, and the nav is meant to be the same object wherever it sits - it
+ * docks to the bottom of the screen at 760px, so a material that changed at 720
+ * gave it three states across 40px of viewport and left it running the full
+ * chromatic filter for the first half of the range the rule was written to
+ * protect. The second is that the cost it was guarding against has already been
+ * paid down elsewhere: the aurora behind it advances on `steps(150)`/`steps(180)`
+ * rather than continuously, so the backdrop it filters changes about three times
+ * a second instead of sixty, and the nav is the only permanently live surface
+ * left on the page.
+ *
+ * If a low-end phone ever does stutter here, this is the first knob to turn back
+ * - but at 760px, not 720, so the material changes when the nav changes place.
  */
-@media (max-width: 720px) {
-  .thick {
-    --glass-refract: url('#glass-regular');
-    --glass-blur: 18px;
-  }
-}
