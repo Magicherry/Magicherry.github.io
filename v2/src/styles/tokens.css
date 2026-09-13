@@ -279,6 +279,21 @@
      button, a project's icon tile. Same reason for existing as the two above -
      both call sites had literal black in them. */
   --glass-drop-sm: 0 10px 22px -14px rgba(0, 0, 0, 0.75);
+  /*
+   * The bed for browsers with no `backdrop-filter` at all, and it is a literal
+   * for a reason: every engine that lacks backdrop-filter also predates
+   * `color-mix()` - Firefox got the filter in 103 and the function in 113,
+   * Chrome 76 against 111 - so the `color-mix` this replaces could not be parsed
+   * by a single browser that would ever reach it. The declaration was dropped
+   * and the surface fell through to `--glass-fill`'s 52%, which is exactly the
+   * see-through nav the fallback exists to prevent.
+   *
+   * 0.88 rather than opaque: enough of the page shows through to read as glass,
+   * far too little for unblurred body text to compete with a label. The stop
+   * below this - `prefers-reduced-transparency` - stays fully opaque, because
+   * there the transparency is the thing being asked about.
+   */
+  --glass-fallback: rgba(12, 15, 23, 0.88);
   --glass-specular: rgba(255, 255, 255, 0.26);
 
   --scrim: rgba(3, 5, 10, 0.72);
@@ -424,6 +439,9 @@
     0 36px 66px -30px rgba(15, 23, 42, 0.2),
     0 68px 112px -62px rgba(15, 23, 42, 0.24);
   --glass-drop-sm: 0 8px 18px -10px rgba(15, 23, 42, 0.16);
+  /* Paper rather than ink, same 0.88. See the dark block for why it is a
+     literal and not a `color-mix`. */
+  --glass-fallback: rgba(254, 254, 255, 0.88);
   --glass-specular: rgba(255, 255, 255, 0.75);
 
   --scrim: rgba(246, 247, 250, 0.76);

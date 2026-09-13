@@ -274,13 +274,20 @@
  * This last tier is where the design has to give something up. `--glass-fill` is
  * 52% alpha, which is a fine tint when a blur pass has already destroyed the
  * detail underneath - and unreadable when it has not: the nav overlaps scrolling
- * content, so its labels would sit directly on moving body text. So transparency
- * is what gets traded away, not legibility. The rim, inner glow, specular and
- * drop shadow all survive, and those are what carry the material anyway.
+ * content, so its labels would sit directly on moving body text. So most of the
+ * transparency gets traded away rather than the legibility; `--glass-fallback`
+ * keeps 12% of it, enough to still read as glass. The rim, inner glow, specular
+ * and drop shadow all survive, and those are what carry the material anyway.
+ *
+ * That token is a literal rgba and has to be. Every engine without
+ * `backdrop-filter` also predates `color-mix()`, so the mix that used to sit
+ * here could not be parsed by any browser that would ever reach it - the
+ * declaration was dropped and the surface fell through to the 52% this block
+ * exists to replace.
  */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .live {
-    background-color: color-mix(in srgb, var(--bg-raised) 92%, var(--bg-base));
+    background-color: var(--glass-fallback);
     background-image: linear-gradient(
       var(--surface-light-angle, 152deg),
       var(--glass-fill-strong) 0%,

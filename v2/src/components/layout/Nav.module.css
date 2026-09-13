@@ -381,7 +381,7 @@
    is behind them. With no blur they need a real bed. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .topbar .iconBtn {
-    background: color-mix(in srgb, var(--bg-raised) 92%, var(--bg-base));
+    background: var(--glass-fallback);
   }
 }
 
