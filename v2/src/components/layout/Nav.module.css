@@ -217,13 +217,29 @@
   gap: 4px;
 }
 
+/*
+ * `border: 0`, and the transparent 1px it replaces is worth a note because it
+ * looked inert and was not.
+ *
+ * Inset box-shadows are drawn from the *padding* box, backgrounds and
+ * `backdrop-filter` from the *border* box. A transparent border pushes the two
+ * apart: the contour ring on the floating top-bar variant landed a pixel inside
+ * the disc, leaving a band of bare fill outside it. On a pale light-mode button
+ * that band reads as a second, brighter rim around the first - a ring the design
+ * never draws and nothing in this file asks for.
+ *
+ * Nothing ever gave it a colour either. Focus uses `outline`, press uses a
+ * transform, and no rule here sets `border-color`, so it reserved a pixel for a
+ * state that does not exist. Under `box-sizing: border-box` removing it keeps
+ * the button exactly 37px and hands that pixel back to the content box.
+ */
 .iconBtn {
   position: relative;
   display: inline-grid;
   place-items: center;
   width: 37px;
   height: 37px;
-  border: 1px solid transparent;
+  border: 0;
   border-radius: var(--radius-full);
   background: color-mix(in srgb, var(--fg) 6%, transparent);
   color: var(--fg);
