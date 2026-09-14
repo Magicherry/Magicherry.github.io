@@ -16,8 +16,8 @@ import styles from './Backdrop.module.css'
  *     at all: the field is rasterised straight onto the visible canvas, once, and
  *     from then on the layer is an ordinary static texture;
  *   - the *static* field is rasterised once into an offscreen canvas and blitted
- *     as a single image each frame. Redrawing ~1,900 individual `arc()` calls
- *     per pointer event, which is what this did originally, is the difference
+ *     as a single image each frame. Redrawing ~1,900 individual subpaths per
+ *     pointer event, which is what this did originally, is the difference
  *     between a free background and a stuttering one;
  *   - only the ~100 dots inside the lens are computed per frame;
  *   - the animation loop *stops completely* once the lens settles, so an idle
@@ -26,7 +26,30 @@ import styles from './Backdrop.module.css'
  */
 
 const SPACING = 34
-const DOT_RADIUS = 1.1
+/**
+ * Half the side of a dot - the field is rounded squares, not circles.
+ *
+ * The squares landed at 1.0 first, picked so a dot covered 3.83px² against the
+ * 3.80 of the 1.1-radius circles it replaced: the shape change on its own is not
+ * area-neutral, and swapping one for the other verbatim would have brightened
+ * every dot on the page by a quarter. This is a deliberate step past that, so
+ * the field is now genuinely heavier than it was as circles - 7.5px² a dot, a
+ * shade under double.
+ *
+ * What keeps it a field rather than a lattice is the ratio to `SPACING`: 2.8px
+ * of dot every 34px is 8%, against 6% before. Well past that the eye starts
+ * reading the gaps as the pattern instead of the dots, so if this grows again it
+ * is `SPACING` that should move with it.
+ */
+const DOT_HALF = 1.4
+/**
+ * Corner radius as a fraction of the half-side rather than an absolute, so a dot
+ * the lens has swollen rounds off by the same proportion. Fixed at 0.45px a
+ * dot grown to 2.5 half-side would read as progressively *sharper* the closer it
+ * got to the pointer, which is backwards - the lens brightens and enlarges, it
+ * does not change the material.
+ */
+const DOT_CORNER_RATIO = 0.45
 const LENS_RADIUS = 190
 const LENS_STRENGTH = 26
 /** Below this, the eased pointer has effectively arrived; stop the loop. */
@@ -52,7 +75,7 @@ export default function LensGrid() {
 
     /*
      * The offscreen copy exists so that a moving lens can blit the untouched
-     * grid instead of re-running ~1,900 arcs per frame. With no lens there are
+     * grid instead of re-running ~1,900 subpaths per frame. With no lens there are
      * no frames, so it would be a second full-viewport backing store bought to
      * save work nobody is doing - the field goes straight onto the visible
      * canvas instead.
@@ -98,6 +121,22 @@ export default function LensGrid() {
     let frame = 0
     let running = false
 
+    /*
+     * One dot, centred on (x, y), added to whatever path is already open.
+     *
+     * `roundRect` takes a top-left corner where `arc` took a centre, so the
+     * offset is not incidental - dropping it would shift the entire field half a
+     * dot down and right, which at 34px spacing is invisible on its own and
+     * misaligns the lens displacement against the field underneath it.
+     *
+     * It also opens its own subpath, so the `moveTo` that used to precede each
+     * arc is gone: without it `arc` would have joined each dot to the last with
+     * a hairline, and ~1,900 of those is a diagonal mesh rather than a grid.
+     */
+    const addDot = (target: CanvasRenderingContext2D, x: number, y: number, half: number) => {
+      target.roundRect(x - half, y - half, half * 2, half * 2, half * DOT_CORNER_RATIO)
+    }
+
     const readVar = (name: string, fallback: string) =>
       getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
 
@@ -116,8 +155,7 @@ export default function LensGrid() {
         for (let col = 0; col < cols; col += 1) {
           const x = originX + col * SPACING
           const y = originY + row * SPACING
-          fieldCtx.moveTo(x + DOT_RADIUS, y)
-          fieldCtx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2)
+          addDot(fieldCtx, x, y, DOT_HALF)
         }
       }
       fieldCtx.fill()
@@ -174,8 +212,7 @@ export default function LensGrid() {
             const dx = x - lensX
             const dy = y - lensY
             if (dx * dx + dy * dy > LENS_RADIUS * LENS_RADIUS) continue
-            ctx.moveTo(x + DOT_RADIUS, y)
-            ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2)
+            addDot(ctx, x, y, DOT_HALF)
           }
         }
         ctx.fill()
@@ -201,12 +238,11 @@ export default function LensGrid() {
 
           ctx.globalAlpha = (0.25 + falloff * 0.75) * power
           ctx.beginPath()
-          ctx.arc(
+          addDot(
+            ctx,
             x + (dx / distance) * push,
             y + (dy / distance) * push,
-            DOT_RADIUS + falloff * 1.5 * power,
-            0,
-            Math.PI * 2,
+            DOT_HALF + falloff * 1.5 * power,
           )
           ctx.fill()
         }
@@ -224,7 +260,7 @@ export default function LensGrid() {
        *
        * Collapsing and re-showing the URL bar changes `innerHeight` and fires
        * `resize`, repeatedly, during a single flick - and honouring each one
-       * would re-rasterise ~1,900 arcs in the middle of a scroll, which is the
+       * would re-rasterise ~1,900 subpaths in the middle of a scroll, which is the
        * exact cost this canvas used to be kept off mobile to avoid. The field is
        * a uniform grid inside a fixed, `overflow: hidden` wrapper, so a canvas
        * left *taller* than the viewport is indistinguishable from one that fits.
