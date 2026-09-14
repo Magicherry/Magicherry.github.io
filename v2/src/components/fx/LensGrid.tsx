@@ -27,21 +27,19 @@ import styles from './Backdrop.module.css'
 
 const SPACING = 34
 /**
- * Half the side of a dot - the field is rounded squares, not circles.
+ * Half the side of a dot at rest - the field is rounded squares, not circles.
  *
- * The squares landed at 1.0 first, picked so a dot covered 3.83px² against the
- * 3.80 of the 1.1-radius circles it replaced: the shape change on its own is not
- * area-neutral, and swapping one for the other verbatim would have brightened
- * every dot on the page by a quarter. This is a deliberate step past that, so
- * the field is now genuinely heavier than it was as circles - 7.5px² a dot, a
- * shade under double.
+ * Picked so a dot covers 3.83px² against the 3.80 of the 1.1-radius circles it
+ * replaced: the shape change on its own is not area-neutral, and swapping one
+ * for the other verbatim would have brightened every dot on the page by a
+ * quarter. The resting field therefore weighs what it always did; only its shape
+ * changed.
  *
- * What keeps it a field rather than a lattice is the ratio to `SPACING`: 2.8px
- * of dot every 34px is 8%, against 6% before. Well past that the eye starts
- * reading the gaps as the pattern instead of the dots, so if this grows again it
- * is `SPACING` that should move with it.
+ * The size the lens grows a dot *to* is a separate decision - see `LENS_SWELL`.
+ * They used to be one number, which is why raising the field's weight and
+ * raising the lens's punch could not be asked for separately.
  */
-const DOT_HALF = 1.4
+const DOT_HALF = 1.0
 /**
  * Corner radius as a fraction of the half-side rather than an absolute, so a dot
  * the lens has swollen rounds off by the same proportion. Fixed at 0.45px a
@@ -50,6 +48,18 @@ const DOT_HALF = 1.4
  * does not change the material.
  */
 const DOT_CORNER_RATIO = 0.45
+/**
+ * How much half-side a dot gains at the very centre of the lens, on top of
+ * `DOT_HALF`. 1.9 puts the peak at 2.9 - a dot under the pointer is nearly three
+ * times the one at rest.
+ *
+ * An absolute gain rather than a multiple of `DOT_HALF`, and that is the point:
+ * the resting field and the lens peak are set independently, so the field can
+ * stay as light as the circles were while the lens still swells hard. Expressed
+ * as a factor the two would be welded together and shrinking one would shrink
+ * the other.
+ */
+const LENS_SWELL = 1.9
 const LENS_RADIUS = 190
 const LENS_STRENGTH = 26
 /** Below this, the eased pointer has effectively arrived; stop the loop. */
@@ -242,7 +252,7 @@ export default function LensGrid() {
             ctx,
             x + (dx / distance) * push,
             y + (dy / distance) * push,
-            DOT_HALF + falloff * 1.5 * power,
+            DOT_HALF + falloff * LENS_SWELL * power,
           )
           ctx.fill()
         }
