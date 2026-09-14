@@ -16,8 +16,8 @@ import styles from './Backdrop.module.css'
  *     at all: the field is rasterised straight onto the visible canvas, once, and
  *     from then on the layer is an ordinary static texture;
  *   - the *static* field is rasterised once into an offscreen canvas and blitted
- *     as a single image each frame. Redrawing ~1,900 individual subpaths per
- *     pointer event, which is what this did originally, is the difference
+ *     as a single image each frame. Redrawing ~1,900 individual `arc()` calls
+ *     per pointer event, which is what this did originally, is the difference
  *     between a free background and a stuttering one;
  *   - only the ~100 dots inside the lens are computed per frame;
  *   - the animation loop *stops completely* once the lens settles, so an idle
@@ -26,41 +26,7 @@ import styles from './Backdrop.module.css'
  */
 
 const SPACING = 34
-/**
- * Half the side of a dot at rest - the field is rounded squares, not circles.
- *
- * Picked so a dot covers 3.83px² against the 3.80 of the 1.1-radius circles it
- * replaced: the shape change on its own is not area-neutral, and swapping one
- * for the other verbatim would have brightened every dot on the page by a
- * quarter. The resting field therefore weighs what it always did; only its shape
- * changed.
- *
- * The size the lens grows a dot *to* is a separate decision - see `LENS_SWELL`.
- * They used to be one number, which is why raising the field's weight and
- * raising the lens's punch could not be asked for separately.
- */
-const DOT_HALF = 1.0
-/**
- * Corner radius as a fraction of the half-side rather than an absolute, so a dot
- * the lens has swollen rounds off by the same proportion. Fixed at 0.45px a
- * dot grown to 2.5 half-side would read as progressively *sharper* the closer it
- * got to the pointer, which is backwards - the lens brightens and enlarges, it
- * does not change the material.
- */
-const DOT_CORNER_RATIO = 0.45
-/**
- * How much half-side a dot gains at the very centre of the lens, on top of
- * `DOT_HALF`. 1.9 puts the peak at 2.9 - a dot under the pointer is nearly three
- * times the one at rest. It is reached only at the centre: the ramp out to
- * `LENS_RADIUS` is squared, see the draw loop.
- *
- * An absolute gain rather than a multiple of `DOT_HALF`, and that is the point:
- * the resting field and the lens peak are set independently, so the field can
- * stay as light as the circles were while the lens still swells hard. Expressed
- * as a factor the two would be welded together and shrinking one would shrink
- * the other.
- */
-const LENS_SWELL = 1.9
+const DOT_RADIUS = 1.1
 const LENS_RADIUS = 190
 const LENS_STRENGTH = 26
 /** Below this, the eased pointer has effectively arrived; stop the loop. */
@@ -86,7 +52,7 @@ export default function LensGrid() {
 
     /*
      * The offscreen copy exists so that a moving lens can blit the untouched
-     * grid instead of re-running ~1,900 subpaths per frame. With no lens there are
+     * grid instead of re-running ~1,900 arcs per frame. With no lens there are
      * no frames, so it would be a second full-viewport backing store bought to
      * save work nobody is doing - the field goes straight onto the visible
      * canvas instead.
@@ -132,22 +98,6 @@ export default function LensGrid() {
     let frame = 0
     let running = false
 
-    /*
-     * One dot, centred on (x, y), added to whatever path is already open.
-     *
-     * `roundRect` takes a top-left corner where `arc` took a centre, so the
-     * offset is not incidental - dropping it would shift the entire field half a
-     * dot down and right, which at 34px spacing is invisible on its own and
-     * misaligns the lens displacement against the field underneath it.
-     *
-     * It also opens its own subpath, so the `moveTo` that used to precede each
-     * arc is gone: without it `arc` would have joined each dot to the last with
-     * a hairline, and ~1,900 of those is a diagonal mesh rather than a grid.
-     */
-    const addDot = (target: CanvasRenderingContext2D, x: number, y: number, half: number) => {
-      target.roundRect(x - half, y - half, half * 2, half * 2, half * DOT_CORNER_RATIO)
-    }
-
     const readVar = (name: string, fallback: string) =>
       getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
 
@@ -166,7 +116,8 @@ export default function LensGrid() {
         for (let col = 0; col < cols; col += 1) {
           const x = originX + col * SPACING
           const y = originY + row * SPACING
-          addDot(fieldCtx, x, y, DOT_HALF)
+          fieldCtx.moveTo(x + DOT_RADIUS, y)
+          fieldCtx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2)
         }
       }
       fieldCtx.fill()
@@ -223,7 +174,8 @@ export default function LensGrid() {
             const dx = x - lensX
             const dy = y - lensY
             if (dx * dx + dy * dy > LENS_RADIUS * LENS_RADIUS) continue
-            addDot(ctx, x, y, DOT_HALF)
+            ctx.moveTo(x + DOT_RADIUS, y)
+            ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2)
           }
         }
         ctx.fill()
@@ -249,28 +201,12 @@ export default function LensGrid() {
 
           ctx.globalAlpha = (0.25 + falloff * 0.75) * power
           ctx.beginPath()
-          /*
-           * Squared, for the same reason the displacement above is cubed.
-           *
-           * The swell used to be linear in `falloff`, which was survivable while
-           * it was small next to `DOT_HALF` and stopped being so once the two
-           * were split and it grew. A linear ramp puts half the swell at half the
-           * radius, so dots a long way out still read as clearly lensed - and the
-           * edge of the lit region is wherever dots stop being distinguishable
-           * from the field, not `LENS_RADIUS`. Raising the swell pushed that edge
-           * outward and the lens read as having grown, with the radius untouched.
-           *
-           * Squared keeps the peak at the pointer and collapses the ramp: half
-           * radius now carries a quarter of the swell, not half. Between the two
-           * exponents, displacement stays the tightest of the three and size sits
-           * between it and the alpha - which is the order they should be in, the
-           * lens being sharpest where it bends and softest where it only tints.
-           */
-          addDot(
-            ctx,
+          ctx.arc(
             x + (dx / distance) * push,
             y + (dy / distance) * push,
-            DOT_HALF + falloff * falloff * LENS_SWELL * power,
+            DOT_RADIUS + falloff * 1.5 * power,
+            0,
+            Math.PI * 2,
           )
           ctx.fill()
         }
@@ -288,7 +224,7 @@ export default function LensGrid() {
        *
        * Collapsing and re-showing the URL bar changes `innerHeight` and fires
        * `resize`, repeatedly, during a single flick - and honouring each one
-       * would re-rasterise ~1,900 subpaths in the middle of a scroll, which is the
+       * would re-rasterise ~1,900 arcs in the middle of a scroll, which is the
        * exact cost this canvas used to be kept off mobile to avoid. The field is
        * a uniform grid inside a fixed, `overflow: hidden` wrapper, so a canvas
        * left *taller* than the viewport is indistinguishable from one that fits.
