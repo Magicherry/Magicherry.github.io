@@ -36,21 +36,34 @@
 
     <script>
       /*
-       * Theme, applied before first paint.
+       * Theme, resolved before first paint.
        *
-       * A first visit needs none of this - <html> is already stamped dark, which
-       * is now the default for everyone. This exists for the returning visitor
-       * who chose light: their preference lives in localStorage, and React
-       * cannot read it in time. By the time the bundle has parsed and the effect
+       * React cannot do this. By the time the bundle has parsed and the effect
        * has run the browser has already painted a frame, and that frame would be
-       * a full-screen flash of the theme they explicitly turned off. A few lines
-       * of blocking script is the one trade where stalling the parser is worth
-       * it.
+       * a full-screen flash of the wrong theme. A few lines of blocking script is
+       * the one trade where stalling the parser is worth it.
+       *
+       * It now matters on a *first* visit too, not only for a returning visitor
+       * who chose light: <html> is stamped dark in the markup, so a device set to
+       * light would flash dark before React resolved the media query. The stamp
+       * stays dark because it is the right answer whenever this script cannot run
+       * or has nothing to go on.
+       *
+       * Order matters. The stored choice is permanent and outranks the device, so
+       * the query is only consulted when there is no live override.
+       *
+       * KEEP IN SYNC with getSystemTheme/THEME_COLOR in src/lib/theme.tsx.
        */
       ;(function () {
+        var theme = null
+
+        // Outside the try: matchMedia does not throw, and a storage failure must
+        // not cost a light-mode device its theme. Queried as `light` so that
+        // `no-preference` and engines without the feature both fall to dark.
+        var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches
+
         try {
           var raw = localStorage.getItem('v2:theme')
-          var theme = null
           if (raw) {
             var parsed = JSON.parse(raw)
             // expiresAt === null means the choice never lapses.
@@ -58,20 +71,17 @@
               theme = parsed.value
             }
           }
-          // Dark is the default for a first visit, `prefers-color-scheme`
-          // included - the site is designed against a near-black ground and
-          // light mode is a separate design, not an inversion. KEEP IN SYNC
-          // with DEFAULT_THEME in src/lib/theme.tsx.
-          if (theme !== 'dark' && theme !== 'light') {
-            theme = 'dark'
-          }
-          document.documentElement.dataset.theme = theme
-          document
-            .querySelector('meta[name="theme-color"]')
-            .setAttribute('content', theme === 'light' ? '#eef2f8' : '#0a1520')
         } catch (e) {
-          /* localStorage can throw in private modes; the dark default stands. */
+          /* localStorage can throw in private modes; the device setting stands. */
         }
+
+        if (theme !== 'dark' && theme !== 'light') {
+          theme = prefersLight ? 'light' : 'dark'
+        }
+
+        document.documentElement.dataset.theme = theme
+        var meta = document.querySelector('meta[name="theme-color"]')
+        if (meta) meta.setAttribute('content', theme === 'light' ? '#eef2f8' : '#0a1520')
       })()
     </script>
   </head>

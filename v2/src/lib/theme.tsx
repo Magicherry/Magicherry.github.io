@@ -99,30 +99,63 @@ const THEME_COLOR: Record<Theme, string> = {
 const isTheme = (value: unknown): value is Theme => value === 'dark' || value === 'light'
 
 /*
- * Dark for everyone on a first visit, `prefers-color-scheme` included.
+ * The device's own setting, on a first visit.
  *
- * This site is designed dark: the aurora, the rim lighting and the refraction
- * are all tuned against a near-black ground, and light mode is a second,
- * separately tuned design rather than the same palette inverted. Opening on the
- * one the work was composed for is the right first impression - and the toggle
- * is in the nav, one tap away, with the choice then kept for good.
+ * This used to be dark for everyone, `prefers-color-scheme` included, on the
+ * grounds that the site is composed dark and light mode is a second, separately
+ * tuned design rather than an inversion. Both halves of that are still true and
+ * neither is an argument for ignoring the setting: a visitor whose OS is in
+ * light mode has already said which of the two designs they want to be handed,
+ * and light mode being a real design rather than a fallback is precisely what
+ * makes honouring it safe.
  *
- * KEEP IN SYNC with the pre-paint script in index.html, which picks the same
- * default before this module has parsed.
+ * Queried as `light` rather than `dark` so that the two answers that are not a
+ * request for light - `no-preference`, and any engine that does not implement
+ * the feature at all - both fall to dark. The site keeps its composed default
+ * wherever the device has not actually asked for anything else.
+ *
+ * KEEP IN SYNC with the pre-paint script in index.html, which resolves the same
+ * query before this module has parsed.
  */
-const DEFAULT_THEME: Theme = 'dark'
+const LIGHT_QUERY = '(prefers-color-scheme: light)'
+
+function getSystemTheme(): Theme {
+  if (typeof window === 'undefined') return 'dark'
+  return window.matchMedia?.(LIGHT_QUERY).matches ? 'light' : 'dark'
+}
+
+/*
+ * Module scope, not an inline arrow in the provider: `useTimedPreference` puts
+ * both of these in effect dependency arrays, so a new identity every render
+ * would tear down and re-add the listener on each one.
+ */
+function subscribeToSystemTheme(onChange: () => void): (() => void) | undefined {
+  const query = window.matchMedia?.(LIGHT_QUERY)
+  if (!query) return undefined
+  query.addEventListener('change', onChange)
+  return () => query.removeEventListener('change', onChange)
+}
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   /*
-   * Nothing subscribes to system changes, and the visitor's choice is permanent
-   * (`ttlMs: null`) - a page that re-themes itself under you at sunset because
-   * the OS did is not following a preference, it is overriding one.
+   * Two rules, and the second is what keeps the first from being obnoxious.
+   *
+   * While no choice has been made the page follows the device live, so an OS
+   * that flips at sunset takes the page with it. Once the toggle has been used
+   * the stored choice wins and `ttlMs: null` keeps it for good - the visitor has
+   * said which design they want and the OS does not get to argue.
+   *
+   * The old note here said a page that re-themes itself under you at sunset is
+   * overriding a preference rather than following one. That is right, and it is
+   * exactly what the override protects against; it was never an argument against
+   * following a device that has *not* been overruled.
    */
   const { value: theme, setValue } = useTimedPreference<Theme>({
     storageKey: 'v2:theme',
-    getAutoValue: () => DEFAULT_THEME,
+    getAutoValue: getSystemTheme,
     isValid: isTheme,
     ttlMs: null,
+    subscribeToAuto: subscribeToSystemTheme,
   })
 
   useEffect(() => {
