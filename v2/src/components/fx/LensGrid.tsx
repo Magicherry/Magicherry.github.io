@@ -51,7 +51,8 @@ const DOT_CORNER_RATIO = 0.45
 /**
  * How much half-side a dot gains at the very centre of the lens, on top of
  * `DOT_HALF`. 1.9 puts the peak at 2.9 - a dot under the pointer is nearly three
- * times the one at rest.
+ * times the one at rest. It is reached only at the centre: the ramp out to
+ * `LENS_RADIUS` is squared, see the draw loop.
  *
  * An absolute gain rather than a multiple of `DOT_HALF`, and that is the point:
  * the resting field and the lens peak are set independently, so the field can
@@ -248,11 +249,28 @@ export default function LensGrid() {
 
           ctx.globalAlpha = (0.25 + falloff * 0.75) * power
           ctx.beginPath()
+          /*
+           * Squared, for the same reason the displacement above is cubed.
+           *
+           * The swell used to be linear in `falloff`, which was survivable while
+           * it was small next to `DOT_HALF` and stopped being so once the two
+           * were split and it grew. A linear ramp puts half the swell at half the
+           * radius, so dots a long way out still read as clearly lensed - and the
+           * edge of the lit region is wherever dots stop being distinguishable
+           * from the field, not `LENS_RADIUS`. Raising the swell pushed that edge
+           * outward and the lens read as having grown, with the radius untouched.
+           *
+           * Squared keeps the peak at the pointer and collapses the ramp: half
+           * radius now carries a quarter of the swell, not half. Between the two
+           * exponents, displacement stays the tightest of the three and size sits
+           * between it and the alpha - which is the order they should be in, the
+           * lens being sharpest where it bends and softest where it only tints.
+           */
           addDot(
             ctx,
             x + (dx / distance) * push,
             y + (dy / distance) * push,
-            DOT_HALF + falloff * LENS_SWELL * power,
+            DOT_HALF + falloff * falloff * LENS_SWELL * power,
           )
           ctx.fill()
         }
