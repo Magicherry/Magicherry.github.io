@@ -13,155 +13,80 @@
 
 ## Overview
 
-A ground-up rebuild of the portfolio as a **single-page scroll narrative**, built
-around a hand-written **Liquid Glass** surface system. Where v1 assembled a site
-from an open-source template and a component library, v2 ships **no UI framework
-and no CSS framework** — every surface, every transition and every token in here
-was written for this site.
+The second version of my personal portfolio, rebuilt as a bilingual, single-page
+experience with a **next-generation glassmorphism design**.
 
-The goal was a site that reads as *made*, not *assembled*: dense in craft, quiet
-in presentation. Rich motion that still holds a steady frame, glass that behaves
-like a material rather than a blur filter, and a bilingual content layer the type
-system refuses to let you leave half-translated.
+## Highlights
 
----
+- **Refined glassmorphism** with layered surfaces, edge refraction and responsive
+  light and dark themes.
+- **Smooth, accessible motion** with scroll-linked effects and support for
+  reduced-motion and reduced-transparency preferences.
+- **Responsive navigation** that adapts from a floating desktop capsule to a
+  mobile bottom bar.
+- **Bilingual content** backed by TypeScript types, including localized CV files.
+- **Project filtering and experience timeline** with animated transitions.
+- **Progressive browser support** with designed fallbacks for unsupported visual
+  effects.
 
-## Highlights & Features
+## Tech Stack
 
-### Appearance
-
-- **Liquid Glass surfaces**: six stacked optical layers per surface — backdrop,
-  body tint, gradient rim, inner glow, pointer-tracked specular and contact
-  shadow. Removing any one of them is what makes most "glassmorphism" read as
-  grey plastic.
-- **Real edge refraction**: an SVG displacement map bends the backdrop *outward
-  at the rim only*, the optical signature of a thick slab with a convex bevel.
-  The thickest variant runs the map three times at different throws for cheap
-  chromatic dispersion.
-- **Dynamic theming**: dark and light are two separately tuned designs, not one
-  palette inverted. Light-mode glass *absorbs* — it darkens and adds contrast,
-  because brightening a near-white backdrop erases the very colour the
-  saturation lift just produced.
-- **Themed via View Transitions**: switching themes reveals the new palette under
-  an expanding circle that starts at the button you pressed — one composited
-  texture crossfade rather than a repaint of several hundred elements.
-
-### Interaction & Motion
-
-- **Smooth scroll** owned by a single Lenis instance, disabled entirely under
-  `prefers-reduced-motion` — and the only thing allowed to scroll the page, so no
-  two easings ever compound.
-- **Glass capsule navigation**: a floating pill on desktop that docks to the
-  **bottom** of the screen below 760px — not a fallback, but the end of the
-  screen the thumb actually reaches.
-- **Scroll-linked composition**: parallax on the hero, a progress rail through
-  the experience timeline, and entrance animations that fire *before* an element
-  has settled in view.
-- **Pointer optics**: a dot field that bends around the cursor using the same
-  lens maths as the glass, and stops its animation loop the moment it settles.
-
-### Content
-
-- **Bilingual by type, not by convention**: every visible string is a
-  `Localized<T>` — a mapped type total over the locale union — so an untranslated
-  string is a compile error rather than an English fallback discovered in
-  production.
-- **Project showcase** with tag filtering and animated re-layout across
-  categories.
-- **Experience timeline** covering full-time, research and internship tracks,
-  newest first.
-- **Integrated CV**: separate Chinese and English PDFs, served with the right
-  download filename per locale.
-- **Custom inline markup**: prose carries two markers (`**accent**`,
-  `[text](url)`) parsed in ~60 lines, including automatic spacing between Han
-  characters and Latin runs. A markdown dependency would be ~40 kB for a syntax
-  the site does not use.
-
-### Engineering
-
-- **Two-tier design tokens**: a palette tier holds raw values and never appears
-  in component CSS; a semantic tier maps them onto roles and is the only thing
-  components read. Both themes swap by redefining the semantic tier.
-- **An opt-in cost model for glass**: `backdrop-filter` re-runs every frame its
-  backdrop changes, and the background here animates forever — so sampling is
-  opt-in and the default is flat. Exactly one surface on the page samples
-  permanently. The rest fake it with fill, rim and specular, and cost nothing.
-- **Deliberate browser support**: only Chromium composites SVG filter references
-  inside `backdrop-filter`; Safari and Firefox parse the value and then drop it,
-  which yields an invisible panel rather than a graceful fallback. So the site
-  opts *in* to Chromium for refraction and everything else lands on a fully
-  designed blur-only tier — with an opaque tier below that for engines with no
-  `backdrop-filter` at all.
-- **Accessibility as a rendering path**: `prefers-reduced-motion` and
-  `prefers-reduced-transparency` each select a designed state, not a degraded
-  one.
-
-## Prerequisites
-
-Clone down this repository. You will need these tools installed:
-
-- `git` (for cloning)
-- `node` `20.19+` or `22.12+` and `npm` (bundled with Node) — required by Vite 8
-- Optional: `nvm` for managing Node versions
+| Technology | Version | Purpose |
+| --- | --- | --- |
+| React | 19.3 | Component-based user interface |
+| TypeScript | 5.9 | Type-safe application development |
+| Vite | 8.2 | Development server and production build |
+| Motion | 13.2 | Interface and scroll-linked animations |
+| Lenis | — | Smooth scrolling |
 
 ## Local Development
 
-Install dependencies and start the development server:
+Requires Git, npm and Node.js `20.19+` or `22.12+`.
 
 ```bash
 npm install
 npm run dev        # http://localhost:3002
 ```
 
-The page hot-reloads as you edit.
+Other available commands:
 
 ```bash
-npm run build      # tsc -b && vite build  ->  dist/
-npm run typecheck  # types only, no emit
-npm run preview    # serve the production build
+npm run build      # typecheck and create the production build
+npm run typecheck  # check types without emitting files
+npm run preview    # preview the production build
 ```
 
-> `vite build` does **not** typecheck. `tsc -b` is the gate, and it runs first in
-> `npm run build` for exactly that reason.
+## Customization
 
-## Usage & Customization
+Visitor-facing content is stored separately from the UI in `src/content/`:
 
-Everything a visitor reads lives in `src/content/` as typed data, separate from
-the components that render it.
+- `profile.ts` — profile details, contact channels and CV paths
+- `copy.ts` — bilingual section titles and UI copy
+- `projects.ts` — project cards, tags and links
+- `experience.ts` — experience and education
+- `stacks.ts` — technical skills
 
-- **Profile & contact**: `src/content/profile.ts` — name, current role, location,
-  stats, contact channels and CV paths.
-- **Copy**: `src/content/copy.ts` — section titles, prose and every UI string,
-  both locales side by side.
-- **Projects**: `src/content/projects.ts` — cards, tags and links.
-- **Experience & education**: `src/content/experience.ts`.
-- **Tech stack**: `src/content/stacks.ts`.
-- **Design tokens**: `src/styles/tokens.css` — colour, type scale, spacing,
-  motion curves and the whole glass tier. Almost every visual change starts here
-  rather than in a component.
-- **Assets**: replace images in `src/assets/`; CVs live in `src/assets/cv/`.
+Visual styles and assets are organized in:
 
-```
+- `src/styles/tokens.css` — colors, typography, spacing, motion and glass styles
+- `src/assets/` — images and other static assets
+- `src/assets/cv/` — Chinese and English CV files
+
+## Project Structure
+
+```text
 src/
-  components/
-    glass/       GlassSurface, GlassDefs, displacementMap
-    fx/          Backdrop, LensGrid, Typewriter
-    layout/      Nav, Preloader, Footer
-    Action, Reveal, RichText, Section
-  content/       typed bilingual data + UI copy
-  lib/           theme, i18n, scroll, intro, preferences, hooks
-  sections/      Hero, About, Stack, Work, Projects, Contact
-  styles/        tokens.css, base.css
+  components/    reusable UI, effects and layout
+  content/       typed bilingual content
+  lib/           theme, i18n, scrolling and shared hooks
+  sections/      page sections
+  styles/        design tokens and global styles
 ```
 
 ## Deployment
 
-`.github/workflows/deploy.yml` runs on every push to `main`: `npm ci` and
-`npm run build` in `v2/`, then publishes `v2/dist` to GitHub Pages. Nothing is
-deployed from the repository root, and `v1/` is kept only as an archive.
-
-Note that `vite build` does not typecheck. `npm run build` runs `tsc -b` first
-and that is the gate — CI fails on a type error, not on a broken bundle.
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which installs
+dependencies, runs the build and publishes the generated site to GitHub Pages.
 
 ## Acknowledgements
 
@@ -174,4 +99,3 @@ Grateful to the open-source community and the projects this is built on:
 - [React Icons](https://react-icons.github.io/react-icons)
 - [Simple Icons](https://simpleicons.org/) and [Devicon](https://devicon.dev/)
   for the brand marks
-- Apple's Liquid Glass, for the material this spent a long time chasing
