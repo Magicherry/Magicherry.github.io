@@ -208,6 +208,25 @@
   --glass-tint: rgba(255, 255, 255, 0.05);
   --glass-tint-strong: rgba(255, 255, 255, 0.085);
   /*
+   * The far end of the body wash, and the reason it exists is the same reason
+   * `--glass-rim-far` does: light that entered the near face has to leave
+   * somewhere, and it leaves at the one turned away from you.
+   *
+   * The wash used to be light-at-0%, nothing from 46% on, which lit the top half
+   * of a panel and left the bottom half at bare `--glass-fill`. At a 152deg axis
+   * that delta runs almost exactly top-to-bottom, so every surface on the page
+   * had a built-in downward darkening that no amount of drop-shadow tuning could
+   * answer - the shadow is outside the panel, this is inside it.
+   *
+   * Half the near value, the same ratio the rim uses, and for the same reason
+   * stated there: it is transmitted light rather than reflected, and it only
+   * reads as a second *light source* - which would flatten the slab - if it gets
+   * anywhere near the same strength. The ramp is shorter too (34% against 46%),
+   * so the middle of the panel still falls off to plain fill and the two ends
+   * stay legible as two ends.
+   */
+  --glass-tint-far: rgba(255, 255, 255, 0.042);
+  /*
    * Lifted off near-black. At rgba(10,14,22,.62) the panels were darker than the
    * page behind them, which inverts what glass does: a sheet over a lit backdrop
    * should read as *brighter* than the wall, not as a hole cut into it. A paler
@@ -216,6 +235,9 @@
    */
   --glass-fill: rgba(21, 27, 40, 0.52);
   --glass-fill-strong: rgba(255, 255, 255, 0.06);
+  /* Flat surfaces get the same far-end return, at the same half ratio. See
+     `--glass-tint-far` above for why there is a far end at all. */
+  --glass-fill-far: rgba(255, 255, 255, 0.03);
   --glass-blur: 18px;
   --glass-saturate: 172%;
   --glass-brightness: 1.06;
@@ -263,22 +285,49 @@
    * distance off the page; a tight contact shadow plus a mid and an ambient one
    * describe an object resting *on* something, which is most of what makes a
    * surface look expensive.
+   *
+   * The three differ in *reach*, not in direction. A layer's visible extent on
+   * any given side is `blur / 2 + spread ± offset`, and the earlier stack ran
+   * 30px of offset against a -34px spread: the spread pulled the shadow inside
+   * the panel's own footprint, so the only thing that ever escaped was the part
+   * the offset pushed past the bottom edge. 26px of dark below, nothing above.
+   * Read as a card lying on the page rather than a sheet floating over it - and
+   * these panels float, so the halo has to close all the way round.
+   *
+   * So the spreads are now shallower than half the blur, which is what gives
+   * every side something to show, and the offsets are small - enough gravity to
+   * keep it from reading as an emitted glow, nowhere near enough to pool.
    */
   --glass-drop:
     0 1px 2px -1px rgba(0, 0, 0, 0.5),
-    0 10px 24px -14px rgba(0, 0, 0, 0.6),
-    0 30px 60px -34px rgba(0, 0, 0, 0.7);
+    0 0 18px -6px rgba(0, 0, 0, 0.42),
+    0 2px 52px -16px rgba(0, 0, 0, 0.55);
   /* The same stack, further from the page - a hovered surface has moved toward
-     you, and the shadow growing is the whole signal. A token because it was
-     hardcoded black, which is correct in exactly one of the two themes. */
+     you, and the shadow growing is the whole signal. With the halo closed all
+     the way round, that growth is now a ring widening rather than a pool
+     lengthening, which is the point: the panel rises, it does not tip forward.
+     A token because it was hardcoded black, correct in exactly one theme. */
   --glass-drop-lift:
     0 2px 4px -2px rgba(0, 0, 0, 0.45),
-    0 16px 34px -18px rgba(0, 0, 0, 0.6),
-    0 40px 76px -38px rgba(0, 0, 0, 0.7);
+    0 0 26px -8px rgba(0, 0, 0, 0.45),
+    0 4px 76px -20px rgba(0, 0, 0, 0.6);
   /* One falloff, for surfaces too small to justify three: the hero's secondary
      button, a project's icon tile. Same reason for existing as the two above -
-     both call sites had literal black in them. */
-  --glass-drop-sm: 0 10px 22px -14px rgba(0, 0, 0, 0.75);
+     both call sites had literal black in them. Same correction, scaled down: a
+     chip gets a tight even halo, not a 7px tongue hanging off its bottom.
+
+     The reach has to be *kept* while the halo is evened out, which is the part
+     that is easy to get wrong - closing the shadow round the sides and shrinking
+     it at the same time reads as the surface settling onto the page. The hero
+     pairs this button with `.primary`, whose accent glow throws 13px below and
+     carries a hue on top of that, so a black halo needs at least comparable
+     reach before the two sit at the same height. */
+  --glass-drop-sm: 0 3px 34px -10px rgba(0, 0, 0, 0.72);
+  /* Its hover. Same one-falloff shape, roughly half again the reach, and it
+     exists so `.glass` can grow its shadow on hover the way `.primary` already
+     does - a button that rises 2px under a shadow that does not move reads as
+     sliding rather than lifting. */
+  --glass-drop-sm-lift: 0 5px 48px -12px rgba(0, 0, 0, 0.75);
   /*
    * The bed for browsers with no `backdrop-filter` at all, and it is a literal
    * for a reason: every engine that lacks backdrop-filter also predates
@@ -297,7 +346,14 @@
   --glass-specular: rgba(255, 255, 255, 0.26);
 
   --scrim: rgba(3, 5, 10, 0.72);
-  --shadow-lift: 0 30px 70px -32px rgba(0, 0, 0, 0.9);
+  /* The one float that is not a glass panel: the QR overlay's close disc. It had
+     the same lopsided geometry the glass drops did - 30px of offset under a -32px
+     spread - which on a 34px button meant a 33px tongue of shadow hanging below a
+     control barely taller than it, and nothing at all above. Same correction, and
+     the scale matters more here than on a panel. */
+  --shadow-lift:
+    0 1px 3px -1px rgba(0, 0, 0, 0.55),
+    0 2px 24px -6px rgba(0, 0, 0, 0.7);
 }
 
 /* ==================================================================== light */
@@ -358,6 +414,20 @@
   --glass-tint-strong: rgba(255, 255, 255, 0.5);
   --glass-fill: rgba(255, 255, 255, 0.72);
   --glass-fill-strong: rgba(255, 255, 255, 0.42);
+  /*
+   * Far end of the body wash - same half ratio as dark, and light mode needs it
+   * at least as badly. The near wash is 42% white on top of a 72% white fill, so
+   * the top of a panel is nearly paper and the bottom is the fill alone; against
+   * the pale page that delta is the strongest vertical gradient on the surface,
+   * and it reads as the panel sagging rather than floating.
+   *
+   * It does *not* pair with an interior shade at the far corner. Light mode wears
+   * a flat white rim at full strength all the way round (see below), and a dark
+   * falloff arriving just inside a white outline is the one combination that
+   * reads as neither - which is why `--glass-inner-shade` is off here too.
+   */
+  --glass-tint-far: rgba(255, 255, 255, 0.24);
+  --glass-fill-far: rgba(255, 255, 255, 0.2);
   --glass-blur: 22px;
   --glass-saturate: 230%;
   /*
@@ -411,39 +481,58 @@
   --glass-edge-hover: #ffffff;
   --glass-rim-lit: #ffffff;
   /*
-   * Five falloffs, and the near layers are firmer than they would otherwise be
+   * Four falloffs, and the near layers are firmer than they would otherwise be
    * because a white rim buys separation from the aurora and none at all from the
    * pale page - over the background this is still the only thing holding the
-   * panel off the paper. The old stack topped out at 30% ink under a tight -34px
-   * spread, which concentrates the dark right at the panel and gives the shadow
-   * a visible outline: the look of a card lying on a page. Glass over paper does
-   * the opposite - a definite but shallow contact, then a very large, very faint
-   * ambient with no edge you can point at. The deep negative spreads mean small
-   * surfaces (pills, chips) skip the wide layers entirely, which is also how it
-   * should be: a 30px chip has no business casting a 96px shadow.
+   * panel off the paper. Glass over paper wants a definite but shallow contact,
+   * then a very large, very faint ambient with no edge you can point at.
+   *
+   * The previous stack got the falloff right and the *geometry* wrong, in the
+   * same way dark mode did: every layer paired a large downward offset with a
+   * spread deeper than half its blur, so each one was clipped back inside the
+   * panel and then shoved out of the bottom. Five layers of ink, all of it below
+   * the card. The wide layers now carry little or no offset, so the ambient
+   * closes round the sides and top too; only the two contact layers stay
+   * downward, because contact is the one thing that genuinely has a direction.
+   *
+   * The spreads are still deep enough that small surfaces (pills, chips) skip
+   * the wide layers entirely, which is how it should be: a 30px chip has no
+   * business casting a 72px shadow.
+   *
+   * Four layers rather than five so this interpolates against `--glass-drop-lift`
+   * below - box-shadow lists of unequal length are not animatable, and the light
+   * theme's hover shadow used to snap in one frame while the lift itself eased.
    */
   --glass-drop:
     0 1px 2px -1px rgba(15, 23, 42, 0.1),
-    0 3px 6px -3px rgba(15, 23, 42, 0.1),
-    0 10px 22px -10px rgba(15, 23, 42, 0.12),
-    0 28px 52px -26px rgba(15, 23, 42, 0.16),
-    0 56px 96px -56px rgba(15, 23, 42, 0.2);
+    0 2px 8px -4px rgba(15, 23, 42, 0.1),
+    0 0 26px -10px rgba(15, 23, 42, 0.13),
+    0 3px 72px -26px rgba(15, 23, 42, 0.18);
   /*
    * The hover lift. This is the token's whole reason for existing: the lift was
    * hardcoded to black at 0.45/0.6/0.7, which is a dark-mode shadow, and on paper
    * it dropped a near-opaque black pool under every card the pointer touched.
+   * Layer for layer with the resting stack above, so the two interpolate.
    */
   --glass-drop-lift:
     0 2px 4px -2px rgba(15, 23, 42, 0.1),
-    0 14px 28px -14px rgba(15, 23, 42, 0.16),
-    0 36px 66px -30px rgba(15, 23, 42, 0.2),
-    0 68px 112px -62px rgba(15, 23, 42, 0.24);
-  --glass-drop-sm: 0 8px 18px -10px rgba(15, 23, 42, 0.16);
+    0 3px 12px -6px rgba(15, 23, 42, 0.12),
+    0 0 38px -12px rgba(15, 23, 42, 0.16),
+    0 6px 100px -34px rgba(15, 23, 42, 0.22);
+  /* See the dark block for why the reach is held rather than trimmed. The ink
+     goes up as well as out: on paper a 0.14 halo spread over 30px is below the
+     threshold where it separates anything at all. */
+  --glass-drop-sm: 0 3px 30px -10px rgba(15, 23, 42, 0.2);
+  --glass-drop-sm-lift: 0 5px 44px -12px rgba(15, 23, 42, 0.26);
   /* Paper rather than ink, same 0.88. See the dark block for why it is a
      literal and not a `color-mix`. */
   --glass-fallback: rgba(254, 254, 255, 0.88);
   --glass-specular: rgba(255, 255, 255, 0.75);
 
   --scrim: rgba(246, 247, 250, 0.76);
-  --shadow-lift: 0 26px 60px -34px rgba(15, 23, 42, 0.4);
+  /* See the dark block. Lighter, because on paper this disc is near-black and
+     already separated from the card by its own value. */
+  --shadow-lift:
+    0 1px 3px -1px rgba(15, 23, 42, 0.16),
+    0 2px 22px -6px rgba(15, 23, 42, 0.26);
 }

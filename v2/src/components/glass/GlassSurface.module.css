@@ -19,11 +19,30 @@
   position: relative;
   border-radius: var(--surface-radius, var(--radius-lg));
   background-color: var(--glass-fill);
+  /*
+   * The body wash, lit at both ends rather than one.
+   *
+   * It used to run bright-at-0% to nothing-at-46% and stay there, which at a
+   * 152deg axis is a near-vertical gradient from lit top to bare fill bottom -
+   * a built-in downward darkening on every surface on the page, and the thing
+   * people actually mean when they say a panel looks heavier at the bottom. The
+   * drop shadow gets blamed for it, but the shadow is outside the box and this
+   * is inside it.
+   *
+   * The return at 100% is the body-fill counterpart of `--glass-rim-far`: light
+   * that came in the near face leaving by the far one. Half strength and a
+   * shorter ramp (66-100% against 0-46%), so the middle still falls all the way
+   * off to plain fill - two ends of one slab, not two lamps.
+   *
+   * Defaulting to `transparent` rather than to a token is deliberate: it lets
+   * the nav opt back out to the single-ended wash with one declaration.
+   */
   background-image: linear-gradient(
     var(--surface-light-angle, 152deg),
     var(--glass-fill-strong) 0%,
     transparent 46%,
-    transparent 100%
+    transparent 66%,
+    var(--glass-fill-far, transparent) 100%
   );
   /*
    * The rim, as three stacked hairlines plus one interior falloff. A single
@@ -81,11 +100,13 @@
  */
 .live {
   background-color: var(--glass-tint);
+  /* Same two-ended wash as `.surface`, in tint values. See there for why. */
   background-image: linear-gradient(
     var(--surface-light-angle, 152deg),
     var(--glass-tint-strong) 0%,
     transparent 46%,
-    transparent 100%
+    transparent 66%,
+    var(--glass-tint-far, transparent) 100%
   );
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
     brightness(var(--glass-brightness)) var(--glass-contrast, );
@@ -292,7 +313,8 @@
       var(--surface-light-angle, 152deg),
       var(--glass-fill-strong) 0%,
       transparent 46%,
-      transparent 100%
+      transparent 66%,
+      var(--glass-fill-far, transparent) 100%
     );
   }
 }

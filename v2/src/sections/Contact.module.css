@@ -149,7 +149,37 @@
   border-radius: var(--radius-sm);
 }
 
+/*
+ * The close disc is solid `--fg`, and that is why it cannot simply borrow
+ * `--glass-rim-light` / `--glass-rim-far`.
+ *
+ * Those two are stated against a translucent panel sitting on the page. This
+ * disc is the page's foreground colour, so it *inverts* with the theme - near
+ * white in dark, near black in light - while the rim tokens do not. Reusing them
+ * puts a white hairline on a near-white disc in dark mode, which is nothing, and
+ * the same hairline on a near-black one in light mode, which is a hard chrome
+ * ring. Neither is a rim.
+ *
+ * So the rim is stated against the disc. The far edge is the interesting half:
+ * `color-mix(... var(--bg-base) 26%)` means "pull this edge back toward the
+ * page", which darkens the white disc and lightens the black one - both of them
+ * the body colour losing its grip as the surface turns away. One expression,
+ * opposite directions, correct in both themes, and it needs no override.
+ *
+ * The near edge cannot do that trick: a highlight is white either way, and white
+ * has nowhere to go on a disc that is already #f2f5fb. So dark mode's dome is
+ * carried by the far edge and light mode's by the near one, and only that alpha
+ * is themed. Same trade tokens.css describes for panels, arriving upside down
+ * because the disc inverts and the panel does not.
+ *
+ * Two hairlines and a sheen, and no interior falloff - this is 34px across, and
+ * a fourth layer at that size is mud rather than depth.
+ */
 .qrClose {
+  --disc-rim-near: rgba(255, 255, 255, 0.85);
+  --disc-rim-far: color-mix(in srgb, var(--fg), var(--bg-base) 26%);
+  --disc-sheen: rgba(255, 255, 255, 0.7);
+
   position: absolute;
   top: -14px;
   right: -14px;
@@ -160,11 +190,30 @@
   height: 34px;
   border: 0;
   border-radius: 50%;
-  background: var(--fg);
+  background-color: var(--fg);
+  /* Same axis as every other surface on the page, including the card this is
+     pinned to - which passes no `lightAngle`, so both resolve to the 152deg
+     fallback and the disc is lit from where the card is. */
+  background-image: linear-gradient(
+    var(--surface-light-angle, 152deg),
+    var(--disc-sheen) 0%,
+    transparent 52%
+  );
   color: var(--bg-base);
   cursor: pointer;
-  box-shadow: var(--shadow-lift);
+  box-shadow:
+    var(--shadow-lift),
+    inset 1px 1px 0 0 var(--disc-rim-near),
+    inset -1px -1px 0 0 var(--disc-rim-far);
   transition: transform var(--dur-fast) var(--ease-gel);
+}
+
+/* The near edge and the sheen come down hard on paper: both are white, and here
+   they are landing on a near-black disc rather than a near-white one. At dark
+   mode's weights this reads as a chrome bezel. */
+:global([data-theme='light']) .qrClose {
+  --disc-rim-near: rgba(255, 255, 255, 0.4);
+  --disc-sheen: rgba(255, 255, 255, 0.17);
 }
 
 .qrClose:hover {

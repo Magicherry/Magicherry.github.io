@@ -30,6 +30,42 @@
   width: 100%;
   padding: 7px 8px 7px 10px;
   --surface-specular-size: 320px;
+  /*
+   * The nav keeps the old directional drop, in both themes, and opts out of the
+   * even halo the panels moved to.
+   *
+   * Panels sit *in* the page, so a shadow that only falls downward reads as a
+   * card lying on it; theirs now closes all the way round and the surface floats.
+   * The nav is fixed over scrolling content, where the same halo has nothing to
+   * fall onto - it just smears ink above and beside the bar, across whatever body
+   * text is passing under it, and the top half of it lands in the gap between the
+   * bar and the top of the viewport where nothing is asking to be separated. A
+   * tight shadow under the lower edge is the whole job: it says the bar is in
+   * front of the text, and stops.
+   *
+   * Same reasoning as the light-mode pins below, and the same caveat - this is a
+   * pin of a value tokens.css used to hold, not an independent decision.
+   */
+  --glass-drop:
+    0 1px 2px -1px rgba(0, 0, 0, 0.5),
+    0 10px 24px -14px rgba(0, 0, 0, 0.6),
+    0 30px 60px -34px rgba(0, 0, 0, 0.7);
+  /*
+   * The two-ended body wash is *not* pinned out here, unlike the shadow above,
+   * and the difference is worth stating because the bar's proportions make it
+   * look like it should be.
+   *
+   * A gradient's axis length is `|w·sinθ| + |h·cosθ|`. At 152deg over a 940x48
+   * bar that is 441px from the width against 42px from the height, so the wash
+   * runs essentially *along* the bar rather than down it - lit at the wordmark,
+   * falling off to plain tint under the links, returning at the controls. The
+   * height never gets a say. A short wide box does not behave like a short box.
+   *
+   * Which also means the bar was already being lit this way at its edges: the
+   * gradient ring in `.live::before` runs the same axis, `--glass-rim-light` at
+   * 0% to `--glass-rim-far` at 100%. The rim had two ends and the fill under it
+   * had one. This is the fill catching up.
+   */
 }
 
 /*
@@ -42,8 +78,9 @@
  *
  * Neither half of that holds for the nav. It is fixed over *moving* content, so
  * a bright even stroke sits directly on whatever body text is passing under it,
- * and the graded rim - lit at one corner, shaded at the other - is what keeps the
- * bar reading as an object rather than as a sticker. The shadow has the same
+ * and the graded rim - lit at one corner and again, at half, at the other - is
+ * what keeps the bar reading as an object rather than as a sticker. The shadow
+ * has the same
  * problem in reverse: a wide ambient under a fixed element does not fall onto
  * anything, it smears across a hundred vertical pixels of scrolling text.
  *
@@ -55,10 +92,37 @@
  */
 :global([data-theme='light']) .bar,
 :global([data-theme='light']) .topbar .iconBtn {
+  /*
+   * The contour, and the one role here that is *not* matched to dark mode. Dark
+   * gets a light hairline because a translucent bar over a near-black page is
+   * already separated by being brighter than it; on paper nothing is, and this
+   * ink line is what holds the bar's boundary against body text scrolling under
+   * it. An outline is not a highlight - the two lines below are the highlight,
+   * and those do match.
+   */
   --glass-edge: rgba(15, 23, 42, 0.13);
+  /*
+   * Lit at the near corner and again, at half strength, at the far one - the
+   * same distribution dark mode uses, at the same ratio (it runs 0.2 / 0.1).
+   *
+   * The far rim used to be ink here, not white: a *shadow* at the corner dark
+   * mode puts its second highlight on, with `--glass-inner-shade` turned on
+   * underneath it to deepen the same corner. That inverts the light rather than
+   * rescaling it - the bar read as lit from the upper left in dark and as lit
+   * from the upper left *and shaded from the lower right* in light, which is a
+   * different object, not the same one on a different page.
+   *
+   * White survives the swap because the far rim is transmitted light, which is
+   * about the substrate the bar is made of rather than the page behind it. It is
+   * subtle on paper, and it is supposed to be - see `--glass-rim-far` in the dark
+   * block of tokens.css for why half is the ceiling.
+   */
   --glass-rim-light: rgba(255, 255, 255, 0.7);
-  --glass-rim-far: rgba(9, 14, 24, 0.11);
-  --glass-inner-shade: rgba(15, 23, 42, 0.1);
+  --glass-rim-far: rgba(255, 255, 255, 0.35);
+  /* Off, because dark mode's is off, and for the reason stated there: the far
+     corner is already carrying a highlight and a dark wash arriving at the same
+     corner is the one thing guaranteed to argue with it. */
+  --glass-inner-shade: transparent;
 }
 
 :global([data-theme='light']) .bar {
