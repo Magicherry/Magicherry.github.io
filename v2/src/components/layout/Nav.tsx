@@ -72,8 +72,17 @@ export default function Nav() {
 
   return (
     <>
-      {/* Docked-nav widths only: the toggles get their own bar at the top so the
-          bottom bar stays purely navigational. */}
+      {/*
+        * Docked-nav widths only: the mark and the language toggle get their own
+        * bar at the top, so the bottom bar stays purely navigational.
+        *
+        * The mark is here because the docked bar has no room for it - five
+        * equal cells, no sixth - and a site whose name appears nowhere on a
+        * phone is a site you cannot identify from a screenshot. Pinning it to
+        * the top-left also puts it back where it sits on desktop, so the two
+        * layouts are the same arrangement at different widths rather than two
+        * different headers.
+        */}
       {dockedNav ? (
         <motion.div
           className={styles['topbar']}
@@ -81,6 +90,18 @@ export default function Nav() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.35, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
+          <button
+            type="button"
+            className={styles['topMark']}
+            onClick={() => scrollTo('home')}
+            aria-label={t(ui.actions.backToTop)}
+          >
+            {/* Decorative: the button is already labelled, and an alt here would
+                have a screen reader announce the portrait twice. Same URL the
+                hero card uses, so it is served from cache. */}
+            <img src={profile.avatar} alt="" width={44} height={44} decoding="async" />
+          </button>
+
           <Controls />
         </motion.div>
       ) : null}

@@ -494,11 +494,57 @@
 /*
  * ================================================================== topbar
  *
- * Mounted only at docked-nav widths (see Nav.tsx). Language pins left, theme
- * pins right, each in its own capsule rather than sharing one bar - a single
- * centred cluster would read as a second navigation element competing with the
- * one at the bottom of the screen.
+ * Mounted only at docked-nav widths (see Nav.tsx). The mark pins left, the
+ * language toggle pins right, each floating free rather than sharing a bar - a
+ * single strip across the top would read as a second navigation element
+ * competing with the one at the bottom of the screen, and the two ends of an
+ * empty rail are exactly where a phone's thumbs already are.
  */
+/*
+ * The mark, as a floating disc at the top-left.
+ *
+ * Not built on `.iconBtn` even though it is the same size and the same shape.
+ * That class is a glass *button* - tint, rim, blur, the lot - and all of it
+ * would be painted underneath an opaque photograph that fills the disc edge to
+ * edge. This needs one thing the glass build does not give it and none of the
+ * rest: a shadow, because the artwork ends in a pale circle and there is
+ * scrolling content passing directly behind it.
+ */
+.topMark {
+  pointer-events: auto;
+  display: block;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-circle);
+  corner-shape: round;
+  overflow: hidden;
+  /* Behind a photo with any transparency, and the colour the disc falls back to
+     while the image is still in flight. */
+  background: var(--bg-base);
+  box-shadow: var(--shadow-lift);
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-gel);
+}
+
+.topMark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Matches the press on the language button beside it - the two are a pair and
+   should answer a thumb the same way. */
+.topMark:active {
+  transform: scale(0.9);
+}
+
+.topMark:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .topbar {
   position: fixed;
   top: max(12px, env(safe-area-inset-top));
