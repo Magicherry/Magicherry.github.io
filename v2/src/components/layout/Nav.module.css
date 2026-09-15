@@ -68,70 +68,6 @@
    */
 }
 
-/*
- * Light mode: the nav opts out of the theme's glass tokens and pins its own.
- *
- * Light-mode panels now wear a flat white rim at full strength, all the way
- * round. That works for a panel resting on the page - it is a deliberate outline
- * over a static backdrop, and where the rim disappears into the pale background
- * the drop shadow takes over.
- *
- * Neither half of that holds for the nav. It is fixed over *moving* content, so
- * a bright even stroke sits directly on whatever body text is passing under it,
- * and the graded rim - lit at one corner and again, at half, at the other - is
- * what keeps the bar reading as an object rather than as a sticker. The shadow
- * has the same
- * problem in reverse: a wide ambient under a fixed element does not fall onto
- * anything, it smears across a hundred vertical pixels of scrolling text.
- *
- * So the nav keeps the graded rim and the tighter contact shadow - the values the
- * rest of the site has since moved on from, held here rather than in the theme.
- *
- * Keep in step with the light block of tokens.css if these roles are retuned -
- * these are pins, not independent design decisions.
- */
-:global([data-theme='light']) .bar,
-:global([data-theme='light']) .topbar .iconBtn {
-  /*
-   * The contour, and the one role here that is *not* matched to dark mode. Dark
-   * gets a light hairline because a translucent bar over a near-black page is
-   * already separated by being brighter than it; on paper nothing is, and this
-   * ink line is what holds the bar's boundary against body text scrolling under
-   * it. An outline is not a highlight - the two lines below are the highlight,
-   * and those do match.
-   */
-  --glass-edge: rgba(15, 23, 42, 0.13);
-  /*
-   * Lit at the near corner and again, at half strength, at the far one - the
-   * same distribution dark mode uses, at the same ratio (it runs 0.2 / 0.1).
-   *
-   * The far rim used to be ink here, not white: a *shadow* at the corner dark
-   * mode puts its second highlight on, with `--glass-inner-shade` turned on
-   * underneath it to deepen the same corner. That inverts the light rather than
-   * rescaling it - the bar read as lit from the upper left in dark and as lit
-   * from the upper left *and shaded from the lower right* in light, which is a
-   * different object, not the same one on a different page.
-   *
-   * White survives the swap because the far rim is transmitted light, which is
-   * about the substrate the bar is made of rather than the page behind it. It is
-   * subtle on paper, and it is supposed to be - see `--glass-rim-far` in the dark
-   * block of tokens.css for why half is the ceiling.
-   */
-  --glass-rim-light: rgba(255, 255, 255, 0.7);
-  --glass-rim-far: rgba(255, 255, 255, 0.35);
-  /* Off, because dark mode's is off, and for the reason stated there: the far
-     corner is already carrying a highlight and a dark wash arriving at the same
-     corner is the one thing guaranteed to argue with it. */
-  --glass-inner-shade: transparent;
-}
-
-:global([data-theme='light']) .bar {
-  --glass-drop:
-    0 1px 2px -1px rgba(15, 23, 42, 0.16),
-    0 10px 24px -12px rgba(15, 23, 42, 0.24),
-    0 30px 60px -34px rgba(15, 23, 42, 0.3);
-}
-
 /* --------------------------------------------------------------- wordmark */
 /* Columns are assigned explicitly so hiding the wordmark at narrow widths
    cannot let the links reflow into its track. */
@@ -143,7 +79,10 @@
   gap: var(--space-2);
   padding: 6px 10px;
   border: 0;
-  border-radius: var(--radius-full);
+  /* With the bar and the links. Everything in the nav is square now except the
+     avatar and the language chip, which are round because they are marks rather
+     than boxes. */
+  border-radius: var(--radius-chip);
   background: none;
   color: var(--fg);
   cursor: pointer;
@@ -151,27 +90,68 @@
   flex: none;
 }
 
+/*
+ * The one round thing on the bar, and it stays round in both layers - the
+ * clipping box and the image inside it, or the corners of the photo show at the
+ * chamfer.
+ *
+ * `--radius-circle` rather than `--radius-full`: the latter is a small cut in
+ * this design, not a capsule. The `corner-shape` reset is the other half - a 50%
+ * radius under the global bevel is a diamond.
+ *
+ * A face is not a plate. The cut corners are the site's shape language and they
+ * belong to surfaces; cropping a portrait into one reads as the avatar having
+ * been damaged rather than as it being part of the system.
+ */
 .markGlyph {
   display: block;
   width: 30px;
   height: 30px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-circle);
+  corner-shape: round;
   overflow: hidden;
   background: var(--bg-base);
+  /*
+   * No ring. It carried an accent circle and a little bloom for a while, on the
+   * model of the player card in the reference, and the mark is better without
+   * one: the artwork already ends in its own pale disc, so the ring was a second
+   * edge a pixel outside the first - and the wordmark beside it is set in the
+   * accent already, which is where that colour belongs on this cluster.
+   */
 }
 
 .markGlyph img {
   width: 100%;
   height: 100%;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-circle);
+  corner-shape: round;
   object-fit: cover;
 }
 
+/* The one piece of type on the bar that is a *name* rather than a control, so it
+   takes the stencil treatment the section titles do rather than the mono the
+   links use - caps, spaced, and heavy enough that the extra letterspace does not
+   read as thin. */
 .markText {
   font-size: var(--text-sm);
-  font-weight: 580;
-  letter-spacing: var(--tracking-tight);
+  font-weight: 720;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   white-space: nowrap;
+  /*
+   * The accent, not the foreground.
+   *
+   * In `--fg` the wordmark weighed exactly as much as the five nav labels beside
+   * it - same case, same tracking, near enough the same size - so the bar opened
+   * with six equal words and nothing said which of them was the name of the
+   * site. Colour is the cheapest separation available and it is the one the
+   * preloader already uses on the same word, so the two readings of the wordmark
+   * now match.
+   *
+   * It does not collide with the active-item state: that is marked by the bar
+   * under the label, and this has none.
+   */
+  color: var(--accent);
 }
 
 /* ------------------------------------------------------------------ links */
@@ -192,12 +172,34 @@
   gap: 7px;
   padding: 8px 13px;
   border: 0;
-  border-radius: var(--radius-full);
+  /*
+   * Square, with the chips, and for the same reason: a 7px chamfer on a 33px-tall
+   * item is a fifth of its height at each cut corner, and five of them in a row
+   * inside a bar that is itself cut put three different angled edges within a few
+   * pixels of each other. The bar keeps its plating; the items sitting in it are
+   * labels, and labels are stencilled.
+   */
+  border-radius: var(--radius-chip);
   background: none;
+  /*
+   * Set as machine labels: mono, caps, spaced, one step down in size.
+   *
+   * The size drop is what pays for the case and the tracking. Uppercase at
+   * --text-sm with 0.09em between the letters is ~18% wider than the sentence
+   * case it replaces, and five of these have to fit a 940px bar beside a
+   * wordmark and two controls; at --text-xs they land within a few pixels of
+   * where they used to.
+   *
+   * `font: inherit` first, then the overrides - the shorthand resets family,
+   * size and weight in one go and would otherwise undo whatever is stated
+   * before it.
+   */
   font: inherit;
-  font-size: var(--text-sm);
-  font-weight: 500;
-  letter-spacing: var(--tracking-normal);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
   white-space: nowrap;
   cursor: pointer;
   /*
@@ -238,12 +240,27 @@
   font-weight: 560;
 }
 
-/* Sized in rem, not em. Inheriting from --text-sm left these at ~13px, which
-   reads as a smudge next to the label rather than an icon. */
+/*
+ * Not drawn on the floating bar - only in the docked layout below 760px.
+ *
+ * The two modes are answering different questions. Docked, each item is a
+ * thumb-sized cell with the label under the glyph, and the glyph is what you
+ * actually aim at; a 12px word alone in a 60px cell is not a target. On the
+ * floating bar there is room for the word at full size, and the icon beside it
+ * was decoration that happened to be the same size as the text - it doubled the
+ * width of the row, pushed the five labels apart, and said nothing the word
+ * did not.
+ *
+ * The reference bar is entirely typographic for the same reason: mono caps, a
+ * marker under the selected one, and no glyphs anywhere.
+ *
+ * Hidden rather than removed from the markup, because the element is the same
+ * one the docked bar needs - `Nav.tsx` renders one set of items for both modes
+ * on purpose (see the comment on `Controls`, which makes the same argument about
+ * the accessibility tree).
+ */
 .linkIcon {
-  position: relative;
-  z-index: 1;
-  font-size: 1.12rem;
+  display: none;
 }
 
 .linkText {
@@ -252,19 +269,102 @@
 }
 
 /*
- * Just a wash. No outline, no rim, no glow.
+ * A wash and a bar under it - a selected channel, not a pill.
  *
- * The accent-coloured label is what marks the position; the pill only needs to
- * give it somewhere to sit. Every edge added here competes with that - and the
- * bar this sits inside already has its own rim, so a second ring 8px in reads as
- * a border on a border.
+ * The wash alone is what this used to be, and the reasoning held while the shape
+ * was a capsule: the accent label marks the position and the pill only gives it
+ * somewhere to sit. A cut plate cannot do that job as quietly, because the two
+ * chamfers are a *shape* and at 13% fill they read as a smudge rather than as a
+ * deliberate one.
+ *
+ * So the position is marked at the bottom edge instead, where a HUD marks it.
+ * The bar is solid accent and full width, which is the loudest thing the bar
+ * carries and the only thing on it that has to be read at a glance; the wash is
+ * demoted to the ground it sits on. Still no outline - the plate this sits
+ * inside has its own rim, and a second ring 8px in is a border on a border.
  */
 .indicator {
   position: absolute;
   inset: 0;
   z-index: 0;
-  border-radius: var(--radius-full);
-  background: color-mix(in srgb, var(--accent) 13%, transparent);
+  /* Follows the item it fills - it is that item's ground, not a shape of its
+     own, and a cut wash inside a square label reads as a misalignment. */
+  border-radius: var(--radius-chip);
+  /*
+   * No fill at all - the marker and the beam below are the entire state.
+   *
+   * This carried a wash that faded upward, and it was the thing that made the
+   * indicator read as a *box*: a tint has edges however soft its top is, and the
+   * two vertical ones sat hard against the cell's sides. The eye resolved a
+   * filled rectangle with a bar under it rather than a lit tab, which is the
+   * opposite of the reference - the selected tab in the game has no ground of
+   * any kind, only an underline and the light standing over it.
+   *
+   * Nothing is lost by removing it: the label is already accent-coloured, so the
+   * item is marked twice over without a fill. And with no rectangle to follow,
+   * the `layoutId` travel between items reads as the light moving rather than as
+   * a box sliding along the bar.
+   */
+  background: none;
+}
+
+/*
+ * The marker bar, inset from the item's edges rather than running its full width.
+ *
+ * In the reference the underline under a selected tab is roughly the width of the
+ * *label*, not of the cell it sits in - which is what makes it read as belonging
+ * to the word rather than as a table border under it. Drawn as a layer instead of
+ * the `inset 0 -2px` box-shadow it replaces, because a shadow cannot be inset
+ * horizontally and cannot carry a glow outward at the same time.
+ *
+ * The glow is the point of drawing it at all: the bar is an emitter, so it spills
+ * a little light onto the bar around it.
+ */
+.indicator::before {
+  content: '';
+  position: absolute;
+  left: 11%;
+  right: 11%;
+  bottom: 0;
+  height: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 9px 0 color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+/*
+ * The beam.
+ *
+ * This is the detail the in-game tabs are actually recognisable by: above the
+ * marker there is a narrow column of light standing up behind the label, much
+ * taller than the underline and much narrower than the cell - not a glow around
+ * the bar but a shaft rising from it.
+ *
+ * A radial ellipse anchored to the bottom edge, not a linear ramp behind a blur.
+ * The linear version was a rectangle that faded at one end, so its two vertical
+ * sides stayed straight however much blur was thrown at them - and straight sides
+ * are exactly what stops something reading as light. An ellipse falls off on both
+ * axes at once, which is what a shaft of light actually does, and it costs no
+ * filter pass to do it.
+ *
+ * It overshoots the item vertically, which the bar's own padding has room for:
+ * the rail does not clip, and a beam that stopped exactly at the label's
+ * ascenders would look like a filled box rather than light.
+ */
+.indicator::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  translate: -50% 0;
+  width: 88%;
+  height: 132%;
+  background: radial-gradient(
+    ellipse 58% 100% at 50% 100%,
+    color-mix(in srgb, var(--accent) 36%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 12%, transparent) 38%,
+    transparent 74%
+  );
+  pointer-events: none;
 }
 
 .link:focus-visible {
@@ -304,7 +404,25 @@
   width: 37px;
   height: 37px;
   border: 0;
-  border-radius: var(--radius-full);
+  /*
+   * A circle, which is the shape this control was drawn for.
+   *
+   * It has been through the whole vocabulary - chamfered, square, rounded - and
+   * the disc is the one that makes the rest of the button work. The language chip
+   * hanging off its lower-right is placed by negative offsets that put its centre
+   * *on the button's arc*; against a flat edge those same offsets park it past
+   * the corner, which is why it used to read as a stray notification dot. A round
+   * button is also the only one whose outline stays a constant distance from the
+   * glyph at its centre, and the glyph here is a symbol rather than a word.
+   *
+   * It agrees with the bar, too: the capsule's ends are semicircles of exactly
+   * this kind, so the control repeats the shape of the rail it sits in.
+   *
+   * `corner-shape: round` is required, not decorative: base.css bevels every
+   * radius on the page by default, and 999px bevelled is a diamond.
+   */
+  border-radius: var(--radius-circle);
+  corner-shape: round;
   background: color-mix(in srgb, var(--fg) 6%, transparent);
   color: var(--fg);
   font: inherit;
@@ -350,7 +468,20 @@
   min-width: 15px;
   height: 15px;
   padding: 0 3px;
-  border-radius: var(--radius-full);
+  /*
+   * Round, like the avatar at the other end of the bar - `--radius-circle` plus
+   * the `corner-shape` reset, since `--radius-full` is a small cut in this
+   * design and a 999px radius under the global bevel is a diamond.
+   *
+   * The geometry above was drawn for a circle and only works as one: an explicit
+   * box with a line-height equal to its height makes this a disc for a single
+   * glyph and a capsule for two, and the negative offsets then put its centre on
+   * the button's own edge. At 15px a chamfer is most of the chip, and what it
+   * takes away is precisely the roundness that reads as a badge *on* the control
+   * rather than a fragment parked beside it.
+   */
+  border-radius: var(--radius-circle);
+  corner-shape: round;
   background: var(--accent);
   color: var(--accent-contrast);
   font-family: var(--font-mono);
@@ -416,14 +547,8 @@
     inset 0 0 0 1px var(--glass-edge),
     inset 0 1px 0 var(--glass-rim-light),
     var(--topbar-drop);
-  -webkit-backdrop-filter: blur(18px) saturate(var(--glass-saturate)) var(--glass-contrast, );
-  backdrop-filter: blur(18px) saturate(var(--glass-saturate)) var(--glass-contrast, );
-}
-
-:global([data-theme='light']) .topbar .iconBtn {
-  --topbar-drop:
-    0 1px 2px -1px rgba(15, 23, 42, 0.14),
-    0 8px 16px -10px rgba(15, 23, 42, 0.2);
+  -webkit-backdrop-filter: blur(18px) saturate(var(--glass-saturate));
+  backdrop-filter: blur(18px) saturate(var(--glass-saturate));
 }
 
 /* Restated because `.topbar .iconBtn` above outranks the generic `.iconBtn:hover`
@@ -434,10 +559,8 @@
 }
 
 :global([data-refraction='on']) .topbar .iconBtn {
-  -webkit-backdrop-filter: blur(18px) saturate(var(--glass-saturate)) var(--glass-contrast, )
-    url('#glass-thin');
-  backdrop-filter: blur(18px) saturate(var(--glass-saturate)) var(--glass-contrast, )
-    url('#glass-thin');
+  -webkit-backdrop-filter: blur(18px) saturate(var(--glass-saturate)) url('#glass-thin');
+  backdrop-filter: blur(18px) saturate(var(--glass-saturate)) url('#glass-thin');
 }
 
 /* These float free over the page rather than sitting on a bar, and `--glass-tint`
@@ -530,7 +653,41 @@
     font-size: var(--text-2xs);
   }
 
+  /*
+   * A short centred tick, not an underline across the cell.
+   *
+   * The desktop marker is inset by a percentage because there it tracks the
+   * width of a label, and the labels sit in cells that fit them. Docked, the
+   * cells are equal fifths of the bar and the labels are not - "ABOUT" against
+   * "PROJECTS" - so a percentage draws five bars of the same width under five
+   * words of very different ones, and the widest of them still runs well past
+   * its own text.
+   *
+   * A fixed width fixes both halves at once: every tick is identical, and none
+   * of them is pretending to underline anything. At 22px it reads as a mark
+   * *placed* under the active item, which is what the docked bar needs - there
+   * is no room for it to be anything more.
+   */
+  .indicator::before {
+    left: 50%;
+    right: auto;
+    width: 22px;
+    translate: -50% 0;
+  }
+
+  /* Narrowed with it. The beam is the marker's own light, so a wide plume over a
+     short tick reads as two unrelated marks rather than one. */
+  .indicator::after {
+    width: 58%;
+  }
+
+  /* Back on, and it leads here: the docked cell stacks the glyph over the label
+     and the glyph is the target. Sized in rem, not em - inheriting from the
+     label's --text-2xs left it reading as a smudge rather than an icon. */
   .linkIcon {
+    display: block;
+    position: relative;
+    z-index: 1;
     font-size: 1.15rem;
   }
 }

@@ -31,7 +31,7 @@
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
   padding: 2px 7px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-chip);
   background: color-mix(in srgb, var(--accent) 14%, transparent);
   color: var(--accent);
   letter-spacing: 0;
@@ -101,12 +101,15 @@
 }
 
 /*
- * Some brand marks are effectively monochrome black (Next.js, Apple, OpenAI)
- * and disappear into a dark background - or white ones into a light one.
- * Inverting only those, only in the theme where they vanish, keeps every mark
- * legible without recolouring the ones that are already fine.
+ * Some brand marks are effectively monochrome black (Next.js, Apple, OpenAI) and
+ * disappear into this page's near-black field. Inverting only those keeps every
+ * mark legible without recolouring the ones that are already fine.
+ *
+ * Unconditional now. It used to be scoped to `[data-theme='dark']` because the
+ * same inversion makes a white mark vanish on paper; with one appearance left
+ * there is no second case to guard against.
  */
-:global([data-theme='dark']) .icon[data-adaptive] img {
+.icon[data-adaptive] img {
   filter: invert(1) brightness(1.6);
 }
 
@@ -121,6 +124,9 @@
  */
 .icon img[data-tile] {
   border-radius: 20%;
+  /* Vendor artwork, not a surface of ours. The mark was drawn with a rounded
+     tile and chamfering it here would be redrawing someone else's logo. */
+  corner-shape: round;
 }
 
 .name {

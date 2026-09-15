@@ -66,7 +66,7 @@ function readOverride<T>(key: string, isValid: (v: unknown) => v is T): StoredOv
 
 export interface TimedPreferenceOptions<T> {
   storageKey: string
-  /** Read the ambient value: system theme, browser language, and so on. */
+  /** Read the ambient value: browser language, and so on. */
   getAutoValue: () => T
   isValid: (value: unknown) => value is T
   /** How long a manual choice lasts. `null` keeps it until it is changed. */

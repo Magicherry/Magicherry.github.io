@@ -45,6 +45,11 @@
   width: clamp(120px, 32vw, 164px);
   height: clamp(120px, 32vw, 164px);
   border-radius: 50%;
+  /* The artwork *is* a circle - an owl inside a pale disc - so a chamfered crop
+     would cut the corners off a shape that has none, leaving four flat chords
+     against nothing. The mark keeps its own silhouette; the plates around it are
+     the site's shape, not the logo's. */
+  corner-shape: round;
   object-fit: cover;
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent),
@@ -62,11 +67,15 @@
  * mark above it there are two things competing to be looked at first, and the
  * one that should win is the one you recognise without reading.
  */
+/* Set like the nav's wordmark and the section titles - caps, spaced, heavy. This
+   is the first type a visitor sees and it has to establish the voice the rest of
+   the page keeps. */
 .wordmark {
   display: block;
   font-size: clamp(1.35rem, 5.4vw, 2.1rem);
-  font-weight: 700;
-  letter-spacing: var(--tracking-tight);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   line-height: 1;
   color: var(--accent);
 }
@@ -77,13 +86,37 @@
  * 270px wordmark it crosses slowly enough to look like a second progress bar
  * sitting directly above the real one, so it is gone.
  */
+/*
+ * Segmented, square-ended.
+ *
+ * Every bar in the reference - the battle-pass tier, the memory budget, the
+ * ammunition counters - is built out of discrete ticks rather than as a
+ * continuous stripe, and it is a legibility device before it is a style one: a
+ * solid bar reports a *ratio* and you have to estimate it, while a comb reports
+ * a *count* and you can read it at a glance.
+ *
+ * The comb is a mask rather than a background, which is what makes it survive
+ * the fill: `.meterFill` scales along X underneath, and masking the track cuts
+ * the track and the fill in the same places with one declaration. Painting gaps
+ * on top instead would mean drawing them in the curtain's own colour, and the
+ * curtain is a gradient.
+ *
+ * 5px on, 2px off. At 180px that is ~25 ticks - enough that the bar still reads
+ * as a bar at a glance, few enough that individual segments are countable, which
+ * is the entire reason for doing this.
+ *
+ * Rounded caps would make it a progress *pill*; cut flat it is a gauge track, the
+ * same distinction the scrollbar makes.
+ */
 .meter {
   justify-self: center;
   width: min(180px, 40vw);
   height: 2px;
-  border-radius: var(--radius-full);
+  border-radius: 0;
   background: var(--fg-ghost);
   overflow: hidden;
+  -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 5px, transparent 5px 7px);
+  mask-image: repeating-linear-gradient(90deg, #000 0 5px, transparent 5px 7px);
 }
 
 .meterFill {

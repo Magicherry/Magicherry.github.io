@@ -10,24 +10,64 @@
   gap: var(--space-2);
 }
 
+/*
+ * A settings-list row, in the sense the reference means it: a hairline box with
+ * a wash that is brightest at the left edge and gone by the middle.
+ *
+ * These used to be bare text rows that appeared only under the pointer, which
+ * left the panel reading as a paragraph of links rather than as a list of
+ * channels - eight rows and not one boundary between them. Giving each one a box
+ * at rest is what turns the block into a manifest.
+ *
+ * The wash runs along the row rather than down it, and that is not decoration:
+ * the row is read left to right, the icon and label are at the left, and lighting
+ * the end you start from is what stops a 240px-wide box from looking empty.
+ * Every row in the reference is built this way.
+ */
 .link {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
+  /* Square, like everything else that is a list item rather than a surface. */
+  border-radius: var(--radius-chip);
+  background-image: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--fg) 5%, transparent) 0%,
+    transparent 58%
+  );
+  box-shadow: inset 0 0 0 1px var(--line);
   color: var(--fg);
   transition:
     background-color var(--dur-fast) var(--ease-enter),
+    box-shadow var(--dur-fast) var(--ease-enter),
     transform var(--dur-base) var(--ease-gel),
     color var(--dur-fast) var(--ease-enter);
 }
 
+/*
+ * Hover lifts the row and marks it along its bottom edge.
+ *
+ * Two corrections, and they are the same correction. The bar was on the left and
+ * the row slid *right*, which is a horizontal gesture on a page where every
+ * other selection - the nav's active item, the project filters - marks itself
+ * with a bar underneath and every other surface answers the pointer by rising.
+ * A row that slides sideways reads as being dragged; one that lifts reads as
+ * being picked up, and that is what a link does.
+ *
+ * The lift and the marker also now agree with each other: the bar sits on the
+ * edge the row is moving away from, so the two read as one motion rather than as
+ * a highlight plus an unrelated nudge.
+ *
+ * The brand colour still carries the fill - one row lit at a time, and entries
+ * with no usable brand hue (GitHub's near-black) fall back to a neutral wash.
+ */
 .link:hover {
-  transform: translateX(3px);
-  /* The brand colour surfaces here instead - one row lit at a time. Entries with
-     no usable brand hue (GitHub's near-black) fall back to a neutral wash. */
-  background: color-mix(in srgb, var(--brand, var(--fg)) 10%, transparent);
+  transform: translateY(-3px);
+  background-color: color-mix(in srgb, var(--brand, var(--fg)) 10%, transparent);
+  box-shadow:
+    inset 0 0 0 1px var(--line-strong),
+    inset 0 -2px 0 0 var(--accent);
   color: var(--fg-strong);
 }
 
@@ -57,8 +97,9 @@
   object-fit: contain;
 }
 
-/* GitHub's mark is #181717 and disappears against a dark card. */
-:global([data-theme='dark']) .linkIcon img[data-adaptive] {
+/* GitHub's mark is #181717 and disappears against a dark card. Unconditional -
+   see the same rule in Stack for why the theme guard came off. */
+.linkIcon img[data-adaptive] {
   filter: invert(1) brightness(1.6);
 }
 
@@ -76,6 +117,8 @@
  */
 .linkIcon img[data-tile] {
   border-radius: 23%;
+  /* Someone else's artwork, drawn round. See the same rule in Stack. */
+  corner-shape: round;
 }
 
 .linkText {
@@ -143,34 +186,38 @@
   padding: var(--space-4);
 }
 
+/*
+ * Square, and here it is a correctness fix rather than a stylistic one.
+ *
+ * This carried `--radius-sm`, which under the global bevel cuts a 7px triangle
+ * off the top-right and bottom-left. A QR code is *read by a machine*, and the
+ * three corners it is read by - the finder patterns - are the top-left,
+ * top-right and bottom-left. Two of them sat in the cut.
+ *
+ * Same defect as the hero portrait, and the same rule: a radius on a surface
+ * styles the surface, a radius on an image trims the image.
+ */
 .qrCard img {
   width: 100%;
   height: auto;
-  border-radius: var(--radius-sm);
+  border-radius: 0;
 }
 
 /*
  * The close disc is solid `--fg`, and that is why it cannot simply borrow
  * `--glass-rim-light` / `--glass-rim-far`.
  *
- * Those two are stated against a translucent panel sitting on the page. This
- * disc is the page's foreground colour, so it *inverts* with the theme - near
- * white in dark, near black in light - while the rim tokens do not. Reusing them
- * puts a white hairline on a near-white disc in dark mode, which is nothing, and
- * the same hairline on a near-black one in light mode, which is a hard chrome
- * ring. Neither is a rim.
+ * Those two are stated against a *translucent panel* sitting on the page. This
+ * disc is the page's foreground colour - a near-white puck on a near-black page -
+ * so reusing them would put a white hairline on a white disc, which is nothing
+ * at all.
  *
- * So the rim is stated against the disc. The far edge is the interesting half:
- * `color-mix(... var(--bg-base) 26%)` means "pull this edge back toward the
- * page", which darkens the white disc and lightens the black one - both of them
- * the body colour losing its grip as the surface turns away. One expression,
- * opposite directions, correct in both themes, and it needs no override.
- *
- * The near edge cannot do that trick: a highlight is white either way, and white
- * has nowhere to go on a disc that is already #f2f5fb. So dark mode's dome is
- * carried by the far edge and light mode's by the near one, and only that alpha
- * is themed. Same trade tokens.css describes for panels, arriving upside down
- * because the disc inverts and the panel does not.
+ * So the rim is stated against the disc instead, and the far edge is the
+ * interesting half: `color-mix(... var(--bg-base) 26%)` means "pull this edge
+ * back toward the page", which is the body colour losing its grip as the surface
+ * turns away. The near edge cannot do that trick - a highlight is white, and
+ * white has nowhere to go on a disc that is already #e7edf6 - so the dome here is
+ * carried by the far edge and the sheen, with the near rim doing very little.
  *
  * Two hairlines and a sheen, and no interior falloff - this is 34px across, and
  * a fourth layer at that size is mud rather than depth.
@@ -190,6 +237,10 @@
   height: 34px;
   border: 0;
   border-radius: 50%;
+  /* The one float on the page that is not a plate, and it stays that way: this
+     is a control stuck onto a card rather than a surface of its own, and the
+     design keeps round for things that are stuck on - dots, gauges, this. */
+  corner-shape: round;
   background-color: var(--fg);
   /* Same axis as every other surface on the page, including the card this is
      pinned to - which passes no `lightAngle`, so both resolve to the 152deg
@@ -206,14 +257,6 @@
     inset 1px 1px 0 0 var(--disc-rim-near),
     inset -1px -1px 0 0 var(--disc-rim-far);
   transition: transform var(--dur-fast) var(--ease-gel);
-}
-
-/* The near edge and the sheen come down hard on paper: both are white, and here
-   they are landing on a near-black disc rather than a near-white one. At dark
-   mode's weights this reads as a chrome bezel. */
-:global([data-theme='light']) .qrClose {
-  --disc-rim-near: rgba(255, 255, 255, 0.4);
-  --disc-sheen: rgba(255, 255, 255, 0.17);
 }
 
 .qrClose:hover {

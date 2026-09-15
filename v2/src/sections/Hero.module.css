@@ -62,6 +62,15 @@
   color: var(--fg-muted);
 }
 
+/*
+ * Hidden above the stacking breakpoint, where "I am" belongs to the name line.
+ * The two copies are swapped in the phone block at the bottom of this file; see
+ * Hero.tsx for why the phrase is rendered twice rather than moved.
+ */
+.introInline {
+  display: none;
+}
+
 .wave {
   display: inline-block;
   transform-origin: 72% 78%;
@@ -103,15 +112,31 @@
 
 /* The element that moves. Kept free of a gradient of its own so the one on
    `.name` inside it is the only thing clipping to text. */
+/*
+ * Set as stencilled caps, like the section titles - this is the largest piece of
+ * type on the site and it would be the only thing left set in sentence case.
+ *
+ * `text-transform` rather than typing the name in capitals in the content layer:
+ * the string is a name, and `profile.ts` should keep saying so. Display case is
+ * a presentation decision and belongs here, where the Chinese reading can opt
+ * out of the letterspacing that comes with it (see below) without the content
+ * needing two spellings.
+ */
 .nameLine {
   display: block;
   font-size: var(--text-4xl);
   font-weight: 500;
-  /* Not --tracking-tighter: at -0.045em the Chinese characters start to crowd
-     each other, and CJK has no kerning slack to give. */
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-stencil);
+  text-transform: uppercase;
   line-height: 1.12;
   color: var(--fg-muted);
+}
+
+/* CJK takes the case change for free - Han has no case - but not the tracking:
+   Chinese glyphs carry their own advance width, and spacing them opens gaps that
+   read as word breaks in a language that does not have them. */
+.nameLine:lang(zh) {
+  letter-spacing: var(--tracking-tight);
 }
 
 .name {
@@ -123,7 +148,12 @@
    * whole `background-clip: text` mechanism out of the hero, and with it the
    * layer-promotion trap that made the name render as nothing.
    */
-  font-weight: 660;
+  /* Heavier than the 660 it carried, for the reason the section titles are 760:
+     set caps cover more of the line than lowercase does, so the same stroke
+     weight reads a step lighter. The gap to the 500 of the "I am" before it is
+     what separates the two halves of the sentence, and it has to survive the
+     case change. */
+  font-weight: 780;
   color: var(--fg-strong);
 }
 
@@ -239,9 +269,22 @@
   --surface-specular-size: 300px;
 }
 
+/*
+ * Square, because this box *clips a photograph*.
+ *
+ * It carried `--radius-md`, which is a two-corner shorthand under the global
+ * `corner-shape: bevel` - so `overflow: hidden` was slicing a 9px triangle off
+ * the top-right and bottom-left of the subject. On a panel that cut is the shape
+ * language; on a photo it is damage, and it read as one: the card looked like a
+ * print someone had trimmed the corners off.
+ *
+ * The distinction is worth stating because it applies to every clipping box on
+ * the site. A radius on a *surface* styles the surface. A radius on a container
+ * whose job is to crop an image styles the image, and the image did not ask.
+ */
 .portrait {
   position: relative;
-  border-radius: var(--radius-md);
+  border-radius: 0;
   overflow: hidden;
   aspect-ratio: 1;
   background: var(--portrait-bed);
@@ -316,16 +359,23 @@
   text-align: center;
 }
 
+/* Mono, because these are *readouts*. Three numbers of different widths set in a
+   proportional face sit on three different centres however the cells are
+   aligned; tabular figures give the row one rhythm. */
 .statValue {
+  font-family: var(--font-mono);
   font-size: var(--text-lg);
-  font-weight: 640;
-  letter-spacing: var(--tracking-tight);
+  font-weight: 700;
+  letter-spacing: var(--tracking-normal);
   color: var(--accent);
 }
 
 .statLabel {
+  font-family: var(--font-mono);
   font-size: var(--text-2xs);
   line-height: 1.35;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
   color: var(--fg-faint);
 }
 
@@ -343,6 +393,9 @@
   border-radius: var(--radius-full);
   background: none;
   color: var(--fg-muted);
+  /* Already caps and already spaced; mono is what puts it in the same voice as
+     the nav labels and the slate indices rather than reading as small prose. */
+  font-family: var(--font-mono);
   font-size: var(--text-2xs);
   letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
@@ -459,6 +512,33 @@
   }
 
   /*
+   * The swap: "I am" leaves the display line and finishes the greeting instead.
+   *
+   * Stacked and centred, it had a whole display-sized line to itself between the
+   * greeting and the name - three lines of heading where the middle one carries
+   * the least. Set at the greeting's size it completes a sentence that was
+   * already there ("Hi there 👋 I AM") and the name gets the big line alone,
+   * which is the only part of the heading anyone is reading for.
+   *
+   * Exactly one copy is `display: none` at any width, so the accessibility tree
+   * sees the phrase once. See Hero.tsx.
+   */
+  .introInline {
+    display: inline;
+    /* Set caps, against the greeting's sentence case, so the two halves of the
+       line stay legible as two things rather than running together as one odd
+       phrase. It is also the register the name below is in, which is what makes
+       the line read as leading into it. */
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-stencil);
+    color: var(--fg-faint);
+  }
+
+  .introLead {
+    display: none;
+  }
+
+  /*
    * Bigger, and sized in vw rather than stepped up a fixed amount.
    *
    * The shared tokens both bottom out on a phone - `--text-4xl` sits on its
@@ -468,11 +548,13 @@
    * back to the reader instead of leaving it as margin.
    *
    * The ceilings are the wrap points, measured against the longest string each
-   * line has to carry. For the name that is "I am Daniel Zhou." (the Chinese
-   * reading is six glyphs and has room to spare); for the role it is "Machine
-   * Learning Engineer", which is the real constraint on that line and why it
-   * lands well under the greeting's own ceiling despite them sharing a token
-   * today.
+   * line has to carry. The name line now carries "Daniel Zhou." alone - "I am"
+   * moved up to the greeting above - so it has gained about a third of its width
+   * back as headroom; the clamp is left where it was rather than spent, because
+   * the value below it was picked against a 360px screen and that constraint has
+   * not changed. For the role the constraint is "Machine Learning Engineer",
+   * which is why it lands well under the greeting's own ceiling despite the two
+   * sharing a token today.
    */
   .greeting {
     font-size: clamp(1.35rem, 5.6vw, 1.6rem);
@@ -486,13 +568,14 @@
   }
 
   /*
-   * Insurance rather than a fix: if the line ever wraps it has to break after
-   * "I am", because a name split across two lines is worse than a long one.
+   * Insurance rather than a fix: a name split across two lines is worse than a
+   * long one, and with "I am" gone from this line there is nowhere else for a
+   * break to go - so the line either fits or it does not.
    *
-   * The failure mode if the name itself ever outgrows the column is a clip, not
-   * a wrap - `.hero` is `overflow: clip` on the x axis. Worth knowing, not worth
-   * guarding today: "Daniel Zhou." occupies 258px of a 393px column at the top
-   * of the clamp, so there is half a name of headroom.
+   * The failure mode if it does not is a clip, not a wrap - `.hero` is
+   * `overflow: clip` on the x axis. Worth knowing, not worth guarding today:
+   * "Daniel Zhou." occupies 258px of a 393px column at the top of the clamp, so
+   * there is half a name of headroom.
    */
   .name {
     white-space: nowrap;

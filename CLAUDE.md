@@ -34,7 +34,7 @@ npm run preview    # serve the production build on 3002
 
 ### Provider stack
 
-`App.tsx` nests `ThemeProvider > LocaleProvider > IntroProvider > ScrollProvider > Shell`. Sections mount from the first commit — only their *entrance animations* wait on the intro flag, so the preloader curtain lifts onto an already-laid-out page.
+`App.tsx` nests `LocaleProvider > IntroProvider > ScrollProvider > Shell`. Sections mount from the first commit — only their *entrance animations* wait on the intro flag, so the preloader curtain lifts onto an already-laid-out page.
 
 ### Content layer — bilingual by type
 
@@ -50,19 +50,31 @@ Prose carries two inline markers parsed by `<RichText>` (~60 lines, no markdown 
 2. **Blur-only** — the default everywhere else.
 3. **Opaque** — `@supports not (backdrop-filter: ...)`, plus designed states for `prefers-reduced-transparency` and `prefers-reduced-motion`.
 
-`backdrop` defaults to `'flat'` on purpose: `'live'` runs a real `backdrop-filter` pass every frame the animated aurora behind it changes, so it is a permanent per-element cost and is used on roughly six surfaces site-wide. Everything else fakes glass with fill, rim, inner glow and specular for free. Do not add `'live'` casually, and do not hand-roll `backdrop-filter` outside this component.
+`backdrop` defaults to `'flat'` on purpose: `'live'` runs a real `backdrop-filter` pass every frame the animated field behind it changes, so it is a permanent per-element cost and is used on roughly six surfaces site-wide. Everything else fakes glass with fill, rim, inner glow and specular for free. Do not add `'live'` casually, and do not hand-roll `backdrop-filter` outside this component.
+
+**Panels are square with a bracketed frame:** four faint edges (`--glass-edge`) and four bright right-angles at the corners (`--hud-bracket`), drawn as eight hairline gradients by `.surface::before` and switched off per surface with `--surface-tick: transparent`. The ratio between the two — brackets several times the edge — *is* the design; bring either toward the other and the figure collapses into an ordinary outline. `.surface` hard-codes `border-radius: 0` and ignores the `radius` prop; `.live` and the `.circle`/`.rounded` escape hatches restate it. A `'live'` surface swaps the brackets for its gradient rim ring (`.live::before` resets the shorthand): one edge treatment per surface, never both.
 
 ### Tokens and theming
 
-`src/styles/tokens.css` is two-tier: a **palette** tier of raw values that must never appear in component CSS, and a **semantic** tier that components exclusively read. Theming rewrites only the semantic tier under `[data-theme='light']`. Dark and light are separately tuned designs, not one palette inverted — light-mode glass *absorbs* (darkens) where dark-mode glass brightens. Most visual changes start here, not in a component.
+`src/styles/tokens.css` is two-tier: a **palette** tier of raw values that must never appear in component CSS, and a **semantic** tier that components exclusively read. Components ask for roles, this file answers — so most visual changes start here, not in a component.
 
-Theme switching in `lib/theme.tsx` uses the View Transitions API to reveal the new palette under an expanding circle (keyframes and easing in `base.css`; only the geometry is computed per click). It deliberately does **not** transition properties across the document.
+**There is one appearance and it is dark.** A light theme was removed along with the toggle, `lib/theme.tsx`, the pre-paint script in `index.html`, the view-transition reveal, and every `[data-theme]` selector. Don't add `[data-theme=…]` rules back; `<html>` no longer carries the attribute. `--glass-inner-shade` and `--glass-specular-blend` survive as deliberately-inert slots (a transparent shadow layer keeps the hover stack interpolable — `box-shadow` lists of unequal length snap).
 
-**Three values are duplicated between `src/lib/theme.tsx` and the pre-paint script in `index.html` and are marked KEEP IN SYNC:** `DEFAULT_THEME` (dark for everyone, `prefers-color-scheme` included), the `v2:theme` localStorage shape, and `THEME_COLOR` (sampled from the *composited* backdrop at the viewport edge — not `--bg-base`, which paints a black band on phones).
+The design is a **tactical** one (drawn against Call of Duty: Black Ops 7): a near-black cold field with v1's bright cyan carrying every accent.
+
+There is exactly **one accent hue** — cyan — and everything reads it: links, heading highlights, readouts, rails, buttons, focus rings, glass rim hovers. The ember the tactical design started from is gone from the interface entirely; it survives only as a faint bloom in the field (`--aurora-3`, a literal) and as the unspent `--accent-warm`. Don't reintroduce a second bright hue without a reason the cyan cannot carry.
+
+Three consequences are easy to trip over:
+
+- **The radius scale holds four-value shorthands, not lengths** (`--radius-lg: 0 13px 0 13px`), and `base.css` sets `corner-shape: bevel` on `:where(*)`. Together that makes a cut plate at the top-right and bottom-left. Anything that must be round — status dots, vendor app-icon tiles, the preloader mark, the nav bar and its language button — sets `corner-shape: round` explicitly, and needs a *single-length* radius (`--radius-round`, `--radius-circle`) since a two-corner shorthand would arc two corners and leave two square. `--radius-full` is a small cut, not a capsule; `--radius-chip` is 0, for chips and tags too short to carry a chamfer without turning into parallelograms. `corner-shape` is Chromium-only and degrades to rounded corners elsewhere, which is why the angular language is carried in parallel by the corner brackets, HUD rules and stencilled caps.
+- **Buttons are square and bracketed.** `<Action>` is the one component with no chamfer (`--radius-chip`) — a button is a command, not a surface — and its hover/focus state draws a pair of detached `[ ]` calipers via `.action::before`, which is why `.action` must not carry `overflow: hidden`.
+- **Interface type is mono caps; prose is not.** Nav links, buttons, chips, section slates and readouts are `--font-mono`, uppercase, positive tracking. Section titles and the hero name are set caps at `--tracking-stencil` with a `:lang(zh)` reset — Han carries its own advance width and letterspacing it opens gaps that read as word breaks.
+
+`<meta name="theme-color">` in `index.html` is a static value sampled from the *composited* backdrop at the viewport edge — deliberately not `--bg-base`, which is the near-black *under* the field and paints a black band above and below the content on phones.
 
 ### Preferences
 
-`useTimedPreference` backs both theme and locale: system/ambient value by default, manual override in localStorage, override **expires after a TTL** (24h default) so a one-off choice doesn't pin the site forever. Theme passes `ttlMs: null` — that choice is permanent. All localStorage access is wrapped, because Safari Lockdown and some webviews throw on *read*.
+`useTimedPreference` backs the locale — and only the locale, since the theme it also backed is gone: ambient value by default, manual override in localStorage, override **expires after a TTL** (24h default) so a one-off choice doesn't pin the site forever. It still supports `ttlMs: null` for a permanent choice; nothing currently asks for one. All localStorage access is wrapped, because Safari Lockdown and some webviews throw on *read*.
 
 ### Scroll and motion
 

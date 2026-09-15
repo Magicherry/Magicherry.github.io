@@ -5,15 +5,48 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding: 12px 22px;
+  /*
+   * Wider than it is tall by more than it was. Caps sit optically higher in the
+   * line box than mixed case, so a button padded evenly around them looks
+   * bottom-heavy; a point off the top and a point onto the sides puts the label
+   * back in the middle of the plate and gives the letterspacing somewhere to go.
+   */
+  padding: 13px 24px;
   border: 0;
-  border-radius: var(--radius-full);
-  font-size: var(--text-sm);
-  font-weight: 560;
-  letter-spacing: var(--tracking-normal);
+  /*
+   * Square, with the chips, rather than cut with the plates.
+   *
+   * A button is not a surface - it is a *command*, and the label is the whole of
+   * it. The plate language belongs to things that hold content: cards, panels,
+   * the nav bar. Cutting a 46px-tall button as well put a chamfer on the one
+   * element whose job is to read as a hard target, and next to the mono caps
+   * inside it a bevelled corner was the only soft thing left in the figure.
+   *
+   * Which also settles the pair in the hero: the filled and the outlined button
+   * now differ by fill alone, where a cut corner used to be a second difference
+   * doing the same work less clearly.
+   */
+  border-radius: var(--radius-chip);
+  /*
+   * A button is a command, and commands on this site are set in mono caps - the
+   * same register as the nav links and the slate indices, so the whole interface
+   * layer speaks one language and the prose is the only thing set in sentences.
+   */
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   white-space: nowrap;
   cursor: pointer;
-  overflow: hidden;
+  /*
+   * No `overflow: hidden`, and it has to go rather than merely being unnecessary.
+   *
+   * It was there to clip the sheen to a rounded corner. The corners are square
+   * now, and the sheen is painted into the element's own box anyway, so it clips
+   * nothing - while the selection bracket below sits *outside* the button by
+   * design and would be cut away entirely.
+   */
   transition:
     transform var(--dur-base) var(--ease-gel),
     box-shadow var(--dur-base) var(--ease-enter),
@@ -40,6 +73,91 @@
   opacity: 1;
 }
 
+/*
+ * ------------------------------------------------------------- the brackets
+ *
+ * `[ LABEL ]` - two end brackets standing off the button's left and right edges,
+ * taller than it is and not touching it.
+ *
+ * This is the device the in-game menu uses that no amount of fill tuning
+ * reproduces. The highlighted entry is a solid bar *embraced* by a pair of
+ * hairline brackets, and three things about them carry the whole effect:
+ *
+ *   - they are detached. A border is an edge the button owns; a mark standing
+ *     off it belongs to the interface pointing at the button, which is a
+ *     different statement and the one that reads as a reticle.
+ *   - they overshoot vertically. Matched to the button's height they would read
+ *     as a frame that had come loose; running past it top and bottom, they read
+ *     as a caliper closed around it.
+ *   - they are ends, not a rectangle. A closed frame encloses; `[ ]` *grips*,
+ *     and the open top and bottom are what keep the eye moving along the label
+ *     rather than around its perimeter.
+ *
+ * Six hairlines on one pseudo-element: two verticals and four stubs, drawn as
+ * background gradients because a border cannot describe a partial figure and
+ * four extra elements for four stubs is not worth a DOM node each.
+ *
+ * Square, always, even if the tones around them were ever cut - a reticle does
+ * not take the shape of what it is aimed at.
+ *
+ * Both tones draw them on hover and focus only, and never at rest - including
+ * the primary, which briefly had them standing open permanently. That was a
+ * category error: the brackets say "the pointer is on this", not "this is the
+ * important one". The primary already says the second thing, in fill, from
+ * across the page. Leaving them out until the pointer arrives is also what gives
+ * them somewhere to go - a mark that is always present cannot close in on
+ * anything.
+ */
+.action::before {
+  content: '';
+  position: absolute;
+  /* Wider than it is tall, so the gap reads as even: the button is ~46px tall
+     and several hundred wide, and an equal offset on both axes looks pinched at
+     the ends. */
+  inset: -8px -11px;
+  pointer-events: none;
+  background-image:
+    /* left: vertical, then the two stubs reaching back toward the label */
+    linear-gradient(var(--action-bracket, transparent), var(--action-bracket, transparent)),
+    linear-gradient(var(--action-bracket, transparent), var(--action-bracket, transparent)),
+    linear-gradient(var(--action-bracket, transparent), var(--action-bracket, transparent)),
+    /* right: the same figure mirrored */
+    linear-gradient(var(--action-bracket, transparent), var(--action-bracket, transparent)),
+    linear-gradient(var(--action-bracket, transparent), var(--action-bracket, transparent)),
+    linear-gradient(var(--action-bracket, transparent), var(--action-bracket, transparent));
+  background-position:
+    0 0,
+    0 0,
+    0 100%,
+    100% 0,
+    100% 0,
+    100% 100%;
+  background-size:
+    1px 100%,
+    14px 1px,
+    14px 1px,
+    1px 100%,
+    14px 1px,
+    14px 1px;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition:
+    opacity var(--dur-base) var(--ease-enter),
+    inset var(--dur-base) var(--ease-gel);
+}
+
+/* Close in as the pointer arrives - the caliper is acquiring the target, so it
+   has to move toward it rather than simply appear around it. */
+.action:hover::before,
+.action:focus-visible::before {
+  opacity: 1;
+  inset: -6px -8px;
+}
+
+.glass {
+  --action-bracket: color-mix(in srgb, var(--accent) 65%, transparent);
+}
+
 .action:active {
   transform: scale(0.965);
   transition-duration: var(--dur-instant);
@@ -51,19 +169,75 @@
 }
 
 /* ---------------------------------------------------------------- primary */
+/*
+ * The selected entry, in the sense the in-game menu means it: not "a button with
+ * the brand colour in it" but the one thing on screen the interface is currently
+ * pointing at.
+ *
+ * Five shadow layers, and each answers something in that reference:
+ *
+ *   outline    a hot hairline *outside* the fill. The bar in the menu is not a
+ *              flat shape; it is a lit one, and the giveaway is that its edge is
+ *              brighter than its middle.
+ *   top facet  white at 45%, one pixel.
+ *   underside  the accent's deep stop, one pixel. Without it a saturated slab
+ *              lit only from above has no bottom and reads as a sticker.
+ *   bloom      a broad halo in the accent's own hue. This is the layer that says
+ *              the colour is *emitting* - in the reference the glow spills a
+ *              long way past the bar and picks up the surface under it.
+ *   drop       the far, dark falloff that keeps it attached to the page.
+ *
+ * The fill is two stacked images. Underneath, a vertical ramp: bright at the top
+ * edge, through the accent, down to its deep stop at the bottom - the bar is lit
+ * from above and the ramp is the only thing that says so. Over it, a wide flat
+ * streak sitting just below centre, which is the detail that makes the reference
+ * read as *lit metal* rather than as a coloured rectangle: a bar with a
+ * monotonic ramp looks moulded, and one with a bright band across its lower half
+ * looks like it is glowing from inside.
+ */
 .primary {
-  background: var(--accent);
+  --action-bracket: color-mix(in srgb, var(--accent) 50%, transparent);
+
+  /* The colour under the gradients, and the one the transition interpolates -
+     `background-image` is not animatable, so the hover state moves the shadows
+     and leaves the ramp alone. */
+  background-color: var(--accent);
+  background-image:
+    linear-gradient(
+      180deg,
+      transparent 32%,
+      color-mix(in srgb, #fff 20%, transparent) 58%,
+      color-mix(in srgb, #fff 20%, transparent) 70%,
+      transparent 88%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-soft) 62%, var(--accent)) 0%,
+      var(--accent) 34%,
+      color-mix(in srgb, var(--accent-deep) 45%, var(--accent)) 74%,
+      var(--accent-deep) 100%
+    );
   color: var(--accent-contrast);
   box-shadow:
-    0 12px 30px -14px color-mix(in srgb, var(--accent) 85%, transparent),
-    inset 0 1px 0 color-mix(in srgb, #fff 45%, transparent);
+    0 0 0 1px color-mix(in srgb, var(--accent-soft) 60%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #fff 50%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--accent-deep) 85%, transparent),
+    0 0 30px -2px color-mix(in srgb, var(--accent) 55%, transparent),
+    0 14px 34px -14px color-mix(in srgb, var(--accent) 90%, transparent);
 }
 
+/* Layer for layer with the resting stack, in the same order, or the box-shadow
+   lists are of unequal length and the whole thing snaps instead of easing. */
 .primary:hover {
+  --action-bracket: color-mix(in srgb, var(--accent-soft) 92%, transparent);
+
   transform: translate3d(0, -2px, 0);
   box-shadow:
-    0 18px 40px -14px color-mix(in srgb, var(--accent) 90%, transparent),
-    inset 0 1px 0 color-mix(in srgb, #fff 55%, transparent);
+    0 0 0 1px color-mix(in srgb, var(--accent-soft) 92%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #fff 62%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--accent-deep) 85%, transparent),
+    0 0 46px 0 color-mix(in srgb, var(--accent) 70%, transparent),
+    0 18px 44px -14px color-mix(in srgb, var(--accent) 95%, transparent);
 }
 
 /* ------------------------------------------------------------------ glass */
@@ -109,6 +283,8 @@
  * unequal length are not interpolable, and `.action` transitions box-shadow.
  */
 .glass:hover {
+  --action-bracket: var(--accent);
+
   transform: translate3d(0, -2px, 0);
   color: var(--fg-strong);
   background-color: color-mix(in srgb, var(--fg) 12%, var(--glass-fill));

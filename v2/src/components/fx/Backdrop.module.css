@@ -14,6 +14,18 @@
  * pairs preserve that at half the fill rate.
  */
 
+/*
+ * Five paint-time layers on one element, in this order from the top down: grain,
+ * scanlines, vignette, and the two axes of the survey grid. None of them takes a
+ * compositor layer of its own - they are `background-image` entries on a wrapper
+ * that was already being painted, which is the difference between texture that
+ * is free and texture that costs a pass over the viewport every frame.
+ *
+ * The vignette sits *above* the grid deliberately. The grid is a survey overlay
+ * and an overlay that stays at full strength into the corners of the screen
+ * reads as wallpaper; dimmed at the edges it reads as something projected onto
+ * the middle of the field, which is where the content is anyway.
+ */
 .backdrop {
   position: fixed;
   inset: 0;
@@ -27,16 +39,41 @@
      * panels; noise dithers the steps away and is the cheapest thing that stops
      * a dark gradient looking like a JPEG artefact. Static - it used to jitter,
      * which forced a recomposite several times a second for no visible gain.
+     *
+     * Carried a third heavier than the aurora design's 0.035, because this one is
+     * *meant* to be felt: the tactical look is a photographed one, and a field
+     * this dark with no dirt in it reads as vector art.
      */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),
-    /* Pulls the eye to the centre column and stops the aurora fighting the nav. */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
+    /*
+     * Scanlines. One lit row in four, at ~3% - per line that is nothing, and
+     * across a viewport it is the single cheapest thing that says "this is a
+     * display and not a page".
+     *
+     * A 4px period rather than 2 or 3, and it is a compromise with the device
+     * pixel ratio rather than a look: at a 2px period a fractional DPR lands the
+     * dark row on a half-pixel and the whole screen shimmers as it scrolls. Four
+     * survives 1.5x and 2x, and at 1x it is still clearly a line pattern.
+     */
+    repeating-linear-gradient(0deg, var(--scan-line) 0 1px, transparent 1px 4px),
+    /* Pulls the eye to the centre column and stops the field fighting the nav. */
     radial-gradient(
       ellipse 120% 80% at 50% 0%,
       transparent 30%,
       color-mix(in srgb, var(--bg-base) 62%, transparent) 100%
-    );
-  background-repeat: repeat, no-repeat;
-  background-size: 160px 160px, 100% 100%;
+    ),
+    /*
+     * The survey grid, one gradient per axis.
+     *
+     * 104px cells, which is not a round number for a reason: the dot field in
+     * front of this is on a 34px pitch, and a grid at 102 (exactly 3x) would beat
+     * against it into a visible moiré wherever the two agree. Two pixels of drift
+     * per cell is enough that they never line up twice.
+     */
+    repeating-linear-gradient(90deg, var(--grid-line) 0 1px, transparent 1px 104px),
+    repeating-linear-gradient(0deg, var(--grid-line) 0 1px, transparent 1px 104px);
+  background-repeat: repeat, repeat, no-repeat, repeat, repeat;
+  background-size: 160px 160px, auto, 100% 100%, auto, auto;
 }
 
 /* --------------------------------------------------------------- aurora */

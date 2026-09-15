@@ -27,10 +27,6 @@ export const ui = {
     copied: { en: 'Copied', zh: '已复制' },
   },
   /* Labelled by what pressing it *does*, not by the state it is in. */
-  theme: {
-    dark: { en: 'Switch to light theme', zh: '切换到浅色主题' },
-    light: { en: 'Switch to dark theme', zh: '切换到深色主题' },
-  },
   language: {
     toggle: { en: '切换到中文', zh: 'Switch to English' },
   },

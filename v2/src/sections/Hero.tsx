@@ -205,6 +205,23 @@ export default function Hero() {
               <span className={styles['wave']} role="img" aria-hidden="true">
                 👋🏻
               </span>
+              {/*
+                * "I am", the narrow-width copy.
+                *
+                * The sentence is rendered twice and exactly one copy is ever
+                * `display: none`, which takes it out of the accessibility tree
+                * as well - so at any given viewport a screen reader hears the
+                * heading once, in order, with no duplication. The alternative
+                * was moving the phrase between two parents at a breakpoint, and
+                * CSS cannot reparent anything.
+                *
+                * Why it moves at all: stacked, "I AM" had a display-sized line
+                * of its own between the greeting and the name, which gave three
+                * words the same weight as the one word that matters. Up here it
+                * finishes the greeting - "Hi there 👋 I AM" - and the name gets
+                * the display line to itself.
+                */}
+              <span className={styles['introInline']}>{t(ui.hero.intro)}</span>
             </motion.span>
 
             {/*
@@ -216,7 +233,11 @@ export default function Hero() {
               */}
             <span className={styles['nameClip']}>
               <motion.span className={styles['nameLine']} variants={nameRise}>
-                {t(ui.hero.intro)} <span className={styles['name']}>{nameTarget}</span>.
+                {/* The wide-width copy. The trailing space lives *inside* the
+                    span so that hiding it leaves no stray leading space in front
+                    of the name - which a centred column would show as a shift. */}
+                <span className={styles['introLead']}>{`${t(ui.hero.intro)} `}</span>
+                <span className={styles['name']}>{nameTarget}</span>.
               </motion.span>
             </span>
           </h1>

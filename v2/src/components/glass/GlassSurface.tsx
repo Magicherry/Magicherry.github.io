@@ -3,7 +3,19 @@ import { usePointerGlow } from '@/lib/hooks/usePointerGlow'
 import styles from './GlassSurface.module.css'
 
 export type GlassVariant = 'thin' | 'regular' | 'thick'
-export type GlassRadius = 'sm' | 'md' | 'lg' | 'xl' | 'full'
+/**
+ * `sm` through `full` are *cut plates* - the radius scale holds four-value
+ * shorthands and the global `corner-shape: bevel` in base.css turns them into
+ * chamfers (see tokens.css).
+ *
+ * `square`, `rounded` and `circle` are the escape hatches, and they are whole
+ * options rather than a consumer overriding `--surface-radius` because that
+ * property is written as an inline style here: a stylesheet cannot outrank it
+ * without `!important`. The latter two additionally have to bring
+ * `corner-shape: round` with them, which is a class and not a custom property,
+ * so the shape and the radius can only be kept in step inside this component.
+ */
+export type GlassRadius = 'sm' | 'md' | 'lg' | 'xl' | 'full' | 'square' | 'rounded' | 'circle'
 
 /**
  * Whether the surface genuinely samples what is behind it.
@@ -43,6 +55,9 @@ const RADIUS_TOKEN: Record<GlassRadius, string> = {
   lg: 'var(--radius-lg)',
   xl: 'var(--radius-xl)',
   full: 'var(--radius-full)',
+  square: 'var(--radius-chip)',
+  rounded: 'var(--radius-round)',
+  circle: 'var(--radius-circle)',
 }
 
 /**
@@ -74,6 +89,11 @@ export default function GlassSurface<E extends ElementType = 'div'>({
       className={[
         styles['surface'],
         styles[variant],
+        // Both carry `corner-shape: round` to the element and its two optical
+        // pseudo-elements. Without it the global bevel in base.css turns the
+        // radius into a chamfer - and at `circle`'s 999px, into a diamond.
+        radius === 'circle' && styles['circle'],
+        radius === 'rounded' && styles['rounded'],
         backdrop === 'live' && styles['live'],
         interactive && styles['interactive'],
         className,

@@ -30,6 +30,9 @@
   --glass-inner-shade: transparent;
   --glass-edge-hover: transparent;
   --glass-rim-lit: transparent;
+  /* The corner brackets are already off - `radius="circle"` clears them, because
+     a bracket is a mark on a corner and this has none. Stated there rather than
+     here so the shape and the overlay can never disagree. */
   /* Smaller than a panel's, because the highlight has to read inside 48px. */
   --surface-specular-size: 90px;
 
@@ -46,6 +49,17 @@
 
 .button:hover {
   color: var(--accent);
+}
+
+/*
+ * Two classes plus the pseudo-class, and that is the whole reason this rule
+ * exists: `.interactive:hover` in GlassSurface sets `--surface-tick` to the
+ * accent to light the brackets on a hovered plate, and it outranks the single
+ * class that turned them off. Without this the ticks would reappear on hover -
+ * on a circle, as two arcs of debris.
+ */
+.wrap .button:hover {
+  --surface-tick: transparent;
 }
 
 /*

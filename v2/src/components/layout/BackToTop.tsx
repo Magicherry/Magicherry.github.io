@@ -59,10 +59,13 @@ export default function BackToTop() {
       transition={{ duration: reducedMotion ? 0.12 : 0.32, ease: [0.16, 1, 0.3, 1] }}
       style={{ pointerEvents: visible ? 'auto' : 'none' }}
     >
+      {/* `circle`, against a site of cut plates: the ring is a circle and the
+          disc under it has to be the same object, or the gauge reads as an
+          overlay on a shape it does not belong to. */}
       <GlassSurface
         as="button"
         type="button"
-        radius="full"
+        radius="circle"
         interactive
         lightAngle={120}
         className={styles['button']}

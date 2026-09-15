@@ -1,9 +1,11 @@
-/* Sits in the section header, opposite the title. */
+/* Sits in the section header, opposite the title. Mono, like every other label
+   the interface prints rather than writes. */
 .order {
   padding: 5px 12px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-chip);
   background: color-mix(in srgb, var(--fg) 6%, transparent);
   box-shadow: inset 0 0 0 1px var(--line);
+  font-family: var(--font-mono);
   font-size: var(--text-2xs);
   font-weight: 600;
   letter-spacing: var(--tracking-wide);
@@ -77,6 +79,14 @@
   width: var(--node-size);
   height: var(--node-size);
   border-radius: 50%;
+  /*
+   * Round, against the global bevel, and it is a category rather than an
+   * exception: the plates are *surfaces* and the round things are *instruments* -
+   * this node, its core, the live blip, the back-to-top gauge. A 50% radius under
+   * `corner-shape: bevel` is a diamond, so anything that has to stay circular has
+   * to say so.
+   */
+  corner-shape: round;
   background: var(--bg-base);
   box-shadow: 0 0 0 1px var(--line-strong);
 }
@@ -85,6 +95,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  corner-shape: round;
   background: var(--fg-faint);
   /* Both properties, because the lit state adds a glow. Transitioning only the
      colour made the glow snap on while the fill eased in. */
@@ -141,10 +152,11 @@
  */
 .track {
   padding: 3px 10px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-chip);
   background: color-mix(in srgb, var(--fg) 8%, transparent);
   box-shadow: inset 0 0 0 1px var(--line);
   color: var(--fg);
+  font-family: var(--font-mono);
   font-size: var(--text-2xs);
   font-weight: 600;
   letter-spacing: var(--tracking-wide);
@@ -156,9 +168,10 @@
   align-items: center;
   gap: 5px;
   padding: 3px 10px 3px 7px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-chip);
   background: color-mix(in srgb, var(--status-live) 16%, transparent);
   color: var(--status-live);
+  font-family: var(--font-mono);
   font-size: var(--text-2xs);
   font-weight: 600;
   letter-spacing: var(--tracking-wide);
@@ -169,6 +182,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
+  corner-shape: round;
   background: currentColor;
   animation: blip 2s var(--ease-inout) infinite;
 }

@@ -3,37 +3,69 @@
  *
  * Two-tier system: a *palette* tier holds raw values and never appears in
  * component CSS; a *semantic* tier maps palette entries onto roles and is the
- * only thing components reference. Theming therefore only ever rewrites the
- * semantic tier, which is why the whole site can swap appearance by flipping
- * one attribute on <html> without a single component knowing about it.
+ * only thing components reference. The separation earns its keep even with one
+ * appearance to serve: components ask for *roles* ("the accent", "the faint
+ * line") and the answers all live here, so retuning the site is an edit to this
+ * file rather than a sweep through thirty stylesheets.
+ *
+ * ---------------------------------------------------------------------------
+ * The design this tier carries is a *tactical* one, drawn against Call of Duty:
+ * Black Ops 7: a near-black field with a cold blue cast, v1's bright cyan doing
+ * all the signalling, square bracketed plating, and type set as stencilled
+ * uppercase.
+ *
+ * There is one appearance and it is dark. A light theme lived here until it was
+ * cut, and the removal was the design decision rather than a simplification of
+ * one: this is a near-black field with a searchlight in it, and a paper edition
+ * of that is a different object wearing the same layout. Two appearances also
+ * meant every optical value below had to be true twice - the glass alone carried
+ * thirty paired tokens - and the second set was being maintained on the strength
+ * of a toggle almost nobody pressed.
  */
 
 :root {
   /* ----------------------------------------------------------------- palette
    *
-   * Carried over from v1, whose signature is the bright cyan `rgb(3, 232, 248)`.
+   * One accent, and it is v1's bright cyan: every link, heading highlight,
+   * readout, rail, status mark, button and rim on the site is this one hue.
    *
-   * There is no second brand hue any more. One arrived when the design leaned on
-   * gradients; with those flattened it had nothing left to do but tint a single
-   * chip, so the palette is now cyan plus neutrals - and green, once, for "live".
+   * The page is cold throughout. The ember that the tactical design was first
+   * drawn with has come all the way back out of the interface - it survives only
+   * as a faint bloom in the field (`--aurora-3`, and it is a literal there) and
+   * as `--accent-warm`, which nothing currently spends. A second bright hue
+   * competing with the cyan was never carrying information the cyan was not.
+   *
+   * Steel is not an accent either; it is what the dark is made of, which is why
+   * it only ever appears behind glass.
    */
+  /* Only the two stops `--accent-warm` names. A palette is not a ramp to be
+     completed - the rest of this family went out with the warm interface. */
+  --p-ember-400: #ff6a1f;
+  --p-ember-700: #b8430d;
+
+  /* The one other hue, and only for "live". Green reads as a running signal
+     almost universally and is the single place a second colour earns its keep. */
+  --p-signal-400: #46d17e;
+
+  --p-steel-400: #5b9fd6;
+  --p-steel-600: #1f5f96;
+  --p-steel-800: #0c3a68;
+
+  /* The accent family, carried over from v1 - the signature is `#03e8f8`. */
   --p-cyan-200: #a5f3fc;
   --p-cyan-400: #03e8f8;
   --p-cyan-500: #06b6d4;
 
-  --p-sky-600: #0284c7;
-  --p-sky-700: #0369a1;
-
-  --p-amber-400: #fbbf24;
-
   /* Only the stops the semantic tier actually reaches for. A palette is not a
-     ramp to be completed - an unreferenced stop is a colour nobody chose. */
-  --p-ink-950: #04060b;
-  --p-ink-800: #0d1018;
+     ramp to be completed - an unreferenced stop is a colour nobody chose. Half a
+     dozen went out with the light theme, including every remaining paper value
+     but the one the portrait stands on. */
+  --p-ink-1000: #020407;
+  --p-ink-950: #05080d;
+  --p-ink-900: #0b1119;
 
-  --p-paper-50: #ffffff;
-  --p-paper-100: #f6f7fa;
-  --p-paper-200: #eceef4;
+  --p-sky-700: #0369a1;
+  --p-paper-50: #faf7f1;
 
   /* ------------------------------------------------------------------- type */
   /*
@@ -88,6 +120,17 @@
   --tracking-normal: -0.008em;
   --tracking-wide: 0.06em;
   --tracking-widest: 0.18em;
+  /*
+   * Stencil tracking, for uppercase display type.
+   *
+   * Uppercase Latin has no descenders and no x-height variation to separate one
+   * letter from the next, so at the negative tracking the rest of the scale uses
+   * a set-caps headline turns into a single dark bar. This is the value section
+   * titles and the hero name are set at, and it is deliberately far from
+   * `--tracking-widest`, which is for 11px labels - a 52px headline needs a
+   * fraction of the letterspace an 11px one does to read as spaced at all.
+   */
+  --tracking-stencil: 0.015em;
 
   /* ------------------------------------------------------------------ space */
   --space-1: 0.25rem;
@@ -101,12 +144,96 @@
   --space-9: 6rem;
   --space-10: 8rem;
 
-  --radius-xs: 8px;
-  --radius-sm: 12px;
-  --radius-md: 18px;
-  --radius-lg: 26px;
-  --radius-xl: 34px;
-  --radius-full: 999px;
+  /* ----------------------------------------------------------------- plating
+   *
+   * Every box on this site is a cut plate, not a capsule, and these two lengths
+   * are the whole shape language.
+   *
+   * The cut is expressed as `border-radius` plus `corner-shape: bevel` rather
+   * than as a `clip-path`, and that choice is load-bearing: clip-path clips the
+   * element's *shadow* too, which would take out the entire contact/ambient
+   * stack the glass system is built on, along with the backdrop pass. Bevelled
+   * corners are a real border shape, so borders, insets, backdrop-filter and
+   * overflow all follow them.
+   *
+   * `corner-shape` is Chromium-only for now. Everywhere else the declaration is
+   * simply unknown and dropped, and the same radii round off instead - which is
+   * why the angular language is *also* carried by things every engine renders:
+   * the corner ticks, the HUD rules, the stencilled caps and the scanlines. The
+   * cut is the sharpest statement of it, not the only one.
+   *
+   * Two sizes, because a 62px control and a 700px panel cannot share a chamfer:
+   * a 12px cut across the corner of a nav button eats most of its height.
+   */
+  --cut: 13px;
+  --cut-sm: 7px;
+  /*
+   * Diagonally opposed, not all four.
+   *
+   * Cutting every corner makes an octagon, which is a *badge* - it closes in on
+   * itself and reads as decoration applied to the box. Cutting the top-right and
+   * bottom-left gives the plate an axis: it points, and every plate on the page
+   * points the same way, which is what makes a grid of them read as one system.
+   * The axis runs against `--surface-light-angle` (152deg, arriving top-left),
+   * so the two cut corners are the two the light does *not* enter or leave by.
+   */
+  --notch: 0 var(--cut) 0 var(--cut);
+  --notch-sm: 0 var(--cut-sm) 0 var(--cut-sm);
+
+  /*
+   * The radius scale *is* the notch scale.
+   *
+   * These hold a four-value shorthand rather than a single length, which is
+   * unusual and is the point: every `border-radius: var(--radius-*)` already
+   * written across the site becomes a cut plate without a single call site
+   * changing. Anything that genuinely has to stay a circle - a status dot, an
+   * app-icon tile, the portrait crop - uses `--radius-circle` or a literal
+   * percentage and opts out of the bevel with `corner-shape: round`.
+   *
+   * `--radius-full` used to be 999px and made capsules. There are no capsules in
+   * this design, so it now resolves to the small cut: every pill on the site -
+   * nav links, filter chips, tags, buttons - became a plate in one line.
+   */
+  --radius-xs: 0 5px 0 5px;
+  --radius-sm: var(--notch-sm);
+  --radius-md: 0 9px 0 9px;
+  --radius-lg: var(--notch);
+  --radius-xl: 0 17px 0 17px;
+  --radius-full: var(--notch-sm);
+  --radius-circle: 999px;
+  /*
+   * A real arc, on all four corners, for the one surface that asks for one.
+   *
+   * It has to be a single length rather than an entry on the scale above: those
+   * are two-corner shorthands, and rounding one of them would arc the top-right
+   * and bottom-left while leaving the other two square - a shape nobody drew.
+   *
+   * 999px: the ends are full semicircles, so this is a capsule rather than a
+   * rounded rectangle. The distinction is real - a capsule reads as a
+   * self-contained object floating over the page, a rounded rectangle as a panel
+   * that has been softened - and the capsule is the right one for the nav, which
+   * is the only element that never touches the layout it floats above.
+   *
+   * A length rather than `50%`, so the arc is always a half-circle of the bar's
+   * *height* whatever its width; at 50% the radius would scale with the box and
+   * the shape would change as the bar narrows.
+   */
+  --radius-round: 999px;
+  /*
+   * Chips, tags and counters: square, and it is a rule about *size* rather than
+   * about kind.
+   *
+   * A 7px chamfer on a 22px-tall label is a third of its height on each cut
+   * corner - the plate stops reading as a cut rectangle and starts reading as a
+   * parallelogram, and a row of eight of them ("Python", "PyQt", "NumPy"...)
+   * turns into a line of arrows. The cut needs a plate long enough to be an
+   * inflection on; below that, a hard corner says the same thing more clearly.
+   *
+   * Zero rather than a small radius, because the alternative to a chamfer here
+   * is a *stencilled* box - printed, not moulded - which is what the type inside
+   * these already is.
+   */
+  --radius-chip: 0;
 
   --shell-max: 1180px;
   --shell-pad: clamp(1.15rem, 4vw, 2.75rem);
@@ -145,78 +272,98 @@
 
   /*
    * The hero portrait is a cutout, so this tile is the surface the subject
-   * stands on rather than a tint over whatever is behind it. It lives up here
-   * in the theme-independent tier on purpose: the photo was lit against white
-   * paper, and a dark bed contradicts that lighting - the rim light along the
-   * hair ends up brighter than the ground it sits on, which reads as a badly
-   * composited cutout. So both themes get the same paper. Palette values, not
-   * `--accent`, because that token is two stops apart between themes and would
-   * pull the bed with it.
+   * stands on rather than a tint over whatever is behind it: the photo was lit
+   * against white paper, and a dark bed contradicts that lighting - the rim light
+   * along the hair ends up brighter than the ground it sits on, which reads as a
+   * badly composited cutout.
+   *
+   * Palette values rather than `--accent`, and that survives the light theme's
+   * removal for a reason of its own: this is the colour of the paper the subject
+   * was photographed against, not a tint the site is applying, so it should not
+   * move if the accent is ever retuned.
    */
-  --portrait-bed: color-mix(in srgb, var(--p-sky-700) 11%, var(--p-paper-50));
-}
+  --portrait-bed: color-mix(in srgb, var(--p-sky-700) 9%, var(--p-paper-50));
 
-/* ============================================================= dark (default) */
-:root,
-[data-theme='dark'] {
+  /* ================================================================ semantic */
   color-scheme: dark;
 
   --bg-base: var(--p-ink-950);
-  --bg-raised: var(--p-ink-800);
-  --bg-sunken: #020306;
+  --bg-raised: var(--p-ink-900);
+  --bg-sunken: var(--p-ink-1000);
 
-  --fg: #f2f5fb;
+  --fg: #e7edf6;
   --fg-strong: #ffffff;
-  --fg-muted: rgba(233, 240, 252, 0.62);
-  --fg-faint: rgba(233, 240, 252, 0.38);
-  --fg-ghost: rgba(233, 240, 252, 0.14);
+  --fg-muted: rgba(226, 236, 250, 0.6);
+  --fg-faint: rgba(226, 236, 250, 0.38);
+  --fg-ghost: rgba(226, 236, 250, 0.13);
 
   --accent: var(--p-cyan-400);
   --accent-soft: var(--p-cyan-200);
   --accent-deep: var(--p-cyan-500);
-  --accent-warm: var(--p-amber-400);
+  --accent-warm: var(--p-ember-400);
+  /* Near-black with the accent's own hue in it, not pure black: a neutral
+     knock-out on a saturated plate reads as a hole punched in it. */
   --accent-contrast: #04141a;
 
+  --status-live: var(--p-signal-400);
+
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.18);
   /*
-   * The one hue on this site that is not the brand: "currently here". Green
-   * reads as live almost universally, and it is the only place a second colour
-   * earns its keep - so it is a named role rather than a hex repeated in two
-   * stylesheets.
+   * The HUD hairline: rules, corner ticks, the marks that frame a section.
+   *
+   * A *tinted* line rather than a neutral one, and that is the difference
+   * between a chrome frame and a targeting overlay. It is far too faint to read
+   * as orange; what it does is keep the framing from being the only cold element
+   * on a warm-signalled page.
    */
-  --status-live: #34d399;
+  --hud-line: color-mix(in srgb, var(--accent) 34%, var(--line-strong));
+  --hud-line-faint: color-mix(in srgb, var(--accent) 22%, transparent);
+  /*
+   * The corner brackets on a panel, and they are deliberately several times the
+   * strength of `--glass-edge` (0.11) that runs along the sides.
+   *
+   * The whole frame is one figure: faint edges, bright corners. If these landed
+   * anywhere near the edge's value the figure collapses into an ordinary outline,
+   * and if the edge came up to meet them it collapses the other way. The ratio is
+   * the design, not the two values.
+   */
+  --hud-bracket: rgba(226, 236, 250, 0.52);
 
-  --line: rgba(255, 255, 255, 0.09);
-  --line-strong: rgba(255, 255, 255, 0.16);
-
-  /* Aurora field behind the glass. Glass only reads as glass when there is
+  /*
+   * The recon field behind the glass. Glass only reads as glass when there is
    * something worth refracting behind it, so these are saturated on purpose -
-   * by the time you see them through 22px of blur they are a faint wash. Same
-   * four hues v1 used in its background mesh, minus the violet. */
-  --aurora-1: rgba(3, 232, 248, 0.42);
-  --aurora-2: rgba(59, 130, 246, 0.42);
-  --aurora-3: rgba(45, 212, 191, 0.28);
-  --aurora-4: rgba(56, 189, 248, 0.32);
+   * by the time you see them through 22px of blur they are a faint wash.
+   *
+   * Three cold and one hot, and the ratio is the point: the ember is under a
+   * third the strength of the steel around it, and Backdrop puts it low in the
+   * field, so it reads as something burning a long way off rather than as a
+   * second wash. Balancing the two would give the page two subjects and no
+   * contrast, which is the one thing the key art this is drawn from never does.
+   */
+  --aurora-1: rgba(24, 96, 156, 0.46);
+  --aurora-2: rgba(11, 52, 98, 0.58);
+  --aurora-3: rgba(255, 106, 31, 0.16);
+  --aurora-4: rgba(40, 122, 172, 0.34);
   --aurora-opacity: 1;
+  /* Scanlines and the survey grid, painted onto the backdrop wrapper. Both are
+     near-invisible per line and read as texture in aggregate; see Backdrop. */
+  --scan-line: rgba(180, 214, 255, 0.032);
+  --grid-line: rgba(140, 190, 240, 0.05);
 
   /* ------------------------------------------------------------ glass tier */
   /*
    * Two fills, because there are two kinds of surface. A *live* surface really
    * samples what is behind it and can afford a barely-there tint; a *flat* one
    * never runs a backdrop pass, so it has to carry its own contrast or the text
-   * on it sits directly on the aurora.
+   * on it sits directly on the field.
    */
-  --glass-tint: rgba(255, 255, 255, 0.05);
-  --glass-tint-strong: rgba(255, 255, 255, 0.085);
+  --glass-tint: rgba(154, 190, 228, 0.045);
+  --glass-tint-strong: rgba(154, 190, 228, 0.08);
   /*
    * The far end of the body wash, and the reason it exists is the same reason
    * `--glass-rim-far` does: light that entered the near face has to leave
    * somewhere, and it leaves at the one turned away from you.
-   *
-   * The wash used to be light-at-0%, nothing from 46% on, which lit the top half
-   * of a panel and left the bottom half at bare `--glass-fill`. At a 152deg axis
-   * that delta runs almost exactly top-to-bottom, so every surface on the page
-   * had a built-in downward darkening that no amount of drop-shadow tuning could
-   * answer - the shadow is outside the panel, this is inside it.
    *
    * Half the near value, the same ratio the rim uses, and for the same reason
    * stated there: it is transmitted light rather than reflected, and it only
@@ -225,314 +372,143 @@
    * so the middle of the panel still falls off to plain fill and the two ends
    * stay legible as two ends.
    */
-  --glass-tint-far: rgba(255, 255, 255, 0.042);
+  --glass-tint-far: rgba(154, 190, 228, 0.038);
   /*
-   * Lifted off near-black. At rgba(10,14,22,.62) the panels were darker than the
-   * page behind them, which inverts what glass does: a sheet over a lit backdrop
-   * should read as *brighter* than the wall, not as a hole cut into it. A paler
-   * base at a lower alpha also lets more of the aurora through, so the surfaces
-   * pick up some of the colour they are supposed to be sitting in front of.
+   * Smoked, and a shade *under* the field rather than over it.
+   *
+   * This is the one optical rule the tactical design inverts on purpose. Apple's
+   * glass is a sheet over a lit wall and has to read brighter than it; armour
+   * plating over a lit field does not - it is the thing blocking the light, and
+   * the edge is where it catches.
+   *
+   * Eight points more transparent than it was, and a shade less black. A flat
+   * panel never samples its backdrop, so *everything* it gets from the field it
+   * gets by letting the field through - and at 0.62 over near-black ink it was
+   * letting almost nothing through, which is why the material read as paint
+   * rather than as glass. The alpha is the single strongest lever on this whole
+   * tier; the wash and the glow below only shape what it admits.
    */
-  --glass-fill: rgba(21, 27, 40, 0.52);
-  --glass-fill-strong: rgba(255, 255, 255, 0.06);
+  --glass-fill: rgba(13, 21, 33, 0.54);
+  /*
+   * The body wash, raked along the light axis, and half again what it was.
+   *
+   * With more field coming through the fill there is more for a directional wash
+   * to act *on*: the rake now reads as the slab being lit from one corner rather
+   * than as a faint tint laid over a flat plate. It is still nowhere near a
+   * highlight - it is a gradient across the body, not a line at an edge, and it
+   * has to stay under the corner brackets or the frame loses its contrast.
+   */
+  --glass-fill-strong: rgba(160, 196, 234, 0.085);
   /* Flat surfaces get the same far-end return, at the same half ratio. See
      `--glass-tint-far` above for why there is a far end at all. */
-  --glass-fill-far: rgba(255, 255, 255, 0.03);
+  --glass-fill-far: rgba(160, 196, 234, 0.042);
+  /*
+   * The sheen: light entering the body at the lit corner, as a *blurred* inset
+   * rather than a hairline.
+   *
+   * This is the layer that replaces the directional rim the bracketed frame had
+   * to give up. A hairline at the boundary competes with the brackets - it is the
+   * same kind of mark in the same place - but a soft wedge a few pixels inside
+   * the edge is a different phenomenon entirely: it reads as the thickness of the
+   * slab catching light, which is precisely what a 1px line cannot say.
+   */
+  --glass-sheen: rgba(206, 230, 255, 0.2);
   --glass-blur: 18px;
-  --glass-saturate: 172%;
-  --glass-brightness: 1.06;
+  --glass-saturate: 150%;
+  --glass-brightness: 1.02;
 
   /*
    * Rim lighting.
    *
-   * The lit edge is 20% white, not 55%. A 1px line at half opacity running the
+   * The lit edge is 24% white, not 55%. A 1px line at half opacity running the
    * full width of a panel is the single clearest tell of cheap glassmorphism:
    * real glass catches light on the facet turned toward the source and loses it
    * within a few pixels, so a uniform bright stroke reads as a drawn border
-   * rather than as an edge.
+   * rather than as an edge. It is two points hotter than it was, and that is the
+   * plating asking for it - a smoked slab with no highlight has no facet at all.
    *
-   * The shaded edge is genuinely dark. It used to be white at 6% - a second,
-   * dimmer highlight - which meant the panel was lit from above *and* below and
-   * had no bottom at all.
-   *
-   * The *far* rim is the exception, and it is not a contradiction of that. A
-   * thick transparent slab lit from one corner catches light twice: directly, on
-   * the facet turned toward the source, and again on the opposite rim, where
-   * light that crossed the body leaves it. The two corners in between get
-   * neither. So this is half the near rim - light that has been through the
-   * glass, not light that bounced off it - and it only reads as a second light
-   * source if it gets anywhere near the same strength.
+   * The *far* rim is not a contradiction of that. A thick transparent slab lit
+   * from one corner catches light twice: directly, on the facet turned toward
+   * the source, and again on the opposite rim, where light that crossed the body
+   * leaves it. The two corners in between get neither. So this is half the near
+   * rim - light that has been through the glass, not light that bounced off it.
    */
-  --glass-rim-light: rgba(255, 255, 255, 0.2);
+  --glass-rim-light: rgba(255, 255, 255, 0.24);
   --glass-rim-far: rgba(255, 255, 255, 0.1);
-  /* The outer contour. Dark mode has no use for one of its own - a translucent
-     panel over a near-black page is already separated by being lighter than it -
-     so it defers to the generic hairline. Light mode does not, see below. */
-  --glass-edge: var(--line);
-  --glass-inner-glow: rgba(255, 255, 255, 0.085);
-  /* No interior shading here on purpose. Dark mode's bottom edge is *transmitted
-     light* (`--glass-rim-far`), and a dark wash creeping in from the same corner
-     would be arguing with it. Light mode, where the far rim is a shadow rather
-     than a highlight, is the case this layer exists for. */
+  /* The outer contour. A cut plate has to state where it ends even where it
+     crosses something dark, so unlike the aurora design this is a real hairline
+     rather than a deferral to `--line`. */
+  --glass-edge: rgba(255, 255, 255, 0.11);
+  /* Light that has entered the slab and scattered. Raised with the sheen above -
+     the two describe one event at two depths, the sheen at the facet and this
+     across the ~20px behind it, so moving one without the other leaves the
+     highlight sitting on a body that never received it. */
+  --glass-inner-glow: rgba(150, 195, 240, 0.12);
+  /*
+   * No interior shading, and the slot is kept rather than the layer removed.
+   *
+   * Off because the panel's far corner is already carrying transmitted light
+   * (`--glass-rim-far`) and a dark wash creeping in from the same corner would be
+   * arguing with it. It stays in the stack because `box-shadow` lists of unequal
+   * length are not interpolable: the hover state restates the whole stack, so a
+   * layer that is transparent in both is free, and one that exists in only one of
+   * them makes the entire shadow snap in a single frame.
+   */
   --glass-inner-shade: transparent;
-  /* Hover states for the two above. Tokens rather than literals because light
-     mode answers `transparent` to both - it has no rim at all, so a hover that
-     drew one would be conjuring an edge that does not otherwise exist. */
-  --glass-edge-hover: color-mix(in srgb, var(--accent) 22%, var(--line));
-  --glass-rim-lit: color-mix(in srgb, var(--glass-rim-light), #fff 25%);
+  /* Hover states for the two above. The edge goes to the ember rather than a
+     brighter white: this is the design's one signal colour, and a plate the
+     pointer is on is exactly the kind of thing it should be signalling. */
+  --glass-edge-hover: color-mix(in srgb, var(--accent) 52%, var(--line-strong));
+  --glass-rim-lit: color-mix(in srgb, var(--glass-rim-light), #fff 30%);
   /*
    * Three falloffs rather than one. A single wide blur puts the panel a fixed
    * distance off the page; a tight contact shadow plus a mid and an ambient one
    * describe an object resting *on* something, which is most of what makes a
    * surface look expensive.
    *
-   * The three differ in *reach*, not in direction. A layer's visible extent on
-   * any given side is `blur / 2 + spread ± offset`, and the earlier stack ran
-   * 30px of offset against a -34px spread: the spread pulled the shadow inside
-   * the panel's own footprint, so the only thing that ever escaped was the part
-   * the offset pushed past the bottom edge. 26px of dark below, nothing above.
-   * Read as a card lying on the page rather than a sheet floating over it - and
-   * these panels float, so the halo has to close all the way round.
-   *
-   * So the spreads are now shallower than half the blur, which is what gives
-   * every side something to show, and the offsets are small - enough gravity to
-   * keep it from reading as an emitted glow, nowhere near enough to pool.
+   * The three differ in *reach*, not in direction: the spreads are shallower
+   * than half the blur, which is what gives every side something to show, and
+   * the offsets are small - enough gravity to keep it from reading as an emitted
+   * glow, nowhere near enough to pool under the plate.
    */
   --glass-drop:
-    0 1px 2px -1px rgba(0, 0, 0, 0.5),
-    0 0 18px -6px rgba(0, 0, 0, 0.42),
-    0 2px 52px -16px rgba(0, 0, 0, 0.55);
+    0 1px 2px -1px rgba(0, 0, 0, 0.62),
+    0 0 18px -6px rgba(0, 0, 0, 0.5),
+    0 2px 52px -16px rgba(0, 0, 0, 0.62);
   /* The same stack, further from the page - a hovered surface has moved toward
      you, and the shadow growing is the whole signal. With the halo closed all
-     the way round, that growth is now a ring widening rather than a pool
-     lengthening, which is the point: the panel rises, it does not tip forward.
-     A token because it was hardcoded black, correct in exactly one theme. */
+     the way round, that growth is a ring widening rather than a pool
+     lengthening: the plate rises, it does not tip forward. */
   --glass-drop-lift:
-    0 2px 4px -2px rgba(0, 0, 0, 0.45),
-    0 0 26px -8px rgba(0, 0, 0, 0.45),
-    0 4px 76px -20px rgba(0, 0, 0, 0.6);
+    0 2px 4px -2px rgba(0, 0, 0, 0.55),
+    0 0 26px -8px rgba(0, 0, 0, 0.52),
+    0 4px 76px -20px rgba(0, 0, 0, 0.66);
   /* One falloff, for surfaces too small to justify three: the hero's secondary
-     button, a project's icon tile. Same reason for existing as the two above -
-     both call sites had literal black in them. Same correction, scaled down: a
-     chip gets a tight even halo, not a 7px tongue hanging off its bottom.
-
-     The reach has to be *kept* while the halo is evened out, which is the part
-     that is easy to get wrong - closing the shadow round the sides and shrinking
-     it at the same time reads as the surface settling onto the page. The hero
-     pairs this button with `.primary`, whose accent glow throws 13px below and
-     carries a hue on top of that, so a black halo needs at least comparable
-     reach before the two sit at the same height. */
-  --glass-drop-sm: 0 3px 34px -10px rgba(0, 0, 0, 0.72);
-  /* Its hover. Same one-falloff shape, roughly half again the reach, and it
-     exists so `.glass` can grow its shadow on hover the way `.primary` already
-     does - a button that rises 2px under a shadow that does not move reads as
-     sliding rather than lifting. */
-  --glass-drop-sm-lift: 0 5px 48px -12px rgba(0, 0, 0, 0.75);
+     button, a project's icon tile. A chip gets a tight even halo, not a 7px
+     tongue hanging off its bottom. The reach is kept rather than trimmed - the
+     hero pairs this with `.primary`, whose ember glow throws 13px below and
+     carries a hue on top of that, so a black halo needs comparable reach before
+     the two sit at the same height. */
+  --glass-drop-sm: 0 3px 34px -10px rgba(0, 0, 0, 0.78);
+  /* Its hover. Same one-falloff shape, roughly half again the reach, so `.glass`
+     can grow its shadow the way `.primary` already does - a button that rises
+     2px under a shadow that does not move reads as sliding rather than lifting. */
+  --glass-drop-sm-lift: 0 5px 48px -12px rgba(0, 0, 0, 0.8);
   /*
    * The bed for browsers with no `backdrop-filter` at all, and it is a literal
    * for a reason: every engine that lacks backdrop-filter also predates
    * `color-mix()` - Firefox got the filter in 103 and the function in 113,
-   * Chrome 76 against 111 - so the `color-mix` this replaces could not be parsed
-   * by a single browser that would ever reach it. The declaration was dropped
-   * and the surface fell through to `--glass-fill`'s 52%, which is exactly the
+   * Chrome 76 against 111 - so a `color-mix` here could not be parsed by a single
+   * browser that would ever reach it. The declaration would be dropped and the
+   * surface would fall through to `--glass-fill`'s 62%, which is exactly the
    * see-through nav the fallback exists to prevent.
-   *
-   * 0.88 rather than opaque: enough of the page shows through to read as glass,
-   * far too little for unblurred body text to compete with a label. The stop
-   * below this - `prefers-reduced-transparency` - stays fully opaque, because
-   * there the transparency is the thing being asked about.
    */
-  --glass-fallback: rgba(12, 15, 23, 0.88);
-  --glass-specular: rgba(255, 255, 255, 0.26);
+  --glass-fallback: rgba(7, 12, 20, 0.9);
+  --glass-specular: rgba(255, 196, 148, 0.22);
 
-  --scrim: rgba(3, 5, 10, 0.72);
-  /* The one float that is not a glass panel: the QR overlay's close disc. It had
-     the same lopsided geometry the glass drops did - 30px of offset under a -32px
-     spread - which on a 34px button meant a 33px tongue of shadow hanging below a
-     control barely taller than it, and nothing at all above. Same correction, and
-     the scale matters more here than on a panel. */
+  --scrim: rgba(2, 4, 8, 0.78);
+  /* The one float that is not a glass panel: the QR overlay's close disc. */
   --shadow-lift:
-    0 1px 3px -1px rgba(0, 0, 0, 0.55),
-    0 2px 24px -6px rgba(0, 0, 0, 0.7);
-}
-
-/* ==================================================================== light */
-[data-theme='light'] {
-  color-scheme: light;
-
-  --bg-base: var(--p-paper-100);
-  --bg-raised: var(--p-paper-50);
-  --bg-sunken: var(--p-paper-200);
-
-  --fg: #10131a;
-  --fg-strong: #05070c;
-  --fg-muted: rgba(16, 19, 26, 0.66);
-  --fg-faint: rgba(16, 19, 26, 0.44);
-  --fg-ghost: rgba(16, 19, 26, 0.12);
-
-  /* v1's light accent was #0369a1. The bright cyan has nowhere near enough
-     contrast on paper, so light mode drops the same hue two stops rather than
-     trying to reuse the dark value. */
-  --accent: var(--p-sky-700);
-  --accent-soft: var(--p-sky-600);
-  --accent-deep: #075985;
-  --accent-warm: #b45309;
-  --accent-contrast: #ffffff;
-
-  /* Two stops darker than the dark-mode green: #34d399 on paper is barely
-     legible at this size. */
-  --status-live: #059669;
-
-  --line: rgba(9, 14, 24, 0.09);
-  --line-strong: rgba(9, 14, 24, 0.16);
-
-  /*
-   * Stronger than they look like they should be, and this is the reason light
-   * mode's glass reads at all. Refraction, blur and a saturation lift all work
-   * on *what is behind the sheet*; over a near-uniform #f6f7fa there is nothing
-   * for any of them to act on, and the nav ends up looking like a plain white
-   * pill. These give it something to bend.
-   */
-  --aurora-1: rgba(6, 182, 212, 0.4);
-  --aurora-2: rgba(59, 130, 246, 0.36);
-  --aurora-3: rgba(45, 212, 191, 0.26);
-  --aurora-4: rgba(56, 189, 248, 0.34);
-  --aurora-opacity: 0.92;
-
-  /*
-   * Light-mode glass is not dark-mode glass inverted. A white sheet over a white
-   * page has no contrast to refract, so the tint goes *up* while the rim goes
-   * down - the depth cue moves from the highlight to the drop shadow.
-   */
-  /*
-   * The live tint drops well below the flat fill. A sampling surface only has to
-   * be *tinted*; at 58% white it was closer to opaque, which threw away the very
-   * thing it had just spent a blur pass collecting. 32% is about the floor - much
-   * less and the aurora stops being a wash and starts being a picture.
-   */
-  --glass-tint: rgba(255, 255, 255, 0.32);
-  --glass-tint-strong: rgba(255, 255, 255, 0.5);
-  --glass-fill: rgba(255, 255, 255, 0.72);
-  --glass-fill-strong: rgba(255, 255, 255, 0.42);
-  /*
-   * Far end of the body wash - same half ratio as dark, and light mode needs it
-   * at least as badly. The near wash is 42% white on top of a 72% white fill, so
-   * the top of a panel is nearly paper and the bottom is the fill alone; against
-   * the pale page that delta is the strongest vertical gradient on the surface,
-   * and it reads as the panel sagging rather than floating.
-   *
-   * It does *not* pair with an interior shade at the far corner. Light mode wears
-   * a flat white rim at full strength all the way round (see below), and a dark
-   * falloff arriving just inside a white outline is the one combination that
-   * reads as neither - which is why `--glass-inner-shade` is off here too.
-   */
-  --glass-tint-far: rgba(255, 255, 255, 0.24);
-  --glass-fill-far: rgba(255, 255, 255, 0.2);
-  --glass-blur: 22px;
-  --glass-saturate: 230%;
-  /*
-   * Below 1, and this is the correction that matters most on paper. Brightening
-   * a near-white backdrop drives it toward clipping and erases the colour the
-   * saturation lift just produced - the pane spends three passes collecting
-   * detail and the fourth throws it away. Real glass absorbs a little light: a
-   * sheet over a bright scene reads slightly darker and punchier than the wall,
-   * never brighter. `contrast` is the term that was missing, and it is a whole
-   * function rather than a number so dark mode runs zero extra passes.
-   */
-  --glass-brightness: 0.97;
-  --glass-contrast: contrast(1.16);
-
-  /*
-   * ------------------------------------------------- a full white rim on paper
-   *
-   * Light mode's edge is one thing: white, at full strength, all the way round.
-   * Not the graded rim dark mode runs - no lit corner, no shaded corner, no
-   * directional falloff. The panel is outlined.
-   *
-   * Which means these three tokens stop describing three different phenomena and
-   * start describing one. Dark mode's geometry survives underneath (the contour
-   * ring, then two diagonal hairlines at the corners the light enters and leaves)
-   * but with every value white and near-opaque it resolves to a single even
-   * stroke, very slightly hotter at those two corners. That is the intent - it is
-   * a drawn rim, not simulated optics, and trying to have it both ways is what
-   * makes this look muddy.
-   *
-   * Known consequence, and it is the reason the shadow below stays heavy: a white
-   * rim only reads where the panel crosses something darker - the aurora, mostly.
-   * Over the pale page background it vanishes into the fill, and there the drop
-   * shadow is once again the only thing holding the panel off the paper.
-   *
-   * The nav re-declares all of these (Nav.module.css) and keeps the graded rim.
-   */
-  --glass-rim-light: rgba(255, 255, 255, 1);
-  --glass-rim-far: rgba(255, 255, 255, 0.85);
-  --glass-edge: rgba(255, 255, 255, 0.92);
-  /* Stays off. An interior dark falloff under a bright white outline is the one
-     combination that reads as neither - the rim says the light is everywhere and
-     the shade says it is behind you. */
-  --glass-inner-shade: transparent;
-  /* A broad wash at the corner the light arrives from - a gradient across the
-     body rather than a line at the boundary, so it sits under the rim rather
-     than competing with it. */
-  --glass-inner-glow: rgba(255, 255, 255, 0.5);
-  /* Hover takes the rim to pure white on every edge. With the rest of the stroke
-     already at full strength there is nowhere else for the state to go, so the
-     lift and the shadow carry most of the signal. */
-  --glass-edge-hover: #ffffff;
-  --glass-rim-lit: #ffffff;
-  /*
-   * Four falloffs, and the near layers are firmer than they would otherwise be
-   * because a white rim buys separation from the aurora and none at all from the
-   * pale page - over the background this is still the only thing holding the
-   * panel off the paper. Glass over paper wants a definite but shallow contact,
-   * then a very large, very faint ambient with no edge you can point at.
-   *
-   * The previous stack got the falloff right and the *geometry* wrong, in the
-   * same way dark mode did: every layer paired a large downward offset with a
-   * spread deeper than half its blur, so each one was clipped back inside the
-   * panel and then shoved out of the bottom. Five layers of ink, all of it below
-   * the card. The wide layers now carry little or no offset, so the ambient
-   * closes round the sides and top too; only the two contact layers stay
-   * downward, because contact is the one thing that genuinely has a direction.
-   *
-   * The spreads are still deep enough that small surfaces (pills, chips) skip
-   * the wide layers entirely, which is how it should be: a 30px chip has no
-   * business casting a 72px shadow.
-   *
-   * Four layers rather than five so this interpolates against `--glass-drop-lift`
-   * below - box-shadow lists of unequal length are not animatable, and the light
-   * theme's hover shadow used to snap in one frame while the lift itself eased.
-   */
-  --glass-drop:
-    0 1px 2px -1px rgba(15, 23, 42, 0.1),
-    0 2px 8px -4px rgba(15, 23, 42, 0.1),
-    0 0 26px -10px rgba(15, 23, 42, 0.13),
-    0 3px 72px -26px rgba(15, 23, 42, 0.18);
-  /*
-   * The hover lift. This is the token's whole reason for existing: the lift was
-   * hardcoded to black at 0.45/0.6/0.7, which is a dark-mode shadow, and on paper
-   * it dropped a near-opaque black pool under every card the pointer touched.
-   * Layer for layer with the resting stack above, so the two interpolate.
-   */
-  --glass-drop-lift:
-    0 2px 4px -2px rgba(15, 23, 42, 0.1),
-    0 3px 12px -6px rgba(15, 23, 42, 0.12),
-    0 0 38px -12px rgba(15, 23, 42, 0.16),
-    0 6px 100px -34px rgba(15, 23, 42, 0.22);
-  /* See the dark block for why the reach is held rather than trimmed. The ink
-     goes up as well as out: on paper a 0.14 halo spread over 30px is below the
-     threshold where it separates anything at all. */
-  --glass-drop-sm: 0 3px 30px -10px rgba(15, 23, 42, 0.2);
-  --glass-drop-sm-lift: 0 5px 44px -12px rgba(15, 23, 42, 0.26);
-  /* Paper rather than ink, same 0.88. See the dark block for why it is a
-     literal and not a `color-mix`. */
-  --glass-fallback: rgba(254, 254, 255, 0.88);
-  --glass-specular: rgba(255, 255, 255, 0.75);
-
-  --scrim: rgba(246, 247, 250, 0.76);
-  /* See the dark block. Lighter, because on paper this disc is near-black and
-     already separated from the card by its own value. */
-  --shadow-lift:
-    0 1px 3px -1px rgba(15, 23, 42, 0.16),
-    0 2px 22px -6px rgba(15, 23, 42, 0.26);
+    0 1px 3px -1px rgba(0, 0, 0, 0.6),
+    0 2px 24px -6px rgba(0, 0, 0, 0.72);
 }

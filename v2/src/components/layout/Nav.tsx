@@ -1,18 +1,8 @@
 import { motion } from 'motion/react'
 import type { IconType } from 'react-icons'
-import {
-  LuBriefcase,
-  LuFolderGit2,
-  LuLanguages,
-  LuLayers,
-  LuMail,
-  LuMoon,
-  LuSun,
-  LuUser,
-} from 'react-icons/lu'
+import { LuBriefcase, LuFolderGit2, LuLanguages, LuLayers, LuMail, LuUser } from 'react-icons/lu'
 import GlassSurface from '@/components/glass/GlassSurface'
 import { useLocale } from '@/lib/i18n'
-import { useTheme } from '@/lib/theme'
 import { useScrollNav, type SectionId } from '@/lib/scroll'
 import { useMediaQuery } from '@/lib/hooks/useMediaQuery'
 import type { Localized } from '@/content/types'
@@ -34,24 +24,21 @@ const ITEMS: readonly NavItem[] = [
   { id: 'contact', icon: LuMail, label: ui.nav.contact },
 ]
 
-// The icon shows the theme you would switch *to*, matching the label.
-const THEME_ICON: Record<'dark' | 'light', IconType> = {
-  dark: LuSun,
-  light: LuMoon,
-}
-
 /**
- * Language and theme toggles, as a fragment so the parent owns their layout.
+ * The site's settings, which is now one button: the language toggle.
  *
- * There is exactly one instance of these on the page at any width. Rendering a
- * desktop copy and a mobile copy and hiding one with CSS is the usual shortcut,
- * but both stay in the accessibility tree - a screen-reader user then hears two
- * "switch theme" buttons and has to guess which one is real.
+ * Still a component and still a fragment rather than being inlined twice. There
+ * is exactly one instance of it on the page at any width, and rendering a
+ * desktop copy and a mobile copy and hiding one with CSS is the usual shortcut -
+ * but both stay in the accessibility tree, and a screen-reader user then hears
+ * two "switch language" buttons and has to guess which one is real.
+ *
+ * It kept the fragment when the theme toggle beside it was removed. A single
+ * child does not need one, but the parents lay these out as a row and would both
+ * have to change the day a second control arrives.
  */
 function Controls() {
   const { t, locale, toggle: toggleLocale } = useLocale()
-  const { theme, cycle } = useTheme()
-  const ThemeIcon = THEME_ICON[theme]
 
   return (
     <>
@@ -66,21 +53,6 @@ function Controls() {
         <span className={styles['iconBtnTag']} aria-hidden="true">
           {locale === 'zh' ? 'EN' : '中'}
         </span>
-      </button>
-
-      <button
-        type="button"
-        className={styles['iconBtn']}
-        // The reveal expands from the button that was pressed, so the change
-        // visibly originates at the control rather than from nowhere.
-        onClick={(event) => {
-          const rect = event.currentTarget.getBoundingClientRect()
-          cycle({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
-        }}
-        title={t(ui.theme[theme])}
-        aria-label={t(ui.theme[theme])}
-      >
-        <ThemeIcon aria-hidden="true" />
       </button>
     </>
   )
@@ -119,10 +91,24 @@ export default function Nav() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       >
+        {/*
+          * Rounded, and the only surface on the site that is.
+          *
+          * Everything else is square with bracketed corners, which is a hard
+          * figure and meant to be - a panel is something you arrive at, look at,
+          * and scroll past. The bar is the one element that is *never* off
+          * screen, and a hard corner held in the periphery for an entire visit
+          * reads as pressure rather than as precision. Softening the one
+          * permanent object is what lets the rest of the page stay sharp.
+          *
+          * `rounded` rather than a value off the radius scale: those entries are
+          * two-corner shorthands under a global `corner-shape: bevel`, so they
+          * cannot express an arc on all four corners. See GlassSurface.
+          */}
         <GlassSurface
           as="nav"
           variant="thick"
-          radius="full"
+          radius="rounded"
           backdrop="live"
           className={styles['bar']}
           aria-label="Primary"

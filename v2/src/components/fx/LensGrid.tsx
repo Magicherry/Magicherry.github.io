@@ -412,33 +412,15 @@ export default function LensGrid() {
     }
 
     /*
-     * The theme swap rewrites the custom properties this reads, so the field has
-     * to be re-rasterised - about 1,900 arcs plus two `getComputedStyle` calls,
-     * which forces a style recalc.
+     * The two colours above are read once and never again.
      *
-     * Deferred to a frame rather than run in the observer's microtask: the theme
-     * switch is a view transition, and doing this work synchronously puts a
-     * multi-millisecond canvas redraw on the main thread in the middle of it.
-     * One frame late is invisible - the canvas is under a full-page snapshot at
-     * that moment anyway.
+     * A `MutationObserver` on `data-theme` used to sit here and re-rasterise the
+     * whole field on a theme switch - the custom properties it reads were being
+     * rewritten under it, and `restColor` especially, since the two themes put
+     * the field on opposite sides of the background it sits on. With one
+     * appearance there is nothing to observe: these values are fixed for the life
+     * of the page.
      */
-    let themeFrame = 0
-    const themeObserver = new MutationObserver(() => {
-      if (themeFrame) return
-      themeFrame = requestAnimationFrame(() => {
-        themeFrame = 0
-        // Both, and `restColor` is the one that bites: the themes put the field
-        // on opposite sides of the background it sits on - pale dots on ink in
-        // dark, ink dots on paper in light - so carrying the old value across a
-        // switch does not tint the grid, it erases it.
-        hotColor = readVar('--accent', hotColor)
-        restColor = readVar('--fg-ghost', restColor)
-        renderField()
-        draw()
-      })
-    })
-    themeObserver.observe(document.documentElement, { attributeFilter: ['data-theme'] })
-
     resize()
     window.addEventListener('resize', resize, { passive: true })
     if (lens) {
@@ -463,8 +445,6 @@ export default function LensGrid() {
       window.removeEventListener('touchmove', onTouch)
       window.removeEventListener('touchend', onTouchEnd)
       window.removeEventListener('touchcancel', onTouchEnd)
-      themeObserver.disconnect()
-      if (themeFrame) cancelAnimationFrame(themeFrame)
       if (frame) cancelAnimationFrame(frame)
     }
   }, [lens])

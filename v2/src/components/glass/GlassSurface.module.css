@@ -1,6 +1,7 @@
 /*
- * A glass surface is six stacked optical layers. Removing any one of them is
- * what makes most CSS "glassmorphism" read as grey plastic:
+ * A glass surface is six stacked optical layers, plus one drawn one. Removing
+ * any of the optical six is what makes most CSS "glassmorphism" read as grey
+ * plastic:
  *
  *   1  backdrop      blur + saturation lift + (where supported) edge refraction
  *   2  body fill     a directional wash, brighter where the light enters
@@ -9,15 +10,33 @@
  *   4  inner glow    light that has entered the slab and scattered
  *   5  specular      a moving highlight that tracks the pointer
  *   6  drop shadow   contact shadow proving the sheet floats above the page
+ *   7  corner ticks  two drawn brackets - not optics, an overlay on top of them
  *
  * Only layer 1 is expensive, and only layer 1 is optional - see `.live` below.
  * Layers 2-6 are what actually carry the material; a flat surface keeps all of
  * them and is nearly indistinguishable over a soft gradient background.
+ *
+ * The plate itself is cut at two opposite corners, which the radius scale and
+ * the global `corner-shape` rule in base.css handle without this file knowing
+ * anything about it. What this file does have to know is that the property does
+ * not inherit and does not reach pseudo-elements, so the two layers below that
+ * carry `border-radius: inherit` restate it.
  */
 
+/*
+ * Square, and the radius the consumer asked for is deliberately ignored here.
+ *
+ * A panel's frame is now four faint edges with four bright right-angles at the
+ * corners, and that figure only exists if the corners *are* right angles - a
+ * chamfer replaces the very thing the brackets are drawn on. `--surface-radius`
+ * still arrives as an inline custom property and is still honoured by the two
+ * tiers below that need it; this rule simply outranks the declaration that used
+ * to read it, which is why it can be a one-line change rather than a prop
+ * migration across nine call sites.
+ */
 .surface {
   position: relative;
-  border-radius: var(--surface-radius, var(--radius-lg));
+  border-radius: 0;
   background-color: var(--glass-fill);
   /*
    * The body wash, lit at both ends rather than one.
@@ -45,44 +64,115 @@
     var(--glass-fill-far, transparent) 100%
   );
   /*
-   * The rim, as three stacked hairlines plus one interior falloff. A single
-   * border cannot express a full outline, a lit near corner and a lit far
-   * corner at once, and box-shadow costs nothing to composite.
+   * One even hairline all the way round, plus the interior falloff. That is the
+   * whole rim now.
    *
-   * The two directional hairlines are offset *diagonally*, and that is the
-   * whole trick. An inset shadow at `0 1px` paints a band of even thickness
-   * along the entire top edge - which is a drawn border, not an edge catching
-   * light, and on a wide panel it reads as a fluorescent tube laid across the
-   * top. Offset to `1px 1px` the same shadow is displaced along the light's own
-   * axis, so its thickness now follows how far each part of the rim is turned
-   * away from the source: 1.4px at the top-left corner, 1px along the top and
-   * left edges, and tapering to *nothing* as it rounds the top-right and
-   * bottom-left. `-1px -1px` mirrors it onto the far corner. Four hairlines
-   * became three because the shaded edge is no longer a separate layer - the
-   * two corners nobody lit are the shading.
+   * It used to carry two *directional* hairlines on top of the contour - offset
+   * diagonally so their thickness followed how far each part of the edge was
+   * turned away from the light, bright at the corner it entered and half as
+   * bright at the one it left. That is a good model of a lit slab and it is the
+   * wrong model for this frame: the corners are where the brackets are, and a rim
+   * that is already brightest at two of them leaves the brackets with nothing to
+   * say. The frame's whole proposition is faint edges, bright corners, and the
+   * edges have to actually be faint for it to read.
    *
-   * The last two lines are the interior, and they are the same geometry mirrored
-   * across the light axis. The glow used to be a `0 0 32px -10px` haze radiating
-   * from every edge, which fills the middle of the panel and is why the material
-   * read as milky plastic; offset along the diagonal with a hard negative spread
-   * it becomes light entering at one corner and falling off within a pixel or
-   * two, which is what light does. The shade is its opposite number - the far
+   * The interior is kept. The glow used to be a `0 0 32px -10px` haze radiating
+   * from every edge, which fills the middle of a panel and is why that material
+   * read as milky plastic; offset along the light axis with a hard negative
+   * spread it becomes light entering at one corner and falling off within a pixel
+   * or two, which is what light does. The shade is its opposite number - the far
    * corner darkening over ~20px rather than stopping at a hairline - and it is
    * how the slab reads as having thickness instead of an outline. Dark mode sets
-   * that token to `transparent`: its far corner is already lit by transmitted
-   * light, and the two would be arguing.
+   * that token to `transparent`, since nothing is lighting its far corner now.
    */
   box-shadow:
     var(--glass-drop),
     inset 0 0 0 1px var(--glass-edge),
-    inset 1px 1px 0 0 var(--glass-rim-light),
-    inset -1px -1px 0 0 var(--glass-rim-far),
+    /* The facet sheen. A 5px blur pulled back by a 4px spread, offset along the
+       light axis - so it is a soft wedge a couple of pixels inside the lit edge
+       rather than a stroke on it. See `--glass-sheen`. */ inset 2px 2px 5px -4px
+      var(--glass-sheen),
     inset 16px 16px 26px -28px var(--glass-inner-glow),
     inset -16px -16px 26px -28px var(--glass-inner-shade);
   transition:
     transform var(--dur-base) var(--ease-gel),
     box-shadow var(--dur-base) var(--ease-enter),
     background-color var(--dur-base) var(--ease-enter);
+}
+
+/*
+ * --------------------------------------------------------- corner brackets (7)
+ *
+ * Four right-angles, one at each corner, sitting *on* the outline rather than
+ * inside it - so the frame is one continuous figure that happens to be bright at
+ * its four corners and faint along its four edges.
+ *
+ * That distribution is the whole idea, and it is how a HUD frames anything: the
+ * corners are where a rectangle is actually defined - two edges meeting is the
+ * information, the middle of an edge is just the consequence - so the corners get
+ * the ink and the edges get whatever is left. The eye reconstructs the box from
+ * four marks and reads the faint sides as confirmation rather than as structure.
+ *
+ * Eight one-pixel gradients rather than four borders, because a border draws
+ * whole edges and each of these is a segment. They were two brackets at the two
+ * corners the plate was not chamfered at; with the chamfer gone there are four
+ * real corners and no reason to leave two of them unmarked.
+ *
+ * `inset: 0` rather than the 7px they used to carry. Held inside the panel they
+ * were a second, smaller frame floating within the first, and against a square
+ * outline that reads as a misprint - two rectangles a few pixels apart. On the
+ * boundary they *are* the outline, brightened.
+ *
+ * 10px long, down from 16. A bracket is a *mark at a corner*, and past a certain
+ * length it stops being one and starts being a partly-drawn border - the eye
+ * begins following the segment along the edge instead of reading the corner it
+ * came from. Ten is about where that flips on panels this size, and it also
+ * leaves more of the faint edge visible, which is what the frame is contrasting
+ * against in the first place.
+ *
+ * `--surface-tick` rather than a literal so a surface can turn it off. The
+ * back-to-top button does - it is 48px across with a progress ring already drawn
+ * on it, and a bracket inside that is two overlays fighting over one control.
+ */
+.surface::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    /* top-left: along the top, then down the left */
+    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
+    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
+    /* top-right */
+    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
+    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
+    /* bottom-left */
+    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
+    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
+    /* bottom-right */
+    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
+    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket)));
+  background-position:
+    0 0,
+    0 0,
+    100% 0,
+    100% 0,
+    0 100%,
+    0 100%,
+    100% 100%,
+    100% 100%;
+  background-size:
+    var(--surface-tick-len, 10px) 1px,
+    1px var(--surface-tick-len, 10px),
+    var(--surface-tick-len, 10px) 1px,
+    1px var(--surface-tick-len, 10px),
+    var(--surface-tick-len, 10px) 1px,
+    1px var(--surface-tick-len, 10px),
+    var(--surface-tick-len, 10px) 1px,
+    1px var(--surface-tick-len, 10px);
+  background-repeat: no-repeat;
+  transition: opacity var(--dur-base) var(--ease-enter);
 }
 
 /*
@@ -99,6 +189,11 @@
  * nothing.
  */
 .live {
+  /* The radius `.surface` above declines to read. A live surface is not framed by
+     brackets - it wears the gradient rim ring instead (see below) - so it has no
+     corners to keep square and takes whatever shape the consumer asked for. The
+     nav is the one that cares. */
+  border-radius: var(--surface-radius, var(--radius-lg));
   background-color: var(--glass-tint);
   /* Same two-ended wash as `.surface`, in tint values. See there for why. */
   background-image: linear-gradient(
@@ -109,9 +204,9 @@
     var(--glass-tint-far, transparent) 100%
   );
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
-    brightness(var(--glass-brightness)) var(--glass-contrast, );
+    brightness(var(--glass-brightness));
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
-    brightness(var(--glass-brightness)) var(--glass-contrast, );
+    brightness(var(--glass-brightness));
 }
 
 /*
@@ -119,17 +214,18 @@
  * Safari answers the feature query truthfully and then renders nothing.
  *
  * The empty fallback is load-bearing: `var(--glass-refract, none)` would expand
- * to `... brightness(1.06) none`, which is not a valid filter list, so the whole
+ * to `... brightness(1.02) none`, which is not a valid filter list, so the whole
  * declaration would be dropped and the surface would lose its blur entirely.
- * `--glass-contrast` holds a whole `contrast()` function for the same reason:
- * only light mode needs it, and a token holding a bare number would have to be
- * defined in both themes or take the filter list down with it.
+ *
+ * (A `--glass-contrast` slot used to ride along here for the same reason. It
+ * existed only to give light mode a `contrast()` pass over its near-white
+ * backdrop, so it went out with the theme.)
  */
 :global([data-refraction='on']) .live {
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
-    brightness(var(--glass-brightness)) var(--glass-contrast, ) var(--glass-refract, );
+    brightness(var(--glass-brightness)) var(--glass-refract, );
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate))
-    brightness(var(--glass-brightness)) var(--glass-contrast, ) var(--glass-refract, );
+    brightness(var(--glass-brightness)) var(--glass-refract, );
 }
 
 /* ------------------------------------------------------------------ variants */
@@ -168,12 +264,20 @@
     inset 16px 16px 26px -28px var(--glass-inner-glow),
     inset -16px -16px 26px -28px var(--glass-inner-shade);
 }
+/* The shorthand `background` below is what retires the corner ticks on a live
+   surface: it resets the four gradients `.surface::before` set, and `inset: 0`
+   puts the layer back on the boundary. A sampling plate gets the true gradient
+   ring instead - one edge treatment per surface, never both. */
 .live::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
   border-radius: inherit;
+  /* Restated rather than inherited: `corner-shape` is not an inherited property
+     and the universal rule in base.css does not reach pseudo-elements, so
+     without this the ring would round off inside a bevelled plate. */
+  corner-shape: bevel;
   padding: 1px;
   background: linear-gradient(
     var(--surface-light-angle, 152deg),
@@ -217,6 +321,9 @@
   inset: 0;
   z-index: 2;
   border-radius: inherit;
+  /* See `.live::before` - the property neither inherits nor reaches pseudo
+     elements, so the highlight would spill past a cut corner without it. */
+  corner-shape: bevel;
   background: radial-gradient(
     var(--surface-specular-size, 220px) circle at var(--gx, 50%) var(--gy, -20%),
     var(--glass-specular) 0%,
@@ -233,10 +340,10 @@
   transition: opacity var(--dur-slow) var(--ease-enter);
 }
 
-:global([data-theme='light']) .surface {
-  --glass-specular-blend: soft-light;
-}
-
+/* `screen`, because the highlight is light being added to a dark surface. The
+   token behind it is what light mode used to swap for `soft-light` - a screen
+   blend over near-white paper clips to flat white - and it survives the theme's
+   removal as the knob a single surface can turn if it ever needs to. */
 .interactive[data-lit='true']::after {
   mix-blend-mode: var(--glass-specular-blend, screen);
   opacity: 1;
@@ -254,11 +361,18 @@
    the two themes; on paper it pooled under every card the pointer touched. */
 .interactive:hover {
   transform: translate3d(0, -3px, 0);
+  /* The brackets light with the rim. A custom property set here reaches
+     `.surface::before` through inheritance, which is the only way to animate a
+     pseudo-element's colour from a state on its host. */
+  --surface-tick: var(--accent);
+  /* Layer for layer with the resting stack, in the same order - box-shadow lists
+     of unequal length are not interpolable, and the whole thing would snap in one
+     frame while the lift itself eased. */
   box-shadow:
     var(--glass-drop-lift),
     inset 0 0 0 1px var(--glass-edge-hover),
-    inset 1px 1px 0 0 var(--glass-rim-lit),
-    inset -1px -1px 0 0 var(--glass-rim-far),
+    /* Brightens with the lift - the panel has turned further into the light. */
+    inset 2px 2px 5px -4px color-mix(in srgb, var(--glass-sheen), #fff 30%),
     inset 16px 16px 26px -28px var(--glass-inner-glow),
     inset -16px -16px 26px -28px var(--glass-inner-shade);
 }
@@ -276,6 +390,49 @@
 .interactive:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
+}
+
+/*
+ * ----------------------------------------------------------------- the circle
+ *
+ * `radius="circle"` opts a surface out of the plating entirely: a 999px radius
+ * under the global bevel is a diamond, so the shape has to be restated here and
+ * on both optical pseudo-elements, which state `bevel` of their own and would
+ * otherwise cut a chord across the ring and the specular.
+ *
+ * Declared after `.live::before` and `.interactive::after` deliberately - equal
+ * specificity, so source order is what settles it.
+ *
+ * The corner ticks go too. They are a bracket around a *corner*, and a circle
+ * does not have any; inset into one they read as two stray arcs of debris. A
+ * circular surface is an instrument - a gauge, a disc, a face - and instruments
+ * on this site are unbracketed.
+ */
+/*
+ * `rounded` is the same escape hatch at a smaller radius: a real arc on all four
+ * corners, for a surface that wants to be soft rather than cut. The nav is the
+ * one consumer - it is the only element on the page that is *always* on screen,
+ * and a hard figure held in the corner of the eye for the whole visit is a
+ * different proposition from one you scroll past.
+ *
+ * It needs no `border-radius` of its own: unlike `.circle` it is only ever used
+ * on a live surface, and `.live` already restates the radius `.surface` declines
+ * to read. If a flat surface ever asks for it, add the declaration here.
+ */
+.circle,
+.circle::before,
+.circle::after,
+.rounded,
+.rounded::before,
+.rounded::after {
+  corner-shape: round;
+}
+
+.circle {
+  --surface-tick: transparent;
+  /* Also the radius, for the same reason `.live` restates it: `.surface` is
+     square now, and a disc that inherited that would be a box. */
+  border-radius: var(--surface-radius, var(--radius-circle));
 }
 
 /* ---------------------------------------------------------------- fallbacks */

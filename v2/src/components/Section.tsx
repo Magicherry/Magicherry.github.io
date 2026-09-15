@@ -6,6 +6,19 @@ import Reveal from './Reveal'
 import RichText from './RichText'
 import styles from './Section.module.css'
 
+/*
+ * A "slate" strip used to sit above every title - the romanised section id and a
+ * hairline rule trailing off to the right, `stack ─────────`, at one point with a
+ * two-digit index in front of it.
+ *
+ * All of it is gone. Each piece was defensible on its own and none of it was
+ * carrying information: the id restated, in English and at 11px, exactly what the
+ * heading underneath says in the reader's own language, and the rule was a
+ * horizontal drawn above a block that already begins with the largest type on the
+ * page. Five sections deep, that is five decorations in the one position a reader
+ * looks at first.
+ */
+
 interface SectionProps {
   id: SectionId
   title: Localized

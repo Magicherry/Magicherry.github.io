@@ -11,7 +11,6 @@ import Work from './sections/Work'
 import Projects from './sections/Projects'
 import Contact from './sections/Contact'
 import { LocaleProvider, useLocale } from './lib/i18n'
-import { ThemeProvider } from './lib/theme'
 import { ScrollProvider } from './lib/scroll'
 import { IntroProvider, useIntro } from './lib/intro'
 
@@ -56,14 +55,12 @@ function Shell() {
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <LocaleProvider>
-        <IntroProvider>
-          <ScrollProvider>
-            <Shell />
-          </ScrollProvider>
-        </IntroProvider>
-      </LocaleProvider>
-    </ThemeProvider>
+    <LocaleProvider>
+      <IntroProvider>
+        <ScrollProvider>
+          <Shell />
+        </ScrollProvider>
+      </IntroProvider>
+    </LocaleProvider>
   )
 }
