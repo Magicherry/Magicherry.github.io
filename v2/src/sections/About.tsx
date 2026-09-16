@@ -70,11 +70,17 @@ export default function About() {
           </Reveal>
 
           <Reveal direction="left" delay={0.2}>
-            <figure className={styles['quote']}>
+            <GlassSurface
+              as="figure"
+              variant="thin"
+              radius="lg"
+              className={styles['quote']}
+              lightAngle={172}
+            >
               <LuQuote className={styles['quoteMark']} aria-hidden="true" />
               <blockquote>{t(ui.about.quote)}</blockquote>
               <figcaption>— {t(ui.about.quoteAuthor)}</figcaption>
-            </figure>
+            </GlassSurface>
           </Reveal>
         </div>
       </div>

@@ -11,6 +11,10 @@ build/
 .idea/
 .vscode/
 .DS_Store
+# The resource-fork sidecar directory macOS writes into a zip. The Hitmarker
+# package arrives with one; it is a duplicate of the tree beside it and must not
+# be mistaken for part of the font distribution.
+__MACOSX/
 Thumbs.db
 *.swp
 

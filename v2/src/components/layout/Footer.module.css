@@ -2,10 +2,64 @@
   position: relative;
   z-index: var(--z-content);
   padding-block: var(--space-6);
-  /* A hairline that fades out at both ends reads as the page ending, where a
-     full-width rule reads as one more divider between sections. */
-  border-top: 1px solid transparent;
-  border-image: linear-gradient(90deg, transparent, var(--line-strong) 30%, var(--line-strong) 70%, transparent) 1;
+}
+
+/*
+ * The page's terminator, and it is symmetric where `.hud-rule` is not.
+ *
+ * What it replaces was a `border-image` hairline fading out at both ends, and
+ * that part was right: a rule running to both edges reads as one more divider
+ * between sections, and this one has to read as the page stopping. What it
+ * lacked was a *terminus* - the fade simply ran out, so a mark whose entire job
+ * is to end had no ends.
+ *
+ * So the fade stays, its run is ticked, and its two shoulders are marked with
+ * solid verticals hanging down into the footer. That is the corner brackets'
+ * proposition applied to a single line: faint along the run, defined where it is
+ * defined. Two marks rather than one, because this line has two ends and neither
+ * is more the end than the other.
+ *
+ * The tint moves from `--line-strong` to `--hud-line` - the same hairline with
+ * the accent in it, the token the block rules are drawn in. This is the last
+ * piece of framing on the page and it should be speaking in the same voice as
+ * the first.
+ *
+ * The ticks sit at 30% and 70% to match the gradient's own stops. A 1px layer
+ * positioned by percentage lands at pct x (width - 1), which at shell width is a
+ * third of a pixel off - not worth a calc() that would then have to be
+ * maintained against two gradient stops.
+ */
+.footer::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 7px;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--hud-line), var(--hud-line)),
+    linear-gradient(var(--hud-line), var(--hud-line));
+  background-position:
+    30% 0,
+    70% 0;
+  background-size:
+    1px 7px,
+    1px 7px;
+  background-repeat: no-repeat;
+}
+
+/* The comb cuts the run and would cut the two ticks with it - a 1px vertical
+   under a 5-on/2-off stencil is there or gone depending on where the viewport
+   puts it. The run gets its own layer for the same reason `.hud-rule` splits
+   into two elements. */
+.footer::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  pointer-events: none;
+  background-image: linear-gradient(90deg, transparent, var(--hud-line) 30%, var(--hud-line) 70%, transparent);
+  -webkit-mask-image: var(--comb);
+  mask-image: var(--comb);
 }
 
 /*
@@ -23,21 +77,59 @@
   gap: var(--space-4);
 }
 
+/*
+ * One voice across all three cells.
+ *
+ * They had three. The motto was sans at `--text-xs`, the copyright mono at
+ * `--text-2xs` and faint, the source link mono caps at 650 - three sizes, two
+ * families and two colours inside a single 24px row, which is the one place on
+ * the page where all the type is on the same line and any difference between it
+ * is read as a difference in *kind*. It was not one: these are three captions.
+ *
+ * The motto used to be argued for as the exception - the one human sentence
+ * down here, and mono caps would make it a system message. That reading was
+ * right about the sentence and wrong about the row. A footer is chrome, the
+ * page has already said everything it has to say by the time you reach it, and
+ * a lone sentence set differently from its two neighbours does not read as warm,
+ * it reads as unstyled.
+ *
+ * So: the terminator's voice, which is the voice of every other readout on the
+ * site. Colour does the remaining separation - the link lifts to the accent on
+ * hover and nothing else in the row moves.
+ */
+.motto,
+.legal,
+.source {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: 650;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+/*
+ * Han carries its own advance width; see `.label:lang(zh)` in BlockHead. The
+ * copyright line is the mixed one - `© 2026 Yuting Zhou.` in front of Chinese -
+ * and it takes the reset whole rather than being split, because the Latin in it
+ * is a name and a number rather than a run of words, and under-tracking eight
+ * characters is invisible where over-tracking Han is not.
+ */
+.motto:lang(zh),
+.legal:lang(zh),
+.source:lang(zh) {
+  letter-spacing: var(--tracking-normal);
+}
+
 .motto {
   grid-column: 1;
   justify-self: start;
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-normal);
-  color: var(--fg-muted);
 }
 
 .legal {
   grid-column: 2;
   justify-self: center;
   text-align: center;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  color: var(--fg-faint);
 }
 
 /*
@@ -52,8 +144,6 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-size: var(--text-xs);
-  color: var(--fg-muted);
   transition: color var(--dur-fast) var(--ease-enter);
 }
 

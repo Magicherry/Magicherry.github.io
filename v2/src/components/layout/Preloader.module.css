@@ -72,6 +72,11 @@
    the page keeps. */
 .wordmark {
   display: block;
+  /* The first type painted on the site, and the one place the display face has
+     to arrive without a swap being obvious - which is why fonts.css takes
+     `swap` over `block` and accepts the reflow. A curtain that opens on nothing
+     is worse than a curtain that opens on the fallback for 80ms. */
+  font-family: var(--font-display);
   font-size: clamp(1.35rem, 5.4vw, 2.1rem);
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -107,6 +112,13 @@
  *
  * Rounded caps would make it a progress *pill*; cut flat it is a gauge track, the
  * same distinction the scrollbar makes.
+ *
+ * The pitch is `--comb` in tokens.css now, shared with the HUD rule so the site
+ * has one answer to how wide a tick is. Note that a consumer already carrying a
+ * mask cannot simply add this as a second layer: mask layers composite with
+ * `add`, so the two would union rather than intersect, and getting an
+ * intersection needs `mask-composite` plus its `-webkit-` spelling, which forces
+ * an offscreen buffer per element (see `.live::before` in GlassSurface).
  */
 .meter {
   justify-self: center;
@@ -115,8 +127,8 @@
   border-radius: 0;
   background: var(--fg-ghost);
   overflow: hidden;
-  -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 5px, transparent 5px 7px);
-  mask-image: repeating-linear-gradient(90deg, #000 0 5px, transparent 5px 7px);
+  -webkit-mask-image: var(--comb);
+  mask-image: var(--comb);
 }
 
 .meterFill {

@@ -70,6 +70,20 @@ Three consequences are easy to trip over:
 - **Buttons are square and bracketed.** `<Action>` is the one component with no chamfer (`--radius-chip`) — a button is a command, not a surface — and its hover/focus state draws a pair of detached `[ ]` calipers via `.action::before`, which is why `.action` must not carry `overflow: hidden`.
 - **Interface type is mono caps; prose is not.** Nav links, buttons, chips, section slates and readouts are `--font-mono`, uppercase, positive tracking. Section titles and the hero name are set caps at `--tracking-stencil` with a `:lang(zh)` reset — Han carries its own advance width and letterspacing it opens gaps that read as word breaks.
 
+### Typography — three faces, two of them licensed
+
+`src/styles/fonts.css` self-hosts **Hitmarker**, the Call of Duty typeface, from `src/assets/HitmarkerFonts/`. Read the header comment there before touching any of it.
+
+- `--font-display` (Hitmarker VF, 300–900) is the **headline** role and has exactly five consumers: `.sectionTitle`, the hero `.nameLine`, and the three wordmarks (nav, mobile topbar, preloader). Do not spread it further — the brand's own do-not list opens with "using too many different sizes, weights, widths and cuts".
+- `--font-sans` is Hitmarker Text in front of the old system stack.
+- `--font-mono` is **not** Hitmarker and must not become it. That role exists for tabulation — stat values on one centre, a HUD rule whose terminus does not move when its number changes, copyable handles — and Hitmarker Text is proportional.
+
+Three constraints that are easy to break:
+
+- **Licence.** `(c) Activision 2023`, revocable and **non-commercial only**, and "must be used exactly as provided … with no modifications". So: no subsetting, no re-encoding, no renaming the files. Vite fingerprints the filename but ships the bytes unchanged; verify with `cmp` if the asset pipeline ever changes.
+- **No CJK.** Hitmarker explicitly excludes Chinese, Japanese, Korean, Thai and Arabic. Every stack keeps its CJK tail so Han falls through per character to PingFang/YaHei. Never reorder a stack so a CJK family sits before a Hitmarker one.
+- **`body` sets `font-variation-settings: 'wdth' 30`** and that is load-bearing, not cosmetic. The display face's `wdth` axis runs 0 (Condensed) → 30 (Normal) → 100 (Wide) and the variable file *defaults to 0*, so dropping this declaration silently condenses every headline on the site.
+
 `<meta name="theme-color">` in `index.html` is a static value sampled from the *composited* backdrop at the viewport edge — deliberately not `--bg-base`, which is the near-black *under* the field and paints a black band above and below the content on phones.
 
 ### Preferences

@@ -220,6 +220,15 @@
   color: var(--accent);
 }
 
+/*
+ * No inventory number in front of the kind, and it was tried. The case for one
+ * here was the best anywhere on the site - this grid is filtered, so an index
+ * would have been the only thing on a card that changed when you pressed a chip
+ * - and it still lost. `01 · WEB APP · 2024` is two numerals bracketing a
+ * two-word label on one 11px line, and the row stopped reading as a caption and
+ * started reading as a part number.
+ */
+
 /* Round, like every other instrument-scale mark on the site - at 3px a bevel is
    a smudge either way, and consistency is cheaper than an exception. */
 .dot {

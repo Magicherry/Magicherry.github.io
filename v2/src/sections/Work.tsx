@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { motion, useScroll, useSpring } from 'motion/react'
 import { LuArrowUpRight, LuGraduationCap } from 'react-icons/lu'
 import Section from '@/components/Section'
+import BlockHead from '@/components/BlockHead'
 import Reveal from '@/components/Reveal'
 import GlassSurface from '@/components/glass/GlassSurface'
 import { useLocale } from '@/lib/i18n'
@@ -182,10 +183,10 @@ export default function Work() {
       </div>
 
       <Reveal className={styles['education']}>
-        <h3 className={styles['educationTitle']}>
-          <LuGraduationCap aria-hidden="true" />
-          {t(ui.sections.work.education)}
-        </h3>
+        {/* No `meta`. There are two degrees, and "02" beside a pair of cards is
+            a number restating something already in view - this is the call site
+            that proves the slot is optional. */}
+        <BlockHead label={ui.sections.work.education} icon={<LuGraduationCap />} />
         <div className={styles['educationGrid']}>
           {education.map((entry) => (
             <GlassSurface

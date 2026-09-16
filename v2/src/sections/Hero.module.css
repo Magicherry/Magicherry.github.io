@@ -124,6 +124,10 @@
  */
 .nameLine {
   display: block;
+  /* Set on the line rather than on `.name` inside it, so the "I am" and the name
+     are one piece of display type with a weight step in the middle - which is
+     the whole figure. Splitting the face between them would make it two. */
+  font-family: var(--font-display);
   font-size: var(--text-4xl);
   font-weight: 500;
   letter-spacing: var(--tracking-stencil);
@@ -267,6 +271,9 @@
   gap: var(--space-4);
   transform: translateZ(40px);
   --surface-specular-size: 300px;
+  /* One of the two plates that carry a screen; the default 10px arm reads as a
+     speck on an edge this long. See the note on `--surface-tick-len`. */
+  --surface-tick-len: 13px;
 }
 
 /*
@@ -345,12 +352,29 @@
   color: var(--fg-faint);
 }
 
+/*
+ * The two halves of this card speak different languages, and the boundary above
+ * says so now.
+ *
+ * Over it are three facts about a person, set in sentences with a glyph each;
+ * under it are three readouts, set in mono caps. Both used to be divided by the
+ * same `1px solid var(--line)` that `.facts` still carries above *it* - two
+ * identical rules inside a 380px card, neither of them saying which boundary
+ * mattered. `.hud-rule` is asymmetric, so the line marking a change of register
+ * no longer looks like the line that is only spacing.
+ *
+ * The facts are not converted to mono to match. They are content - a registered
+ * company name and a place - and "Shanghai NIO Automobile Co., Ltd." set in
+ * monospaced caps is unreadable at 11px before the Chinese reading is even
+ * considered.
+ *
+ * `padding-top` and the border both go: the card is a grid, and its gap is
+ * already carrying the space on every other boundary in it.
+ */
 .stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-2);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--line);
 }
 
 .stats li {

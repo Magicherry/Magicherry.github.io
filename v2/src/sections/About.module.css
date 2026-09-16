@@ -85,10 +85,24 @@
 }
 
 /* ------------------------------------------------------------------ quote */
-/* No rule down the side - the quote mark above the text already announces it,
-   and the two together were two devices doing one job. */
+/*
+ * No rule down the side - the quote mark above the text already announces it,
+ * and the two together were two devices doing one job. There is a plate under it
+ * now instead.
+ *
+ * It was the one unframed thing in a column whose only other item is a bracketed
+ * card, and at that spacing it did not read as the second module in a sidebar -
+ * it read as a paragraph that had come loose from the prose beside it.
+ *
+ * `thin` rather than `regular`, so the column reads card-then-plate. That is the
+ * hierarchy the two contents already have: one is a list of facts about the
+ * person, the other is somebody else's sentence.
+ */
 .quote {
   padding: var(--space-5);
+  /* A thin plate wants a shorter arm than a content card. See the note on
+     `--surface-tick-len` in GlassSurface. */
+  --surface-tick-len: 7px;
 }
 
 /*

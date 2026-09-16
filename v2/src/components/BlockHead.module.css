@@ -1,0 +1,45 @@
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/*
+ * The uppercase block labels on this site were four copies of the same six
+ * declarations - Stack twice, Work, and About's sidebar - and no two of them
+ * agreed on anything except by accident. They are one rule now, which is also
+ * the one place the Han reset below can be stated.
+ */
+.label {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+/*
+ * The letterspace comes off for Han, for the reason `.sectionTitle:lang(zh)`
+ * gives in base.css: Chinese glyphs carry their own advance width, and spacing
+ * them opens gaps that read as breaks between words in a language that has
+ * none. Stated at 11px here and at 52px there because the argument is about the
+ * *script*, not the size - which is what every one of the hand-rolled labels
+ * this replaces had missed.
+ *
+ * `--tracking-normal` rather than the `--tracking-tight` the section titles
+ * take: that value is an optical correction for display type, and this is a
+ * label. The only job here is getting the HUD letterspace out of the way.
+ */
+.label:lang(zh) {
+  letter-spacing: var(--tracking-normal);
+}
+
+.icon {
+  display: inline-flex;
+  font-size: 1.15rem;
+  color: var(--accent);
+}

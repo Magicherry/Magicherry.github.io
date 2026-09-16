@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
 import Section from '@/components/Section'
+import BlockHead from '@/components/BlockHead'
 import Reveal, { revealItem } from '@/components/Reveal'
 import GlassSurface from '@/components/glass/GlassSurface'
 import { useLocale } from '@/lib/i18n'
@@ -61,7 +62,7 @@ export default function Stack() {
         * certified is a stronger claim than which editor I open.
         */}
       <Reveal className={styles['block']} stagger={0.06}>
-        <h3 className={styles['blockTitle']}>{t(ui.sections.stack.certifications)}</h3>
+        <BlockHead label={ui.sections.stack.certifications} />
 
         <ul className={styles['certs']}>
           {certifications.map((cert) => (
@@ -90,7 +91,7 @@ export default function Stack() {
       </Reveal>
 
       <Reveal className={styles['block']} stagger={0.06}>
-        <h3 className={styles['blockTitle']}>{t(ui.sections.stack.tools)}</h3>
+        <BlockHead label={ui.sections.stack.tools} />
 
         {/* One labelled row per category. A definition list is the honest
             element here: each row really is a term and the things under it. */}

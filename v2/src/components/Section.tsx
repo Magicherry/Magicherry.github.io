@@ -17,6 +17,14 @@ import styles from './Section.module.css'
  * horizontal drawn above a block that already begins with the largest type on the
  * page. Five sections deep, that is five decorations in the one position a reader
  * looks at first.
+ *
+ * <BlockHead> draws very nearly the same strip and is not a walking back of any
+ * of that, because both arguments above are about *position* rather than about
+ * the figure. It goes on blocks that have no heading at all - Certifications,
+ * Tools, Education - several hundred pixels into a section whose title has
+ * already been read, where the label is the only name the block has and the rule
+ * is the only thing separating it from what came before. Neither is true here.
+ * Nothing goes above the <h2>.
  */
 
 interface SectionProps {

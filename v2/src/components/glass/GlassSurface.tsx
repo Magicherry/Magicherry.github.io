@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
+import { motion, type Variants } from 'motion/react'
 import { usePointerGlow } from '@/lib/hooks/usePointerGlow'
 import styles from './GlassSurface.module.css'
 
@@ -41,8 +42,46 @@ interface GlassOwnProps {
   interactive?: boolean
   /** Angle the virtual light arrives from. Vary it so surfaces aren't clones. */
   lightAngle?: number
+  /**
+   * A single band of light crossing the plate as it arrives.
+   *
+   * Costs nothing at rest and never repeats, but it needs a variant-driven
+   * parent - a `<Reveal>` - to fire at all. Reserved for the two panels that
+   * carry a screen: a grid of them is the dozen simultaneous animations mid
+   * scroll that `<Reveal>` refuses to animate blur for.
+   */
+  sweep?: boolean
   className?: string
   children?: ReactNode
+}
+
+/**
+ * The sweep reads its parent's timeline rather than owning one.
+ *
+ * `hidden`/`shown` are the labels `<Reveal>` sets, and Motion propagates a
+ * variant label down through arbitrary intermediate components - which is
+ * already how `revealItem` reaches a `<motion.li>` two DOM levels inside a
+ * `<Reveal>` in Stack. So a swept surface animates when the block it belongs to
+ * animates, with no second observer and nothing to keep in step.
+ *
+ * Two consequences are worth knowing. Outside a variant-driven parent this does
+ * nothing at all, which is why the CSS rests at `opacity: 0` rather than relying
+ * on `initial` - a wedge of light parked permanently on a panel's left edge
+ * would be worse than no sweep. And under reduced motion `<Reveal>` returns a
+ * plain tag with no motion context, so the band never receives `shown` and never
+ * runs: the designed path, reached without a media query.
+ *
+ * Opacity keyframes rather than a plain fade. A band that arrives at the edge
+ * already lit reads as the panel switching on, and one that leaves lit reads as
+ * it switching off; the light has to enter and leave the plate.
+ */
+const surfaceSweep: Variants = {
+  hidden: { x: '-130%', opacity: 0 },
+  shown: {
+    x: '260%',
+    opacity: [0, 1, 1, 0],
+    transition: { duration: 1.05, ease: [0.16, 1, 0.3, 1], delay: 0.18 },
+  },
 }
 
 type GlassSurfaceProps<E extends ElementType> = GlassOwnProps & {
@@ -75,6 +114,7 @@ export default function GlassSurface<E extends ElementType = 'div'>({
   backdrop = 'flat',
   interactive = false,
   lightAngle,
+  sweep = false,
   className,
   style,
   children,
@@ -107,6 +147,11 @@ export default function GlassSurface<E extends ElementType = 'div'>({
       }}
       {...rest}
     >
+      {sweep ? (
+        <span className={styles['sweep']} aria-hidden="true">
+          <motion.span className={styles['sweepBand']} variants={surfaceSweep} />
+        </span>
+      ) : null}
       {children}
     </Component>
   )

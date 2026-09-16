@@ -1,3 +1,6 @@
+/* Before the tokens, because the token layer names these families and a
+   `@font-face` has to be declared before the first rule that could use one. */
+@import './fonts.css';
 @import './tokens.css';
 
 /* =========================================================== reset & shell */
@@ -63,6 +66,31 @@ body {
   letter-spacing: var(--tracking-normal);
   font-synthesis-weight: none;
   text-rendering: optimizeLegibility;
+  /*
+   * One width for the whole site, set once and inherited.
+   *
+   * Hitmarker's display face carries a `wdth` axis where 0 is Condensed, 30 is
+   * Normal and 100 is Wide, and its variable file defaults to 0 - so leaving
+   * this out does not give you the neutral width, it gives you the narrowest
+   * one. 30 is the column the fixed "Normal" family sits in.
+   *
+   * Picking one and stating it here rather than per use-site is the brand's own
+   * discipline: its list of things to avoid opens with "using too many different
+   * sizes, weights, widths and cuts of Hitmarker". Width is the axis with the
+   * least to say on a page this size - the display face appears five times - and
+   * the weight axis is already carrying the hierarchy.
+   *
+   * `font-variation-settings` rather than `font-stretch`, which would be the
+   * better-behaved property: this axis runs 0..100 where the CSS percentage
+   * mapping expects 100 to *be* normal, so `font-stretch` would need `30%` to
+   * mean Normal and `0%` to mean Condensed, and a zero there is at the edge of
+   * what the property accepts. Naming the axis leaves nothing to interpret.
+   *
+   * Listing only `wdth` leaves `wght` under the control of `font-weight`, which
+   * is what every rule on this site already sets. And the two text faces have no
+   * `wdth` axis at all, so they simply ignore it.
+   */
+  font-variation-settings: 'wdth' 30;
   /*
    * `clip`, never `hidden`. `overflow-x: hidden` silently turns <body> into a
    * scroll container, and every `position: sticky` descendant then sticks to a
@@ -194,6 +222,12 @@ body {
  * not exist.
  */
 .sectionTitle {
+  /* The headline role, in the face the rest of the page was drawn against. The
+     weight below was tuned for a system face and is left alone on purpose -
+     Hitmarker's 760 is its own 760, and the reasoning above is about what set
+     caps do to apparent weight, which is a property of the case rather than of
+     the typeface. */
+  font-family: var(--font-display);
   font-size: var(--text-3xl);
   font-weight: 760;
   letter-spacing: var(--tracking-stencil);
@@ -212,6 +246,62 @@ body {
   font-size: var(--text-lg);
   line-height: var(--leading-relaxed);
   color: var(--fg-muted);
+}
+
+/*
+ * The HUD rule: a ticked hairline that gains toward a terminal mark.
+ *
+ * Global rather than a module class because three unrelated places draw it - a
+ * block header's fill, the hero card's change of register, the footer - and CSS
+ * Modules cannot share a figure between files. It sits with `.sectionTitle` and
+ * `.lede` for the same reason those do: it is the site's own vocabulary, not one
+ * component's.
+ *
+ * The figure is the panel frame's argument applied to a line. An even rule is a
+ * divider and says only "these are two things". This one is faint where it
+ * leaves the label, ticked along its run, and solid where it stops - so the
+ * *terminus* carries the ink, which is the same distribution that makes four
+ * corner brackets read as a frame rather than as an outline.
+ *
+ * Ticked, not solid, and the ticks are a graticule: they measure nothing and
+ * nothing fills them. A scale with no gauge on it is honest - it is the same
+ * mark as the survey grid behind the whole page - where a scale with a bar
+ * across it would be claiming a quantity this site does not have.
+ *
+ * `--hud-rule-len` is the tick's height and the box's. 7px is `--cut-sm`, so the
+ * terminus is exactly as tall as the smallest chamfer on the page.
+ *
+ * No `corner-shape` and no `:lang()`: no radius, no type.
+ */
+.hud-rule {
+  position: relative;
+  flex: 1 1 auto;
+  /* Never collapses to nothing. In a narrow column the label takes most of the
+     row, and a four-pixel stub of rule reads as a rendering fault rather than as
+     a figure - so below this the row would rather wrap than shrink it. */
+  min-width: var(--space-6);
+  height: var(--hud-rule-len, 7px);
+  /* The terminal tick, and the one part of the figure that is not combed. */
+  background-image: linear-gradient(var(--hud-line), var(--hud-line));
+  background-position: 100% 0;
+  background-size: 1px var(--hud-rule-len, 7px);
+  background-repeat: no-repeat;
+}
+
+/*
+ * The run, on a pseudo-element of its own so the comb can cut it without cutting
+ * the terminus. Masking the whole element instead would put a 1px-wide vertical
+ * under a 5-on/2-off horizontal stencil, where it lands on a gap about a third of
+ * the time and disappears - a figure that vanishes at some widths and not others.
+ */
+.hud-rule::before {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 1px;
+  background-image: linear-gradient(90deg, var(--hud-line-faint), var(--hud-line));
+  -webkit-mask-image: var(--comb);
+  mask-image: var(--comb);
 }
 
 /* ================================================================= a11y */

@@ -133,6 +133,7 @@
    links use - caps, spaced, and heavy enough that the extra letterspace does not
    read as thin. */
 .markText {
+  font-family: var(--font-display);
   font-size: var(--text-sm);
   font-weight: 720;
   letter-spacing: 0.08em;
@@ -306,6 +307,17 @@
    * a box sliding along the bar.
    */
   background: none;
+  /*
+   * Bottom centre, because that is where the emitter is.
+   *
+   * Nav.tsx switches this on and off with a `scaleX`, and the origin is what
+   * decides what that reads as. From the centre of the box the marker would
+   * shrink toward a point halfway up the cell, floating away from the edge it is
+   * drawn on; anchored at the foot, the bar closes in along its own line and the
+   * beam narrows over it, which is a light going out rather than a shape
+   * shrinking.
+   */
+  transform-origin: 50% 100%;
 }
 
 /*
@@ -409,7 +421,7 @@
    *
    * It has been through the whole vocabulary - chamfered, square, rounded - and
    * the disc is the one that makes the rest of the button work. The language chip
-   * hanging off its lower-right is placed by negative offsets that put its centre
+   * hanging off its upper-right is placed by negative offsets that put its centre
    * *on the button's arc*; against a flat edge those same offsets park it past
    * the corner, which is why it used to read as a stray notification dot. A round
    * button is also the only one whose outline stays a constant distance from the
@@ -453,16 +465,23 @@
  *
  * It used to be sized by padding and a unitless line-height, which on a *round*
  * button is the wrong way to place anything: the result was a ~13px blob parked
- * past the bottom-right corner, out where the circle has already curved away, so
- * it read as a stray notification dot rather than as part of the control. Given
- * an explicit box and a line-height equal to its height, the chip is a circle for
- * a single glyph and a capsule for two, and the offsets put its centre on the
- * button's arc - straddling the edge instead of floating beside it.
+ * past the corner, out where the circle has already curved away, so it read as a
+ * stray notification dot rather than as part of the control. Given an explicit
+ * box and a line-height equal to its height, the chip is a circle for a single
+ * glyph and a capsule for two, and the offsets put its centre on the button's
+ * arc - straddling the edge instead of floating beside it.
+ *
+ * Upper-right rather than lower. The two corners are geometrically the same on a
+ * disc, so this is about what the chip *is*: it names the language the button
+ * will switch you to, which is a label on the control, and a label sits above
+ * the thing it names. Hung underneath it read as a count - the position a badge
+ * occupies when it is reporting unread items - and the bar's 7px padding is
+ * symmetric, so nothing in the layout preferred one over the other.
  */
 .iconBtnTag {
   position: absolute;
   right: -2px;
-  bottom: -2px;
+  top: -2px;
   display: grid;
   place-items: center;
   min-width: 15px;
@@ -501,8 +520,32 @@
  * empty rail are exactly where a phone's thumbs already are.
  */
 /*
- * The mark, as a floating disc at the top-left.
+ * The mark: a floating disc at the top-left, with the wordmark beside it while
+ * the page is at the top.
  *
+ * One button rather than a disc and a label next to it, for the same reason the
+ * desktop `.mark` is one: both halves say "this is the site" and both should
+ * take you back to the top, and a name that is not the target of the control
+ * printed against it is a label you have to learn is not a link.
+ *
+ * The button itself is now only a row - no ground, no shadow, no clip. All of
+ * that belongs to the disc, which is the part that is actually a circle; the
+ * wordmark hanging out of a 44px round overflow-hidden box would have been
+ * clipped to nothing.
+ */
+.topMark {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+/*
  * Not built on `.iconBtn` even though it is the same size and the same shape.
  * That class is a glass *button* - tint, rim, blur, the lot - and all of it
  * would be painted underneath an opaque photograph that fills the disc edge to
@@ -510,13 +553,11 @@
  * rest: a shadow, because the artwork ends in a pale circle and there is
  * scrolling content passing directly behind it.
  */
-.topMark {
-  pointer-events: auto;
+.topMarkGlyph {
+  flex: none;
   display: block;
   width: 44px;
   height: 44px;
-  padding: 0;
-  border: 0;
   border-radius: var(--radius-circle);
   corner-shape: round;
   overflow: hidden;
@@ -524,25 +565,65 @@
      while the image is still in flight. */
   background: var(--bg-base);
   box-shadow: var(--shadow-lift);
-  cursor: pointer;
   transition: transform var(--dur-fast) var(--ease-gel);
 }
 
-.topMark img {
+.topMarkGlyph img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 /* Matches the press on the language button beside it - the two are a pair and
-   should answer a thumb the same way. */
-.topMark:active {
+   should answer a thumb the same way. The press is on the disc, not on the
+   button: with the wordmark out the row is three times as wide, and scaling the
+   whole of it swings the name about for a tap aimed at the portrait. */
+.topMark:active .topMarkGlyph {
   transform: scale(0.9);
 }
 
 .topMark:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+  border-radius: var(--radius-circle);
+  corner-shape: round;
+}
+
+/*
+ * The wordmark, and the reason it can be clipped away is that it is *not* the
+ * identification the disc is - the portrait carries that on its own, which is
+ * why the phone layout shipped without this for as long as it did.
+ *
+ * What it adds is at the top of the page only: an arriving reader sees a face
+ * and no name anywhere on screen until they scroll into the hero. Past the first
+ * screen the name has been read, the hero is printing it at 3rem, and a wordmark
+ * held in the corner for the rest of a visit is just width taken off a phone.
+ *
+ * `overflow: hidden` is what makes the exit read as *collapsing into the disc*
+ * rather than as a fade: the box closes from the right, so the letters are taken
+ * back toward the portrait in the order they were set. The width and margin are
+ * animated from Nav.tsx - a layout animation rather than a transform, because a
+ * `scaleX` would squash the letterforms and the button's own hit area has to
+ * shrink with it.
+ */
+.topMarkText {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  /* The same three declarations as `.markText` on the desktop bar - it is the
+     same wordmark at the same size, just in the layout that has room for it at a
+     different moment. */
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 720;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  /* The accent, matching `.markText` on the desktop bar and the preloader - the
+     three readings of the wordmark are one word and should look like it. */
+  color: var(--accent);
+  /* The name sits against scrolling content with nothing behind it; the disc
+     beside it has a shadow for the same reason. */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
 }
 
 .topbar {
@@ -628,7 +709,7 @@
  */
 .topbar .iconBtnTag {
   right: -3px;
-  bottom: -3px;
+  top: -3px;
   min-width: 18px;
   height: 18px;
   padding: 0 4px;

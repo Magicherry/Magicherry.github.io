@@ -19,7 +19,7 @@
    * A button is not a surface - it is a *command*, and the label is the whole of
    * it. The plate language belongs to things that hold content: cards, panels,
    * the nav bar. Cutting a 46px-tall button as well put a chamfer on the one
-   * element whose job is to read as a hard target, and next to the mono caps
+   * element whose job is to read as a hard target, and next to the interface caps
    * inside it a bevelled corner was the only soft thing left in the figure.
    *
    * Which also settles the pair in the hero: the filled and the outlined button
@@ -28,11 +28,11 @@
    */
   border-radius: var(--radius-chip);
   /*
-   * A button is a command, and commands on this site are set in mono caps - the
+   * A button is a command, and commands on this site are set in the interface voice - the
    * same register as the nav links and the slate indices, so the whole interface
    * layer speaks one language and the prose is the only thing set in sentences.
    */
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: var(--text-xs);
   font-weight: 700;
   letter-spacing: 0.1em;

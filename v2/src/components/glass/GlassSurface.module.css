@@ -126,9 +126,19 @@
  * 10px long, down from 16. A bracket is a *mark at a corner*, and past a certain
  * length it stops being one and starts being a partly-drawn border - the eye
  * begins following the segment along the edge instead of reading the corner it
- * came from. Ten is about where that flips on panels this size, and it also
- * leaves more of the faint edge visible, which is what the frame is contrasting
- * against in the first place.
+ * came from. Ten is about where that flips, and it also leaves more of the faint
+ * edge visible, which is what the frame is contrasting against in the first
+ * place.
+ *
+ * It is the *default* rather than a constant, though, and `--surface-tick-len`
+ * is how a surface says otherwise. Where a bracket stops being a mark is a
+ * function of the edge it sits on, not an absolute length: ten pixels on a 305px
+ * stack card is 3% of that edge, while the same ten on the 1100px contact panel
+ * is under one - a bracket that has quietly become a speck, so the frame is
+ * still drawn and the eye no longer finds its corners. So the arm scales with
+ * the plate: longer on the two panels that carry a screen, the default on
+ * content cards, shorter on the thin plates where ten would run a third of the
+ * way down a 46px edge.
  *
  * `--surface-tick` rather than a literal so a surface can turn it off. The
  * back-to-top button does - it is 48px across with a progress ring already drawn
@@ -347,6 +357,60 @@
 .interactive[data-lit='true']::after {
   mix-blend-mode: var(--glass-specular-blend, screen);
   opacity: 1;
+}
+
+/* ------------------------------------------------------------------- sweep */
+/*
+ * A band of light crossing the plate once, as it arrives.
+ *
+ * A real child, because both pseudo-elements on a surface are already spoken
+ * for: `::before` is the corner brackets (or the live rim) and `::after` is the
+ * specular. Two nodes rather than one, because the band has to be clipped to the
+ * plate's silhouette *and* travel past both its edges, and a single element
+ * cannot do both - it would need `overflow: hidden` on itself while overflowing.
+ *
+ * The clipper does not restate `corner-shape`. Unlike `.live::before` and
+ * `.interactive::after` it is a real element, so the `:where(*)` rule in base.css
+ * already reaches it and `border-radius: inherit` is enough. On a flat surface
+ * that inherits the 0 `.surface` hard-codes, which is right - flat plates are
+ * square.
+ *
+ * No `mix-blend-mode`. A blend makes the compositor read its backdrop into an
+ * offscreen buffer whether or not the layer is visible, which is the cost the
+ * specular above goes to some trouble not to pay at rest - and a band that
+ * exists for one second is the last thing that should open a blend group for the
+ * life of the page.
+ *
+ * No `z-index`, deliberately. A positioned child at `z-index: auto` paints above
+ * the plate's content and below the two pseudo-elements at 1 and 2, so the light
+ * crosses the text and passes *under* the frame, which is what light crossing a
+ * plate does.
+ */
+.sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sweepBand {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 44%;
+  /* Raked against the plate's light axis rather than square to it: a vertical
+     band crossing a surface lit from 152deg reads as a wipe, and one leaning
+     with the light reads as the light moving. Built out of the sheen, because
+     that is already the token for light entering this material. */
+  background: linear-gradient(
+    104deg,
+    transparent 0%,
+    color-mix(in srgb, var(--glass-sheen) 62%, transparent) 50%,
+    transparent 100%
+  );
+  /* Stated here rather than left to `initial` - see the note in GlassSurface.tsx
+     on what happens outside a variant-driven parent. */
+  opacity: 0;
 }
 
 /* ------------------------------------------------------------- interaction */

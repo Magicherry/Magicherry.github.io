@@ -292,7 +292,21 @@ export default function Hero() {
               aria-hidden="true"
             />
 
-            <GlassSurface variant="regular" radius="xl" className={styles['card']} lightAngle={140}>
+            {/*
+             * The one sweep call site that has to gate itself. Everywhere else
+             * the band rides a <Reveal>, which returns a plain tag under reduced
+             * motion and so never hands it a `shown` to run on - the opt-out is
+             * free. This card is driven by `slab` above, which animates whatever
+             * the preference says, so the band would be the one thing that did
+             * not honour it.
+             */}
+            <GlassSurface
+              variant="regular"
+              radius="xl"
+              sweep={!reducedMotion}
+              className={styles['card']}
+              lightAngle={140}
+            >
               <div className={styles['portrait']}>
                 <img
                   src={profile.portrait}
@@ -342,6 +356,13 @@ export default function Hero() {
                   <span>{t(profile.location)}</span>
                 </li>
               </ul>
+
+              {/* The card changes voice here, from sentences to readouts. See
+                  `.stats` in Hero.module.css for why this boundary is drawn
+                  differently from the one above the facts. A sibling in the
+                  card's grid rather than a `::before` on the list: `.stats` is a
+                  <ul>, and the site has one definition of this mark. */}
+              <span className="hud-rule" aria-hidden="true" />
 
               <ul className={styles['stats']}>
                 {stats.map((stat) => (

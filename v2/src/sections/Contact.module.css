@@ -2,6 +2,10 @@
   display: grid;
   gap: var(--space-6);
   padding: clamp(1.5rem, 4vw, 2.5rem);
+  /* The widest plate on the site - 1100px at shell width, where the default 10px
+     arm is under 1% of the edge it is meant to be marking. See the note on
+     `--surface-tick-len` in GlassSurface. */
+  --surface-tick-len: 15px;
 }
 
 .links {
@@ -127,19 +131,60 @@
   min-width: 0;
 }
 
+/*
+ * Set like everything else this interface *prints* rather than writes: mono,
+ * caps, spaced.
+ *
+ * The boxes above turned eight links into a list; this is what turns the list
+ * into a manifest. It was the last block on the page still setting its labels in
+ * sentence-case sans inside a bracketed panel, which made the panel read as a
+ * page of contact details rather than as a channel index.
+ *
+ * `--text-xs`, down a step from the `--text-sm` this carried: caps run 10-12%
+ * wider per character, and the label has to stay clear of the handle beneath it,
+ * which is the longest string in the row.
+ */
 .linkLabel {
-  font-size: var(--text-sm);
-  font-weight: 580;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 650;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
   color: var(--fg);
 }
 
+/* See `.label:lang(zh)` in BlockHead. `--font-mono` names PingFang and YaHei at
+   its tail precisely so a Chinese label inside a mono run is not handed to a
+   last-resort face. */
+.linkLabel:lang(zh) {
+  letter-spacing: var(--tracking-normal);
+}
+
+/*
+ * Mono too, and here it is not a choice of register. These strings are an email
+ * address, a phone number, a handle and a numeric ID - the one thing in this
+ * panel a visitor transcribes by hand, and a proportional face is what makes
+ * `zyt680129` hard to copy off a screen.
+ *
+ * `--fg-muted` and not `--fg-faint`: see the note on `.focus` in Work. Faint
+ * measures about 3:1, and this is text someone reads character by character.
+ */
 .linkHint {
+  font-family: var(--font-mono);
   font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-normal);
   color: var(--fg-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/*
+ * No line numbers down the left of these rows, and they were tried. Eight is a
+ * number you can see without counting, so numbering the rows told a reader
+ * something the rows already told them - and the mono caps above are what turns
+ * this block into a manifest, not a column of digits.
+ */
 
 .linkArrow {
   margin-left: auto;
@@ -184,6 +229,9 @@
 .qrCard {
   position: relative;
   padding: var(--space-4);
+  /* Held a step under the panel behind it, not matched to it - the overlay is
+     the smaller plate and should read as one. */
+  --surface-tick-len: 8px;
 }
 
 /*

@@ -277,26 +277,13 @@ a.company:hover svg {
 }
 
 /* -------------------------------------------------------------- education */
+/* The label, the glyph and the divider are all <BlockHead> now - it is the same
+   figure this block was drawing by hand, stated once and shared with Stack. The
+   `border-top` goes with them rather than staying above it: the component brings
+   its own rule, and two of them this close is the misprint the panel brackets
+   avoid. */
 .education {
   margin-top: var(--space-7);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--line);
-}
-
-.educationTitle {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
-  color: var(--fg-faint);
-}
-
-.educationTitle svg {
-  color: var(--accent);
-  font-size: 1.15rem;
 }
 
 .educationGrid {
@@ -309,6 +296,9 @@ a.company:hover svg {
 .degree {
   /* Three bands across the full width - crest, title block, year - rather than
      a cluster of text pinned to the left with half the card empty beside it. */
+  /* A short plate: the default 10px arm runs a third of the way down a 46px
+     edge, which is a partly-drawn border rather than a corner mark. */
+  --surface-tick-len: 7px;
   display: flex;
   align-items: center;
   gap: var(--space-4);

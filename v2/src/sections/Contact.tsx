@@ -88,7 +88,7 @@ export default function Contact() {
       lede={ui.sections.contact.body}
     >
       <Reveal>
-        <GlassSurface variant="regular" radius="xl" className={styles['panel']} lightAngle={150}>
+        <GlassSurface variant="regular" radius="xl" sweep className={styles['panel']} lightAngle={150}>
           <div className={styles['links']}>
             {socials.map((social) => {
               const Fallback = FALLBACK_ICONS[social.id] ?? LuMail
