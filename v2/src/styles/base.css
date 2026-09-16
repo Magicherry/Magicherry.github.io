@@ -1,6 +1,3 @@
-/* Before the tokens, because the token layer names these families and a
-   `@font-face` has to be declared before the first rule that could use one. */
-@import './fonts.css';
 @import './tokens.css';
 
 /* =========================================================== reset & shell */
@@ -66,31 +63,6 @@ body {
   letter-spacing: var(--tracking-normal);
   font-synthesis-weight: none;
   text-rendering: optimizeLegibility;
-  /*
-   * One width for the whole site, set once and inherited.
-   *
-   * Hitmarker's display face carries a `wdth` axis where 0 is Condensed, 30 is
-   * Normal and 100 is Wide, and its variable file defaults to 0 - so leaving
-   * this out does not give you the neutral width, it gives you the narrowest
-   * one. 30 is the column the fixed "Normal" family sits in.
-   *
-   * Picking one and stating it here rather than per use-site is the brand's own
-   * discipline: its list of things to avoid opens with "using too many different
-   * sizes, weights, widths and cuts of Hitmarker". Width is the axis with the
-   * least to say on a page this size - the display face appears five times - and
-   * the weight axis is already carrying the hierarchy.
-   *
-   * `font-variation-settings` rather than `font-stretch`, which would be the
-   * better-behaved property: this axis runs 0..100 where the CSS percentage
-   * mapping expects 100 to *be* normal, so `font-stretch` would need `30%` to
-   * mean Normal and `0%` to mean Condensed, and a zero there is at the edge of
-   * what the property accepts. Naming the axis leaves nothing to interpret.
-   *
-   * Listing only `wdth` leaves `wght` under the control of `font-weight`, which
-   * is what every rule on this site already sets. And the two text faces have no
-   * `wdth` axis at all, so they simply ignore it.
-   */
-  font-variation-settings: 'wdth' 30;
   /*
    * `clip`, never `hidden`. `overflow-x: hidden` silently turns <body> into a
    * scroll container, and every `position: sticky` descendant then sticks to a
@@ -222,12 +194,6 @@ body {
  * not exist.
  */
 .sectionTitle {
-  /* The headline role, in the face the rest of the page was drawn against. The
-     weight below was tuned for a system face and is left alone on purpose -
-     Hitmarker's 760 is its own 760, and the reasoning above is about what set
-     caps do to apparent weight, which is a property of the case rather than of
-     the typeface. */
-  font-family: var(--font-display);
   font-size: var(--text-3xl);
   font-weight: 760;
   letter-spacing: var(--tracking-stencil);

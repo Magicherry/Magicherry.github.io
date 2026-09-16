@@ -124,10 +124,6 @@
  */
 .nameLine {
   display: block;
-  /* Set on the line rather than on `.name` inside it, so the "I am" and the name
-     are one piece of display type with a weight step in the middle - which is
-     the whole figure. Splitting the face between them would make it two. */
-  font-family: var(--font-display);
   font-size: var(--text-4xl);
   font-weight: 500;
   letter-spacing: var(--tracking-stencil);

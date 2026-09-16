@@ -133,7 +133,6 @@
    links use - caps, spaced, and heavy enough that the extra letterspace does not
    read as thin. */
 .markText {
-  font-family: var(--font-display);
   font-size: var(--text-sm);
   font-weight: 720;
   letter-spacing: 0.08em;
@@ -610,10 +609,6 @@
   display: block;
   overflow: hidden;
   white-space: nowrap;
-  /* The same three declarations as `.markText` on the desktop bar - it is the
-     same wordmark at the same size, just in the layout that has room for it at a
-     different moment. */
-  font-family: var(--font-display);
   font-size: var(--text-sm);
   font-weight: 720;
   letter-spacing: 0.08em;

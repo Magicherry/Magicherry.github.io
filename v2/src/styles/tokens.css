@@ -69,57 +69,16 @@
 
   /* ------------------------------------------------------------------- type */
   /*
-   * Three roles, and the first two are now Hitmarker - the Call of Duty
-   * typeface, declared in fonts.css, where the licence and the loading
-   * decisions are written down.
-   *
-   * The site ran on system faces for a long time and the argument for that was
-   * a good one: SF Pro and Segoe UI Variable are already resident, so first
-   * paint carried the final typography at zero network cost. What it could not
-   * carry was the *voice*. Every other borrowed element here - the brackets, the
-   * cut plates, the stencilled caps, the survey grid - was drawn against Black
-   * Ops 7, and the type underneath them was whatever the operating system
-   * happened to ship. The system stack stays, in place, as the fallback each
-   * face swaps out of.
-   *
-   * `--font-display` is the headline face: section titles, the hero name, the
-   * three wordmarks. Nothing else. Hitmarker's own do-not list warns against
-   * "using too many different sizes, weights, widths and cuts", and the widest
-   * door into that mistake is letting a display face spread into places that
-   * only need emphasis.
-   */
-  --font-display: 'Hitmarker', var(--font-sans);
-  /*
-   * Hitmarker Text in front of the old stack, unchanged behind it. The face is
-   * the brand's own answer for "body copy, dense paragraphs of text or small
-   * scale UI" - drawn with a smaller x-height and looser spacing than the
-   * headline cuts for exactly that.
-   *
-   * Everything from `ui-sans-serif` on is the pre-webfont stack kept whole, and
-   * the CJK tail on the end is doing more work than before: Hitmarker covers 317
-   * languages and Chinese is explicitly not one of them, so on this bilingual
-   * site a Han glyph falls straight through to PingFang or YaHei while the Latin
-   * beside it stays in Hitmarker. Per character, with nothing to switch on.
+   * No webfont is downloaded. On Apple hardware this resolves to SF Pro - the
+   * exact typeface the Liquid Glass language was drawn against - and on Windows
+   * to Segoe UI Variable. Both are already resident, so first paint carries the
+   * final typography with zero layout shift and zero network cost.
    */
   --font-sans:
-    'Hitmarker Text', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'SF Pro Display',
-    'SF Pro Text', 'Segoe UI Variable Display', 'Segoe UI', Inter, system-ui, 'PingFang SC',
+    ui-sans-serif, -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    'Segoe UI Variable Display', 'Segoe UI', Inter, system-ui, 'PingFang SC',
     'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
   /*
-   * Deliberately *not* Hitmarker Text, even though the brand nominates Text for
-   * "small scale UI and digital moments" and that is exactly what this role is.
-   *
-   * What the mono is for here is not smallness, it is *tabulation*. The nav
-   * labels could be anything; the readouts could not. A proportional face sets
-   * three stat values of different widths on three different centres however
-   * the cells are aligned, moves the terminus of a HUD rule when its number
-   * changes, and turns a copyable handle like `zyt680129` into something you
-   * have to transcribe character by character. Half the comments in this
-   * codebase that say "mono, because these are readouts" are load-bearing.
-   *
-   * So the interface keeps its own voice, and the page now runs three faces
-   * rather than two: a headline, a text face, and a machine.
-   *
    * The CJK families at the end are not decoration. Every face before them is
    * Latin-only, so a Chinese glyph in a mono run falls through to the browser's
    * last-resort CJK font - typically unhinted and rendered at the wrong weight,
@@ -131,24 +90,6 @@
     ui-monospace, 'SF Mono', SFMono-Regular, 'Cascadia Code', 'JetBrains Mono',
     'Roboto Mono', Menlo, Consolas, 'PingFang SC', 'Microsoft YaHei',
     'Noto Sans SC', monospace;
-  /*
-   * The same face under the name of the *role* rather than of the technology.
-   *
-   * `--font-mono` answers "I need figures that line up"; this answers "I am part
-   * of the interface, not part of the page" - nav links, buttons, chips, the
-   * stencilled indices. Today the two resolve to one stack, and the alias exists
-   * because those are separate questions that have only happened to share an
-   * answer: a readout needs a monospaced face for reasons that would survive any
-   * redesign, while the interface voice is a choice this design made and a later
-   * one could unmake without touching a single stat value.
-   *
-   * <Action> is the only consumer so far. It arrived referring to this token
-   * before the token existed, which silently dropped every button on the site
-   * back to the body font - `var()` on an undefined custom property is invalid
-   * at computed-value time, and `font-family` then inherits rather than holding
-   * its declared value.
-   */
-  --font-ui: var(--font-mono);
 
   /* Fluid scale:每一级在 375px 到 1440px 之间线性插值，避免断点处的跳变 */
   --text-2xs: clamp(0.65rem, 0.62rem + 0.14vw, 0.72rem);

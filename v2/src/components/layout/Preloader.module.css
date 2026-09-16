@@ -72,11 +72,6 @@
    the page keeps. */
 .wordmark {
   display: block;
-  /* The first type painted on the site, and the one place the display face has
-     to arrive without a swap being obvious - which is why fonts.css takes
-     `swap` over `block` and accepts the reflow. A curtain that opens on nothing
-     is worse than a curtain that opens on the fallback for 80ms. */
-  font-family: var(--font-display);
   font-size: clamp(1.35rem, 5.4vw, 2.1rem);
   font-weight: 800;
   letter-spacing: 0.1em;

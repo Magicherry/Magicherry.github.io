@@ -77,59 +77,24 @@
   gap: var(--space-4);
 }
 
-/*
- * One voice across all three cells.
- *
- * They had three. The motto was sans at `--text-xs`, the copyright mono at
- * `--text-2xs` and faint, the source link mono caps at 650 - three sizes, two
- * families and two colours inside a single 24px row, which is the one place on
- * the page where all the type is on the same line and any difference between it
- * is read as a difference in *kind*. It was not one: these are three captions.
- *
- * The motto used to be argued for as the exception - the one human sentence
- * down here, and mono caps would make it a system message. That reading was
- * right about the sentence and wrong about the row. A footer is chrome, the
- * page has already said everything it has to say by the time you reach it, and
- * a lone sentence set differently from its two neighbours does not read as warm,
- * it reads as unstyled.
- *
- * So: the terminator's voice, which is the voice of every other readout on the
- * site. Colour does the remaining separation - the link lifts to the accent on
- * hover and nothing else in the row moves.
- */
-.motto,
-.legal,
-.source {
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-weight: 650;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--fg-muted);
-}
-
-/*
- * Han carries its own advance width; see `.label:lang(zh)` in BlockHead. The
- * copyright line is the mixed one - `© 2026 Yuting Zhou.` in front of Chinese -
- * and it takes the reset whole rather than being split, because the Latin in it
- * is a name and a number rather than a run of words, and under-tracking eight
- * characters is invisible where over-tracking Han is not.
- */
-.motto:lang(zh),
-.legal:lang(zh),
-.source:lang(zh) {
-  letter-spacing: var(--tracking-normal);
-}
-
+/* Stays sans while the link opposite it goes mono caps, and that asymmetry is
+   the point. This is the one human sentence in the footer; "Keep frosty &
+   curious." printed in monospaced capitals is a system message. */
 .motto {
   grid-column: 1;
   justify-self: start;
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-normal);
+  color: var(--fg-muted);
 }
 
 .legal {
   grid-column: 2;
   justify-self: center;
   text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--fg-faint);
 }
 
 /*
@@ -138,13 +103,29 @@
  * least important; the two ends of the rule now read as a matched pair of quiet
  * lines with the copyright centred between them.
  */
+/*
+ * Set as mono caps, because it is the one *command* in the footer and that is
+ * how this site sets commands - the nav links, the buttons and the skip link are
+ * all in this voice. The motto beside it deliberately is not.
+ */
 .source {
   grid-column: 3;
   justify-self: end;
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: 650;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--fg-muted);
   transition: color var(--dur-fast) var(--ease-enter);
+}
+
+/* Han carries its own advance width; see `.label:lang(zh)` in BlockHead. */
+.source:lang(zh) {
+  letter-spacing: var(--tracking-normal);
 }
 
 .source svg {
