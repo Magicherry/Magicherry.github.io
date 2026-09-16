@@ -77,36 +77,68 @@
   gap: var(--space-4);
 }
 
-/* Stays sans while the link opposite it goes mono caps, and that asymmetry is
-   the point. This is the one human sentence in the footer; "Keep frosty &
-   curious." printed in monospaced capitals is a system message. */
-.motto {
-  grid-column: 1;
-  justify-self: start;
-  font-size: var(--text-xs);
-  letter-spacing: var(--tracking-normal);
+/*
+ * One rule for both ends of the row, because they are one figure.
+ *
+ * The note on `.source` below has said for a while that the two ends of the rule
+ * should read as a matched pair with the copyright centred between them, and for
+ * a while they did not: the motto was sans at `--text-xs` and the link was mono
+ * caps at `--text-2xs`. Two different faces, two different sizes and two
+ * different cases, twelve hundred pixels apart on the last line of the page -
+ * which is exactly far enough that it read as inconsistency rather than as
+ * contrast.
+ *
+ * Mono caps is the side that won, for two reasons. The copyright between them is
+ * already mono, so this makes the whole row one family rather than two thirds of
+ * one. And the argument that used to be here - that the motto is the one human
+ * sentence in the footer and belongs in a human face - proves too much: the
+ * stencilled section titles across this site are sentences too, and the case
+ * treatment is what marks them as belonging to the interface rather than to the
+ * prose. A closing line is interface.
+ *
+ * Declared together rather than duplicated, so the pair cannot drift apart
+ * again - which is how it got here.
+ */
+.motto,
+.source {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: 650;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
   color: var(--fg-muted);
 }
 
+/* Han carries its own advance width; see `.label:lang(zh)` in BlockHead. */
+.motto:lang(zh),
+.source:lang(zh) {
+  letter-spacing: var(--tracking-normal);
+}
+
+.motto {
+  grid-column: 1;
+  justify-self: start;
+}
+
+/* Quieter than the pair flanking it, and sentence-case, so the row is one voice
+   at two weights rather than three lines shouting the same way. */
 .legal {
   grid-column: 2;
   justify-self: center;
   text-align: center;
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
+  text-transform: none;
   color: var(--fg-faint);
 }
 
 /*
- * Weighted to match the motto opposite it, not the button that used to be here.
- * A filled 40px disc in this corner was the loudest thing in the footer and the
- * least important; the two ends of the rule now read as a matched pair of quiet
- * lines with the copyright centred between them.
- */
-/*
- * Set as mono caps, because it is the one *command* in the footer and that is
- * how this site sets commands - the nav links, the buttons and the skip link are
- * all in this voice. The motto beside it deliberately is not.
+ * The link half of the pair: the same type, plus the glyph and the hover it
+ * needs as a control.
+ *
+ * A filled 40px disc used to sit in this corner - the loudest thing in the
+ * footer and the least important. What replaced it is deliberately weighted to
+ * the motto opposite rather than to the button it succeeded.
  */
 .source {
   grid-column: 3;
@@ -114,18 +146,7 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-family: var(--font-mono);
-  font-size: var(--text-2xs);
-  font-weight: 650;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--fg-muted);
   transition: color var(--dur-fast) var(--ease-enter);
-}
-
-/* Han carries its own advance width; see `.label:lang(zh)` in BlockHead. */
-.source:lang(zh) {
-  letter-spacing: var(--tracking-normal);
 }
 
 .source svg {
