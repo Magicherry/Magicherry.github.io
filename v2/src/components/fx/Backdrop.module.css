@@ -158,6 +158,50 @@
   }
 }
 
+/* ---------------------------------------------------------------- surge */
+/*
+ * The field lighting up with the reader's own scroll speed.
+ *
+ * Two bands rather than a wash, and they are at the top and bottom edges: it is
+ * the vignette a cockpit gets under load, and it works here for the plain
+ * compositional reason that the middle of the screen is where the text is. A
+ * full-field cyan bloom would put a colour cast over the one thing nobody wants
+ * one on. At the edges it reads as speed in the periphery, which is where speed
+ * is actually felt.
+ *
+ * ---------------------------------------------------------------------------
+ * Why this does not break the budget the `steps()` drift above was written for.
+ *
+ * That note is about a *standing* cost: the nav genuinely samples what is behind
+ * it, so any backdrop that changes continuously forces a blur pass every frame,
+ * forever. The argument does not carry over, for two reasons. This layer is at
+ * `opacity: 0` unless the page is moving faster than a reading nudge, and an
+ * element at zero opacity paints nothing - an idle page is exactly as cheap as
+ * it was. And while it *is* lit, the page is scrolling, which means the content
+ * behind the nav is already changing and the nav is already re-blurring. The
+ * cost lands only in frames that were being paid for anyway.
+ *
+ * Driven by opacity rather than a transform for the same reason: a moving
+ * gradient would change the backdrop while the page was still, which is the one
+ * thing the drift note rules out.
+ */
+.surge {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background-image:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      transparent 24%
+    ),
+    linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      transparent 24%
+    );
+}
+
 /* ----------------------------------------------------------------- grid */
 .grid {
   position: absolute;
@@ -169,5 +213,21 @@
 @media (prefers-reduced-motion: reduce) {
   .field {
     animation: none;
+  }
+
+  /*
+   * Belt and braces, and worth the two lines.
+   *
+   * The surge is already dark on this path at source: without Lenis there is no
+   * velocity signal and `scroll.tsx` deliberately leaves the value pinned at
+   * zero rather than deriving one, on the grounds that a field which flares
+   * whenever you scroll is precisely what someone asking for reduced motion is
+   * asking not to have. This states the same conclusion where a reader looking
+   * for it would look, and stops a future change at the source from silently
+   * turning a flashing backdrop back on for the people least able to tolerate
+   * one.
+   */
+  .surge {
+    display: none;
   }
 }

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { SectionId } from '@/lib/scroll'
+import { useScrollNav, type SectionId } from '@/lib/scroll'
 import type { Localized } from '@/content/types'
 import { useLocale } from '@/lib/i18n'
 import Reveal from './Reveal'
@@ -38,9 +38,34 @@ interface SectionProps {
 
 export default function Section({ id, title, lede, aside, children }: SectionProps) {
   const { t } = useLocale()
+  const { active } = useScrollNav()
+
+  /*
+   * The section answers the frame.
+   *
+   * The HUD locks onto whatever the spy hands it (see Frame.tsx); this is the
+   * other half of that event, in the content. The attribute is *held* for as
+   * long as the section owns the viewport rather than being pulsed and removed,
+   * which is what makes re-acquisition work: scroll away and back and the
+   * attribute genuinely leaves and returns, so the one-shot animations hanging
+   * off it in base.css start again. An attribute that was set and cleared on a
+   * timer would fire once and then be unable to fire a second time without a
+   * reflow.
+   *
+   * Reading the context here re-renders five components when the active section
+   * changes. That is a handful of renders on an event that happens at reading
+   * speed - unlike `progress` and `velocity` on the same context, which is
+   * exactly why those two are motion values and this one is not.
+   */
+  const acquired = active === id
 
   return (
-    <section id={id} className={`section ${styles['section']}`} aria-labelledby={`${id}-title`}>
+    <section
+      id={id}
+      className={`section ${styles['section']}`}
+      data-acquired={acquired || undefined}
+      aria-labelledby={`${id}-title`}
+    >
       <div className="shell">
         <Reveal className={styles['head']}>
           <div className={styles['headMain']}>

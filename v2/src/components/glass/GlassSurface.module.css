@@ -86,6 +86,11 @@
    * that token to `transparent`, since nothing is lighting its far corner now.
    */
   box-shadow:
+    /* Three transparent layers holding the hovered state's glow open. They cost
+       nothing to paint and they are the only reason the ignition on hover can
+       *ease* - see `--glow-none` in tokens.css, and the same argument the shade
+       layer below is kept for. */
+    var(--glow-none),
     var(--glass-drop),
     inset 0 0 0 1px var(--glass-edge),
     /* The facet sheen. A 5px blur pulled back by a 4px spread, offset along the
@@ -433,6 +438,23 @@
      of unequal length are not interpolable, and the whole thing would snap in one
      frame while the lift itself eased. */
   box-shadow:
+    /*
+     * The plate actually catches now.
+     *
+     * The brackets have gone to `--accent` on hover for a while, and on their own
+     * they were a colour change on eight hairlines - correct, and almost
+     * invisible against a near-black field. What was missing is that a mark
+     * turning on should light *what is around it*: the glow is the same
+     * three-falloff figure the drop shadow uses, so the panel reads as having
+     * been energised rather than as having been recoloured.
+     *
+     * The small step, not the large one. `--glow-lg` belongs to the one standing
+     * 100% mark on the site (the rail head); a panel under a pointer is a
+     * response, and a response that burns as hot as the instrument's brightest
+     * readout flattens the range this tier exists to create. A grid of project
+     * cards can also put three of these under the pointer in a second.
+     */
+    var(--glow-sm),
     var(--glass-drop-lift),
     inset 0 0 0 1px var(--glass-edge-hover),
     /* Brightens with the lift - the panel has turned further into the light. */

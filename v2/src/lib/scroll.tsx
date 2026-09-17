@@ -9,15 +9,45 @@ import {
   type ReactNode,
 } from 'react'
 import Lenis from 'lenis'
+import { animate, useMotionValue, type MotionValue } from 'motion/react'
 import { usePrefersReducedMotion } from './hooks/useMediaQuery'
 
 export const SECTION_IDS = ['home', 'about', 'stack', 'work', 'projects', 'contact'] as const
 export type SectionId = (typeof SECTION_IDS)[number]
 
+/**
+ * Scroll speed, in px/frame, that counts as "full throttle" for the readouts and
+ * the backdrop sweep that ride `velocity`.
+ *
+ * Lenis reports raw px/frame and it is unbounded - a trackpad flick peaks near
+ * 200, a scrollbar drag can exceed 1000, and a value with no ceiling cannot
+ * drive an opacity. Normalising against a fixed reference turns it into the 0..1
+ * the consumers actually want, and 90 is roughly a brisk wheel scroll: fast
+ * enough that ordinary reading stays at zero, low enough that the sweep reaches
+ * full strength during a normal flick rather than only under a violent one.
+ */
+const VELOCITY_REFERENCE = 90
+
 interface ScrollContextValue {
   /** Id of the section currently owning the viewport. Drives the nav pill. */
   active: SectionId
   scrollTo: (id: SectionId) => void
+  /**
+   * Page scroll, 0..1, and absolute normalised scroll speed, 0..1.
+   *
+   * Motion values rather than state, and that is not an optimisation - it is the
+   * only shape this can take. These update on every scroll frame, and the
+   * provider sits above the entire tree: putting either in `useState` would
+   * re-render every section, every glass card and the nav sixty times a second.
+   * As motion values they are written straight to the elements that subscribe,
+   * and React never sees a single one of the updates.
+   *
+   * Every existing scroll-linked effect on the site already works this way -
+   * Work's `railScale`, Hero's `parallaxGate` - so consumers have a pattern to
+   * follow rather than a new one to invent.
+   */
+  progress: MotionValue<number>
+  velocity: MotionValue<number>
 }
 
 const ScrollContext = createContext<ScrollContextValue | null>(null)
@@ -26,6 +56,50 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
   const reducedMotion = usePrefersReducedMotion()
   const lenisRef = useRef<Lenis | null>(null)
   const [active, setActive] = useState<SectionId>('home')
+
+  const progress = useMotionValue(0)
+  const velocity = useMotionValue(0)
+
+  /* ------------------------------------------------------------- velocity */
+  /*
+   * Speed is *pushed* by scroll events and decays on a timer, because there is
+   * no event for "the scrolling stopped".
+   *
+   * Lenis emits `scroll` only while the position is changing, so whatever speed
+   * the last event carried would otherwise stand forever - the backdrop sweep
+   * would stay lit on a page nobody is touching. The obvious fix, a rAF loop
+   * easing the value down, costs a frame every frame for the life of the page
+   * and breaks the rule the whole backdrop is built around (see LensGrid: an
+   * idle page runs zero frames).
+   *
+   * So the decay is an animation that is *started* once the events stop and ends
+   * on its own. Idle costs nothing, and the 120ms delay is longer than the gap
+   * between frames of a real scroll, so an ordinary drag never trips it.
+   */
+  const decayRef = useRef<ReturnType<typeof animate> | null>(null)
+  const idleRef = useRef(0)
+
+  const pushVelocity = useCallback(
+    (raw: number) => {
+      decayRef.current?.stop()
+      velocity.set(Math.min(Math.abs(raw) / VELOCITY_REFERENCE, 1))
+      window.clearTimeout(idleRef.current)
+      idleRef.current = window.setTimeout(() => {
+        // The exit curve, for the reason tokens.css gives it: the sweep going
+        // out is not a thing anyone should be asked to watch.
+        decayRef.current = animate(velocity, 0, { duration: 0.45, ease: [0.5, 0, 0.75, 0] })
+      }, 120)
+    },
+    [velocity],
+  )
+
+  useEffect(
+    () => () => {
+      window.clearTimeout(idleRef.current)
+      decayRef.current?.stop()
+    },
+    [],
+  )
 
   /* --------------------------------------------------------- smooth scroll */
   useEffect(() => {
@@ -47,17 +121,65 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
     })
     lenisRef.current = lenis
 
+    // The telemetry tap. Lenis already computes both of these for its own
+    // easing, so reading them here costs nothing beyond the two `set` calls -
+    // a second scroll listener measuring the same page would not be free.
+    const offScroll = lenis.on('scroll', (instance) => {
+      progress.set(instance.progress || 0)
+      pushVelocity(instance.velocity)
+    })
+
     let frame = requestAnimationFrame(function raf(time: number) {
       lenis.raf(time)
       frame = requestAnimationFrame(raf)
     })
 
     return () => {
+      offScroll()
       cancelAnimationFrame(frame)
       lenis.destroy()
       lenisRef.current = null
     }
-  }, [reducedMotion])
+  }, [progress, pushVelocity, reducedMotion])
+
+  /* ------------------------------------------------ progress, without Lenis */
+  /*
+   * Under reduced motion there is no Lenis, and the HUD still has to know where
+   * on the page it is - the rail's progress graticule is *information*, not
+   * decoration, so taking it away with the animation would be the wrong
+   * degradation.
+   *
+   * `velocity` is deliberately left at zero on this path rather than computed
+   * from successive scroll positions. Everything that reads it is a light that
+   * rises with speed, and someone who asked for less motion should not be handed
+   * a field that flares every time they scroll. Zero is the designed answer
+   * here, not a missing one.
+   */
+  useEffect(() => {
+    if (!reducedMotion) return
+
+    let frame = 0
+    const read = () => {
+      frame = 0
+      const limit = document.documentElement.scrollHeight - window.innerHeight
+      progress.set(limit > 0 ? Math.min(Math.max(window.scrollY / limit, 0), 1) : 0)
+    }
+    // Coalesced to one read per frame: `scroll` can fire several times between
+    // paints, and each one of these is a forced layout.
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(read)
+    }
+
+    read()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      if (frame) cancelAnimationFrame(frame)
+    }
+  }, [progress, reducedMotion])
 
   /* ------------------------------------------------------------ section spy */
   useEffect(() => {
@@ -112,7 +234,10 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
     [reducedMotion],
   )
 
-  const value = useMemo(() => ({ active, scrollTo }), [active, scrollTo])
+  const value = useMemo(
+    () => ({ active, scrollTo, progress, velocity }),
+    [active, scrollTo, progress, velocity],
+  )
 
   return <ScrollContext value={value}>{children}</ScrollContext>
 }

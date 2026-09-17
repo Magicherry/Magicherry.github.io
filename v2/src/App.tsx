@@ -1,5 +1,6 @@
 import GlassDefs from './components/glass/GlassDefs'
 import Backdrop from './components/fx/Backdrop'
+import Frame from './components/hud/Frame'
 import Nav from './components/layout/Nav'
 import BackToTop from './components/layout/BackToTop'
 import Preloader from './components/layout/Preloader'
@@ -26,6 +27,13 @@ function Shell() {
 
       <GlassDefs />
       <Backdrop />
+      {/*
+       * The frame sits between the field and the controls, which is also where
+       * it sits optically: behind the nav, in front of everything that scrolls.
+       * It reads the scroll context rather than owning any state of its own, so
+       * mounting it here costs one subscription and no layout.
+       */}
+      <Frame />
       <Preloader onDone={markReady} />
       <Nav />
       <BackToTop />

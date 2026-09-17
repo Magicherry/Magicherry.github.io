@@ -19,7 +19,7 @@ interface NavItem {
 
 const ITEMS: readonly NavItem[] = [
   { id: 'about', icon: LuUser, label: ui.nav.about },
-  { id: 'stack', icon: LuLayers, label: { en: 'Stack', zh: '技术栈' } },
+  { id: 'stack', icon: LuLayers, label: ui.nav.stack },
   { id: 'work', icon: LuBriefcase, label: ui.nav.work },
   { id: 'projects', icon: LuFolderGit2, label: ui.nav.projects },
   { id: 'contact', icon: LuMail, label: ui.nav.contact },

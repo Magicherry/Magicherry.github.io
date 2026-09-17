@@ -1,0 +1,598 @@
+/*
+ * The instrument frame.
+ *
+ * Read the note at the top of Frame.tsx first - it covers why this layer exists
+ * and why every number in it is real. This file is about where the marks go.
+ *
+ * The whole layer is `pointer-events: none` and nothing inside it turns that
+ * back on. That is not a caveat, it is the condition on which an overlay is
+ * allowed to sit above the content at all (see `--z-hud` in tokens.css): the
+ * frame reports, it never receives. Anything in here that wanted a click would
+ * have to be a control, and controls belong in the nav.
+ */
+
+.frame {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-hud);
+  pointer-events: none;
+  /*
+   * Nothing in here affects anything outside it, and saying so lets the browser
+   * skip the frame entirely when it recalculates layout for the page scrolling
+   * underneath. `layout style` rather than the `strict` shorthand: `paint` would
+   * clip the head's glow at the track's bounds, and `size` is wrong for a box
+   * that is sized by `inset: 0`.
+   */
+  contain: layout style;
+
+  /*
+   * How far the marks sit from the edge of the screen.
+   *
+   * Local rather than in tokens.css because exactly one file reads it - the
+   * tokens file holds the two numbers other files have to agree with
+   * (`--hud-gutter`, `--hud-frame-len`) and nothing else. It scales a little
+   * with the viewport so the frame does not look pasted on at 2560px, and stops
+   * early: past about 18px the brackets stop reading as a frame around the
+   * screen and start reading as a box drawn on it.
+   */
+  --hud-inset: clamp(12px, 1.2vw, 18px);
+}
+
+/*
+ * There is no rule across the top of the screen.
+ *
+ * A full-width progress hairline lived here and was cut, and it is worth saying
+ * why so it does not come back by default. It was the most conventional mark on
+ * the page - a reading-progress bar pinned to the top edge is the single most
+ * common piece of chrome on the web - and the frame already reports the same
+ * quantity twice, better: the rail carries a combed gauge with a filled portion
+ * and a travelling head, and a numeric percentage under it. A third statement of
+ * one number, in the one position every other site puts it, was the part of this
+ * instrument that looked like a website.
+ *
+ * It also cost the frame its footing at narrow widths - it was the only mark
+ * that reached every breakpoint - which is why Frame.tsx now returns null below
+ * 1045px rather than mounting an empty layer. See the note there.
+ */
+
+/* ----------------------------------------------------------- corner marks */
+/*
+ * Four right angles at the corners of the *screen*.
+ *
+ * This is the panel frame's own figure (`.surface::before` in GlassSurface)
+ * scaled up to the viewport, and it is the cheapest sentence in the redesign:
+ * a bracket around the edge of what you are looking at says you are looking
+ * *through* something. Nothing else here does that in a single mark.
+ *
+ * Two borders per element rather than four gradients, because unlike the panel
+ * version these corners have no edge running between them to match - there is no
+ * box here, only the corners of one. The ratio that matters on a panel (faint
+ * edges, bright corners) has nothing to hold on this scale, so the mark carries
+ * its weight on its own and `--hud-frame` is correspondingly brighter than
+ * either of the panel values.
+ */
+.bracket {
+  position: absolute;
+  width: var(--hud-frame-len);
+  height: var(--hud-frame-len);
+  border: 0 solid var(--hud-frame);
+  /*
+   * Square, explicitly, and against the global `corner-shape: bevel`.
+   *
+   * These have no radius so the declaration in base.css has nothing to convert -
+   * but a right angle is the entire content of this mark, and stating it here
+   * means a future change to the radius scale cannot quietly chamfer the one
+   * figure on the site whose whole job is to be a corner.
+   */
+  border-radius: 0;
+  /*
+   * No transition, and its absence is a fix rather than an omission.
+   *
+   * `translate` and `border-color` were both transitioned here *and* animated by
+   * the `lock` keyframes below, which is two drivers on one property. A running
+   * animation outranks a transition, so the lock itself looked right - but the
+   * moment `data-locking` came off, the value snapped from wherever the keyframe
+   * had it back to the base, and the transition dutifully animated that snap
+   * over another 320ms. Every acquisition therefore ran a 260ms snap followed by
+   * a 320ms drift back, and crossing two section boundaries in quick succession
+   * put the two out of phase: the corners wobbled.
+   *
+   * Nothing else on this element touches either property, so the keyframes can
+   * own them outright.
+   */
+}
+
+.tl {
+  top: var(--hud-inset);
+  left: var(--hud-inset);
+  border-top-width: 1px;
+  border-left-width: 1px;
+}
+
+.tr {
+  top: var(--hud-inset);
+  right: var(--hud-inset);
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+
+.bl {
+  bottom: var(--hud-inset);
+  left: var(--hud-inset);
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+}
+
+.br {
+  bottom: var(--hud-inset);
+  right: var(--hud-inset);
+  border-bottom-width: 1px;
+  border-right-width: 1px;
+}
+
+/* ------------------------------------------------------------- the lock */
+/*
+ * The frame re-acquiring: all four corners light up, once, on every acquisition.
+ *
+ * ---------------------------------------------------------------------------
+ * They light. They do not *move*, and that is the whole correction.
+ *
+ * This used to pull each corner 7px toward the centre of the screen and release
+ * it, on the theory that a mechanism catching should be felt as well as seen.
+ * It does not survive contact with the actual page. A section boundary is
+ * crossed every few seconds of ordinary reading, so the movement is not an event
+ * you notice once - it is four objects in the corners of your vision jumping,
+ * repeatedly, while you are trying to read something else. At the edge of the
+ * visual field motion is the one signal that cannot be ignored, which is exactly
+ * why it was chosen and exactly why it was wrong: the frame was interrupting the
+ * content it exists to frame. Read back, it is indistinguishable from a
+ * rendering fault - the word for it is a twitch, not a lock.
+ *
+ * Light carries the same information and costs the reader nothing. Peripheral
+ * vision registers a brightness change perfectly well; what it does not do is
+ * demand that you look. So the corners go to the accent and fall back, and the
+ * frame still visibly re-acquires without ever moving a pixel.
+ *
+ * `drop-shadow` rather than `box-shadow` for the bloom. A bracket is two borders
+ * on an otherwise empty box, so a box-shadow would trace the whole square -
+ * including the two sides that are not drawn - and the lock would flash a
+ * complete rectangle in each corner. `drop-shadow` follows the painted pixels,
+ * which here are the two arms and nothing else.
+ *
+ * The animation is declared on the attribute rather than on `.bracket` with a
+ * toggled `animation-play-state`, because it has to be able to retrigger.
+ * Scrolling back and forth across a section boundary fires this repeatedly, and
+ * a running keyframe animation ignores a second request unless the element is
+ * reflowed - mounting the attribute for the duration and taking it away again
+ * sidesteps that without touching layout. See Frame.tsx.
+ */
+.frame[data-locking] .bracket {
+  animation: lock 420ms var(--ease-enter);
+}
+
+/*
+ * Up fast, down slow - the asymmetry `--ease-enter` and `--ease-exit` are named
+ * for, expressed as keyframe position rather than as two curves. The rise is
+ * over in the first fifth so the acquisition is legible as a distinct moment;
+ * the remaining four fifths are a decay, which is what stops a repeated signal
+ * from reading as a flash.
+ */
+@keyframes lock {
+  0% {
+    border-color: var(--hud-frame);
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  18% {
+    border-color: var(--accent);
+    filter: drop-shadow(0 0 6px var(--accent-bloom));
+  }
+  100% {
+    border-color: var(--hud-frame);
+    filter: drop-shadow(0 0 0 transparent);
+  }
+}
+
+/* ---------------------------------------------------------------- rail */
+/*
+ * The left edge: which section the frame has locked onto, and how far through
+ * the document the reader is.
+ *
+ * It lives in the margin the shell already leaves. `--hud-gutter` is the number
+ * the layout has to agree with, and base.css pulls `--shell-max` in at 1280 so
+ * that the agreement holds at the width where it first stops being automatic.
+ *
+ * Centred vertically rather than pinned to the top, and held to 62vh. A rail
+ * running the full height of the screen is a *border*, and the moment it reaches
+ * both edges the eye stops reading it as an instrument sitting in the margin and
+ * starts reading it as the page having a left wall.
+ */
+.rail {
+  position: absolute;
+  left: var(--hud-inset);
+  top: 50%;
+  translate: 0 -50%;
+  width: var(--hud-gutter);
+  height: 62vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  font-family: var(--font-mono);
+  /*
+   * The label's reserved run down the column, and it has to be a fixed length.
+   * See `.railLabel` - this is the number that stops the gauge moving.
+   *
+   * Sized against the longest string either language can put here: "PROJECTS" is
+   * eight rotated Latin glyphs at `--text-xs` plus `--tracking-widest`, which
+   * lands near 100px. The margin above that is for a reader who has scaled their
+   * text up, since this is one of the few strings on the site with no `clamp()`
+   * behind it.
+   */
+  --rail-label-run: 8.5rem;
+}
+
+.railTop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 0;
+}
+
+/*
+ * The section's ordinal. Mono and accent, because it is a readout - the same
+ * voice the hero card's stats and the preloader's meter are in.
+ */
+.railIndex {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: var(--tracking-normal);
+  color: var(--accent);
+  /* Tabular figures: `01` and `04` are different widths in a proportional face,
+     and a number that shifts sideways as you scroll is the one thing a fixed
+     readout must not do. */
+  font-variant-numeric: tabular-nums;
+}
+
+/* The denominator is context, not data. It never changes, so it should never
+   compete with the figure that does. */
+.railTotal {
+  color: var(--fg-ghost);
+  font-weight: 500;
+}
+
+/*
+ * The acquired section's name, set down the rail.
+ *
+ * `writing-mode: vertical-rl` with the default `text-orientation: mixed` is
+ * doing something worth naming: it rotates Latin a quarter turn so it reads
+ * downward, and leaves Han *upright* and stacked, which is how vertical Chinese
+ * is actually set. One declaration, two correct typographies, and the site's
+ * bilingual invariant survives into the chrome rather than stopping at the
+ * content. Rotating the box with a `transform` instead - the usual way to get
+ * vertical type - would have laid Chinese on its side.
+ *
+ * No `letter-spacing` reset for `:lang(zh)` here, unlike the section titles: in
+ * vertical writing the tracking applies down the column rather than across the
+ * glyphs, so it opens the line rather than pulling the characters apart. The
+ * argument that makes letterspaced Han read as false word breaks is an argument
+ * about horizontal setting.
+ */
+.railLabel {
+  /* Never shrunk by the column above it - the fixed run below is the whole
+     point, and flex would happily negotiate it away on a short viewport. */
+  flex: none;
+  writing-mode: vertical-rl;
+  /*
+   * A step up from the readouts, and the only piece of the frame that is.
+   *
+   * Everything else here is a *value* - a clock, a window size, a percentage -
+   * and values are reference material you look at when you want them. This is
+   * the name of what the instrument has locked onto, which is the one thing in
+   * the frame worth reading without being asked. At `--text-2xs` in
+   * `--fg-muted` it was quieter than the ordinal above it, which inverted the
+   * hierarchy: the number is the index, the label is the subject.
+   */
+  font-size: var(--text-xs);
+  font-weight: 620;
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--fg);
+  white-space: nowrap;
+  /*
+   * A *fixed* run down the column, and this is the declaration that stops the
+   * rail twitching.
+   *
+   * The rail is a flex column and the track below takes `flex: 1 1 auto`, so
+   * every pixel this label gains or loses is a pixel the gauge moves. Two things
+   * were changing its length constantly. Section to section the string itself
+   * changes - "WORK" is half of "PROJECTS" - so the whole gauge jumped on every
+   * acquisition. And during the decode the *noise* changes length: in
+   * `vertical-rl` a rotated Latin glyph advances down the column by its width,
+   * so a run of random letters is a different height every frame, and the head
+   * and fill under it shivered for the whole 620ms.
+   *
+   * `height` rather than a logical property, deliberately: in this writing mode
+   * the block axis is horizontal and the inline axis runs down the page, so
+   * `block-size` would fix the wrong dimension. Physical is unambiguous here.
+   *
+   * `text-align: center` then centres the text *along the column*, because
+   * alignment follows the inline axis - so a four-letter label sits in the
+   * middle of the reserved run instead of hanging from the top of it.
+   */
+  height: var(--rail-label-run);
+  text-align: center;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------- the gauge */
+/*
+ * A graticule with something actually on it.
+ *
+ * `.hud-rule` in base.css is combed at this same pitch and makes a point of
+ * measuring nothing - a scale with no gauge is honest where the site has no
+ * quantity to report. This is the one place it does have one: scroll position is
+ * a real fraction of a real length, so here the comb gets a head to travel along
+ * it. The long note on `--comb` in tokens.css anticipated exactly this and asked
+ * that a future gauge use the site's pitch rather than inventing its own, which
+ * is why the mask below is built from `--comb-on` / `--comb-off` rather than
+ * from `--comb` itself: that token is a 90deg gradient, and this track runs
+ * down the page.
+ */
+.railTrack {
+  position: relative;
+  flex: 1 1 auto;
+  width: 9px;
+  min-height: 120px;
+  --rail-head: 3px;
+}
+
+.railComb {
+  position: absolute;
+  inset: 0 auto 0 50%;
+  translate: -50% 0;
+  width: 1px;
+  /*
+   * Gains downward, matching the direction of travel - the same distribution
+   * `.hud-rule` uses along its own run.
+   *
+   * Carried on `--hud-frame` at the far end rather than `--hud-line`, because
+   * this graticule is on the frame and not in the column. The block rules inside
+   * a section sit a few pixels from the text they head and can afford to be
+   * nearly invisible; a 450px track alone in the margin at the same weight
+   * simply is not there, and a head travelling down a scale nobody can see is a
+   * bright dot wandering the edge of the screen.
+   */
+  background: linear-gradient(180deg, var(--hud-line), var(--hud-frame));
+  -webkit-mask-image: repeating-linear-gradient(
+    180deg,
+    #000 0 var(--comb-on),
+    transparent var(--comb-on) calc(var(--comb-on) + var(--comb-off))
+  );
+  mask-image: repeating-linear-gradient(
+    180deg,
+    #000 0 var(--comb-on),
+    transparent var(--comb-on) calc(var(--comb-on) + var(--comb-off))
+  );
+}
+
+/*
+ * The distance already travelled.
+ *
+ * This is what makes the track a *gauge* rather than a scale with a marker on
+ * it, and it is the one figure on the site allowed to make that claim - see the
+ * note above, and the long argument under `--comb` in tokens.css for why
+ * `.hud-rule` is deliberately denied it. The difference is whether there is a
+ * real quantity: scroll position is a true fraction of a true length, so a
+ * filled portion is reporting rather than decorating.
+ *
+ * Combed by the same mask as the track under it, so the fill lands *on* the
+ * ticks instead of between them - an unbroken bar over a ticked line would read
+ * as two unrelated marks sharing a column, which is the same mistake the charge
+ * on `.hud-rule` avoids in base.css.
+ *
+ * `scaleY` from the top, driven off the same motion value as the head, so the
+ * two can never disagree about where the reader is.
+ */
+.railFill {
+  position: absolute;
+  inset: 0 auto 0 50%;
+  translate: -50% 0;
+  width: 1px;
+  transform-origin: 50% 0;
+  background: var(--accent);
+  -webkit-mask-image: repeating-linear-gradient(
+    180deg,
+    #000 0 var(--comb-on),
+    transparent var(--comb-on) calc(var(--comb-on) + var(--comb-off))
+  );
+  mask-image: repeating-linear-gradient(
+    180deg,
+    #000 0 var(--comb-on),
+    transparent var(--comb-on) calc(var(--comb-on) + var(--comb-off))
+  );
+}
+
+/*
+ * The carrier, and its height is the whole trick.
+ *
+ * Motion drives this with `y: 0%` .. `y: 100%`, and a percentage in a transform
+ * resolves against the *element's own* height. Making that height `100% -
+ * head` means a full travel moves the head exactly from the top of the track to
+ * the point where its bottom edge lands on the bottom of the track - no
+ * overshoot to correct, no `calc()` inside an interpolated value, and the whole
+ * thing stays a single compositor transform.
+ */
+.railHeadTrack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(100% - var(--rail-head));
+}
+
+/*
+ * The one thing on this site that is lit all the way up.
+ *
+ * Everything else that takes the accent takes it at a fraction, or takes it
+ * briefly - a link, a rim, a lock that lasts 260ms. This is a standing 100%:
+ * `--accent-soft` is the brightest stop in the family and it carries the large
+ * glow. It can afford to be, because it is nine pixels by three and it is the
+ * single most informative mark in the frame. A page needs somewhere for the eye
+ * to find the top of the range, or the range is not real.
+ */
+.railHead {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  width: 9px;
+  height: var(--rail-head);
+  background: var(--accent-soft);
+  box-shadow: var(--glow-lg);
+}
+
+.railPct {
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Three characters of room whether the reading needs them or not, so the one
+   moment the page reaches 100 does not widen the block and drag the `%` along
+   with it. `tabular-nums` on the parent keeps the digits themselves on a fixed
+   pitch; this keeps the *cell* fixed as well. */
+.railPctValue {
+  min-width: 3ch;
+  text-align: right;
+}
+
+/* The unit, not the quantity. It never changes, so it steps back the way
+   `.railTotal` does above - same argument, same pair of roles. */
+.railPctMark {
+  color: var(--fg-faint);
+}
+
+/* ------------------------------------------------------------- readouts */
+/*
+ * Top right, and *below* the corner bracket rather than beside it.
+ *
+ * Two things already want the top of the screen: the bracket owns the corner
+ * itself, and the nav is a 940px capsule centred at 14px. Dropping the readouts
+ * under the bracket clears both without needing either to move - at 1280px,
+ * which is the narrowest width this block is rendered at, the nav's right edge
+ * and this column would otherwise be about forty pixels apart, and forty pixels
+ * is close enough to read as a collision that nearly happened.
+ */
+.readouts {
+  position: absolute;
+  top: calc(var(--hud-inset) + var(--hud-frame-len) + var(--space-4));
+  right: var(--hud-inset);
+  display: grid;
+  gap: 5px;
+  justify-items: end;
+  font-family: var(--font-mono);
+}
+
+/*
+ * The frame rate, opposite the readouts.
+ *
+ * Same vertical offset as the block on the right - under the corner bracket
+ * rather than beside it - so the two corners of the frame start on one line and
+ * the instrument reads as symmetrical even though the two sides carry different
+ * numbers of rows.
+ *
+ * Left-aligned against its own edge, which is the mirror of the right block's
+ * `justify-items: end` rather than a different decision: each column is ranged
+ * against the edge of the screen it belongs to.
+ */
+.fps {
+  position: absolute;
+  top: calc(var(--hud-inset) + var(--hud-frame-len) + var(--space-4));
+  left: var(--hud-inset);
+  font-family: var(--font-mono);
+}
+
+/*
+ * The one readout whose label comes *first* in reading order and still lines up.
+ *
+ * The right-hand block ranges its values against the right edge, so label and
+ * value sit label-then-value with the numbers forming a clean right margin. Over
+ * here the column is ranged left, and the same order would leave the value
+ * floating at whatever offset the label happened to end at. Reversing the row
+ * puts the number against the screen edge and the label after it, so this column
+ * is ranged on its figures exactly as the other one is.
+ */
+.fps .readout {
+  flex-direction: row-reverse;
+}
+
+/*
+ * Three characters, ranged left - the mirror of `.railPctValue`, and for the
+ * same reason. The reading is two digits on a 60Hz panel and three on a 120Hz
+ * one, and it crosses between them whenever frames are actually dropped, which
+ * is precisely the moment a meter must not start moving around. Ranged left
+ * rather than right because this column is ranged against the left edge of the
+ * screen; the cell is fixed either way.
+ */
+.fps .readoutValue {
+  min-width: 3ch;
+  text-align: left;
+}
+
+.readout {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* Label under value, by a full step. These rows are read as "23:19:19", not as
+   "TIME 23:19:19" - the label is there to say what the number is the first time
+   you look and should disappear every time after. */
+.readoutLabel {
+  color: var(--fg-faint);
+  text-transform: uppercase;
+}
+
+.readoutValue {
+  /* Fixed cell, so the three rows form a column. The clock is the widest at 8
+     characters and never varies (see useClock); the viewport reading is the one
+     that moves, and without this it would drag the whole block left and right as
+     a window is dragged - a readout advertising its own instability. */
+  min-width: 9ch;
+  text-align: right;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ========================================================= reduced motion */
+/*
+ * The frame stays. All of it.
+ *
+ * This is the distinction the whole site is built on and it matters most here,
+ * where the temptation to just switch the layer off is strongest: reduced motion
+ * asks for less *movement*, not less information. So the brackets, the rail, the
+ * gauge and the readouts are all still drawn and still correct - the head still
+ * sits at the reader's position in the document, the clock still ticks, the
+ * label still changes.
+ *
+ * What goes is the part that is only movement: the lock's snap (the corners
+ * change state instantly instead), and the decode, which Scramble drops on its
+ * own by reading the same preference.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .frame[data-locking] .bracket {
+    animation: none;
+  }
+
+  .bracket {
+    transition: none;
+  }
+}

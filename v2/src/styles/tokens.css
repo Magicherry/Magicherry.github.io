@@ -297,6 +297,21 @@
 
   --z-canvas: 0;
   --z-content: 10;
+  /*
+   * The instrument frame, and it sits *over* the content rather than under it.
+   *
+   * A canopy is in front of what you are looking at - that is what makes it a
+   * canopy and not a wallpaper - so the brackets, rails and readouts have to be
+   * able to cross the column. They never actually do: everything in the frame is
+   * pinned to a viewport edge, in the margin the shell's `max-width` already
+   * leaves. Being above content is what makes that a *choice* rather than an
+   * accident of the layout, and it is why the frame carries `pointer-events:
+   * none` - an overlay that swallows clicks is the price of this position, and
+   * it is not one worth paying.
+   *
+   * Below the nav, which is the one object that must stay reachable.
+   */
+  --z-hud: 50;
   --z-nav: 60;
   --z-overlay: 80;
   --z-preloader: 100;
@@ -368,6 +383,89 @@
    * the design, not the two values.
    */
   --hud-bracket: rgba(226, 236, 250, 0.52);
+
+  /* ----------------------------------------------------------- intensity
+   *
+   * One hue, and now a *range* for it.
+   *
+   * The single accent was never the thing making this page quiet - a whole
+   * interface drawn in one colour held permanently at about 60% was. Links,
+   * rails, readouts, brackets, rims: every one of them the same cyan at the same
+   * strength, so nothing on the page was ever loud and nothing was ever quiet
+   * either. Contrast of *amplitude* is what a second hue is usually brought in to
+   * fake, and it does not need one.
+   *
+   * So the cyan gets a top end. These are the tokens for the moments it is
+   * allowed to reach it, and they are deliberately few: a bloom that is always
+   * on is just a brighter flat, which is the problem again one step up.
+   */
+  /*
+   * The glow colour. Lifted toward `--accent-soft` rather than being the accent
+   * itself, because a light source is not the same colour as the thing it lights
+   * - real emission desaturates toward white at the core, and a glow painted in
+   * the flat accent reads as a coloured blur rather than as something burning.
+   */
+  --accent-bloom: color-mix(in srgb, var(--accent-soft) 46%, var(--accent));
+  /*
+   * Three falloffs, and the same argument `--glass-drop` makes above: one wide
+   * blur is a coloured halo at a fixed distance, while a tight core plus a mid
+   * and a far reach is *emission*. The core is nearly opaque and a few pixels
+   * across; the far layer is wide and almost gone.
+   */
+  --glow-lg:
+    0 0 8px -2px color-mix(in srgb, var(--accent-bloom) 78%, transparent),
+    0 0 26px -6px color-mix(in srgb, var(--accent-bloom) 52%, transparent),
+    0 0 64px -16px color-mix(in srgb, var(--accent-bloom) 42%, transparent);
+  --glow-sm:
+    0 0 5px -1px color-mix(in srgb, var(--accent-bloom) 62%, transparent),
+    0 0 14px -4px color-mix(in srgb, var(--accent-bloom) 38%, transparent),
+    0 0 30px -10px color-mix(in srgb, var(--accent-bloom) 26%, transparent);
+  /*
+   * The off state, and it is three transparent layers rather than `none` for
+   * exactly the reason `--glass-inner-shade` is a transparent shadow rather than
+   * a deleted one: `box-shadow` lists of unequal length are not interpolable, so
+   * a surface transitioning from `none` to a three-layer glow snaps on in a
+   * single frame instead of igniting. Anything that lights up transitions
+   * between this and one of the two above.
+   */
+  --glow-none:
+    0 0 8px -2px transparent,
+    0 0 26px -6px transparent,
+    0 0 64px -16px transparent;
+
+  /* --------------------------------------------------------- instrument frame
+   *
+   * The chrome that lives at the viewport edges rather than in the column: four
+   * corner brackets, a telemetry rail down the left, readouts at the top right.
+   *
+   * `--hud-frame` is brighter and more tinted than `--hud-line`, and that
+   * inversion of the usual rule is the point. Everything inside the column is
+   * *content* and the marks around it should stay under it; the frame is not in
+   * the column at all, it is the thing the column is being viewed through, and a
+   * canopy you cannot see is not a canopy. It still sits well under `--accent`
+   * proper - this is structure, not signal.
+   */
+  --hud-frame: color-mix(in srgb, var(--accent) 46%, var(--line-strong));
+  /*
+   * Bracket arm length at viewport scale.
+   *
+   * An order of magnitude over the 10-13px arms on a panel, and it has to be:
+   * the figure is read as a *proportion* of the box it marks, so an arm that
+   * reads as a corner on a 380px card is a speck in the corner of a 1440px
+   * screen. Clamped rather than a percentage so it does not run away on an
+   * ultrawide, where a 4% arm would be most of a hand's width of drawn line.
+   */
+  --hud-frame-len: clamp(18px, 2.4vw, 34px);
+  /*
+   * What the rail reserves at the left edge, and the one number in this file
+   * that the *layout* has to agree with.
+   *
+   * The shell is 1180px wide and centred, so on a 1440px viewport there is 130px
+   * of margin each side and the rail fits in it with room to spare. Between 1280
+   * and 1360 it does not, which is why `base.css` pulls `--shell-max` in at that
+   * breakpoint rather than letting the rail overlap the first column of text.
+   */
+  --hud-gutter: 58px;
 
   /*
    * The recon field behind the glass. Glass only reads as glass when there is

@@ -157,6 +157,32 @@ body {
   padding-inline: var(--shell-pad);
 }
 
+/*
+ * The column gives way to the frame, and this is the one place the instrument
+ * layer is allowed to cost the content anything.
+ *
+ * The HUD rail is 58px (`--hud-gutter`) pinned to the left edge, and it lives in
+ * the margin the shell's own `max-width` already leaves. At 1440px that margin
+ * is 130px a side and there is nothing to negotiate. At 1280px - which is
+ * exactly where Frame.tsx starts rendering the rail - it is 50px, and the rail
+ * would be standing on the first character of every line.
+ *
+ * So the column comes in by 60px across the band where the two genuinely
+ * compete, and is released again above it. Sixty pixels off a 1180px measure is
+ * about four characters of a line that was already at a comfortable length; the
+ * alternatives were a rail overlapping text, or no rail at all below 1400px,
+ * and both of those cost more than four characters.
+ *
+ * The upper bound matters as much as the lower one. Without it the shell would
+ * stay narrowed forever and a 4K display would be reading a 1120px column for
+ * the sake of a constraint that stopped applying a thousand pixels ago.
+ */
+@media (min-width: 1280px) and (max-width: 1400px) {
+  .shell {
+    --shell-max: 1120px;
+  }
+}
+
 .section {
   position: relative;
   padding-block: var(--section-gap);
@@ -204,6 +230,55 @@ body {
 .sectionTitle:lang(zh) {
   letter-spacing: var(--tracking-tight);
   max-width: 18ch;
+}
+
+/*
+ * The title igniting as the frame locks onto its section.
+ *
+ * This is the content's half of the acquisition - the corners snap, the rail
+ * decodes, and the heading the reader has just arrived at lights up once and
+ * settles. It is the only moment a *title* on this site is allowed to carry the
+ * accent at full strength, and it lasts 900ms.
+ *
+ * A `text-shadow` on the whole heading rather than on the `**accent**` run
+ * alone, and that is a constraint turned into the better answer. RichText draws
+ * that run with a CSS-Modules class, so its real name is hashed and no
+ * stylesheet outside that file can name it. What a cyan bloom over the *whole*
+ * line does instead is bleed the accent into the white words beside it, which is
+ * phosphor, not a compromise: a display whose bright pixels bloom into their
+ * neighbours is precisely what the rest of this design - the scanlines, the
+ * grain, the survey grid - is already claiming the page is.
+ *
+ * Both ends of the keyframe are a shadow rather than `none`, for the reason
+ * tokens.css gives under `--glow-none`: shadow lists of unequal length are not
+ * interpolable, and `none` against a real shadow snaps the flash on in one
+ * frame instead of lighting it.
+ *
+ * Not held while the section is active - a heading that stays lit for as long as
+ * you are reading under it is just a differently-coloured heading, and the
+ * signal was never "you are here", it was "you just arrived".
+ *
+ * `text-shadow` is a paint property, and Reveal.tsx refuses to animate one
+ * (`filter: blur()`) on exactly that ground - so the difference is worth
+ * stating. The rule there is about *count*: a stack grid and a project grid mean
+ * a dozen simultaneous filter animations arriving mid-scroll, which is when
+ * there are the fewest frames to spare. This is one element, on a single line of
+ * type, firing once when a section boundary is crossed - and never at the same
+ * time as another copy of itself, because only one section can own the viewport.
+ * The rule is "do not run a dozen of these at once", not "never repaint".
+ */
+.section[data-acquired] .sectionTitle {
+  animation: titleAcquire 900ms var(--ease-enter);
+}
+
+@keyframes titleAcquire {
+  0%,
+  100% {
+    text-shadow: 0 0 0 transparent;
+  }
+  22% {
+    text-shadow: 0 0 20px color-mix(in srgb, var(--accent-bloom) 62%, transparent);
+  }
 }
 
 .lede {
@@ -268,6 +343,65 @@ body {
   background-image: linear-gradient(90deg, var(--hud-line-faint), var(--hud-line));
   -webkit-mask-image: var(--comb);
   mask-image: var(--comb);
+}
+
+/*
+ * A charge running the length of the rule when its section is acquired.
+ *
+ * The block heads inside a section (Certifications, Tools, Education) are the
+ * only horizontals the design gives itself, and on acquisition they are what
+ * carries the lock *down into* the content - the corners snap at the edge of the
+ * screen, the title blooms at the top of the column, and then the rules further
+ * down light in turn as the same event reaches them.
+ *
+ * Its own pseudo-element rather than a brightening of `::before`, because the
+ * two are different figures on the same line: `::before` is the run, at even
+ * weight, and this is a short band travelling along it. Combed by the same mask
+ * so the charge is carried by the graticule's own ticks rather than crossing
+ * them - a smooth band over a ticked line reads as two unrelated marks.
+ *
+ * Paint-bound (`background-position`), and deliberately: the element is one
+ * pixel tall and at most three of them exist in any section. The compositor
+ * alternative - a transformed child - would need a wrapper with `overflow:
+ * hidden`, and clipping is what the mask is already doing.
+ */
+.hud-rule::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 1px;
+  opacity: 0;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent-bloom),
+    transparent
+  );
+  background-size: 28% 100%;
+  background-repeat: no-repeat;
+  -webkit-mask-image: var(--comb);
+  mask-image: var(--comb);
+}
+
+.section[data-acquired] .hud-rule::after {
+  animation: ruleCharge 1s var(--ease-inout);
+}
+
+@keyframes ruleCharge {
+  0% {
+    background-position: -30% 0;
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 130% 0;
+    opacity: 0;
+  }
 }
 
 /* ================================================================= a11y */

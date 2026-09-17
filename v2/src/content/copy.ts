@@ -8,9 +8,18 @@ import type { Localized } from './types'
  */
 
 export const ui = {
+  /*
+   * One label per entry in `SECTION_IDS`, and that completeness is now load
+   * bearing. `stack` used to be written inline in Nav.tsx - the only section
+   * whose name lived in a component - which was survivable while the nav was the
+   * only thing that needed it. The HUD frame names the acquired section too, so
+   * there are two consumers, and a second inline copy is how the two drift
+   * apart.
+   */
   nav: {
     home: { en: 'Home', zh: '首页' },
     about: { en: 'About', zh: '关于' },
+    stack: { en: 'Stack', zh: '技术栈' },
     work: { en: 'Work', zh: '经历' },
     projects: { en: 'Projects', zh: '项目' },
     contact: { en: 'Contact', zh: '联系' },

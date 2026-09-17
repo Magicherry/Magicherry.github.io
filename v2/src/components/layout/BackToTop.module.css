@@ -9,6 +9,35 @@
 }
 
 /*
+ * Out of the corner, where the frame's bracket now is.
+ *
+ * The HUD draws a right angle in each corner of the viewport, and the
+ * bottom-right one lands underneath this button: the bracket reaches about 52px
+ * in, the disc starts at 28px and is 48px across, so they overlap across most of
+ * both arms. The button wins on z-index, which is the worst of the available
+ * outcomes - a hairline that disappears halfway along its length and comes back,
+ * which reads as a rendering fault rather than as two objects.
+ *
+ * So the button yields. It is the mobile object of the two - it exists because a
+ * long page on a phone needs a way back, and every width where this rule applies
+ * has a permanent nav bar doing the same job - and moving it in is one
+ * declaration against redrawing the frame around it.
+ *
+ * Bound to the same 1045px the brackets are rendered at in Frame.tsx, and the
+ * two have to be kept in step by hand - one is a media query here, the other a
+ * `useMediaQuery` there, and CSS cannot read a React breakpoint. That file
+ * derives the number (it is where the nav stops reaching the corners); this one
+ * only has to match it. Below it there are no brackets and the button keeps the
+ * corner it has always had.
+ */
+@media (min-width: 1045px) {
+  .wrap {
+    right: max(4rem, env(safe-area-inset-right));
+    bottom: max(4rem, env(safe-area-inset-bottom));
+  }
+}
+
+/*
  * No frame. Every edge layer the glass system would draw is switched off here,
  * in every theme and in every state.
  *

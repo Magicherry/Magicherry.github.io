@@ -50,19 +50,42 @@ const DOT_HALF = 1.0
 const DOT_CORNER_RATIO = 0.45
 /**
  * How much half-side a dot gains at the very centre of the lens, on top of
- * `DOT_HALF`. 1.9 puts the peak at 2.9 - a dot under the pointer is nearly three
- * times the one at rest. It is reached only at the centre: the ramp out to
- * `LENS_RADIUS` is squared, see the draw loop.
+ * `DOT_HALF`. 2.6 puts the peak at 3.6 - a dot under the pointer is over three
+ * and a half times the one at rest. It is reached only at the centre: the ramp
+ * out to `LENS_RADIUS` is squared, see the draw loop.
  *
  * An absolute gain rather than a multiple of `DOT_HALF`, and that is the point:
  * the resting field and the lens peak are set independently, so the field can
  * stay as light as the circles were while the lens still swells hard. Expressed
  * as a factor the two would be welded together and shrinking one would shrink
  * the other.
+ *
+ * Raised from 1.9 along with `LENS_STRENGTH` and the new `LENS_BLOOM`, and the
+ * three move together for one reason: this is the only place on the site where
+ * the accent responds to the *pointer* rather than to the document, and it was
+ * the quietest of the lit things rather than the loudest. The squared ramp is
+ * what makes the increase affordable - it keeps the growth at the pointer and
+ * collapses it within a fraction of the radius, so a harder peak does not widen
+ * the region that reads as lensed. See the long note in the draw loop.
  */
-const LENS_SWELL = 1.9
+const LENS_SWELL = 2.6
 const LENS_RADIUS = 190
-const LENS_STRENGTH = 26
+const LENS_STRENGTH = 34
+/**
+ * How far the lens throws light past the dots it is drawing.
+ *
+ * A canvas `shadowBlur` in the accent colour, so a dot near the pointer does not
+ * merely turn cyan - it *emits*, and the dark between the dots picks up the
+ * spill. This is the field's share of the intensity tier the rest of the site
+ * gained (see `--glow-*` in tokens.css): the lens was already the most physical
+ * thing on the page and it was drawing flat-coloured squares.
+ *
+ * Applied only inside the lens loop, never to the resting field. Shadowed fills
+ * are among the most expensive things a 2D context does, and the ~100 dots under
+ * the pointer can afford it where the ~1,900 of the static field could not - that
+ * rasterises once and would carry the cost into every blit thereafter.
+ */
+const LENS_BLOOM = 9
 /** Below this, the eased pointer has effectively arrived; stop the loop. */
 const SETTLE_EPSILON = 0.35
 /** Same idea for the fade: below this the lens is fully in or fully out. */
@@ -232,6 +255,14 @@ export default function LensGrid() {
       // The lens itself, rising over the pass above. At power 1 that pass is
       // skipped and this is exactly the lens it has always been.
       ctx.fillStyle = hotColor
+      /*
+       * The bloom rides `power` so it arrives and leaves with the lens rather
+       * than snapping on at the first pointer event. Set once for the whole
+       * loop - `shadowColor` and `shadowBlur` are context state, and writing
+       * them per dot is a hundred redundant state changes a frame.
+       */
+      ctx.shadowColor = hotColor
+      ctx.shadowBlur = LENS_BLOOM * power
       for (let row = minRow; row <= maxRow; row += 1) {
         for (let col = minCol; col <= maxCol; col += 1) {
           const x = originX + col * SPACING
@@ -276,6 +307,13 @@ export default function LensGrid() {
         }
       }
       ctx.globalAlpha = 1
+      /*
+       * Cleared, because the context is shared with the rest-pass and the blit
+       * at the top of `draw`. Leaving a shadow set would put a glow behind the
+       * whole field's blitted image on the next frame - one bloom around a
+       * full-viewport rectangle, which is both wrong and expensive.
+       */
+      ctx.shadowBlur = 0
     }
 
     const resize = () => {
