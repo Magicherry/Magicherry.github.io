@@ -118,10 +118,43 @@
  * the ink and the edges get whatever is left. The eye reconstructs the box from
  * four marks and reads the faint sides as confirmation rather than as structure.
  *
- * Eight one-pixel gradients rather than four borders, because a border draws
- * whole edges and each of these is a segment. They were two brackets at the two
- * corners the plate was not chamfered at; with the chamfer gone there are four
- * real corners and no reason to leave two of them unmarked.
+ * ---------------------------------------------------------------------------
+ * One border with the corners masked in, rather than eight positioned segments.
+ *
+ * This was eight one-pixel background gradients - two per corner - on the
+ * reasoning that a border draws whole edges where each of these is a segment.
+ * The reasoning is fine and the rendering is not, because a panel on this page
+ * is almost never on a whole pixel. A project card measures 353.328px at
+ * `left: 158`, so its left edge falls exactly on a device pixel and its right
+ * edge falls at .328 of one.
+ *
+ * Two background layers meeting at that edge are rasterised independently. The
+ * horizontal arm is ten pixels long and lands with its last column at 33%
+ * coverage; the vertical arm is *one* pixel wide and smears across two columns
+ * at 67% and 33%. Nothing is misplaced - both are drawn at exactly the right
+ * subpixel coordinate - but one of them is a wide shape whose edge happens to be
+ * soft and the other is a hairline that is entirely edge, so the eye reads the
+ * two as a step. Only the right-hand corners show it, and that is the tell: the
+ * left edge is integral and renders clean.
+ *
+ * A border does not have that problem, because the corner is not two things
+ * being placed next to each other - it is one box, mitred by the layout engine
+ * at whatever subpixel its geometry lands on. So the frame is drawn as a real
+ * 1px border and a four-square mask reveals only the corners of it. What the
+ * mask's own fractional edges can now soften is the far *end* of an arm, ten
+ * pixels away from the junction, where a third of a pixel is invisible.
+ *
+ * The mask squares overhang the box by 2px on their outer sides, and that is
+ * load-bearing rather than slack: a mask edge landing on the same fractional
+ * coordinate as the border's own edge would multiply the two alphas together and
+ * dim the corner - fixing the step by fading the thing it is made of. Pushed
+ * outside the border box the mask is solid everywhere it matters and the
+ * overhang is clipped away. The squares are sized `--surface-tick-len + 2px` so
+ * the visible arm is still exactly the length asked for.
+ *
+ * They were two brackets at the two corners the plate was not chamfered at; with
+ * the chamfer gone there are four real corners and no reason to leave two of
+ * them unmarked.
  *
  * `inset: 0` rather than the 7px they used to carry. Held inside the panel they
  * were a second, smaller frame floating within the first, and against a square
@@ -155,38 +188,44 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background-image:
-    /* top-left: along the top, then down the left */
-    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
-    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
-    /* top-right */
-    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
-    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
-    /* bottom-left */
-    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
-    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
-    /* bottom-right */
-    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket))),
-    linear-gradient(var(--surface-tick, var(--hud-bracket)), var(--surface-tick, var(--hud-bracket)));
-  background-position:
-    0 0,
-    0 0,
-    100% 0,
-    100% 0,
-    0 100%,
-    0 100%,
-    100% 100%,
-    100% 100%;
-  background-size:
-    var(--surface-tick-len, 10px) 1px,
-    1px var(--surface-tick-len, 10px),
-    var(--surface-tick-len, 10px) 1px,
-    1px var(--surface-tick-len, 10px),
-    var(--surface-tick-len, 10px) 1px,
-    1px var(--surface-tick-len, 10px),
-    var(--surface-tick-len, 10px) 1px,
-    1px var(--surface-tick-len, 10px);
-  background-repeat: no-repeat;
+  /* The whole outline, drawn once by the box model. The mask below is what turns
+     it back into four corners. `box-sizing: border-box` is global (base.css), so
+     with `inset: 0` this sits exactly on the panel's boundary rather than a pixel
+     outside it. */
+  border: 1px solid var(--surface-tick, var(--hud-bracket));
+  /* Square, like `.surface` itself - a chamfer would replace the very corners the
+     brackets are drawn on. Stated rather than left to the initial value so the
+     global `corner-shape: bevel` has nothing to act on. */
+  border-radius: 0;
+  /* The square that reveals one corner, plus the 2px of overhang argued for
+     above. One length, reused by all four layers. */
+  --surface-tick-mask: calc(var(--surface-tick-len, 10px) + 2px);
+  -webkit-mask-image:
+    linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0);
+  mask-image:
+    linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0),
+    linear-gradient(#000 0 0);
+  /* Each square pushed 2px out of the box on the two sides that meet at its own
+     corner, so no mask edge ever coincides with the border's. */
+  -webkit-mask-position:
+    -2px -2px,
+    calc(100% + 2px) -2px,
+    -2px calc(100% + 2px),
+    calc(100% + 2px) calc(100% + 2px);
+  mask-position:
+    -2px -2px,
+    calc(100% + 2px) -2px,
+    -2px calc(100% + 2px),
+    calc(100% + 2px) calc(100% + 2px);
+  -webkit-mask-size: var(--surface-tick-mask) var(--surface-tick-mask);
+  mask-size: var(--surface-tick-mask) var(--surface-tick-mask);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   transition: opacity var(--dur-base) var(--ease-enter);
 }
 
@@ -279,15 +318,28 @@
     inset 16px 16px 26px -28px var(--glass-inner-glow),
     inset -16px -16px 26px -28px var(--glass-inner-shade);
 }
-/* The shorthand `background` below is what retires the corner ticks on a live
-   surface: it resets the four gradients `.surface::before` set, and `inset: 0`
-   puts the layer back on the boundary. A sampling plate gets the true gradient
-   ring instead - one edge treatment per surface, never both. */
+/*
+ * A sampling plate gets the true gradient ring instead of corner ticks - one
+ * edge treatment per surface, never both - so this layer has to retire the
+ * bracket frame before drawing its own.
+ *
+ * `border: 0` is the declaration that does it, and it is easy to lose. The
+ * brackets used to be eight background gradients, which the `background`
+ * shorthand below reset for free; they are a real border now (see the note on
+ * `.surface::before`), and a shorthand for one property does not touch another.
+ * Without this the ring would be drawn over a full 1px outline in
+ * `--hud-bracket` - not four ticks, the whole box - which is the one thing this
+ * rule exists to prevent.
+ *
+ * The `mask` shorthand below still resets the corner mask on its own, since it
+ * restates every longhand in the group.
+ */
 .live::before {
   content: '';
   position: absolute;
   inset: 0;
   z-index: 1;
+  border: 0;
   border-radius: inherit;
   /* Restated rather than inherited: `corner-shape` is not an inherited property
      and the universal rule in base.css does not reach pseudo-elements, so

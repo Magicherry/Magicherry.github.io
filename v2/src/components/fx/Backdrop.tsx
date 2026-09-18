@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { motion, useTransform } from 'motion/react'
+import { motion, useSpring, useTransform } from 'motion/react'
 import { useScrollNav } from '@/lib/scroll'
 import styles from './Backdrop.module.css'
 
@@ -33,16 +33,38 @@ export default function Backdrop() {
    * fast the page is moving means the single biggest surface on screen is
    * reporting something about the person in front of it.
    *
-   * Dead below 0.12 rather than rising from zero, and that threshold is what
-   * keeps it from being a gimmick. Reading - a line at a time, a nudge of the
-   * wheel - stays entirely dark, so the bloom is not a thing that happens
-   * constantly; it is reserved for someone actually travelling. It also means an
-   * idle page holds a literal `opacity: 0` and paints nothing at all.
-   *
-   * Clamped by the two-argument range form, which (unlike the function form -
-   * see Hero) clamps for free at both ends.
+   * Dead below the threshold rather than rising from zero, so reading - a line at
+   * a time, a nudge of the wheel - stays entirely dark and an idle page holds a
+   * literal `opacity: 0` and paints nothing. Clamped by the two-argument range
+   * form, which (unlike the function form - see Hero) clamps for free at both
+   * ends.
    */
-  const surge = useTransform(velocity, [0.12, 1], [0, 1])
+  const reach = useTransform(velocity, [0.22, 1], [0, 1])
+
+  /*
+   * And a spring between that reading and the light, which is not a refinement -
+   * without it the effect strobes.
+   *
+   * Scroll velocity is not a level, it is a series of impulses. A wheel delivers
+   * discrete notches and a trackpad delivers flicks, so within a single gesture
+   * the raw value spikes and decays over and over. Mapped straight onto opacity
+   * that crosses the threshold several times a second, and two bands at the top
+   * and bottom of the screen switching on and off at that rate is exactly what
+   * "the page flickers when I scroll fast" describes. The cause is not the
+   * threshold - raising it alone just moves where the strobing happens.
+   *
+   * A spring cannot follow an impulse. It integrates them, so a burst of notches
+   * reads as one continuous push and the light rises once, holds while the
+   * gesture lasts, and falls once at the end. The lag it introduces is the point:
+   * a bloom that arrives a beat after you start moving and lingers a beat after
+   * you stop reads as the field having inertia, which is what it should have.
+   *
+   * Low stiffness and heavy damping deliberately - this is a mass being pushed,
+   * not a control answering a click, and any overshoot here would be a second
+   * flash after the scroll had already ended. It still settles, so an idle page
+   * returns to zero frames.
+   */
+  const surge = useSpring(reach, { stiffness: 58, damping: 26, mass: 0.7 })
 
   return (
     <div className={styles['backdrop']} aria-hidden="true">

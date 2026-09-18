@@ -499,52 +499,6 @@
   font-family: var(--font-mono);
 }
 
-/*
- * The frame rate, opposite the readouts.
- *
- * Same vertical offset as the block on the right - under the corner bracket
- * rather than beside it - so the two corners of the frame start on one line and
- * the instrument reads as symmetrical even though the two sides carry different
- * numbers of rows.
- *
- * Left-aligned against its own edge, which is the mirror of the right block's
- * `justify-items: end` rather than a different decision: each column is ranged
- * against the edge of the screen it belongs to.
- */
-.fps {
-  position: absolute;
-  top: calc(var(--hud-inset) + var(--hud-frame-len) + var(--space-4));
-  left: var(--hud-inset);
-  font-family: var(--font-mono);
-}
-
-/*
- * The one readout whose label comes *first* in reading order and still lines up.
- *
- * The right-hand block ranges its values against the right edge, so label and
- * value sit label-then-value with the numbers forming a clean right margin. Over
- * here the column is ranged left, and the same order would leave the value
- * floating at whatever offset the label happened to end at. Reversing the row
- * puts the number against the screen edge and the label after it, so this column
- * is ranged on its figures exactly as the other one is.
- */
-.fps .readout {
-  flex-direction: row-reverse;
-}
-
-/*
- * Three characters, ranged left - the mirror of `.railPctValue`, and for the
- * same reason. The reading is two digits on a 60Hz panel and three on a 120Hz
- * one, and it crosses between them whenever frames are actually dropped, which
- * is precisely the moment a meter must not start moving around. Ranged left
- * rather than right because this column is ranged against the left edge of the
- * screen; the cell is fixed either way.
- */
-.fps .readoutValue {
-  min-width: 3ch;
-  text-align: left;
-}
-
 .readout {
   display: flex;
   align-items: baseline;
@@ -562,10 +516,13 @@
 }
 
 .readoutValue {
-  /* Fixed cell, so the three rows form a column. The clock is the widest at 8
-     characters and never varies (see useClock); the viewport reading is the one
-     that moves, and without this it would drag the whole block left and right as
-     a window is dragged - a readout advertising its own instability. */
+  /* Fixed cell, so the four rows form a column ranged on one right margin. The
+     clock is the widest at 8 characters and never varies (see useClock); the two
+     that do vary are the viewport reading, which changes as a window is dragged,
+     and the frame rate, which is two digits at 60Hz and three at 120 and crosses
+     between them exactly when frames are being dropped. Without a fixed cell
+     either one would drag the whole block sideways - a readout advertising its
+     own instability. */
   min-width: 9ch;
   text-align: right;
   color: var(--fg-muted);

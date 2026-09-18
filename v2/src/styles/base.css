@@ -233,53 +233,30 @@ body {
 }
 
 /*
- * The title igniting as the frame locks onto its section.
+ * The section title does not light up, and it did.
  *
- * This is the content's half of the acquisition - the corners snap, the rail
- * decodes, and the heading the reader has just arrived at lights up once and
- * settles. It is the only moment a *title* on this site is allowed to carry the
- * accent at full strength, and it lasts 900ms.
+ * A 900ms cyan bloom fired on the heading every time the frame acquired its
+ * section - the content's half of the lock, alongside the corner brackets and
+ * the rail's decode. It is the third piece of that event to be pulled, and the
+ * three failed for one reason, which is worth stating once here rather than
+ * discovering a fourth time.
  *
- * A `text-shadow` on the whole heading rather than on the `**accent**` run
- * alone, and that is a constraint turned into the better answer. RichText draws
- * that run with a CSS-Modules class, so its real name is hashed and no
- * stylesheet outside that file can name it. What a cyan bloom over the *whole*
- * line does instead is bleed the accent into the white words beside it, which is
- * phosphor, not a compromise: a display whose bright pixels bloom into their
- * neighbours is precisely what the rest of this design - the scanlines, the
- * grain, the survey grid - is already claiming the page is.
+ * An acquisition is not a rare occurrence. A section boundary is crossed every
+ * few seconds of ordinary reading, in both directions, and anything tied to it
+ * is therefore something the reader will see dozens of times in a visit. The
+ * corner brackets failed because they moved, at the edge of vision, where motion
+ * cannot be ignored. This failed for the sharper version of the same reason: it
+ * fired *directly where the reader was looking*, on the largest type on screen,
+ * at the exact moment they had arrived to read it. A signal that interrupts the
+ * thing it is announcing is not a signal.
  *
- * Both ends of the keyframe are a shadow rather than `none`, for the reason
- * tokens.css gives under `--glow-none`: shadow lists of unequal length are not
- * interpolable, and `none` against a real shadow snaps the flash on in one
- * frame instead of lighting it.
+ * What survives of the lock is what stays out of the way: the corners brighten
+ * and fall back without moving, the rail's readout decodes in the margin, and
+ * the block rules further down take a charge as the event reaches them. The
+ * heading is simply left alone to be read.
  *
- * Not held while the section is active - a heading that stays lit for as long as
- * you are reading under it is just a differently-coloured heading, and the
- * signal was never "you are here", it was "you just arrived".
- *
- * `text-shadow` is a paint property, and Reveal.tsx refuses to animate one
- * (`filter: blur()`) on exactly that ground - so the difference is worth
- * stating. The rule there is about *count*: a stack grid and a project grid mean
- * a dozen simultaneous filter animations arriving mid-scroll, which is when
- * there are the fewest frames to spare. This is one element, on a single line of
- * type, firing once when a section boundary is crossed - and never at the same
- * time as another copy of itself, because only one section can own the viewport.
- * The rule is "do not run a dozen of these at once", not "never repaint".
+ * `data-acquired` stays on the section - the rule charge below still reads it.
  */
-.section[data-acquired] .sectionTitle {
-  animation: titleAcquire 900ms var(--ease-enter);
-}
-
-@keyframes titleAcquire {
-  0%,
-  100% {
-    text-shadow: 0 0 0 transparent;
-  }
-  22% {
-    text-shadow: 0 0 20px color-mix(in srgb, var(--accent-bloom) 62%, transparent);
-  }
-}
 
 .lede {
   margin-top: var(--space-4);
@@ -343,6 +320,55 @@ body {
   background-image: linear-gradient(90deg, var(--hud-line-faint), var(--hud-line));
   -webkit-mask-image: var(--comb);
   mask-image: var(--comb);
+}
+
+/*
+ * The same figure reflected: a terminus at *each* end, and the run gaining
+ * toward both.
+ *
+ * The default rule is directional because of where it starts. <BlockHead> draws
+ * `LABEL ┄┄┄┄┄┄┤` - the line leaves a word and travels away from it, so ink that
+ * builds toward the far end is a reading direction and the single terminus is
+ * where the eye is being sent.
+ *
+ * A rule with nothing at either end is not that. The hero card uses one as a
+ * change of register between two blocks of content, spanning the full width of
+ * the plate with no label to leave and nowhere to be sent - and the directional
+ * gain there has no argument behind it. It just looks weighted to one side, like
+ * a divider that slipped.
+ *
+ * So the modifier mirrors the figure about its own centre rather than flattening
+ * it. An even rule would have been the easy answer and it is the one thing this
+ * vocabulary exists to avoid: `.hud-rule`'s whole proposition is that a line
+ * should be faint along its run and defined where it stops. This one simply
+ * stops twice. The footer says the same thing about the page's own terminator -
+ * two marks rather than one, because the line has two ends and neither is more
+ * the end than the other.
+ *
+ * Both layers have to be restated. The ticks live on the element's own
+ * background so the comb cannot cut them, and the run lives on `::before` so the
+ * comb can - the split is `.hud-rule`'s, and a modifier that touched only one of
+ * them would light one end and fade the other.
+ */
+.hud-rule[data-symmetric] {
+  background-image:
+    linear-gradient(var(--hud-line), var(--hud-line)),
+    linear-gradient(var(--hud-line), var(--hud-line));
+  background-position:
+    0 0,
+    100% 0;
+  background-size:
+    1px var(--hud-rule-len, 7px),
+    1px var(--hud-rule-len, 7px);
+}
+
+.hud-rule[data-symmetric]::before {
+  background-image: linear-gradient(
+    90deg,
+    var(--hud-line),
+    var(--hud-line-faint) 50%,
+    var(--hud-line)
+  );
 }
 
 /*

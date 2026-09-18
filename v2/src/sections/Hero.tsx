@@ -361,8 +361,14 @@ export default function Hero() {
                   `.stats` in Hero.module.css for why this boundary is drawn
                   differently from the one above the facts. A sibling in the
                   card's grid rather than a `::before` on the list: `.stats` is a
-                  <ul>, and the site has one definition of this mark. */}
-              <span className="hud-rule" aria-hidden="true" />
+                  <ul>, and the site has one definition of this mark.
+
+                  Symmetric, unlike every other rule on the site. This one has no
+                  label to leave - it spans the plate edge to edge between two
+                  blocks - so the default's gain toward one terminus is a reading
+                  direction pointing at nothing. See `.hud-rule[data-symmetric]`
+                  in base.css. */}
+              <span className="hud-rule" data-symmetric aria-hidden="true" />
 
               <ul className={styles['stats']}>
                 {stats.map((stat) => (

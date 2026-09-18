@@ -216,23 +216,6 @@ export default function Frame() {
 
       {wideFrame ? (
         <>
-          {/* --------------------------------------------------------- fps */}
-          {/*
-            * Top left, opposite the readouts, because it is a different kind of
-            * fact from the three over there.
-            *
-            * Those describe the *session* - the time, the window, the language -
-            * and they change slowly or not at all. This one describes the
-            * machine's behaviour right now and moves every second. Putting it in
-            * the block with them would have one restless number among three
-            * settled ones, which makes the whole block look unstable; on its own
-            * at the other corner it reads as a separate instrument, which is what
-            * it is.
-            */}
-          <div className={styles['fps']}>
-            <Readout label="FPS" value={String(fps).padStart(2, '0')} />
-          </div>
-
           {/* ------------------------------------------------------- rail */}
           <div className={styles['rail']}>
             <div className={styles['railTop']}>
@@ -289,9 +272,21 @@ export default function Frame() {
           </div>
 
           {/* --------------------------------------------------- readouts */}
+          {/*
+            * Ordered by how fast each one moves, fastest in the middle.
+            *
+            * The frame rate sits under the viewport reading rather than in a
+            * corner of its own, so all four facts about the machine are in one
+            * column ranged on one right margin. Putting the one restless number
+            * between two settled ones is what keeps the block from looking
+            * unstable: the clock ticks at the top, the rate flickers in the
+            * middle where the column is already dense, and the language sits
+            * still at the bottom.
+            */}
           <div className={styles['readouts']}>
             <Readout label="TIME" value={clock} />
             <Readout label="VIEW" value={viewport} />
+            <Readout label="FPS" value={String(fps).padStart(2, '0')} />
             <Readout label="LANG" value={locale === 'zh' ? 'ZH-CN' : 'EN'} />
           </div>
         </>

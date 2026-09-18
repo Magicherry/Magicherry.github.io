@@ -356,8 +356,15 @@
  * under it are three readouts, set in mono caps. Both used to be divided by the
  * same `1px solid var(--line)` that `.facts` still carries above *it* - two
  * identical rules inside a 380px card, neither of them saying which boundary
- * mattered. `.hud-rule` is asymmetric, so the line marking a change of register
- * no longer looks like the line that is only spacing.
+ * mattered. `.hud-rule` is ticked and terminated where that one is plain, so the
+ * line marking a change of register no longer looks like the line that is only
+ * spacing.
+ *
+ * It takes the symmetric variant. The asymmetry the default carries is an
+ * argument about *leaving a label*, and there is no label here - the rule runs
+ * the full width of the plate between two blocks of content, so a terminus on
+ * one side only reads as the divider having slipped sideways. See
+ * `.hud-rule[data-symmetric]` in base.css.
  *
  * The facts are not converted to mono to match. They are content - a registered
  * company name and a place - and "Shanghai NIO Automobile Co., Ltd." set in
@@ -648,6 +655,41 @@
 
   .title {
     gap: var(--space-2);
+  }
+}
+
+/*
+ * Below the width where the two calls to action stop fitting side by side, they
+ * stack - and stacked, they match.
+ *
+ * Wrapped flex items are sized individually, so "View selected work" and
+ * "Download CV" arrived as two different widths sitting one above the other,
+ * centred. Two buttons of different lengths on one row read as two buttons; the
+ * same pair stacked reads as one control that has been cut badly, because
+ * vertical alignment invites the eye to compare edges that a horizontal
+ * arrangement never puts next to each other.
+ *
+ * A single grid column sized to `fit-content` is what equalises them: the track
+ * takes the width of the *wider* button, both items stretch to fill it, and the
+ * `(100%)` argument keeps the longer label from pushing the pair wider than the
+ * column on a narrow handset. `justify-content` then centres the track itself,
+ * matching the centred copy above it.
+ *
+ * 480px rather than the 760px the phone layout starts at, because this has to
+ * fire where the buttons actually wrap and not before. The pair measures about
+ * 435px, so a 600px-wide window still sits them happily on one row and should
+ * keep them there; below about 470 it cannot. The value is measured against the
+ * English strings, which are much the longer of the two - so Chinese, which
+ * would still have fitted, stacks here as well. That is the one deliberate cost:
+ * it buys both readings the same structure and the same matched tap targets on a
+ * phone, rather than a locale-dependent layout that would still break at 320px
+ * where Chinese finally wraps too.
+ */
+@media (max-width: 480px) {
+  .actions {
+    display: grid;
+    grid-template-columns: fit-content(100%);
+    justify-content: center;
   }
 }
 
