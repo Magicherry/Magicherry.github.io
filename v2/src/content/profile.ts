@@ -56,6 +56,16 @@ export const profile = {
      is one URL in either language, and it is the page you are standing on
      rather than a way to reach the person who wrote it. */
   repo: 'https://github.com/Magicherry/Magicherry.github.io',
+  /*
+   * The person's GitHub, as distinct from `repo` above - that is this site's
+   * source, this is the account that wrote it.
+   *
+   * It lives here rather than only in `socials` because it now has two
+   * consumers: the contact list renders it as one channel among several, and the
+   * nav links to it directly. The social entry below reads this field instead of
+   * repeating the string, so there is one place to change it.
+   */
+  github: 'https://github.com/Magicherry',
 } as const
 
 /** Strings the typewriter cycles through under the hero name. */
@@ -154,6 +164,20 @@ const simpleMark = (slug: string) => `https://cdn.simpleicons.org/${slug}`
  * Everything here is already public in the downloadable CV, so putting it in the
  * page adds convenience rather than exposure - with the caveat that plain text
  * in HTML is far easier to harvest than the same string inside a PDF.
+ *
+ * ---------------------------------------------------------------------------
+ * When a label gets a Chinese reading, and when `same()` is the right answer.
+ *
+ * The test is whether the platform *has* a Chinese name, not whether one could
+ * be invented. 邮箱, 电话, 微信, 小红书, 领英 and 哔哩哔哩 are the names those
+ * things are actually called here - the last two are registered brand names the
+ * companies traded under, not transliterations someone reached for. GitHub and
+ * Discord have no such name: Chinese speakers say "GitHub", and writing 吉特哈布
+ * would be inventing a word to fill a column.
+ *
+ * So `same()` on a label is a statement, not a shortcut. It says this product is
+ * called one thing everywhere, and it should survive a reader going down the
+ * list wondering why two entries are in Latin.
  */
 export const socials: readonly SocialLink[] = [
   {
@@ -171,7 +195,8 @@ export const socials: readonly SocialLink[] = [
   {
     id: 'github',
     label: same('GitHub'),
-    href: same('https://github.com/Magicherry'),
+    /* The one URL, held on `profile` above - the nav links to it too. */
+    href: same(profile.github),
     hint: { en: '@Magicherry', zh: '@Magicherry' },
     mark: simpleMark('github'),
     // #181717 - invisible on a dark card, so the mark is inverted there and the
@@ -180,7 +205,13 @@ export const socials: readonly SocialLink[] = [
   },
   {
     id: 'linkedin',
-    label: same('LinkedIn'),
+    /*
+     * 领英 is LinkedIn's own registered Chinese name, not a rendering of it -
+     * the company traded under it here for a decade. See the note above
+     * `socials` for why this entry and Bilibili take a translation where GitHub
+     * and Discord do not.
+     */
+    label: { en: 'LinkedIn', zh: '领英' },
     href: same('https://www.linkedin.com/in/yuting-zhou-magicherry/'),
     hint: { en: 'yuting-zhou-magicherry', zh: 'yuting-zhou-magicherry' },
     mark: 'https://cdn.jsdelivr.net/gh/devicons/devicon@2.17.0/icons/linkedin/linkedin-original.svg',
@@ -209,9 +240,14 @@ export const socials: readonly SocialLink[] = [
   },
   {
     id: 'bilibili',
-    label: same('Bilibili'),
+    /* 哔哩哔哩 is the registered name the site sets its own masthead in; the
+       Latin spelling is the export. See the note above `socials`. */
+    label: { en: 'Bilibili', zh: '哔哩哔哩' },
     href: same('https://space.bilibili.com/155876727'),
-    hint: { en: 'space.bilibili.com', zh: 'Bilibili 主页' },
+    /* The zh hint drops the brand name now that the label carries it, and states
+       the destination the way the English one does. "Bilibili 主页" under a label
+       reading 哔哩哔哩 was saying the name twice and the domain never. */
+    hint: { en: 'space.bilibili.com', zh: 'space.bilibili.com' },
     mark: simpleMark('bilibili'),
     brand: '#00a1d6',
   },

@@ -254,16 +254,36 @@ export const certifications: readonly Certification[] = [
     icon: simple('nvidia'),
     href: 'https://www.nvidia.com/en-us/training/',
   },
+  /*
+   * The two vendor certifications are written the way their issuers write them,
+   * which is why the punctuation below does not match between them.
+   *
+   * Both used to be `ACRONYM (Track)` - a house convention invented here, and
+   * the one form neither company uses. Alibaba Cloud names this one "Alibaba
+   * Cloud Certified Associate (ACA) - Big Data ...", with the track set off by a
+   * spaced hyphen; Huawei names its tracks as a single hyphenated token,
+   * `HCIA-Intelligent Computing`, exactly as it does HCIA-AI and HCIA-Datacom.
+   * Making the two agree with each other would mean making at least one of them
+   * disagree with the body that issued it, and a credential is the last thing on
+   * this page that should be restyled for tidiness.
+   *
+   * The vendor is not repeated in the name because `issuer` beside it already
+   * carries it - so the full "Alibaba Cloud Certified Associate" and "Huawei
+   * Certified ICT Associate" expansions stay out of a card that is 300px wide.
+   */
   {
     id: 'aliyun-aca',
-    name: { en: 'ACA (Big Data)', zh: 'ACA（大数据）' },
+    name: { en: 'ACA - Big Data', zh: 'ACA 大数据' },
     issuer: { en: 'Alibaba Cloud', zh: '阿里云' },
     icon: simple('alibabacloud'),
     href: 'https://edu.alibabacloud.com/certification',
   },
   {
     id: 'huawei-hcia',
-    name: { en: 'HCIA (Intelligent Computing)', zh: 'HCIA（智能计算）' },
+    /* Hyphenated with no spaces, and that is Huawei's own form rather than a
+       typo - the track is part of the certification's name, not a parenthetical
+       after it. */
+    name: { en: 'HCIA-Intelligent Computing', zh: 'HCIA 智能计算' },
     issuer: { en: 'Huawei', zh: '华为' },
     icon: simple('huawei'),
     href: 'https://e.huawei.com/en/talent/cert/',

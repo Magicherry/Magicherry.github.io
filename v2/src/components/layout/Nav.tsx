@@ -1,7 +1,15 @@
 import { useState } from 'react'
 import { motion, useMotionValueEvent, useScroll } from 'motion/react'
 import type { IconType } from 'react-icons'
-import { LuBriefcase, LuFolderGit2, LuLanguages, LuLayers, LuMail, LuUser } from 'react-icons/lu'
+import {
+  LuBriefcase,
+  LuFolderGit2,
+  LuGithub,
+  LuLanguages,
+  LuLayers,
+  LuMail,
+  LuUser,
+} from 'react-icons/lu'
 import GlassSurface from '@/components/glass/GlassSurface'
 import { useLocale } from '@/lib/i18n'
 import { useScrollNav, type SectionId } from '@/lib/scroll'
@@ -26,23 +34,38 @@ const ITEMS: readonly NavItem[] = [
 ]
 
 /**
- * The site's settings, which is now one button: the language toggle.
+ * The trailing end of the bar: a link out to the author's GitHub, and the
+ * language toggle.
  *
- * Still a component and still a fragment rather than being inlined twice. There
- * is exactly one instance of it on the page at any width, and rendering a
- * desktop copy and a mobile copy and hiding one with CSS is the usual shortcut -
- * but both stay in the accessibility tree, and a screen-reader user then hears
- * two "switch language" buttons and has to guess which one is real.
+ * Still a component rather than being inlined twice. There is exactly one
+ * instance of it on the page at any width, and rendering a desktop copy and a
+ * mobile copy and hiding one with CSS is the usual shortcut - but both stay in
+ * the accessibility tree, and a screen-reader user then hears two "switch
+ * language" buttons and has to guess which one is real.
  *
- * It kept the fragment when the theme toggle beside it was removed. A single
- * child does not need one, but the parents lay these out as a row and would both
- * have to change the day a second control arrives.
+ * It renders its own row now, where it used to be a bare fragment. That was
+ * always the plan for "the day a second control arrives": the desktop bar
+ * wrapped it in `.controls` to give the grid a third item, but the phone's top
+ * bar did not - and that one is `justify-content: space-between`, so a second
+ * child would have stopped being a pair at the right-hand end and become three
+ * things spread across the whole width. Owning the wrapper fixes both layouts in
+ * one place instead of asking every future parent to remember.
+ *
+ * The language toggle first, GitHub last - the outbound link is the one that
+ * ends the bar.
+ *
+ * Worth knowing when editing this row: the toggle carries `.iconBtnTag` hanging
+ * 2px past its own upper-right corner, so it is the one control here that is
+ * wider than it measures. At the row's 4px gap that leaves two pixels between
+ * the chip and the button after it. It clears - the neighbour is a disc, and at
+ * the height the chip sits at that circle has already curved away - but there is
+ * no room left, so anything added between these two has to account for it.
  */
 function Controls() {
   const { t, locale, toggle: toggleLocale } = useLocale()
 
   return (
-    <>
+    <div className={styles['controls']}>
       <button
         type="button"
         className={styles['iconBtn']}
@@ -55,7 +78,23 @@ function Controls() {
           {locale === 'zh' ? 'EN' : '中'}
         </span>
       </button>
-    </>
+
+      {/* An anchor, not a button with an onClick: this leaves the site, so it
+          should be middle-clickable, openable in a new tab, and reachable by
+          whatever the reader's browser does with links. `aria-label` as well as
+          `title` because the glyph is the whole of it - a tooltip is not an
+          accessible name. */}
+      <a
+        className={styles['iconBtn']}
+        href={profile.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        title={t(ui.actions.github)}
+        aria-label={t(ui.actions.github)}
+      >
+        <LuGithub aria-hidden="true" />
+      </a>
+    </div>
   )
 }
 
@@ -323,11 +362,10 @@ export default function Nav() {
             })}
           </ul>
 
-          {dockedNav ? null : (
-            <div className={styles['controls']}>
-              <Controls />
-            </div>
-          )}
+          {/* No wrapper here any more - `<Controls>` renders `.controls` itself,
+              so it is still the bar grid's third item and the phone's top bar
+              gets the same row for free. See the note on that component. */}
+          {dockedNav ? null : <Controls />}
 
         </GlassSurface>
       </motion.header>

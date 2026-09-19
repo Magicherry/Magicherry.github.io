@@ -128,18 +128,32 @@ body {
 }
 
 /*
- * Square, and that is a change from the 4px it carried.
+ * The ring, and nothing else. It used to also carry `border-radius: 0`.
  *
- * A focus ring is an *overlay* rather than part of the object it surrounds - it
- * is the one thing on the page drawn by the browser rather than by the design -
- * and a rounded one sitting 3px outside a chamfered plate traces neither shape.
- * A hard rectangle reads as a bracket placed over the control, which is what it
- * is, and is the same figure the HUD ticks use elsewhere.
+ * That was there to make the focus ring a hard rectangle - the argument being
+ * that a focus ring is an *overlay* rather than part of the object it surrounds,
+ * the one thing on the page drawn by the browser rather than by the design, and
+ * that a rounded ring 3px outside a chamfered plate traces neither shape.
+ *
+ * It was the wrong instrument for that, and the bug is worth stating plainly:
+ * `border-radius` is not a property of the ring, it is the geometry of the
+ * *element*. Setting it here did not square the outline, it squared whatever was
+ * focused. Every round control on the site turned into a box for as long as it
+ * held focus - the nav's icon buttons, the phone wordmark, and worst of all the
+ * QR overlay's close disc, which carries `autoFocus` and so was square every
+ * single time the overlay opened. That rule outranked each control's own radius
+ * on source order, so nothing local could defend against it.
+ *
+ * The premise had also expired. `outline` follows the border box, and in a
+ * browser that understands `corner-shape` that includes the chamfer - so a ring
+ * around a cut plate is now cut at the same two corners and traces the shape
+ * exactly, which is what the original note wanted and could not get. Round
+ * controls get a round ring, cut plates get a cut one, and square ones were
+ * never in question.
  */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 0;
 }
 
 /* ================================================================== layout */

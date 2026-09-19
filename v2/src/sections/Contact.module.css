@@ -226,12 +226,19 @@
   max-width: min(90vw, 340px);
 }
 
+/*
+ * No `--surface-tick-len` here any more, and it was never doing anything.
+ *
+ * It set a shorter bracket arm so the overlay would read as the smaller plate,
+ * which is a sound instinct for a flat surface and inert on this one: the card
+ * is `backdrop="live"`, and a live surface has no corner brackets to shorten -
+ * `.live::before` replaces that whole layer with the gradient rim ring, one edge
+ * treatment per surface and never both. The declaration was describing a figure
+ * this card does not draw.
+ */
 .qrCard {
   position: relative;
   padding: var(--space-4);
-  /* Held a step under the panel behind it, not matched to it - the overlay is
-     the smaller plate and should read as one. */
-  --surface-tick-len: 8px;
 }
 
 /*

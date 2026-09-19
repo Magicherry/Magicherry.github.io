@@ -196,7 +196,24 @@ export default function Contact() {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               onClick={(event) => event.stopPropagation()}
             >
-              <GlassSurface variant="regular" radius="lg" backdrop="live" className={styles['qrCard']}>
+              {/*
+                * Square, where every other plate on the page is cut.
+                *
+                * `radius="lg"` chamfered the card's top-right and bottom-left,
+                * and on this one surface the cut had nothing to sit on. A plate
+                * is cut because it is a *plate* - the shape says "this is a
+                * panel of the interface". What this holds is a machine-readable
+                * square that has already had to opt out of the shape language
+                * itself (see `.qrCard img`, where the chamfer was taking two of
+                * the three finder patterns), so the card was a cut frame drawn
+                * tightly around a deliberately uncut thing - two corner
+                * treatments a padding-width apart, disagreeing.
+                *
+                * `square` rather than `--surface-radius`: the radius arrives as
+                * an inline custom property and a stylesheet cannot outrank it
+                * without `!important`. See GlassSurface.
+                */}
+              <GlassSurface variant="regular" radius="square" backdrop="live" className={styles['qrCard']}>
                 <button
                   type="button"
                   className={styles['qrClose']}

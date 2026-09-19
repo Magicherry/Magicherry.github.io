@@ -34,6 +34,10 @@ export const ui = {
     close: { en: 'Close', zh: '关闭' },
     backToTop: { en: 'Back to top', zh: '回到顶部' },
     copied: { en: 'Copied', zh: '已复制' },
+    /* Names the destination rather than the act - "GitHub" alone would be the
+       fourth unlabelled glyph in a bar where every other control says where it
+       goes. It is the button's accessible name as well as its tooltip. */
+    github: { en: 'GitHub profile', zh: 'GitHub 主页' },
   },
   /* Labelled by what pressing it *does*, not by the state it is in. */
   language: {
