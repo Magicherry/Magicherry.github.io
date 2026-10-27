@@ -1,4 +1,11 @@
 import type { Localized } from './types'
+/*
+ * The one cover that is not a 1024px square tile: it is VidFlow's own 256px
+ * app icon, a glyph on transparent, copied from the repo's `VidFlow/Assets`.
+ * The card shows it at 62px, so 256 is already four times what it needs, and
+ * the transparent ground lets the tile's own fill stand in for a backing plate.
+ */
+import vidflow from '@/assets/projects/VidFlow.png'
 import streamx from '@/assets/projects/StreamX.png'
 import railway from '@/assets/projects/Railway.png'
 import trainMulti from '@/assets/projects/train_multi.png'
@@ -9,7 +16,7 @@ import managements from '@/assets/projects/Managements.png'
 import cider from '@/assets/projects/CiderMusic.png'
 import fighters from '@/assets/projects/Fighters.png'
 
-export type ProjectDomain = 'ai' | 'web' | 'data' | 'design'
+export type ProjectDomain = 'ai' | 'web' | 'data' | 'desktop' | 'design'
 
 export interface Project {
   id: string
@@ -28,10 +35,25 @@ export const domainLabels: Record<ProjectDomain, Localized> = {
   ai: { en: 'AI / ML', zh: 'AI / 机器学习' },
   web: { en: 'Web', zh: 'Web 工程' },
   data: { en: 'Data', zh: '数据' },
+  desktop: { en: 'Desktop', zh: '桌面应用' },
   design: { en: 'Design', zh: '设计' },
 }
 
 export const projects: readonly Project[] = [
+  {
+    id: 'vidflow',
+    image: vidflow,
+    title: { en: 'VidFlow — Video Downloader', zh: 'VidFlow 视频下载器' },
+    summary: {
+      en: 'A native Windows 11 video downloader on WinUI 3, built around yt-dlp, for Bilibili, Douyin, RedNote, Weibo, YouTube and X. It keeps the original stream with no re-encode, queues and resumes downloads, and installs and updates its own components in-app.',
+      zh: '基于 WinUI 3 的原生 Windows 11 视频下载器，以 yt-dlp 为核心，支持哔哩哔哩、抖音、小红书、微博、YouTube 与 X。原画质下载、默认不二次转码，支持下载队列与断点续传，所需组件在应用内一键安装并自动更新。',
+    },
+    domains: ['desktop'],
+    tags: ['C#', 'WinUI 3', '.NET', 'yt-dlp', 'FFmpeg'],
+    kind: { en: 'Personal', zh: '个人项目' },
+    year: '2026',
+    repo: 'https://github.com/Magicherry/VidFlow',
+  },
   {
     id: 'streamx',
     image: streamx,
@@ -67,7 +89,7 @@ export const projects: readonly Project[] = [
       en: 'A Qt desktop application that turns raw train telemetry into readable space-time diagrams, so researchers can reason about a given day and corridor at a glance.',
       zh: '基于 Qt 的原生桌面应用，将原始列车运行数据转换为直观的时空图与可视化结果，帮助研究人员围绕特定日期与区段快速理解列车活动情况。',
     },
-    domains: ['data'],
+    domains: ['data', 'desktop'],
     tags: ['Python', 'PyQt', 'NumPy', 'Pandas', 'Matplotlib'],
     kind: { en: 'Company Internal', zh: '企业内部项目' },
     year: '2025',

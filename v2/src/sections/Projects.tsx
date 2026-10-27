@@ -19,10 +19,16 @@ export default function Projects() {
 
   // Only offer a chip for a domain that actually has projects behind it - an
   // empty filter is a dead end the visitor has to back out of.
+  //
+  // Chips follow the declaration order of `domainLabels`, not the order domains
+  // first turn up in the list. The list is newest-first, so ordering by first
+  // appearance let whatever the latest project happened to be pull its domain to
+  // the front of the row.
   const filters = useMemo(() => {
     const present = new Set<ProjectDomain>()
     projects.forEach((project) => project.domains.forEach((domain) => present.add(domain)))
-    return (['all', ...present] as Filter[]).map((id) => ({
+    const ordered = (Object.keys(domainLabels) as ProjectDomain[]).filter((id) => present.has(id))
+    return (['all', ...ordered] as Filter[]).map((id) => ({
       id,
       label: id === 'all' ? ui.actions.all : domainLabels[id],
       count: id === 'all' ? projects.length : projects.filter((p) => p.domains.includes(id)).length,

@@ -281,6 +281,6 @@ export const socials: readonly SocialLink[] = [
 /** Headline numbers for the hero's stat strip. */
 export const stats: readonly { value: string; label: Localized }[] = [
   { value: '2026', label: { en: 'MSc graduate', zh: '届硕士毕业生' } },
-  { value: '9', label: { en: 'Past projects', zh: '个历史项目' } },
+  { value: '10', label: { en: 'Past projects', zh: '个历史项目' } },
   { value: '2', label: { en: 'Languages spoken', zh: '门工作语言' } },
 ]
