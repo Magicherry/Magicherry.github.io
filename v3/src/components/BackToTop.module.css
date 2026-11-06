@@ -1,0 +1,143 @@
+/*
+ * v2's back-to-top, in v3's materials: the disc is the cards' glass (tint +
+ * blur) rather than v2's GlassSurface, the ring and the completed fill are
+ * the accent. Positions are v2's - 4rem in from the corner on wide screens,
+ * tighter on a phone. (v2 lifted it 74px on phones to clear its docked
+ * bottom nav; v3's nav stays at the top, so no lift.)
+ */
+.wrap {
+  position: fixed;
+  right: max(clamp(1rem, 2.4vw, 1.75rem), env(safe-area-inset-right));
+  bottom: max(clamp(1rem, 2.4vw, 1.75rem), env(safe-area-inset-bottom));
+  z-index: 40;
+  opacity: 0;
+  transform: translateY(10px) scale(0.85);
+  pointer-events: none;
+  transition:
+    opacity 0.32s var(--ease-out),
+    transform 0.32s var(--ease-out);
+}
+
+.wrap[data-visible] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+@media (min-width: 1045px) {
+  .wrap {
+    right: max(4rem, env(safe-area-inset-right));
+    bottom: max(4rem, env(safe-area-inset-bottom));
+  }
+}
+
+.button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  backdrop-filter: var(--card-blur);
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+  color: var(--text-primary);
+  /* A slight overshoot on the lift - v2's "gel" press and release. */
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.6s var(--ease-out),
+    color 0.6s var(--ease-out);
+}
+
+.button:hover {
+  color: var(--brand);
+  transform: translateY(-2px);
+}
+
+.button:active {
+  transform: scale(0.94);
+  transition-duration: 0.1s;
+}
+
+/* The bottom of the page: the gauge is spent, so it becomes the fill. */
+.button[data-complete] {
+  background: var(--brand);
+  color: var(--brand-contrast);
+}
+
+.button[data-complete]:hover {
+  color: var(--brand-contrast);
+}
+
+.button[data-complete] .ring {
+  opacity: 0;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: rotate(-90deg);
+  pointer-events: none;
+  transition: opacity 0.6s var(--ease-out);
+}
+
+.ring circle {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.track {
+  stroke: var(--border-strong);
+}
+
+.bar {
+  stroke: var(--brand);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.icon {
+  position: relative;
+  width: 17px;
+  height: 17px;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.button:hover .icon {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 760px) {
+  .wrap {
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrap {
+    transform: none;
+    transition-duration: 0.12s;
+  }
+
+  .button,
+  .icon {
+    transition-duration: 1ms;
+  }
+
+  .button:hover,
+  .button:hover .icon {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .button {
+    background: #12161d;
+    backdrop-filter: none;
+  }
+}

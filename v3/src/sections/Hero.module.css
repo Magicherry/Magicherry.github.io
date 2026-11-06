@@ -1,0 +1,152 @@
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+}
+
+/*
+ * A cold bloom behind the headline, over the page-wide v2 backdrop.
+ *
+ * Faded out at the bottom with a *mask*, not a gradient painted to the page
+ * colour: the backdrop shows through everywhere, and a solid fade would draw a
+ * black band across it where the hero ends.
+ *
+ * The bloom's blue is a literal, not `--brand`: it is background, and the
+ * background keeps its own colours whatever the interface accent is.
+ */
+.field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(#000 65%, transparent);
+}
+
+.field::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 50% 38% at 50% 22%, rgba(103, 153, 254, 0.16), transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 255, 255, 0.04), transparent 70%);
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  padding-top: calc(var(--space-11) - var(--space-4));
+  padding-bottom: var(--space-9);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  width: 100%;
+  max-width: 800px;
+  padding-top: var(--space-4);
+  text-align: center;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* A live dot - the one moving thing in the label. */
+.pulse {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand);
+}
+
+.pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--brand);
+  animation: pulse 2.4s ease-out infinite;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  max-width: 720px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+/* The trailing arrow moves up and to the right on hover - v2's figure for a
+   control that takes you somewhere. */
+.trailing {
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.viewWork:hover .trailing {
+  transform: translate(2px, -2px);
+}
+
+.preview {
+  width: 100%;
+  max-width: 1020px;
+}
+
+/* Tipped back about its centre as the page scrolls (useScrollTilt). */
+.tilt {
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+@media (max-width: 767px) {
+  .inner {
+    gap: var(--space-6);
+    padding-top: 104px;
+    padding-bottom: 48px;
+  }
+
+  .copy {
+    gap: var(--space-5);
+  }
+
+  /* Natural-width pills, centred - not stretched to share the row. Only the
+     link could stretch (the CV control is a split button that keeps its own
+     width), so stretching made 查看项目 a wide bar beside a compact pill. */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse::after {
+    animation: none;
+  }
+}

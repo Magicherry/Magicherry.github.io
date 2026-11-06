@@ -40,6 +40,10 @@ import lmstudioMark from '@/assets/marks/lmstudio.png'
 import djangoMark from '@/assets/marks/django.png'
 import flaskMark from '@/assets/marks/flask.svg'
 import ginMark from '@/assets/marks/gin.png'
+/* Bundled: no icon CDN carries it yet. Google's own favicon from
+   antigravity.google, with the white/black disc behind the mark removed so it
+   sits bare like the other glyphs. */
+import antigravityMark from '@/assets/marks/antigravity.svg'
 
 /**
  * Icons are served from jsDelivr rather than bundled. 35 marks would add real
@@ -160,17 +164,23 @@ export const techStack: readonly StackGroup[] = [
 export const toolStack: readonly StackGroup[] = [
   {
     id: 'editors',
-    label: { en: 'Editors', zh: '编辑器' },
+    label: { en: 'IDEs & Editors', zh: 'IDE 与编辑器' },
     items: [
       { name: 'VS Code', icon: devicon('vscode/vscode-original'), href: 'https://code.visualstudio.com/' },
       { name: 'Cursor', icon: simple('cursor'), href: 'https://cursor.com/', adaptive: true },
       { name: 'JetBrains', icon: devicon('jetbrains/jetbrains-original'), href: 'https://www.jetbrains.com/' },
       { name: 'Jupyter', icon: devicon('jupyter/jupyter-original'), href: 'https://jupyter.org/' },
+      {
+        name: 'Visual Studio',
+        icon: devicon('visualstudio/visualstudio-original'),
+        href: 'https://visualstudio.microsoft.com/',
+      },
+      { name: 'Xcode', icon: devicon('xcode/xcode-original'), href: 'https://developer.apple.com/xcode/' },
     ],
   },
   {
     id: 'ai',
-    label: { en: 'AI Coding', zh: 'AI 编程' },
+    label: { en: 'AI Coding Assistants', zh: 'AI 编程助手' },
     items: [
       /* These two used to pin a hex - /CC785C and /4D6BFE - which is exactly the
          eyeballing the note at the top of this file says the catalogue exists to
@@ -185,33 +195,40 @@ export const toolStack: readonly StackGroup[] = [
         icon: simple('deepseek'),
         href: 'https://github.com/deepseek-ai/DeepSeek-Harness',
       },
+      { name: 'Antigravity', icon: antigravityMark, href: 'https://antigravity.google/' },
+      { name: 'Trae', icon: simple('trae'), href: 'https://www.trae.ai/' },
     ],
   },
   {
     id: 'craft',
-    label: { en: 'Design & API', zh: '设计与接口' },
+    label: { en: 'Design & API Tools', zh: '设计与 API 工具' },
     items: [
       { name: 'Figma', icon: devicon('figma/figma-original'), href: 'https://www.figma.com/' },
       { name: 'Postman', icon: devicon('postman/postman-original'), href: 'https://www.postman.com/' },
+      { name: 'Apifox', icon: simple('apifox'), href: 'https://apifox.com/' },
+      { name: 'Swagger', icon: devicon('swagger/swagger-original'), href: 'https://swagger.io/' },
     ],
   },
   {
     id: 'os',
-    label: { en: 'Operating Systems', zh: '操作系统' },
+    label: { en: 'OS & Virtualization', zh: '操作系统与虚拟化' },
     items: [
       { name: 'Windows', icon: devicon('windows11/windows11-original'), href: 'https://www.microsoft.com/windows' },
       { name: 'macOS', icon: devicon('apple/apple-original'), href: 'https://www.apple.com/macos/', adaptive: true },
       { name: 'Ubuntu', icon: devicon('ubuntu/ubuntu-original'), href: 'https://ubuntu.com/desktop/' },
       { name: 'Fedora', icon: devicon('fedora/fedora-original'), href: 'https://fedoraproject.org/' },
       { name: 'fnOS', icon: fnosMark, href: 'https://www.fnnas.com/' },
+      { name: 'Proxmox VE', icon: simple('proxmox'), href: 'https://www.proxmox.com/en/proxmox-virtual-environment/overview' },
     ],
   },
   {
     id: 'network',
-    label: { en: 'Networking', zh: '网络' },
+    label: { en: 'Networking & Cloud', zh: '网络与云服务' },
     items: [
       { name: 'Tailscale', icon: simple('tailscale'), href: 'https://tailscale.com/', adaptive: true },
       { name: 'ZeroTier', icon: simple('zerotier'), href: 'https://www.zerotier.com/' },
+      { name: 'WireGuard', icon: simple('wireguard'), href: 'https://www.wireguard.com/' },
+      { name: 'Cloudflare', icon: devicon('cloudflare/cloudflare-original'), href: 'https://www.cloudflare.com/' },
     ],
   },
 ]

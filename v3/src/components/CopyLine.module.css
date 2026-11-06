@@ -1,0 +1,53 @@
+.line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  padding: 14px var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-input);
+  background: var(--surface-1);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.code {
+  min-width: 0;
+  font: inherit;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.prompt {
+  color: var(--brand);
+  user-select: none;
+}
+
+.copy {
+  flex: none;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-description);
+  transition:
+    color var(--dur-fast),
+    scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.copy:hover {
+  color: var(--text-primary);
+}
+
+.copy[data-copied] {
+  color: var(--success);
+}
+
+/* A smaller mono size on a phone, so the clone URL breaks across two lines
+   instead of three. */
+@media (max-width: 767px) {
+  .line {
+    padding: 12px 14px;
+    font-size: 12.5px;
+  }
+}

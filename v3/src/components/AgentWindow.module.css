@@ -1,0 +1,1111 @@
+/*
+ * Every length inside the window is a multiple of `--u`, so the illustration
+ * scales as a whole object instead of reflowing like a page. The container
+ * query below swaps `--u` and drops the sidebar on narrow widths.
+ */
+.viewport {
+  width: 100%;
+  container-type: inline-size;
+}
+
+.window {
+  --u: 0.9px;
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: calc(var(--u) * 680);
+  overflow: hidden;
+  border-radius: var(--radius-panel);
+  /* A 1px light ring instead of a border, so the window's edge sits on the
+     page rather than inside its own box, plus one long soft shadow. */
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 24px 72px rgba(0, 0, 0, 0.45);
+  color: #f9fafb;
+  font-family: var(--font-ui);
+  font-size: calc(var(--u) * 14);
+  line-height: 1.4;
+  text-align: left;
+  user-select: none;
+}
+
+.icon {
+  width: calc(var(--u) * 16);
+  height: calc(var(--u) * 16);
+  flex: none;
+}
+
+.iconSm {
+  width: calc(var(--u) * 13);
+  height: calc(var(--u) * 13);
+  flex: none;
+}
+
+/* ----------------------------------------------------------- traffic lights */
+.lights {
+  display: flex;
+  gap: calc(var(--u) * 8);
+}
+
+.lights i {
+  width: calc(var(--u) * 12);
+  height: calc(var(--u) * 12);
+  border-radius: 50%;
+  background: #ff5f57;
+}
+
+.lights i:nth-child(2) {
+  background: #febc2e;
+}
+
+.lights i:nth-child(3) {
+  background: #28c840;
+}
+
+/* ------------------------------------------------------------------ sidebar */
+/*
+ * A frosted sidebar: cool at the top, a hint of violet at the foot, over a
+ * slate ground - the colour of a macOS vibrancy sidebar sitting over a dark
+ * desktop.
+ */
+.sidebar {
+  --u: 0.8px;
+  display: flex;
+  flex-direction: column;
+  width: calc(var(--u) * 260);
+  flex: none;
+  min-height: 0;
+  font-size: calc(var(--u) * 14);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(122, 155, 240, 0.08),
+      rgba(122, 155, 240, 0) 35%,
+      rgba(143, 137, 184, 0) 68%,
+      rgba(143, 137, 184, 0.07)
+    ),
+    var(--app-sidebar);
+  box-shadow: inset -0.5px 0 rgba(255, 255, 255, 0.1);
+}
+
+.windowBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(var(--u) * 52);
+  padding: 0 calc(var(--u) * 14);
+  flex: none;
+  color: #cfd3d6;
+}
+
+.sidebarBrand {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 8);
+  padding: calc(var(--u) * 2) calc(var(--u) * 16) calc(var(--u) * 14);
+  font-weight: 600;
+  font-size: calc(var(--u) * 15);
+}
+
+.sidebarBrand img,
+.account img {
+  width: calc(var(--u) * 22);
+  height: calc(var(--u) * 22);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.sidebarBody {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 calc(var(--u) * 8);
+  color: #d7dade;
+}
+
+.newSession,
+.navRow,
+.folderRow {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 10);
+  height: calc(var(--u) * 34);
+  padding: 0 calc(var(--u) * 10);
+  border-radius: calc(var(--u) * 8);
+}
+
+.newSession {
+  color: #fff;
+}
+
+.workspaceHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: calc(var(--u) * 18);
+  padding: 0 calc(var(--u) * 10) calc(var(--u) * 6);
+  font-size: calc(var(--u) * 12);
+  color: #9aa0a8;
+}
+
+.workspaceTools {
+  display: flex;
+  gap: calc(var(--u) * 10);
+}
+
+.activeFolder {
+  color: #fff;
+}
+
+.sessions {
+  padding-left: calc(var(--u) * 16);
+}
+
+.sessionRow {
+  display: flex;
+  align-items: center;
+  height: calc(var(--u) * 32);
+  padding: 0 calc(var(--u) * 10);
+  border-radius: calc(var(--u) * 8);
+  color: #b9bec5;
+  white-space: nowrap;
+}
+
+.sessionRow span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sessionRow[data-selected] {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 10);
+  padding: calc(var(--u) * 14) calc(var(--u) * 18);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+  color: #e3e5e8;
+}
+
+/* --------------------------------------------------------------------- main */
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--app-bg);
+}
+
+.mainBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--u) * 6);
+  height: calc(var(--u) * 52);
+  flex: none;
+  color: #e6e7e9;
+  font-weight: 500;
+}
+
+/* The second set of lights only exists when the sidebar is gone and the main
+   pane is the whole window. */
+.mainLights {
+  position: absolute;
+  left: calc(var(--u) * 16);
+  display: none;
+}
+
+.conversation {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  /* Fades the transcript into the composer, as a scrolled-to-bottom pane would. */
+  mask-image: linear-gradient(180deg, #000 82%, transparent);
+}
+
+.transcript {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 14);
+  max-width: calc(var(--u) * 660);
+  margin: 0 auto;
+  padding: calc(var(--u) * 20) calc(var(--u) * 28) calc(var(--u) * 40);
+}
+
+.userMessage {
+  align-self: flex-end;
+  max-width: 80%;
+  padding: calc(var(--u) * 10) calc(var(--u) * 14);
+  border-radius: calc(var(--u) * 16);
+  background: #2a2b2e;
+  color: #f3f4f6;
+}
+
+.thought {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 4);
+  color: #8b9097;
+  font-size: calc(var(--u) * 13);
+}
+
+.assistant {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 10);
+  color: #e8eaed;
+  line-height: 1.65;
+}
+
+.assistant ol {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 6);
+  padding-left: calc(var(--u) * 20);
+  list-style: decimal;
+}
+
+.assistant li::marker {
+  color: #8b9097;
+}
+
+.assistant strong {
+  font-weight: 600;
+  color: #fff;
+}
+
+.more {
+  color: #c4c7cc;
+}
+
+/* ----------------------------------------------------------------- composer */
+.composerDock {
+  flex: none;
+  padding: 0 calc(var(--u) * 24) calc(var(--u) * 22);
+}
+
+.composer {
+  max-width: calc(var(--u) * 660);
+  margin: 0 auto;
+  padding: calc(var(--u) * 14) calc(var(--u) * 14) calc(var(--u) * 10);
+  border: 0.5px solid rgba(255, 255, 255, 0.14);
+  border-radius: calc(var(--u) * 20);
+  background: #1e1f22;
+  box-shadow: 0 calc(var(--u) * 8) calc(var(--u) * 24) rgba(0, 0, 0, 0.25);
+}
+
+.placeholder {
+  padding: 0 calc(var(--u) * 4) calc(var(--u) * 14);
+  color: #6f747c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--u) * 8);
+}
+
+.toolbarSide {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 8);
+  min-width: 0;
+}
+
+.add,
+.send {
+  display: grid;
+  place-items: center;
+  width: calc(var(--u) * 30);
+  height: calc(var(--u) * 30);
+  border-radius: 50%;
+  flex: none;
+}
+
+.add {
+  border: 0.5px solid rgba(255, 255, 255, 0.16);
+  color: #c8ccd1;
+}
+
+.send {
+  background: #fff;
+  color: #111;
+}
+
+.chip,
+.model {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 5);
+  height: calc(var(--u) * 28);
+  padding: 0 calc(var(--u) * 10);
+  border-radius: calc(var(--u) * 14);
+  color: #b4b9bf;
+  font-size: calc(var(--u) * 12.5);
+  white-space: nowrap;
+}
+
+.chip {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.effort {
+  color: #7b8088;
+}
+
+/* ------------------------------------------------------------ narrow window */
+@container (max-width: 720px) {
+  .window {
+    --u: 0.86px;
+    height: calc(var(--u) * 560);
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .mainLights {
+    display: block;
+  }
+
+  .transcript {
+    padding-inline: calc(var(--u) * 18);
+  }
+
+  .composerDock {
+    padding-inline: calc(var(--u) * 14);
+  }
+}
+
+@container (max-width: 440px) {
+  .window {
+    --u: 0.8px;
+    height: calc(var(--u) * 540);
+  }
+
+  .model {
+    display: none;
+  }
+
+  .conversationTitle {
+    max-width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* ================================================================ intro */
+/* Each message and reply block rises in as it is added. */
+.enter {
+  animation: msg-in 0.4s var(--ease-out) both;
+}
+
+@keyframes msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 8));
+  }
+}
+
+/* The question as it is typed - the placeholder's box, in full-strength type. */
+.typed {
+  padding: 0 calc(var(--u) * 4) calc(var(--u) * 14);
+  color: #f3f4f6;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.caret {
+  display: inline-block;
+  width: 1.5px;
+  height: 1.05em;
+  margin-left: 1px;
+  vertical-align: -0.15em;
+  background: var(--brand);
+  animation: caret 1s steps(1) infinite;
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* The send button lights as the question finishes, just before it is sent. */
+.send {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.send[data-ready] {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 calc(var(--u) * 4) rgba(255, 255, 255, 0.15);
+}
+
+/* "Thinking" with a light sweeping across the text. */
+.thinking span {
+  background: linear-gradient(90deg, #6f747c 0%, #e8eaed 50%, #6f747c 100%) 0 0 / 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .caret,
+  .thinking span {
+    animation: none;
+  }
+}
+
+/* ========================================================== interaction */
+/*
+ * The window is a working client now. These rules turn the sidebar entries
+ * into buttons, make the transcript a scrolling log, the composer a real
+ * input, and style the reply bodies (agent/Replies.tsx).
+ */
+
+/* Text in the log can be selected and copied; the chrome cannot.
+   Positioned, so each turn's offsetTop is measured from the log itself -
+   that is what scrolls a new question to the top. */
+.conversation {
+  position: relative;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  user-select: text;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+  /* Soft edges top and bottom, where the log scrolls under the bars. */
+  mask-image: linear-gradient(
+    180deg,
+    transparent,
+    #000 calc(var(--u) * 16),
+    #000 calc(100% - var(--u) * 16),
+    transparent
+  );
+}
+
+.turn {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 14);
+}
+
+/* Turns sit further apart than the parts of a turn, so each question and its
+   answer read as one exchange - the same rhythm a chat client uses. */
+.turn + .turn {
+  margin-top: calc(var(--u) * 26);
+}
+
+/* ------------------------------------------------------------ sidebar */
+.newSession,
+.navRow,
+.folderRow,
+.sessionRow {
+  width: 100%;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* The open folder label is a heading, not a control. */
+.activeFolder {
+  cursor: default;
+}
+
+.newSession:hover,
+.navRow:hover,
+.folderRow:not(.activeFolder):hover,
+.sessionRow:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.navRow[data-selected],
+.folderRow[data-selected],
+.newSession[aria-current] {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.newSession:focus-visible,
+.navRow:focus-visible,
+.folderRow:focus-visible,
+.sessionRow:focus-visible,
+.chipBtn:focus-visible,
+.pageLink:focus-visible,
+.send:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: -2px;
+}
+
+/* ----------------------------------------------------------- composer */
+.composer {
+  transition: border-color 0.2s ease;
+}
+
+.composer:focus-within {
+  border-color: rgba(var(--brand-rgb), 0.45);
+}
+
+.input {
+  display: block;
+  width: 100%;
+  margin: 0 0 calc(var(--u) * 12);
+  padding: calc(var(--u) * 2) calc(var(--u) * 4);
+  border: 0;
+  background: transparent;
+  color: #f3f4f6;
+  font: inherit;
+  outline: none;
+}
+
+/* The composer's border lights on focus; the page's outline ring would draw
+   a second, hard box inside it. */
+.input:focus-visible {
+  outline: none;
+}
+
+.input::placeholder {
+  color: #6f747c;
+}
+
+.send {
+  border: 0;
+  cursor: pointer;
+  transition: scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.send:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.send:not(:disabled):hover {
+  transform: scale(1.06);
+}
+
+/* --------------------------------------------------------- reply parts */
+.lead {
+  color: #e8eaed;
+}
+
+.muted {
+  color: #8b9097;
+}
+
+.pulseText {
+  animation: pulse-text 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse-text {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.subhead {
+  margin-top: calc(var(--u) * 4);
+  font-size: calc(var(--u) * 12);
+  letter-spacing: 0.04em;
+  color: #8b9097;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--u) * 6);
+  margin-top: calc(var(--u) * 4);
+}
+
+.chipBtn {
+  height: calc(var(--u) * 28);
+  padding: 0 calc(var(--u) * 12);
+  border: 0.5px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  color: #d4d7db;
+  font-size: calc(var(--u) * 12.5);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease,
+    scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.chipBtn:hover {
+  border-color: rgba(var(--brand-rgb), 0.55);
+  background: rgba(var(--brand-rgb), 0.08);
+  color: #fff;
+}
+
+.pageLink {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 5);
+  align-self: flex-start;
+  color: var(--brand);
+  font-size: calc(var(--u) * 13);
+  cursor: pointer;
+}
+
+.pageLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pageLink svg {
+  width: calc(var(--u) * 13);
+  height: calc(var(--u) * 13);
+}
+
+/* ------------------------------------------------------------ projects */
+.projList,
+.repoList {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 6);
+}
+
+.projRow,
+.repoRow {
+  display: grid;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: calc(var(--u) * 12);
+  background: #1b1c1f;
+  color: inherit;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.projRow {
+  grid-template-columns: calc(var(--u) * 36) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: calc(var(--u) * 10);
+  padding: calc(var(--u) * 8) calc(var(--u) * 12) calc(var(--u) * 8) calc(var(--u) * 8);
+}
+
+a.projRow:hover,
+.repoRow:hover {
+  border-color: rgba(var(--brand-rgb), 0.4);
+  background: #202125;
+}
+
+.projRow img {
+  width: calc(var(--u) * 36);
+  height: calc(var(--u) * 36);
+  border-radius: calc(var(--u) * 9);
+  object-fit: cover;
+}
+
+.projText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.projTitle {
+  font-size: calc(var(--u) * 13.5);
+  font-weight: 600;
+  color: #f3f4f6;
+}
+
+.projYear {
+  margin-left: calc(var(--u) * 6);
+  font-family: var(--font-mono);
+  font-size: calc(var(--u) * 11.5);
+  font-weight: 400;
+  color: #7b8088;
+}
+
+.projSummary {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: calc(var(--u) * 12.5);
+  color: #9aa0a8;
+}
+
+.projAction {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 4);
+  font-size: calc(var(--u) * 12);
+  color: #8b9097;
+  white-space: nowrap;
+}
+
+.projAction svg {
+  width: calc(var(--u) * 13);
+  height: calc(var(--u) * 13);
+}
+
+a.projRow:hover .projAction {
+  color: var(--brand);
+}
+
+/* ---------------------------------------------------------- experience */
+.roleList {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 10);
+}
+
+.roleList li {
+  display: grid;
+  grid-template-columns: calc(var(--u) * 14) minmax(0, 1fr);
+  align-items: start;
+}
+
+.roleDot {
+  width: calc(var(--u) * 8);
+  height: calc(var(--u) * 8);
+  margin-top: calc(var(--u) * 7);
+  border-radius: 50%;
+  background: #4b5058;
+}
+
+.roleDot[data-current] {
+  background: var(--brand);
+  box-shadow: 0 0 calc(var(--u) * 8) rgba(var(--brand-rgb), 0.7);
+}
+
+.roleText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.45;
+}
+
+.roleTitle {
+  font-size: calc(var(--u) * 13.5);
+  font-weight: 600;
+  color: #f3f4f6;
+}
+
+.roleLive {
+  margin-left: calc(var(--u) * 8);
+  padding: 0 calc(var(--u) * 7);
+  border-radius: 999px;
+  background: rgba(74, 222, 128, 0.14);
+  color: var(--success);
+  font-size: calc(var(--u) * 11);
+  font-weight: 500;
+  vertical-align: 1px;
+}
+
+.roleMeta {
+  font-size: calc(var(--u) * 12.5);
+  color: #9aa0a8;
+}
+
+.eduList {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 6);
+}
+
+.eduList li {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 8);
+  font-size: calc(var(--u) * 13);
+}
+
+.eduList img {
+  width: calc(var(--u) * 22);
+  height: calc(var(--u) * 22);
+  object-fit: contain;
+}
+
+.eduList .roleMeta {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.bullets {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 6);
+  padding-left: calc(var(--u) * 20);
+  list-style: decimal;
+}
+
+.bullets li::marker {
+  color: #8b9097;
+}
+
+/* --------------------------------------------------------------- stack */
+.stackList > div {
+  display: grid;
+  grid-template-columns: calc(var(--u) * 96) minmax(0, 1fr);
+  gap: calc(var(--u) * 8);
+  padding: calc(var(--u) * 7) 0;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.07);
+}
+
+.stackList > div:first-child {
+  border-top: 0;
+}
+
+.stackList dt {
+  font-size: calc(var(--u) * 12.5);
+  color: #9aa0a8;
+}
+
+.stackList dd {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--u) * 4);
+}
+
+.stackItem {
+  padding: 0 calc(var(--u) * 8);
+  border-radius: calc(var(--u) * 6);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: calc(var(--u) * 12);
+  line-height: 1.7;
+}
+
+/* ------------------------------------------------------------- contact */
+.contact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: calc(var(--u) * 12);
+}
+
+.contactList {
+  display: flex;
+  flex-direction: column;
+}
+
+.contactRow {
+  display: grid;
+  grid-template-columns: calc(var(--u) * 76) minmax(0, 1fr);
+  gap: calc(var(--u) * 8);
+  padding: calc(var(--u) * 6) calc(var(--u) * 8);
+  border-radius: calc(var(--u) * 8);
+  color: inherit;
+  transition: background-color 0.15s ease;
+}
+
+.contactRow:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.contactLabel {
+  font-size: calc(var(--u) * 13);
+  font-weight: 600;
+  color: #f3f4f6;
+}
+
+.contactHint {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: calc(var(--u) * 12.5);
+  color: #9aa0a8;
+}
+
+.contactRow:hover .contactHint {
+  color: var(--brand);
+}
+
+.qr {
+  margin: 0;
+  padding: calc(var(--u) * 6);
+  border-radius: calc(var(--u) * 10);
+  background: #fff;
+  text-align: center;
+}
+
+.qr img {
+  width: calc(var(--u) * 112);
+  height: calc(var(--u) * 112);
+}
+
+.qr figcaption {
+  margin-top: calc(var(--u) * 2);
+  font-size: calc(var(--u) * 11);
+  color: #555;
+}
+
+/* -------------------------------------------------------------- github */
+.ghCard {
+  padding: calc(var(--u) * 12);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: calc(var(--u) * 12);
+  background: #1b1c1f;
+}
+
+.ghHead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: calc(var(--u) * 4) calc(var(--u) * 12);
+  font-size: calc(var(--u) * 12.5);
+  color: #e8eaed;
+}
+
+.calScroll {
+  margin: calc(var(--u) * 10) 0 calc(var(--u) * 6);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.calScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.calendar {
+  display: grid;
+  grid-template-rows: repeat(7, auto);
+  grid-auto-flow: column;
+  gap: 2px;
+}
+
+.calendar i,
+.ghLegend i {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.calendar i[data-pad] {
+  background: transparent;
+}
+
+.calendar i[data-level="1"],
+.ghLegend i[data-level="1"] {
+  background: rgba(var(--brand-rgb), 0.28);
+}
+
+.calendar i[data-level="2"],
+.ghLegend i[data-level="2"] {
+  background: rgba(var(--brand-rgb), 0.5);
+}
+
+.calendar i[data-level="3"],
+.ghLegend i[data-level="3"] {
+  background: rgba(var(--brand-rgb), 0.75);
+}
+
+.calendar i[data-level="4"],
+.ghLegend i[data-level="4"] {
+  background: var(--brand);
+}
+
+.ghLegend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  font-size: calc(var(--u) * 11);
+  color: #8b9097;
+}
+
+.ghLegend i {
+  width: calc(var(--u) * 9);
+}
+
+.ghLegend span:first-child {
+  margin-right: 3px;
+}
+
+.ghLegend span:last-child {
+  margin-left: 3px;
+}
+
+.repoRow {
+  gap: calc(var(--u) * 2);
+  padding: calc(var(--u) * 8) calc(var(--u) * 12);
+}
+
+.repoName {
+  font-family: var(--font-mono);
+  font-size: calc(var(--u) * 13);
+  color: var(--brand);
+}
+
+.repoDesc {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font-size: calc(var(--u) * 12.5);
+  color: #9aa0a8;
+}
+
+.repoMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--u) * 10);
+  font-size: calc(var(--u) * 11.5);
+  color: #7b8088;
+}
+
+.repoMeta span {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 3);
+}
+
+.repoMeta svg {
+  width: calc(var(--u) * 11);
+  height: calc(var(--u) * 11);
+}
+
+@container (max-width: 440px) {
+  .contact {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stackList > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: calc(var(--u) * 4);
+  }
+
+  .projAction {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulseText {
+    animation: none;
+  }
+}
+
+/* A nested stream inside a reply (the GitHub data) must not add a box of its
+   own - its children take part in the reply's column and gap directly. */
+.streamPart {
+  display: contents;
+}

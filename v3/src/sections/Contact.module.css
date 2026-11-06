@@ -1,0 +1,236 @@
+/* ---------------------------------------------------------------- connect */
+.connect {
+  padding-block: var(--space-10) var(--space-6);
+}
+
+.title {
+  max-width: 600px;
+  margin-bottom: var(--space-8);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  align-items: stretch;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  height: 100%;
+  padding: var(--space-7);
+}
+
+.card > :last-child {
+  margin-top: auto;
+}
+
+/* -------------------------------------------------------------------- cta */
+/* Clips sideways only. The blooms are wider than a phone, so they must not
+   cause horizontal scroll - but clipping vertically drew a hard line across
+   the light wherever the wrapper's top or bottom edge fell. */
+.ctaWrap {
+  position: relative;
+  overflow-x: clip;
+}
+
+/*
+ * The closing bloom: three soft pools of the accent rising from behind the
+ * buttons. The cross-grid that used to sit here is now page-wide (see
+ * Backdrop) - a second copy scrolling with the section over a fixed one
+ * would have shimmered where the two drifted in and out of register.
+ */
+.glows {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glowA,
+.glowB,
+.glowC {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+}
+
+/* Gathered under the actions, so the light rises from behind the buttons
+   rather than sitting over the heading.
+
+   Literal colours, not `--brand`: these are background, and the background
+   keeps its blue whatever the interface accent is set to. */
+.glowA {
+  bottom: 220px;
+  left: 14%;
+  width: 380px;
+  height: 300px;
+  background: rgba(103, 153, 254, 0.14);
+}
+
+.glowB {
+  bottom: 200px;
+  left: 50%;
+  width: 620px;
+  height: 260px;
+  translate: -50% 0;
+  background: rgba(77, 107, 254, 0.2);
+}
+
+.glowC {
+  bottom: 230px;
+  right: 14%;
+  width: 340px;
+  height: 280px;
+  background: rgba(143, 137, 230, 0.12);
+}
+
+.cta {
+  position: relative;
+  z-index: 1;
+  padding-block: var(--space-11) var(--space-12);
+}
+
+.ctaInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.ctaBody {
+  max-width: 652px;
+  margin-top: var(--space-5);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+  max-width: 860px;
+}
+
+@media (max-width: 1023px) {
+  .cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .connect {
+    padding-block: 64px var(--space-2);
+  }
+
+  .title {
+    margin-bottom: var(--space-5);
+  }
+
+  .cards {
+    gap: var(--space-3);
+  }
+
+  .card {
+    padding: var(--space-5);
+  }
+
+  .cta {
+    padding-block: 72px 64px;
+  }
+
+  /*
+   * Pills of one capped width, wrapped and centred, rather than a grid whose
+   * cells stretch with the screen: a pill is a button, and at 700px a
+   * half-width cell made each one a 345px bar. Half the row each, never
+   * wider than 160px, so a phone gets two per row and a small tablet four.
+   * The phone button shows its label here instead of the number (see
+   * Contact.tsx) so it fits the capped width - tapping it still dials.
+   */
+  .actions {
+    gap: 10px;
+    width: 100%;
+  }
+
+  .actions > * {
+    flex: 0 0 calc(50% - 5px);
+    max-width: 160px;
+    min-width: 0;
+  }
+
+  .phoneFull {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .phoneShort {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------ wechat qr */
+.qrRoot {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Above the button, centred on it - the CV menu's white card. */
+.qrCard {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  /* Its own width, not the button's: positioned at `left: 50%` of a ~90px
+     button, a shrink-to-fit box gets only half of that to lay out in and
+     collapses into a strip. */
+  width: max-content;
+  padding: 12px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow:
+    0 0 1px 0 rgba(0, 0, 0, 0.2),
+    0 12px 32px 0 rgba(0, 0, 0, 0.24);
+  translate: -50% 0;
+  transform-origin: bottom center;
+  animation: qr-enter 0.35s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.qrCard img {
+  display: block;
+  width: 168px;
+  height: 168px;
+  border-radius: 8px;
+}
+
+.qrCaption {
+  font-size: 13px;
+  color: #6b7079;
+}
+
+@keyframes qr-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@media (max-width: 767px) {
+  .qrRoot > :first-child {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qrCard {
+    animation: none;
+  }
+}

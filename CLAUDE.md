@@ -9,6 +9,8 @@ Two generations of one personal site live side by side:
 - `v2/` — **the live site.** React 19 · TypeScript · Vite 8 · Motion · Lenis. No UI or CSS framework. Everything is hand-written.
 - `v1/` — archived predecessor (CRA · React Router · Bootstrap). Never built, never deployed. Do not touch it unless the request is explicitly about v1.
 
+- `v3/` — **in development, not deployed.** A redesign in a quiet dark product-page idiom (near-black page, white type at a few opacities, one accent (v2's cyan), pill buttons, 16px hairline panels, mock app-window illustrations). Same toolchain as v2 (React 19 · TS strict · Vite), no animation library. Its `src/content/` and `src/assets/` are **copies** of v2's — a content edit must be made in both until one version is retired. v3-only copy lives in `v3/src/content/site.ts`. Dev server on port 3003.
+
 Unless stated otherwise, "the site" means `v2/` and every command below runs from `v2/`.
 
 `v1/Resume/` is a **separate git repository** nested inside this one and is gitignored — the CV PDFs the site serves are hand-copied into `v2/src/assets/cv/`, they are not built from it.

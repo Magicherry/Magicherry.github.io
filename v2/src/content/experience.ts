@@ -1,6 +1,12 @@
 import type { Localized } from './types'
 import rutgersCrest from '@/assets/education/rutgers.png'
 import sitCrest from '@/assets/education/sit.png'
+/* NIO's own white mark, from nio.com - drawn for dark grounds. */
+import nioLogo from '@/assets/companies/nio.svg'
+/* The JV has no published mark of its own; this is the icon of the app the
+   internship built for - Metro大都会, Shanghai Metro's transit app (App Store
+   artwork, 192px). It is a tile with its own ground, so it is drawn rounded. */
+import metroLogo from '@/assets/companies/metro.png'
 
 export type Track = 'work' | 'research' | 'internship'
 
@@ -14,6 +20,11 @@ export interface Role {
   duration: string
   /** Present roles pin to the top of the timeline and get a live indicator. */
   current?: boolean
+  /** The employer's mark, bundled. Shown beside the role's detail, the way a
+   *  degree shows its crest. Absent where no official mark is available. */
+  logo?: string
+  /** The logo is an app icon with its own background: round its corners. */
+  logoTile?: boolean
   bullets: Localized<readonly string[]>
 }
 
@@ -36,6 +47,7 @@ export const roles: readonly Role[] = [
        already matched; "NIO Inc." was the English one drifting. */
     company: { en: 'Shanghai NIO Automobile Co., Ltd.', zh: '上海蔚来汽车有限公司' },
     companyUrl: 'https://www.nio.com/',
+    logo: nioLogo,
     focus: {
       en: 'Enterprise AI Agents · LLM/RAG · Business Planning',
       zh: '企业级 AI Agent · LLM/RAG · 业务规划分析',
@@ -63,6 +75,9 @@ export const roles: readonly Role[] = [
       zh: '罗格斯大学先进基础设施与交通中心（CAIT）',
     },
     companyUrl: 'https://cait.rutgers.edu/',
+    /* CAIT's own logo is a wide wordmark (black type) built around the
+       Rutgers R; the R alone is the square mark it reduces to. */
+    logo: rutgersCrest,
     focus: {
       en: 'Hierarchical Classification · Data Engineering · LLM Applications',
       zh: '层级文本分类 · 数据工程 · LLM 应用',
@@ -89,6 +104,8 @@ export const roles: readonly Role[] = [
       en: 'Tenchii Digital Tech (Tencent × Shanghai Metro JV)',
       zh: '上海通驰数字科技有限公司（腾讯 × 上海地铁合资）',
     },
+    logo: metroLogo,
+    logoTile: true,
     focus: {
       en: 'Front-end Performance · Real-time Systems · Vue/React',
       zh: '前端性能优化 · 实时通信 · Vue/React',
@@ -142,6 +159,13 @@ export interface Education {
   /** School crest, bundled rather than hot-linked - see below. */
   crest: string
   url: string
+  /** Month-precise dates, as the CV prints them. `duration` stays the
+   *  year-only form the timeline reads. */
+  period?: string
+  /** One line under the dates: the focus, or the standing. */
+  focus?: Localized
+  /** What the degree covered, from the CV. */
+  notes?: Localized<readonly string[]>
 }
 
 /*
@@ -164,6 +188,21 @@ export const education: readonly Education[] = [
     duration: '2024 — 2026',
     crest: rutgersCrest,
     url: 'https://www.cs.rutgers.edu/',
+    period: '09/2024 — 06/2026',
+    focus: {
+      en: 'NLP · Hierarchical Text Classification · LLM Applications',
+      zh: 'NLP · 层级文本分类 · LLM 应用',
+    },
+    notes: {
+      en: [
+        'Focused on natural language processing, hierarchical text classification and LLM applications.',
+        'Research assistant at the Rutgers CAIT lab, building hierarchical classifiers over 100k+ railway incident records.',
+      ],
+      zh: [
+        '研究方向为自然语言处理、层级文本分类与大语言模型应用。',
+        '在 Rutgers CAIT 实验室担任研究助理，面向 10 万+ 条铁路事故记录构建层级分类模型。',
+      ],
+    },
   },
   {
     degree: { en: 'B.Eng. in Software Engineering', zh: '软件工程 学士' },
@@ -171,5 +210,11 @@ export const education: readonly Education[] = [
     duration: '2020 — 2024',
     crest: sitCrest,
     url: 'https://www.sit.edu.cn/',
+    period: '09/2020 — 06/2024',
+    focus: { en: 'GPA 3.7 / 4.0 · Top 10%', zh: 'GPA 3.7 / 4.0 · 专业前 10%' },
+    notes: {
+      en: ['Core training in software engineering, algorithms, machine learning and full-stack web development.'],
+      zh: ['系统学习软件工程、算法、机器学习与全栈 Web 开发。'],
+    },
   },
 ]

@@ -1,0 +1,868 @@
+.section {
+  padding-block: var(--space-10) var(--space-10);
+}
+
+/* Left-aligned, like every other section title. */
+.title {
+  margin-bottom: var(--space-7);
+}
+
+/*
+ * The band after the cards: interests on the left, the quote as a small,
+ * muted sign-off on the right, divided by a hairline.
+ */
+.strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-7);
+  margin-top: var(--space-6);
+  padding: var(--space-6) var(--space-7);
+}
+
+/* ------------------------------------------------------------- interests */
+.interests {
+  min-width: 0;
+}
+
+.sideTitle {
+  margin-bottom: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* Pills that wrap, not a ruled list - five short labels read at a glance. */
+.interests ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.interests li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px 0 6px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.interestIcon {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  border-radius: 50%;
+  background: rgba(var(--brand-rgb), 0.1);
+  color: var(--brand);
+}
+
+.interestIcon svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ----------------------------------------------------------------- quote */
+/* Quiet: body size, muted, set off by a hairline rule - a sign-off, not a
+   statement competing with the section title. */
+.quote {
+  margin: 0;
+  padding-left: var(--space-6);
+  border-left: 1px solid var(--border-subtle);
+}
+
+.quote blockquote {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-description);
+  text-wrap: pretty;
+}
+
+.quote figcaption {
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+}
+
+/* ------------------------------------------------------------------- card */
+/*
+ * Copy at the top, illustration anchored to the bottom edge and cropped by it.
+ * The illustration bleeding off the card is what makes it read as a window
+ * seen through a frame rather than a thumbnail pasted in.
+ */
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  padding: var(--space-7) var(--space-7) 0;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-panel);
+  /* The same glass as `.panel` in base.css. */
+  background: var(--card-bg);
+  backdrop-filter: var(--card-blur);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .card {
+    background: #12161d;
+    backdrop-filter: none;
+  }
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding-bottom: var(--space-7);
+}
+
+.media {
+  --u: 1px;
+  position: relative;
+  height: 280px;
+  margin-top: auto;
+}
+
+/* --------------------------------------------------------------- app frame */
+.app {
+  position: absolute;
+  inset: 0 0 -40px;
+  overflow: hidden;
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px 20px 0 0;
+  background: var(--app-bg);
+  box-shadow:
+    0 16px 42px rgba(25, 44, 79, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.12);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: #e8eaed;
+  user-select: none;
+}
+
+.appBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding: 0 18px;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.appTitle {
+  font-weight: 500;
+  color: #f3f4f6;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #7b8088;
+}
+
+/* ------------------------------------------------------------- agent run */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(var(--brand-rgb), 0.12);
+  color: var(--brand);
+  font-size: 12px;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: blink 1.6s ease-in-out infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 10px 6px;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 8px;
+  border-radius: 8px;
+  color: #c4c7cc;
+}
+
+.step[data-state='active'] {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.stepIcon {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+.step[data-state='done'] .stepIcon {
+  background: rgba(74, 222, 128, 0.14);
+  color: var(--success);
+}
+
+.step[data-state='active'] .stepIcon {
+  color: var(--brand);
+}
+
+.stepIcon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.step[data-state='active'] .stepIcon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.spin {
+  animation: spin 1.1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+.stepTime {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: #6f747c;
+}
+
+.toolCall {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 18px 0;
+  padding: 10px 12px;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: #1b1c1f;
+  color: #8b9097;
+}
+
+.toolCall svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+}
+
+.toolCall code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #d4d7db;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------- code tokens */
+.tkKw {
+  color: #c792ea;
+}
+
+.tkFn {
+  color: #82aaff;
+}
+
+.tkStr {
+  color: #c3e88d;
+}
+
+.tkNum {
+  color: #f78c6c;
+}
+
+/* ------------------------------------------------------------------ diff */
+.tabBar {
+  display: flex;
+  height: 40px;
+  padding: 0 10px;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-bottom: 1.5px solid var(--brand);
+  color: #f3f4f6;
+  font-size: 12.5px;
+}
+
+.tab svg {
+  width: 12px;
+  height: 12px;
+  color: #7b8088;
+}
+
+.diffHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+}
+
+.filePath {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #d4d7db;
+}
+
+.counts {
+  display: inline-flex;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.plus {
+  color: var(--success);
+}
+
+.minus {
+  color: var(--danger);
+}
+
+.diffBody {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.hunk {
+  padding: 8px 18px;
+  background: rgba(var(--brand-rgb), 0.08);
+  color: #7fd3dc;
+}
+
+.line {
+  display: grid;
+  grid-template-columns: 30px 30px 16px 1fr;
+  align-items: center;
+  height: var(--line-h, 26px);
+  overflow: hidden;
+  transition:
+    height 0.35s var(--ease-out),
+    opacity 0.35s ease;
+  padding-left: 8px;
+  color: #d4d7db;
+  white-space: pre;
+}
+
+.line[data-kind='add'] {
+  background: rgba(74, 222, 128, 0.09);
+}
+
+.line[data-kind='del'] {
+  background: rgba(248, 113, 113, 0.09);
+}
+
+.line code {
+  font: inherit;
+  overflow: hidden;
+}
+
+.lineNo {
+  color: #5b6068;
+  text-align: right;
+  padding-right: 8px;
+}
+
+.sign {
+  color: #8b9097;
+}
+
+.line[data-kind='add'] .sign {
+  color: var(--success);
+}
+
+.line[data-kind='del'] .sign {
+  color: var(--danger);
+}
+
+/* ----------------------------------------------------------------- labels */
+.record {
+  margin: 16px 18px 0;
+  padding: 12px 14px;
+  border-left: 2px solid rgba(var(--brand-rgb), 0.6);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0 8px 8px 0;
+  color: #c4c7cc;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.labelsTitle {
+  margin: 18px 18px 8px;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7b8088;
+}
+
+.labels {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 18px;
+}
+
+.label {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 72px 34px;
+  align-items: center;
+  gap: 10px;
+}
+
+.labelPath {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #8b9097;
+  font-size: 12.5px;
+}
+
+.labelPath [data-leaf] {
+  color: #f3f4f6;
+}
+
+.sep {
+  margin: 0 5px;
+  color: #5b6068;
+}
+
+.bar {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brand);
+}
+
+.score {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: #d4d7db;
+  text-align: right;
+}
+
+/* ------------------------------------------------------------------ tiles */
+.tiles {
+  position: absolute;
+  inset: 0 0 -24px;
+  overflow: hidden;
+  /* Fades the column in at the top edge, so tiles scroll in from nothing
+     rather than appearing under a hard cut. */
+  mask-image: linear-gradient(transparent, #000 18%, #000);
+}
+
+/* Two identical halves, each ending in one gap's worth of padding, so the
+   track's -50% is exactly one half and the loop has no seam. */
+.tileTrack {
+  display: flex;
+  flex-direction: column;
+  animation: tiles-scroll 36s linear infinite;
+  animation-play-state: paused;
+}
+
+.media[data-running] .tileTrack {
+  animation-play-state: running;
+}
+
+.tileHalf {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding-bottom: 10px;
+}
+
+@keyframes tiles-scroll {
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  height: 62px;
+  padding: 8px 10px;
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  background: var(--app-card);
+  box-shadow: 0 10px 30px rgba(41, 70, 122, 0.2);
+}
+
+/* Bare mark, no well - as in the stack section: each logo has its own
+   silhouette and colour, and a box around it is an edge that belongs to
+   neither. The slot keeps its width so the names still line up. */
+.iconWell {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 40px;
+  flex: none;
+}
+
+.tileCopy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.tileName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: 500;
+  color: #f3f4f6;
+}
+
+.tileMeta {
+  font-size: 12px;
+  color: #8b9097;
+}
+
+/* ------------------------------------------------------------ breakpoints */
+@media (max-width: 1023px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .strip {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5);
+  }
+
+  .quote {
+    padding-left: 0;
+    padding-top: var(--space-5);
+    border-left: 0;
+    border-top: 1px solid var(--border-subtle);
+  }
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding-block: 64px;
+  }
+
+  .title {
+    margin-bottom: var(--space-5);
+  }
+
+  .strip {
+    padding: var(--space-5);
+  }
+
+  .grid {
+    gap: var(--space-4);
+  }
+
+  .card {
+    padding: var(--space-5) var(--space-5) 0;
+  }
+
+  .copy {
+    padding-bottom: var(--space-5);
+  }
+
+  /* Tall enough for each illustration's last line on a narrow screen, where
+     text wraps onto more lines than on desktop - at 220px the agent run lost
+     its tool call and the classifier its third label. */
+  .media {
+    height: 300px;
+  }
+
+  /* The diff at a size where its lines fit the narrower window instead of
+     being cut off mid-token. */
+  .diffBody {
+    font-size: 11px;
+  }
+
+  .line {
+    grid-template-columns: 22px 22px 14px 1fr;
+    --line-h: 24px;
+    padding-left: 4px;
+  }
+
+  .hunk {
+    padding: 7px 14px;
+  }
+
+  /* Tiles drop their second line, so a name like "TypeScript" has the room
+     it needs rather than being truncated beside its category. */
+  .tile {
+    height: 52px;
+    padding: 6px 8px;
+    gap: 8px;
+  }
+
+  .iconWell {
+    width: 34px;
+    height: 34px;
+  }
+
+  .tileMeta {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin,
+  .statusDot {
+    animation: none;
+  }
+}
+
+/* ================================================================ motion */
+/*
+ * Frame states for the looping illustrations. The clock lives in useDemo; the
+ * components set attributes per frame, and these rules turn each change of
+ * attribute into a short transition.
+ */
+
+/* The illustration's own box, inside the media slot. */
+.stage {
+  position: absolute;
+  inset: 0;
+}
+
+/* ----------------------------------------------------------- pause button */
+/*
+ * Sits just above the illustration's top-right corner, in the card's own
+ * padding. Shown while the card is hovered or the button has focus; on a
+ * touch screen, where there is no hover, it stays faintly visible so the
+ * control can still be found.
+ */
+.pause {
+  position: absolute;
+  z-index: 3;
+  bottom: calc(100% + 6px);
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #adb2b8;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.pause svg {
+  width: 14px;
+  height: 14px;
+}
+
+.card:hover .pause,
+.pause:focus-visible,
+.pause[aria-pressed='true'] {
+  opacity: 1;
+}
+
+.pause:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+@media (hover: none) {
+  .pause {
+    opacity: 0.6;
+  }
+}
+
+/* ------------------------------------------------------------- agent run */
+.step {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.step[data-state='pending'] {
+  color: #6f747c;
+}
+
+.pending {
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid #4b5058;
+  border-radius: 50%;
+}
+
+/* The check arrives with a small pop. */
+.step[data-state='done'] .stepIcon svg {
+  animation: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.stepTime:not(:empty) {
+  animation: fade-in 0.3s ease;
+}
+
+.status {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.status[data-done] {
+  background: rgba(74, 222, 128, 0.14);
+  color: var(--success);
+}
+
+.status[data-done] .statusDot {
+  animation: none;
+}
+
+/* Spinner and blinking dot run only while the demo does. */
+.spin,
+.statusDot {
+  animation-play-state: paused;
+}
+
+.media[data-running] .spin,
+.media[data-running] .statusDot {
+  animation-play-state: running;
+}
+
+.toolCall {
+  animation: slide-in 0.35s var(--ease-out);
+}
+
+/* ------------------------------------------------------------------ diff */
+.line:not([data-shown]) {
+  height: 0;
+  opacity: 0;
+}
+
+/* Added lines type in: the code is uncovered left to right in steps. */
+.line[data-kind='add'][data-shown] code {
+  animation: type-in 0.7s steps(32, end) both;
+}
+
+/* -------------------------------------------------------------- labels */
+.record {
+  animation: slide-in 0.4s var(--ease-out);
+}
+
+.bar span {
+  transition: width 0.6s var(--ease-out);
+}
+
+.label {
+  transition: opacity 0.3s ease;
+}
+
+.label:not([data-on]) {
+  opacity: 0.45;
+}
+
+.label[data-on] .score {
+  animation: fade-in 0.3s ease;
+}
+
+/* ----------------------------------------------------------- keyframes */
+@keyframes pop {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes type-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Reduced motion: useDemo already holds every illustration on its finished
+   frame; this removes the remaining one-shot transitions and the scroll. */
+@media (prefers-reduced-motion: reduce) {
+  .tileTrack,
+  .toolCall,
+  .record,
+  .stepTime,
+  .line[data-kind='add'][data-shown] code,
+  .step[data-state='done'] .stepIcon svg,
+  .label[data-on] .score {
+    animation: none;
+  }
+
+  .line,
+  .bar span,
+  .label,
+  .step,
+  .status {
+    transition: none;
+  }
+}

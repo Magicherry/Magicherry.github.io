@@ -1,0 +1,52 @@
+/*
+ * In prose a `**marked**` run is the same white as the text around it, one
+ * weight up - in description-grey prose that alone is enough to lift it.
+ * Only section titles paint the marked word in the accent (below).
+ */
+.accentBody {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Section titles keep v2's figure: the marked noun in the accent, at the
+   heading's own weight. */
+.accentHeading {
+  color: var(--brand);
+  font-weight: inherit;
+}
+
+.aside {
+  color: var(--text-description);
+  font-style: italic;
+}
+
+/* A dashed underline at rest, blue on hover - links read as links without
+   adding a second colour to every paragraph. */
+.link {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: rgba(255, 255, 255, 0.4);
+  text-underline-offset: 4px;
+  transition:
+    color var(--dur-fast) ease,
+    text-decoration-color var(--dur-fast) ease;
+}
+
+.link:hover {
+  color: var(--brand);
+  text-decoration-color: currentColor;
+}
+
+/* Optical spacing between Han and a marked Latin run; see RichText.tsx. */
+.accentBody[data-gap-before],
+.accentHeading[data-gap-before],
+.link[data-gap-before] {
+  margin-inline-start: 0.16em;
+}
+
+.accentBody[data-gap-after],
+.accentHeading[data-gap-after],
+.link[data-gap-after] {
+  margin-inline-end: 0.16em;
+}

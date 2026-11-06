@@ -1,0 +1,188 @@
+/*
+ * Design tokens.
+ *
+ * Two tiers, as in v2: components read the semantic names below and never a raw
+ * value. Most visual changes therefore start here.
+ *
+ * The system is deliberately quiet. One page colour, white type at a handful of
+ * opacities, hairline borders at 6-10% white, and a single blue that is spent
+ * only where something is interactive or worth pointing at - links, the prompt
+ * sigil, selection, focus. Depth comes from translucent surfaces stacked on a
+ * near-black ground, not from shadows or gradients.
+ */
+:root {
+  color-scheme: dark;
+
+  /* ------------------------------------------------------------- colour */
+  --bg-page: #0a0a0a;
+  /* Surfaces are white at low alpha rather than greys, so a panel laid over
+     the hero's dot field or a glow lets a little of it through instead of
+     punching a flat hole in it. Numbered by role, not by brightness. */
+  --surface-1: rgba(255, 255, 255, 0.06); /* inputs, code lines, chips */
+  --surface-2: rgba(255, 255, 255, 0.04);
+  --surface-3: rgba(255, 255, 255, 0.02); /* panels and cards */
+  --surface-raised: rgba(255, 255, 255, 0.12); /* the header once scrolled */
+  --surface-hover: rgba(255, 255, 255, 0.06);
+  /* Opaque grounds for the mock application windows. These have to be solid -
+     they are pictures of software, and software is not see-through. */
+  /*
+   * Card glass. A 2% white wash let the v2 backdrop - dot field, lens glow,
+   * aurora - read straight through every card and fight the text on it. So
+   * a cool dark tint at ~35% to hold contrast, and a 12px blur behind it so
+   * whatever shows through arrives softened. (55% / 18px was tried first and
+   * read as solid - the backdrop vanished behind every card.) The faint
+   * white on top keeps the panel a step lighter than the page around it.
+   */
+  --card-bg:
+    linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+    rgba(10, 14, 20, 0.35);
+  --card-blur: blur(12px) saturate(var(--glass-saturate));
+  /* Hover: the same glass, a little lighter. */
+  --card-bg-hover:
+    linear-gradient(rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)),
+    rgba(10, 14, 20, 0.4);
+  --app-bg: #151517;
+  --app-sidebar: #23272e;
+  --app-card: #212123;
+  --overlay: #262626;
+
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.8);
+  --text-description: rgba(255, 255, 255, 0.5);
+  --text-faint: rgba(255, 255, 255, 0.45);
+  --text-placeholder: rgba(255, 255, 255, 0.3);
+
+  /*
+   * The accent is v2's cyan - the site's signature since v1 (#03e8f8) - with
+   * v2's lighter and deeper stops. It replaced the reference page's blue so
+   * the interface and the ported v2 backdrop (lens glow, scroll surge) speak
+   * in one colour. `--brand-contrast` is the ink for text set *on* the cyan,
+   * which is too bright to carry white.
+   */
+  --brand: #03e8f8;
+  --brand-soft: #a5f3fc;
+  --brand-strong: #06b6d4;
+  --brand-rgb: 3, 232, 248;
+  --brand-contrast: #04141a;
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.2);
+  --border-strong: rgba(255, 255, 255, 0.24);
+  /* The mock windows use half-pixel borders at a slightly higher alpha: on a 2x
+     screen that is a true hairline, on 1x it rounds to 1px and the alpha keeps
+     it from reading as a drawn box. */
+  --border-app: rgba(255, 255, 255, 0.12);
+
+  --success: #4ade80;
+  --danger: #f87171;
+
+  /* Buttons. Primary is the one inverted object on the page - white on black -
+     and there is never more than one in view. */
+  --btn-primary-bg: #ffffff;
+  --btn-primary-text: #0a0a0a;
+  --btn-primary-hover: rgba(0, 0, 0, 0.2);
+  --btn-secondary-bg: var(--surface-1);
+  --btn-secondary-text: #ffffff;
+  --btn-secondary-border: rgba(255, 255, 255, 0.15);
+  --btn-secondary-hover: rgba(255, 255, 255, 0.2);
+  --btn-secondary-hover-border: rgba(255, 255, 255, 0.6);
+
+  /* ------------------------------------------------------------- shape */
+  --radius-pill: 100px;
+  --radius-card: 24px;
+  --radius-panel: 16px;
+  --radius-media: 10px;
+  --radius-input: 10px;
+  --radius-sm: 8px;
+
+  /* ------------------------------------------------------------- space */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 56px;
+  --space-9: 80px;
+  --space-10: 120px;
+  --space-11: 160px;
+  --space-12: 200px;
+  --space-13: 240px;
+
+  --blur-glass: 12px;
+  /* How much colour every frosted surface pulls through from what is behind
+     it. The aurora and lens glow come through vivid rather than greyed by
+     the blur. One number for all of them - cards, header, buttons. */
+  --glass-saturate: 140%;
+
+  /* --------------------------------------------------------------- type */
+  --font-body: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  /* Headings carry Latin in Montserrat; Han in the same line falls through to
+     the body stack's system face, which is the pairing the reference uses. */
+  --font-heading: 'Montserrat', var(--font-body);
+  --font-mono: 'Fragment Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, 'PingFang SC',
+    'Microsoft YaHei', monospace;
+  /* The face the mock application windows are set in: a native UI stack, since
+     they are pictures of a desktop app rather than of this page. */
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  /* ------------------------------------------------------------- motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  /*
+   * A physical spring - stiffness 180, damping 28, mass 1 - sampled into a
+   * `linear()` easing so CSS can play it without an animation library or a
+   * per-frame script. Damping ratio 1.04: just past critical, so it arrives
+   * fast and settles without overshoot. 0.77s is where it comes within 0.1%
+   * of rest. Regenerate both together if the constants change.
+   */
+  --ease-spring: linear(
+    0, 0.069, 0.21, 0.363, 0.502, 0.619, 0.712, 0.785, 0.841, 0.882, 0.914, 0.937, 0.954, 0.966,
+    0.975, 0.982, 0.987, 0.991, 0.993, 0.995, 0.996, 0.997, 0.998, 0.999, 1
+  );
+  --dur-spring: 0.77s;
+  --dur-fast: 0.2s;
+  --dur-base: 0.35s;
+  --dur-enter: 0.8s;
+
+  /* ------------------------------------------------------ backdrop (v2) */
+  /*
+   * The page background is v2's, ported whole (components/fx/), and these are
+   * the values it was drawn with. Names kept as v2 had them so the copied CSS
+   * and canvas code read them unchanged. The cyan is v2's accent; in v3 it
+   * appears only in the backdrop - the lens glow and the scroll surge.
+   */
+  --bg-base: #05080d;
+  --accent: #03e8f8;
+  --fg-ghost: rgba(226, 236, 250, 0.13);
+  --aurora-1: rgba(24, 96, 156, 0.46);
+  --aurora-2: rgba(11, 52, 98, 0.58);
+  --aurora-3: rgba(255, 106, 31, 0.16);
+  --aurora-4: rgba(40, 122, 172, 0.34);
+  --aurora-opacity: 1;
+  --scan-line: rgba(180, 214, 255, 0.032);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-slow: 620ms;
+  /* -1, not v2's 0: v3's sections are not positioned, so the backdrop has to
+     sit beneath the in-flow content rather than rely on it stacking above. */
+  --z-canvas: -1;
+
+  /* --------------------------------------------------------------- layout */
+  --container: min(100% - 48px, 1140px);
+  --header-h: 64px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --container: min(100% - 144px, 1140px);
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --container: min(100% - 160px, 1280px);
+  }
+}

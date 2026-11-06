@@ -1,0 +1,265 @@
+.section {
+  padding-block: var(--space-10);
+}
+
+.title {
+  max-width: 600px;
+  margin-bottom: var(--space-8);
+}
+
+.groups {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.group {
+  padding: var(--space-5);
+}
+
+.groupHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  padding: 0 var(--space-2);
+}
+
+.groupLabel {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.groupCount {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.items {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px;
+}
+
+/* A row, not a tile: icon well and name, with a hover wash. */
+.item,
+.cert {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: 6px var(--space-2);
+  border-radius: var(--radius-input);
+  transition: background-color var(--dur-fast);
+}
+
+.item:hover,
+.cert:hover {
+  background: var(--surface-hover);
+}
+
+/* A fixed track the width of the certification wells, so names in both
+   lists start at the same x - but no border and no ground. */
+.itemIcon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.item:hover .itemIcon {
+  transform: scale(1.08);
+}
+
+.well {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: var(--app-card);
+}
+
+.itemName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.item:hover .itemName,
+.cert:hover .itemName {
+  color: var(--text-primary);
+}
+
+/* ------------------------------------------------------------ lower pair */
+.lower {
+  display: grid;
+  /* The tools card takes most of the row: its rows hold up to seven chips
+     each, while a certification is one short line. */
+  grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.block {
+  padding: var(--space-6);
+}
+
+.blockTitle {
+  margin-bottom: var(--space-4);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.tools {
+  display: flex;
+  flex-direction: column;
+}
+
+.toolRow {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--border-default);
+}
+
+.toolRow:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.toolLabel {
+  font-size: 13px;
+  color: var(--text-description);
+}
+
+.toolItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 11px 0 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition:
+    border-color var(--dur-fast),
+    color var(--dur-fast);
+}
+
+.chip:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.certs {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.certCopy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.certIssuer {
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+/* ------------------------------------------------------------ breakpoints */
+@media (max-width: 1100px) {
+  .groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lower {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding-block: 64px;
+  }
+
+  .title {
+    margin-bottom: var(--space-5);
+  }
+
+  .groups {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+  }
+
+  .group {
+    padding: var(--space-4);
+  }
+
+  .groupHead {
+    margin-bottom: var(--space-2);
+    padding: 0 var(--space-1);
+  }
+
+  /*
+   * v2's phone layout: three across, icon above name. Two across with the
+   * name beside the icon left ~90px for the name and truncated the long ones
+   * ("Apache Sp...", "GitHub Ac..."); stacked, the name gets the full cell
+   * and wraps if it must.
+   */
+  .items {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2px;
+  }
+
+  .item {
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 4px;
+    text-align: center;
+  }
+
+  .item .itemName {
+    white-space: normal;
+    font-size: 12.5px;
+    line-height: 1.3;
+  }
+
+  .itemIcon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .lower {
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+
+  .block {
+    padding: var(--space-4);
+  }
+
+  .toolRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+}
