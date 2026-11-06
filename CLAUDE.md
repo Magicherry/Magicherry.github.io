@@ -6,12 +6,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Two generations of one personal site live side by side:
 
-- `v2/` — **the live site.** React 19 · TypeScript · Vite 8 · Motion · Lenis. No UI or CSS framework. Everything is hand-written.
+- `v2/` — **the previous site, archived but kept buildable** as a rollback target. React 19 · TypeScript · Vite 8 · Motion · Lenis. No UI or CSS framework. Everything is hand-written.
 - `v1/` — archived predecessor (CRA · React Router · Bootstrap). Never built, never deployed. Do not touch it unless the request is explicitly about v1.
 
-- `v3/` — **in development, not deployed.** A redesign in a quiet dark product-page idiom (near-black page, white type at a few opacities, one accent (v2's cyan), pill buttons, 16px hairline panels, mock app-window illustrations). Same toolchain as v2 (React 19 · TS strict · Vite), no animation library. Its `src/content/` and `src/assets/` are **copies** of v2's — a content edit must be made in both until one version is retired. v3-only copy lives in `v3/src/content/site.ts`. Dev server on port 3003.
+- `v3/` — **the live site.** A redesign in a quiet dark product-page idiom (near-black page, white type at a few opacities, one accent (v2's cyan), pill buttons, 16px hairline panels, mock app-window illustrations). Same toolchain as v2 (React 19 · TS strict · Vite), no animation library. Its `src/content/` and `src/assets/` are **copies** of v2's — a content edit must be made in both until v2 is retired. v3-only copy lives in `v3/src/content/site.ts`. Dev server on port 3003.
 
-Unless stated otherwise, "the site" means `v2/` and every command below runs from `v2/`.
+The commands and the Architecture/Conventions sections below were written for `v2/`. v3 shares the toolchain, the strict TS config, the `Localized<T>` content layer and CSS Modules, but **not** v2's glass system, tactical tokens, Motion or Lenis — read v3's own source and comments before applying a v2 rule there. v3's dev server is `npm run dev` from `v3/` (port 3003).
 
 `v1/Resume/` is a **separate git repository** nested inside this one and is gitignored — the CV PDFs the site serves are hand-copied into `v2/src/assets/cv/`, they are not built from it.
 
@@ -28,7 +28,7 @@ npm run preview    # serve the production build on 3002
 
 `vite build` does **not** typecheck — `tsc -b` is the gate and runs first in `npm run build`. There is no test suite and no linter configured; `npm run typecheck` is the only automated check, and the TS config is strict (`exactOptionalPropertyTypes`, `noUnusedLocals/Parameters`, `noUncheckedSideEffectImports`), so optional props are passed via conditional spreads rather than `prop={maybeUndefined}`.
 
-`.github/workflows/deploy.yml` builds `v2/` and publishes `v2/dist` to GitHub Pages on every push to `main`. (`v2/README.md` still says deployment is "not wired up yet" — that section is stale.)
+`.github/workflows/deploy.yml` builds `v3/` (`npm ci && npm run build`) and publishes `v3/dist` to GitHub Pages on every push to `main`. Rolling back to v2 is three path edits in that file. (`v2/README.md` still says deployment is "not wired up yet" — that section is stale.)
 
 `@/*` resolves to `v2/src/*`, declared in both `vite.config.ts` and `tsconfig.app.json`; they must stay in step.
 
