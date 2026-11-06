@@ -276,7 +276,7 @@ export default function Nav() {
                 asset is the same URL the hero card uses, so it is served from
                 cache rather than fetched again. */}
             <span className={styles['markGlyph']}>
-              <img src={profile.avatar} alt="" width={29} height={29} decoding="async" />
+              <img src={profile.avatar} alt="" width={37} height={37} decoding="async" />
             </span>
             <span className={styles['markText']}>Magicherry</span>
           </button>

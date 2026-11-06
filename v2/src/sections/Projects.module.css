@@ -4,10 +4,13 @@
   flex-wrap: wrap;
   gap: 4px;
   padding: 5px;
-  /* Square, like the nav bar this is the same object as: a rail of segmented
-     labels. The container and its segments have to agree, or an angled edge sits
-     5px outside five straight ones. */
-  border-radius: var(--radius-chip);
+  /* A capsule, like the nav bar this is the same object as: a rail of segmented
+     labels. The container and its segments have to agree, or a round end sits
+     5px outside five square ones - so the chips below take the same arc.
+     `corner-shape: round` is required: base.css bevels every radius by default,
+     and 999px bevelled is a diamond. */
+  border-radius: var(--radius-round);
+  corner-shape: round;
   background: color-mix(in srgb, var(--fg) 5%, transparent);
   box-shadow: inset 0 0 0 1px var(--line);
 }
@@ -19,9 +22,10 @@
   gap: 6px;
   padding: 7px 13px;
   border: 0;
-  /* Square, with the rail around them and the nav links they are built like -
-     same figure, same shape, same selected state. */
-  border-radius: var(--radius-chip);
+  /* Capsules, nested in the capsule rail around them - same figure, same shape,
+     same selected state. The focus ring follows this radius too. */
+  border-radius: var(--radius-round);
+  corner-shape: round;
   background: none;
   color: var(--fg);
   /* A filter is a control, and controls on this site are printed labels. The
@@ -56,7 +60,8 @@
 .chipPill {
   position: absolute;
   inset: 0;
-  border-radius: var(--radius-chip);
+  border-radius: var(--radius-round);
+  corner-shape: round;
   /* No ground, for the reason spelled out on the nav's indicator: a tint has
      vertical edges however soft its top is, and those edges are what make a lit
      tab read as a filled box instead. */

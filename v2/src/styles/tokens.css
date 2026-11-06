@@ -251,8 +251,7 @@
    * Two consumers, and they are doing different jobs with it. The preloader
    * meter is a *gauge*: something fills it, and the ticks are what make the
    * filled part countable. `.hud-rule` is a *graticule*: nothing fills it, and
-   * the ticks claim nothing at all - they are a scale, in the same family as the
-   * survey grid in the backdrop. That distinction is worth keeping. Nothing else
+   * the ticks claim nothing at all - they are a scale. That distinction is worth keeping. Nothing else
    * on this site has countable data to gauge (there are no proficiency levels in
    * content/stacks.ts, and the timeline rail reports continuous scroll
    * progress), so this token exists to stop a future gauge inventing its own
@@ -483,10 +482,10 @@
   --aurora-3: rgba(255, 106, 31, 0.16);
   --aurora-4: rgba(40, 122, 172, 0.34);
   --aurora-opacity: 1;
-  /* Scanlines and the survey grid, painted onto the backdrop wrapper. Both are
-     near-invisible per line and read as texture in aggregate; see Backdrop. */
+  /* Scanlines, painted onto the backdrop wrapper. Near-invisible per line and
+     read as texture in aggregate; see Backdrop. (The survey grid that shared
+     this slot was removed, and `--grid-line` with it.) */
   --scan-line: rgba(180, 214, 255, 0.032);
-  --grid-line: rgba(140, 190, 240, 0.05);
 
   /* ------------------------------------------------------------ glass tier */
   /*
@@ -592,7 +591,7 @@
    * them makes the entire shadow snap in a single frame.
    */
   --glass-inner-shade: transparent;
-  /* Hover states for the two above. The edge goes to the ember rather than a
+  /* Hover states for the two above. The edge goes to the cyan rather than a
      brighter white: this is the design's one signal colour, and a plate the
      pointer is on is exactly the kind of thing it should be signalling. */
   --glass-edge-hover: color-mix(in srgb, var(--accent) 52%, var(--line-strong));
@@ -623,7 +622,7 @@
   /* One falloff, for surfaces too small to justify three: the hero's secondary
      button, a project's icon tile. A chip gets a tight even halo, not a 7px
      tongue hanging off its bottom. The reach is kept rather than trimmed - the
-     hero pairs this with `.primary`, whose ember glow throws 13px below and
+     hero pairs this with `.primary`, whose accent glow throws 13px below and
      carries a hue on top of that, so a black halo needs comparable reach before
      the two sit at the same height. */
   --glass-drop-sm: 0 3px 34px -10px rgba(0, 0, 0, 0.78);
@@ -641,7 +640,14 @@
    * see-through nav the fallback exists to prevent.
    */
   --glass-fallback: rgba(7, 12, 20, 0.9);
-  --glass-specular: rgba(255, 196, 148, 0.22);
+  /*
+   * The pointer highlight on interactive plates. Cold, in the sheen's family:
+   * this was a peach (255 196 148) left over from the ember interface, and under
+   * a `screen` blend over a cyan-rimmed panel it tinted every hovered card
+   * faintly red - a second hue arriving exactly where the accent is meant to be
+   * the only signal. Same alpha; only the temperature changed.
+   */
+  --glass-specular: rgba(196, 228, 255, 0.22);
 
   --scrim: rgba(2, 4, 8, 0.78);
   /* The one float that is not a glass panel: the QR overlay's close disc. */

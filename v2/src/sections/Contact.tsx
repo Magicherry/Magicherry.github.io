@@ -87,8 +87,11 @@ export default function Contact() {
       title={ui.sections.contact.title}
       lede={ui.sections.contact.body}
     >
+      {/* No `sweep`: the band of light crossing the plate on arrival is kept for
+          the hero card alone. On the last panel of the page it read as a flash
+          rather than an entrance. */}
       <Reveal>
-        <GlassSurface variant="regular" radius="xl" sweep className={styles['panel']} lightAngle={150}>
+        <GlassSurface variant="regular" radius="xl" className={styles['panel']} lightAngle={150}>
           <div className={styles['links']}>
             {socials.map((social) => {
               const Fallback = FALLBACK_ICONS[social.id] ?? LuMail

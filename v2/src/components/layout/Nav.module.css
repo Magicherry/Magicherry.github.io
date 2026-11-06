@@ -28,7 +28,8 @@
   align-items: center;
   gap: var(--space-2);
   width: 100%;
-  padding: 7px 8px 7px 10px;
+  /* Symmetric. See `.mark` for how the avatar is seated in the left end. */
+  padding: 7px 8px;
   --surface-specular-size: 320px;
   /*
    * The nav keeps the old directional drop, in both themes, and opts out of the
@@ -77,7 +78,14 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  padding: 6px 10px;
+  /*
+   * No padding on the left or vertically: the avatar is the mirror image of the
+   * GitHub button at the other end - same 37px disc, sitting directly on the
+   * bar's 8px padding - so the two ends of the capsule are seated identically.
+   * It used to carry 10px here on top of 10px of bar padding, which put its
+   * centre nine pixels further in than the button's and read as pushed right.
+   */
+  padding: 0 10px 0 0;
   border: 0;
   /* With the bar and the links. Everything in the nav is square now except the
      avatar and the language chip, which are round because they are marks rather
@@ -105,8 +113,9 @@
  */
 .markGlyph {
   display: block;
-  width: 30px;
-  height: 30px;
+  /* The size of `.iconBtn` - see `.mark`. */
+  width: 37px;
+  height: 37px;
   border-radius: var(--radius-circle);
   corner-shape: round;
   overflow: hidden;

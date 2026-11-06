@@ -50,18 +50,14 @@
 }
 
 /*
- * Hover lifts the row and marks it along its bottom edge.
+ * Hover lifts the row and brightens its hairline - no marker bar.
  *
- * Two corrections, and they are the same correction. The bar was on the left and
- * the row slid *right*, which is a horizontal gesture on a page where every
- * other selection - the nav's active item, the project filters - marks itself
- * with a bar underneath and every other surface answers the pointer by rising.
- * A row that slides sideways reads as being dragged; one that lifts reads as
- * being picked up, and that is what a link does.
- *
- * The lift and the marker also now agree with each other: the bar sits on the
- * edge the row is moving away from, so the two read as one motion rather than as
- * a highlight plus an unrelated nudge.
+ * The row used to slide right with a bar on its left, then lift with a cyan bar
+ * along its bottom edge. The lift stays: every surface on the page answers the
+ * pointer by rising, and a row that slides sideways reads as being dragged. The
+ * bar went: the bottom bar is the *selection* figure (the nav's active item, the
+ * project filters), and a link under the pointer is not selected - borrowing that
+ * figure for hover made eight rows look like a second tab strip.
  *
  * The brand colour still carries the fill - one row lit at a time, and entries
  * with no usable brand hue (GitHub's near-black) fall back to a neutral wash.
@@ -69,9 +65,7 @@
 .link:hover {
   transform: translateY(-3px);
   background-color: color-mix(in srgb, var(--brand, var(--fg)) 10%, transparent);
-  box-shadow:
-    inset 0 0 0 1px var(--line-strong),
-    inset 0 -2px 0 0 var(--accent);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
   color: var(--fg-strong);
 }
 

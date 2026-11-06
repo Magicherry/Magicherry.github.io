@@ -293,12 +293,12 @@ export default function Hero() {
             />
 
             {/*
-             * The one sweep call site that has to gate itself. Everywhere else
-             * the band rides a <Reveal>, which returns a plain tag under reduced
-             * motion and so never hands it a `shown` to run on - the opt-out is
-             * free. This card is driven by `slab` above, which animates whatever
-             * the preference says, so the band would be the one thing that did
-             * not honour it.
+             * The only sweep left on the page (Contact's was removed), and it
+             * has to gate itself. A band riding a <Reveal> would get the opt-out
+             * for free, since <Reveal> returns a plain tag under reduced motion
+             * and never hands it a `shown` to run on. This card is driven by
+             * `slab` above, which animates whatever the preference says, so the
+             * band would be the one thing that did not honour it.
              */}
             <GlassSurface
               variant="regular"

@@ -86,19 +86,9 @@
    */
   border-radius: 0;
   /*
-   * No transition, and its absence is a fix rather than an omission.
-   *
-   * `translate` and `border-color` were both transitioned here *and* animated by
-   * the `lock` keyframes below, which is two drivers on one property. A running
-   * animation outranks a transition, so the lock itself looked right - but the
-   * moment `data-locking` came off, the value snapped from wherever the keyframe
-   * had it back to the base, and the transition dutifully animated that snap
-   * over another 320ms. Every acquisition therefore ran a 260ms snap followed by
-   * a 320ms drift back, and crossing two section boundaries in quick succession
-   * put the two out of phase: the corners wobbled.
-   *
-   * Nothing else on this element touches either property, so the keyframes can
-   * own them outright.
+   * No transition and no animation: the brackets are static. They used to light
+   * on every section change - see the note on the lock in Frame.tsx for why that
+   * was withdrawn.
    */
 }
 
@@ -128,68 +118,6 @@
   right: var(--hud-inset);
   border-bottom-width: 1px;
   border-right-width: 1px;
-}
-
-/* ------------------------------------------------------------- the lock */
-/*
- * The frame re-acquiring: all four corners light up, once, on every acquisition.
- *
- * ---------------------------------------------------------------------------
- * They light. They do not *move*, and that is the whole correction.
- *
- * This used to pull each corner 7px toward the centre of the screen and release
- * it, on the theory that a mechanism catching should be felt as well as seen.
- * It does not survive contact with the actual page. A section boundary is
- * crossed every few seconds of ordinary reading, so the movement is not an event
- * you notice once - it is four objects in the corners of your vision jumping,
- * repeatedly, while you are trying to read something else. At the edge of the
- * visual field motion is the one signal that cannot be ignored, which is exactly
- * why it was chosen and exactly why it was wrong: the frame was interrupting the
- * content it exists to frame. Read back, it is indistinguishable from a
- * rendering fault - the word for it is a twitch, not a lock.
- *
- * Light carries the same information and costs the reader nothing. Peripheral
- * vision registers a brightness change perfectly well; what it does not do is
- * demand that you look. So the corners go to the accent and fall back, and the
- * frame still visibly re-acquires without ever moving a pixel.
- *
- * `drop-shadow` rather than `box-shadow` for the bloom. A bracket is two borders
- * on an otherwise empty box, so a box-shadow would trace the whole square -
- * including the two sides that are not drawn - and the lock would flash a
- * complete rectangle in each corner. `drop-shadow` follows the painted pixels,
- * which here are the two arms and nothing else.
- *
- * The animation is declared on the attribute rather than on `.bracket` with a
- * toggled `animation-play-state`, because it has to be able to retrigger.
- * Scrolling back and forth across a section boundary fires this repeatedly, and
- * a running keyframe animation ignores a second request unless the element is
- * reflowed - mounting the attribute for the duration and taking it away again
- * sidesteps that without touching layout. See Frame.tsx.
- */
-.frame[data-locking] .bracket {
-  animation: lock 420ms var(--ease-enter);
-}
-
-/*
- * Up fast, down slow - the asymmetry `--ease-enter` and `--ease-exit` are named
- * for, expressed as keyframe position rather than as two curves. The rise is
- * over in the first fifth so the acquisition is legible as a distinct moment;
- * the remaining four fifths are a decay, which is what stops a repeated signal
- * from reading as a flash.
- */
-@keyframes lock {
-  0% {
-    border-color: var(--hud-frame);
-    filter: drop-shadow(0 0 0 transparent);
-  }
-  18% {
-    border-color: var(--accent);
-    filter: drop-shadow(0 0 6px var(--accent-bloom));
-  }
-  100% {
-    border-color: var(--hud-frame);
-    filter: drop-shadow(0 0 0 transparent);
-  }
 }
 
 /* ---------------------------------------------------------------- rail */
@@ -391,16 +319,32 @@
  * as two unrelated marks sharing a column, which is the same mistake the charge
  * on `.hud-rule` avoids in base.css.
  *
- * `scaleY` from the top, driven off the same motion value as the head, so the
- * two can never disagree about where the reader is.
+ * Two elements, because the mask and the scale cannot live on the same one.
+ * They used to: `scaleY` and the comb were both on the fill, and a transform
+ * scales everything the element paints, mask included. At 30% progress every
+ * tick was squashed to 30% of its pitch, so the fill read as a finer, denser
+ * comb than the track under it and the ticks crawled as the page scrolled -
+ * the graticule was being stretched rather than filled.
+ *
+ * So the comb sits on `.railFillMask`, which spans the whole track and never
+ * transforms, and the bar inside it is plain accent and only scales. The mask
+ * is applied after the child's transform, so the ticks stay pinned to the
+ * track's pitch and the bar simply uncovers more of them. Still one compositor
+ * transform, still `scaleY` from the top off the same motion value as the head,
+ * so the two can never disagree about where the reader is.
  */
 .railFill {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 0;
+  background: var(--accent);
+}
+
+.railFillMask {
   position: absolute;
   inset: 0 auto 0 50%;
   translate: -50% 0;
   width: 1px;
-  transform-origin: 50% 0;
-  background: var(--accent);
   -webkit-mask-image: repeating-linear-gradient(
     180deg,
     #000 0 var(--comb-on),
@@ -489,22 +433,33 @@
  * and this column would otherwise be about forty pixels apart, and forty pixels
  * is close enough to read as a collision that nearly happened.
  */
+/*
+ * A two-column table, both columns ranged left: labels start on one x, values
+ * start on another. Right-aligned, the labels were ragged on their left edge
+ * (FPS is a character short of the rest) and read as four separate lines
+ * rather than as one table.
+ *
+ * The block itself still hangs from the right inset - only the alignment
+ * *inside* it changed - and `.readout` is `display: contents` so its two spans
+ * become cells of this grid and share its column tracks.
+ */
 .readouts {
   position: absolute;
   top: calc(var(--hud-inset) + var(--hud-frame-len) + var(--space-4));
   right: var(--hud-inset);
   display: grid;
-  gap: 5px;
-  justify-items: end;
+  grid-template-columns: auto auto;
+  column-gap: var(--space-2);
+  row-gap: 5px;
+  justify-items: start;
+  align-items: baseline;
   font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
 }
 
 .readout {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  font-size: var(--text-2xs);
-  letter-spacing: var(--tracking-wide);
+  display: contents;
 }
 
 /* Label under value, by a full step. These rows are read as "23:19:19", not as
@@ -516,15 +471,16 @@
 }
 
 .readoutValue {
-  /* Fixed cell, so the four rows form a column ranged on one right margin. The
-     clock is the widest at 8 characters and never varies (see useClock); the two
-     that do vary are the viewport reading, which changes as a window is dragged,
-     and the frame rate, which is two digits at 60Hz and three at 120 and crosses
-     between them exactly when frames are being dropped. Without a fixed cell
-     either one would drag the whole block sideways - a readout advertising its
-     own instability. */
+  /* Fixed cell, so the block's width - and with it, since it hangs from the
+     right inset, the left edge both columns range on - does not move. The clock
+     never varies (see useClock); the two that do are the viewport reading, which
+     changes as a window is dragged, and the frame rate, which is two digits at
+     60Hz and three at 120 and crosses between them exactly when frames are being
+     dropped. Without a fixed cell either one would drag the whole block sideways
+     - a readout advertising its own instability. 9ch covers the widest
+     realistic viewport reading (2552×1274). */
   min-width: 9ch;
-  text-align: right;
+  text-align: left;
   color: var(--fg-muted);
   font-variant-numeric: tabular-nums;
 }
@@ -540,16 +496,7 @@
  * sits at the reader's position in the document, the clock still ticks, the
  * label still changes.
  *
- * What goes is the part that is only movement: the lock's snap (the corners
- * change state instantly instead), and the decode, which Scramble drops on its
- * own by reading the same preference.
+ * What goes is the part that is only movement: the decode, which Scramble drops
+ * on its own by reading the same preference. The brackets need no rule here -
+ * they no longer animate under any preference.
  */
-@media (prefers-reduced-motion: reduce) {
-  .frame[data-locking] .bracket {
-    animation: none;
-  }
-
-  .bracket {
-    transition: none;
-  }
-}

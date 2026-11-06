@@ -15,16 +15,11 @@
  */
 
 /*
- * Five paint-time layers on one element, in this order from the top down: grain,
- * scanlines, vignette, and the two axes of the survey grid. None of them takes a
- * compositor layer of its own - they are `background-image` entries on a wrapper
- * that was already being painted, which is the difference between texture that
- * is free and texture that costs a pass over the viewport every frame.
- *
- * The vignette sits *above* the grid deliberately. The grid is a survey overlay
- * and an overlay that stays at full strength into the corners of the screen
- * reads as wallpaper; dimmed at the edges it reads as something projected onto
- * the middle of the field, which is where the content is anyway.
+ * Three paint-time layers on one element, in this order from the top down:
+ * grain, scanlines and vignette. None of them takes a compositor layer of its
+ * own - they are `background-image` entries on a wrapper that was already being
+ * painted, which is the difference between texture that is free and texture
+ * that costs a pass over the viewport every frame.
  */
 .backdrop {
   position: fixed;
@@ -61,19 +56,15 @@
       ellipse 120% 80% at 50% 0%,
       transparent 30%,
       color-mix(in srgb, var(--bg-base) 62%, transparent) 100%
-    ),
-    /*
-     * The survey grid, one gradient per axis.
-     *
-     * 104px cells, which is not a round number for a reason: the dot field in
-     * front of this is on a 34px pitch, and a grid at 102 (exactly 3x) would beat
-     * against it into a visible moiré wherever the two agree. Two pixels of drift
-     * per cell is enough that they never line up twice.
-     */
-    repeating-linear-gradient(90deg, var(--grid-line) 0 1px, transparent 1px 104px),
-    repeating-linear-gradient(0deg, var(--grid-line) 0 1px, transparent 1px 104px);
-  background-repeat: repeat, repeat, no-repeat, repeat, repeat;
-  background-size: 160px 160px, auto, 100% 100%, auto, auto;
+    );
+  /*
+   * No survey grid. It was a 104px ruled grid under the vignette, and both axes
+   * came out: the verticals read as margins boxing the column in, and the
+   * horizontals left on their own read as lined paper. The dot field and the
+   * scanlines already give the field its texture without ruling it.
+   */
+  background-repeat: repeat, repeat, no-repeat;
+  background-size: 160px 160px, auto, 100% 100%;
 }
 
 /* --------------------------------------------------------------- aurora */

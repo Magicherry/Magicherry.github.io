@@ -264,10 +264,10 @@ body {
  * at the exact moment they had arrived to read it. A signal that interrupts the
  * thing it is announcing is not a signal.
  *
- * What survives of the lock is what stays out of the way: the corners brighten
- * and fall back without moving, the rail's readout decodes in the margin, and
- * the block rules further down take a charge as the event reaches them. The
- * heading is simply left alone to be read.
+ * The corners have since gone the same way - they stopped moving, then stopped
+ * lighting too. What survives of the lock is what stays out of the way: the
+ * rail's readout decodes in the margin, and the block rules further down take a
+ * charge as the event reaches them. The heading is simply left alone to be read.
  *
  * `data-acquired` stays on the section - the rule charge below still reads it.
  */
@@ -296,9 +296,8 @@ body {
  * corner brackets read as a frame rather than as an outline.
  *
  * Ticked, not solid, and the ticks are a graticule: they measure nothing and
- * nothing fills them. A scale with no gauge on it is honest - it is the same
- * mark as the survey grid behind the whole page - where a scale with a bar
- * across it would be claiming a quantity this site does not have.
+ * nothing fills them. A scale with no gauge on it is honest, where a scale with
+ * a bar across it would be claiming a quantity this site does not have.
  *
  * `--hud-rule-len` is the tick's height and the box's. 7px is `--cut-sm`, so the
  * terminus is exactly as tall as the smallest chamfer on the page.
@@ -390,9 +389,8 @@ body {
  *
  * The block heads inside a section (Certifications, Tools, Education) are the
  * only horizontals the design gives itself, and on acquisition they are what
- * carries the lock *down into* the content - the corners snap at the edge of the
- * screen, the title blooms at the top of the column, and then the rules further
- * down light in turn as the same event reaches them.
+ * carries the lock *down into* the content - the rail decodes in the margin,
+ * and then the rules further down light in turn as the same event reaches them.
  *
  * Its own pseudo-element rather than a brightening of `::before`, because the
  * two are different figures on the same line: `::before` is the run, at even

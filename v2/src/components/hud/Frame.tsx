@@ -3,7 +3,7 @@ import { motion, useTransform } from 'motion/react'
 import Scramble from '@/components/fx/Scramble'
 import { useLocale } from '@/lib/i18n'
 import { SECTION_IDS, useScrollNav } from '@/lib/scroll'
-import { useMediaQuery, usePrefersReducedMotion } from '@/lib/hooks/useMediaQuery'
+import { useMediaQuery } from '@/lib/hooks/useMediaQuery'
 import { useClock } from '@/lib/hooks/useClock'
 import { useFps } from '@/lib/hooks/useFps'
 import { ui } from '@/content/copy'
@@ -75,7 +75,6 @@ function useViewport(): string {
 export default function Frame() {
   const { t, locale } = useLocale()
   const { active, progress } = useScrollNav()
-  const reducedMotion = usePrefersReducedMotion()
   const clock = useClock()
   const viewport = useViewport()
 
@@ -130,41 +129,18 @@ export default function Frame() {
   const fps = useFps(wideFrame)
 
   /*
-   * The lock, and it is the one thing here that is an *event* rather than a
-   * reading.
+   * No lock on the corners. When the spy hands over a new section, only the
+   * rail's readout decodes - the brackets stay exactly as they are.
    *
-   * When the spy hands over a new section the frame does not simply start
-   * showing a different label - it re-acquires: the corner brackets light and
-   * fall back, and the rail's readout decodes. That difference is the entire
-   * argument for this component. A highlight that changes is a page reacting; a
-   * frame that visibly re-locks is an instrument tracking.
-   *
-   * The corners light rather than move, and Frame.module.css carries the long
-   * argument for why. Briefly: a boundary is crossed every few seconds of
-   * ordinary reading, and four marks jumping in the corners of the visual field
-   * that often is an interruption rather than a signal.
-   *
-   * State rather than a CSS animation restarted by hand, because the animation
-   * has to be retriggerable - scrolling up and down across a boundary fires this
-   * repeatedly, and a keyframe animation that is already running ignores a
-   * second request unless the element is reflowed. Mounting an attribute for the
-   * duration sidesteps that entirely.
-   *
-   * The timer is deliberately *longer* than the 420ms keyframe it is holding
-   * open. Matching the two exactly is a race: `setTimeout` is not accurate to
-   * the millisecond and a frame of jitter either way meant the attribute was
-   * sometimes pulled while the animation was still on its last step, cutting the
-   * decay off part-lit. Forty milliseconds of slack costs nothing - the
-   * animation has ended and the brackets are already at rest through all of it -
-   * and guarantees the lock always completes on its own terms.
+   * They used to light to the accent and fall back on every acquisition (and
+   * before that, pull inward and release). Both were withdrawn for the reason
+   * base.css states under `.sectionTitle`: a boundary is crossed every few
+   * seconds of ordinary reading, so anything tied to it is seen dozens of times
+   * a visit, and four marks flashing in the corners of the visual field that
+   * often read as a flicker rather than a signal. The decode stays because it
+   * sits in the margin with the label it is announcing, and changes nothing
+   * else on screen.
    */
-  const [locking, setLocking] = useState(false)
-  useEffect(() => {
-    if (reducedMotion) return
-    setLocking(true)
-    const timer = window.setTimeout(() => setLocking(false), 460)
-    return () => window.clearTimeout(timer)
-  }, [active, reducedMotion])
 
   /*
    * Derived straight off the motion value, so the number and the head both
@@ -201,11 +177,7 @@ export default function Frame() {
   if (!cornerFrame) return null
 
   return (
-    <div
-      className={styles['frame']}
-      data-locking={locking || undefined}
-      aria-hidden="true"
-    >
+    <div className={styles['frame']} aria-hidden="true">
       {/* Unconditional: the early return above already established that this
           width has a frame at all, so a second test for the same thing would
           only invite the two drifting apart. */}
@@ -255,7 +227,9 @@ export default function Frame() {
                   takes a 0..1 number, which is exactly what `progress` already
                   is, so the fill and the head below are reading the same
                   quantity through two different transforms and cannot drift. */}
-              <motion.span className={styles['railFill']} style={{ scaleY: progress }} />
+              <span className={styles['railFillMask']}>
+                <motion.span className={styles['railFill']} style={{ scaleY: progress }} />
+              </span>
               <motion.span className={styles['railHeadTrack']} style={{ y: headY }}>
                 <span className={styles['railHead']} />
               </motion.span>

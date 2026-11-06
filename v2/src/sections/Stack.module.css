@@ -31,7 +31,12 @@
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
   padding: 2px 7px;
-  border-radius: var(--radius-chip);
+  /* A capsule rather than the square chip counters default to: a round end reads
+     as a badge on the title, not as a second, smaller plate beside it. The
+     `corner-shape` reset is required - a 999px radius under the global bevel is
+     a diamond. */
+  border-radius: var(--radius-round);
+  corner-shape: round;
   background: color-mix(in srgb, var(--accent) 14%, transparent);
   color: var(--accent);
   letter-spacing: 0;
@@ -57,7 +62,13 @@
   justify-items: center;
   gap: 9px;
   padding: var(--space-4) 6px;
-  border-radius: var(--radius-sm);
+  /* A rounded rectangle for the hover wash, not the bevel notch: the cell holds
+     vendor marks that are mostly round or rounded tiles, and a cut corner around
+     them read as a second shape language in one box. A single length, so all
+     four corners arc - a `--radius-*` shorthand would round two and leave two
+     square - and `corner-shape: round` to opt out of the global bevel. */
+  border-radius: 12px;
+  corner-shape: round;
   color: var(--fg);
   text-align: center;
   transition:
@@ -174,7 +185,9 @@
   gap: var(--space-3);
   height: 100%;
   padding: 10px 12px;
-  border-radius: var(--radius-sm);
+  /* Same hover figure as `.item` above. */
+  border-radius: 12px;
+  corner-shape: round;
   color: var(--fg);
   transition:
     background-color var(--dur-fast) var(--ease-enter),

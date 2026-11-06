@@ -2,7 +2,11 @@
    the interface prints rather than writes. */
 .order {
   padding: 5px 12px;
-  border-radius: var(--radius-chip);
+  /* A capsule, like the other small labels (skill counts, project filters).
+     The `corner-shape` reset is required - 999px under the global bevel is a
+     diamond. */
+  border-radius: var(--radius-round);
+  corner-shape: round;
   background: color-mix(in srgb, var(--fg) 6%, transparent);
   box-shadow: inset 0 0 0 1px var(--line);
   font-family: var(--font-mono);
@@ -152,7 +156,9 @@
  */
 .track {
   padding: 3px 10px;
-  border-radius: var(--radius-chip);
+  /* Capsule, matching `.order` and the live badge beside it. */
+  border-radius: var(--radius-round);
+  corner-shape: round;
   background: color-mix(in srgb, var(--fg) 8%, transparent);
   box-shadow: inset 0 0 0 1px var(--line);
   color: var(--fg);
@@ -168,7 +174,8 @@
   align-items: center;
   gap: 5px;
   padding: 3px 10px 3px 7px;
-  border-radius: var(--radius-chip);
+  border-radius: var(--radius-round);
+  corner-shape: round;
   background: color-mix(in srgb, var(--status-live) 16%, transparent);
   color: var(--status-live);
   font-family: var(--font-mono);

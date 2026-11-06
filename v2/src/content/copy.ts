@@ -52,7 +52,7 @@ export const ui = {
      * already names.
      */
     about: {
-      title: { en: 'Know Who **I Am**', zh: '进一步了解**我**' },
+      title: { en: 'Know Who **I Am**', zh: '关于**我**' },
     },
     stack: {
       title: { en: 'Professional **Skillset**', zh: '我常用的**技术栈**' },
@@ -92,14 +92,14 @@ export const ui = {
   about: {
     paragraphs: {
       en: [
-        'Today I am an **AI Agent Engineer** at [NIO](https://www.nio.com/), building **enterprise agent systems** for manufacturing operations across **LLMs and RAG**, **workflow automation** and **data-driven decision support**. Before that I researched **NLP and LLMs** at the [Rutgers CAIT Lab](https://cait.rutgers.edu/), and shipped large-scale web applications at a **Tencent × Shanghai Metro** joint venture.',
+        'Today I am an **AI Agent Engineer** and **Business Analyst Assistant** at [NIO](https://www.nio.com/), building **enterprise agent systems** for manufacturing operations across **LLMs and RAG**, **workflow automation** and **data-driven decision support**. Before that I researched **NLP and LLMs** at the [Rutgers CAIT Lab](https://cait.rutgers.edu/), and shipped large-scale web applications at a **Tencent × Shanghai Metro** joint venture.',
         'I work across the stack — from **responsive, detail-obsessed interfaces** to **dependable back-end services**, with real practice in **database design, API design, data pipelines and containerised deployment**.',
         'What I actually care about is that the result is **fast, maintainable and kind to the person using it**. A system that holds up technically *and* feels natural in the hand is the whole goal.',
       ],
       zh: [
-        '现在我在 [蔚来](https://www.nio.com/) 担任 **AI Agent 工程师**，面向制造运营构建**企业级 Agent 系统**，围绕 **LLM / RAG**、**流程自动化**与**数据驱动的决策支持**展开。此前我在 [Rutgers CAIT Lab](https://cait.rutgers.edu/) 从事 **NLP / LLM** 研究，并在**腾讯 × 上海地铁**合资公司参与大规模 Web 应用的工程建设。',
-        '在技术上我横跨前后端——既关注**界面的响应速度与交互细节**，也重视**后端服务的稳定与可靠**，并持续实践**数据库与 API 设计、数据处理流程和容器化部署**。',
-        '我真正在意的，是做出来的东西**足够快、便于维护、对人友好**。既能经得起技术推敲，也能让人用得自然顺手。',
+        '目前，我在[蔚来](https://www.nio.com/)担任**业务分析助理兼 AI Agent 工程师**，聚焦制造运营场景下的**企业级 AI Agent 系统研发与落地**，结合 **LLM / RAG、业务流程自动化与数据驱动决策**，推动 AI 技术与实际业务的深度融合。此前，我曾在 [Rutgers CAIT Lab](https://cait.rutgers.edu/) 从事 **NLP / LLM** 相关研究，并在**腾讯 × 上海地铁**合资公司参与大型 Web 应用的研发与工程实践。',
+        '技术上，我具备**全栈开发与 AI 应用工程**的复合背景，既关注**前端性能与交互体验**，也重视**后端架构的稳定性与可扩展性**，并持续实践**数据库与 API 设计、数据处理管道及容器化部署**。',
+        '相比单纯追求技术复杂度，我更在意产品能否真正解决问题：**性能出色、易于维护、体验友好**。既经得起技术推敲，也能贴近真实业务需求，让技术价值真正落地。',
       ],
     } satisfies Localized<readonly string[]>,
     /*
