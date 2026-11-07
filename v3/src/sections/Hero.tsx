@@ -1,10 +1,11 @@
 import { useLayoutEffect, useRef, type CSSProperties } from 'react'
-import { LuArrowUpRight } from 'react-icons/lu'
+import { LuArrowUpRight, LuMapPin } from 'react-icons/lu'
 import { useLocale } from '@/lib/i18n'
 import { site } from '@/content/site'
 import { useScrollTilt } from '@/lib/useScrollTilt'
 import AgentWindow from '@/components/AgentWindow'
 import CvDownload from '@/components/CvDownload'
+import HeroSky from '@/components/fx/HeroSky'
 import styles from './Hero.module.css'
 
 /**
@@ -47,13 +48,15 @@ export default function Hero() {
       {/* Only the bloom behind the headline. The dot field this used to hold
           is gone: v2's lens field (components/fx) now covers the whole page,
           and a second grid at a different pitch beat against it. */}
-      <div className={styles['field']} aria-hidden="true" />
+      <div className={styles['field']} aria-hidden="true">
+        <HeroSky className={styles['sky']} />
+      </div>
 
       <div className={`container ${styles['inner']}`}>
         <div className={styles['copy']}>
           <div className={`hero-enter ${styles['heading']}`} style={enter(24, 10, 0.9, 0)}>
-            <span className="eyebrow">
-              <span className={styles['pulse']} aria-hidden="true" />
+            <span className={styles['badge']}>
+              <LuMapPin className={styles['pin']} aria-hidden="true" />
               {t(site.hero.label)}
             </span>
             <h1 id="hero-title" className="text-hero">

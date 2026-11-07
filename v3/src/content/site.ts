@@ -14,8 +14,9 @@ import type { Localized } from './types'
 
 export const site = {
   hero: {
-    /* The mono eyebrow above the headline. */
-    label: { en: 'NIO · Shanghai', zh: '蔚来 · 上海' },
+    /* The status badge above the headline. Says "now", because the pulsing
+       dot beside it does - a bare "NIO · Shanghai" left the dot unexplained. */
+    label: { en: 'Now at NIO in Shanghai', zh: '现就职于上海蔚来' },
     headline: { en: "Hi, I'm Daniel Zhou", zh: 'Hi，我是周昱廷' },
     lines: {
       en: ['Building enterprise AI agent systems for manufacturing operations — balancing engineering, interface craft and interaction.'],

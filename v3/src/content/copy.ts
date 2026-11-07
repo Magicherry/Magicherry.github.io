@@ -18,7 +18,7 @@ export const ui = {
    */
   nav: {
     home: { en: 'Home', zh: '首页' },
-    about: { en: 'About', zh: '关于' },
+    about: { en: 'About', zh: '关于我' },
     stack: { en: 'Stack', zh: '技术栈' },
     work: { en: 'Work', zh: '经历' },
     projects: { en: 'Projects', zh: '项目' },

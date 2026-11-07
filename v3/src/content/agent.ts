@@ -51,7 +51,7 @@ export const agent = {
 
   /* What the user "asks" when a topic is opened from the sidebar or a chip. */
   questions: {
-    about: { en: "I'd like to know more about you", zh: '想多了解一些关于你的事' },
+    about: { en: 'Tell me more about yourself', zh: '多讲讲你自己吧' },
     intro: { en: 'Could you introduce yourself?', zh: '可以介绍一下你自己吗？' },
     projects: { en: 'Show me your projects', zh: '看看你做过的项目' },
     experience: { en: 'Walk me through your experience', zh: '介绍一下你的工作经历' },
@@ -88,9 +88,11 @@ export const agent = {
 
   /* Suggestion chips, pinned above the composer. */
   chips: [
-    /* Worded as the visitor's question, like the other chips are its topics:
-       the visitor is the one asking, so it is "about you", not "about me". */
-    { topic: 'about', label: { en: 'About you', zh: '关于你' } },
+    /* A topic, like its neighbours - not a pronoun. "About you" / "关于你" was
+       first, worded as the visitor's question, but a chip reads as a label,
+       and a label that says "you" to the visitor sounds like it is about
+       *them*. "个人简介" is the plain name for what the reply is: v2's About. */
+    { topic: 'about', label: { en: 'About', zh: '个人简介' } },
     { topic: 'projects', label: { en: 'Projects', zh: '项目' } },
     { topic: 'experience', label: { en: 'Experience', zh: '经历' } },
     { topic: 'github', label: { en: 'GitHub activity', zh: 'GitHub 动态' } },
@@ -144,7 +146,7 @@ const ROUTES: readonly [Topic, RegExp][] = [
   ['contact', /联系|邮箱|邮件|微信|电话|领英|contact|email|mail|wechat|phone|linkedin|reach/i],
   /* Before `intro`: "about you" asks for the longer self-portrait, not the
      one-paragraph introduction. */
-  ['about', /关于你|关于我|兴趣|爱好|理念|about you|about me|yourself|interest|hobb/i],
+  ['about', /关于你|关于我|背景|简介|兴趣|爱好|理念|about you|about me|background|yourself|interest|hobb|values/i],
   ['intro', /介绍|你是谁|你好|hello|\bhi\b|who are you|introduce/i],
 ]
 
