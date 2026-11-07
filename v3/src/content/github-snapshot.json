@@ -1,0 +1,45 @@
+{
+  "takenAt": "2026-11-07T11:47:38.690Z",
+  "repos": [
+    {
+      "name": "Magicherry.github.io",
+      "description": "A modern React-based personal portfolio featuring smooth animations, glassmorphic design, and an interactive UX.",
+      "html_url": "https://github.com/Magicherry/Magicherry.github.io",
+      "language": "CSS",
+      "stargazers_count": 3,
+      "pushed_at": "2026-11-07T10:31:03Z",
+      "fork": false
+    },
+    {
+      "name": "VidFlow",
+      "description": "A native Windows 11 (WinUI 3) video downloader supporting YouTube, Bilibili, RedNote, Weibo, X (Twitter), and Douyin, powered by yt-dlp.",
+      "html_url": "https://github.com/Magicherry/VidFlow",
+      "language": "C#",
+      "stargazers_count": 2,
+      "pushed_at": "2026-11-05T15:19:42Z",
+      "fork": false
+    },
+    {
+      "name": "VidFlow-for-Mac",
+      "description": "A native macOS video downloader built with Swift and SwiftUI, following Apple's native design guidelines, supporting YouTube, Bilibili, RedNote, Weibo, X (Twitter), and Douyin, powered by yt-dlp.",
+      "html_url": "https://github.com/Magicherry/VidFlow-for-Mac",
+      "language": "Swift",
+      "stargazers_count": 0,
+      "pushed_at": "2026-10-30T18:18:46Z",
+      "fork": false
+    },
+    {
+      "name": "Management_Dashboard",
+      "description": "A full-stack management system built with Spring Boot and Vue.js with administrative capabilities.",
+      "html_url": "https://github.com/Magicherry/Management_Dashboard",
+      "language": "Vue",
+      "stargazers_count": 0,
+      "pushed_at": "2026-10-16T09:26:54Z",
+      "fork": false
+    }
+  ],
+  "user": {
+    "public_repos": 17,
+    "followers": 3
+  }
+}

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import snapshot from '@/content/github-snapshot.json'
 
 /**
  * Public GitHub data for the agent window's "GitHub" reply.
@@ -20,6 +21,14 @@ import { useEffect, useState } from 'react'
  *
  * Either source can fail independently; the reply shows what arrived and
  * falls back to a link to the profile if the calendar did not.
+ *
+ * The REST half fails far more often than that budget suggests: the 60 an hour
+ * belong to the visitor's *IP*, and behind a campus, office or mobile-carrier
+ * NAT they are shared with everyone else on it. Spent, every call is a 403, and
+ * the reply used to show the calendar alone. So the profile and repositories
+ * fall back - first to the last copy this browser fetched (localStorage), then
+ * to the snapshot taken at build time (scripts/github-snapshot.mjs), whichever
+ * is newer. A visitor sees data at most one deploy old instead of none.
  */
 
 export interface ContributionDay {
@@ -49,6 +58,39 @@ export type GithubState = { status: 'loading' } | { status: 'error' } | { status
 
 let request: Promise<GithubData> | null = null
 
+interface Saved {
+  takenAt: string
+  repos: Repo[]
+  user: { public_repos: number; followers: number }
+}
+
+const CACHE_KEY = 'gh-snapshot'
+
+/* Wrapped both ways: Safari Lockdown and some webviews throw on *read*. */
+function readCache(): Saved | null {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY)
+    return raw ? (JSON.parse(raw) as Saved) : null
+  } catch {
+    return null
+  }
+}
+
+function writeCache(saved: Saved) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(saved))
+  } catch {
+    /* storage full or blocked - the build snapshot still covers it */
+  }
+}
+
+/** The newer of this browser's last fetch and the build's snapshot. */
+function fallback(): Saved {
+  const cached = readCache()
+  const built = snapshot as Saved
+  return cached && cached.takenAt > built.takenAt ? cached : built
+}
+
 const json = async <T,>(url: string): Promise<T> => {
   const res = await fetch(url, { headers: { Accept: 'application/json' } })
   if (!res.ok) throw new Error(`${res.status} ${url}`)
@@ -63,15 +105,22 @@ function load(user: string): Promise<GithubData> {
     json<Repo[]>(`https://api.github.com/users/${user}/repos?sort=pushed&per_page=10`),
     json<{ public_repos: number; followers: number }>(`https://api.github.com/users/${user}`),
   ]).then(([calendar, repos, profile]) => {
-    const data: GithubData = {
-      days: calendar.status === 'fulfilled' ? calendar.value.contributions : null,
-      total: calendar.status === 'fulfilled' ? (calendar.value.total['lastYear'] ?? null) : null,
-      repos:
-        repos.status === 'fulfilled' ? repos.value.filter((r) => !r.fork).slice(0, 4) : null,
+    const live = {
+      repos: repos.status === 'fulfilled' ? repos.value.filter((r) => !r.fork).slice(0, 4) : null,
       user:
         profile.status === 'fulfilled'
           ? { public_repos: profile.value.public_repos, followers: profile.value.followers }
           : null,
+    }
+    if (live.repos && live.user) {
+      writeCache({ takenAt: new Date().toISOString(), repos: live.repos, user: live.user })
+    }
+    const saved = live.repos && live.user ? null : fallback()
+    const data: GithubData = {
+      days: calendar.status === 'fulfilled' ? calendar.value.contributions : null,
+      total: calendar.status === 'fulfilled' ? (calendar.value.total['lastYear'] ?? null) : null,
+      repos: live.repos ?? (saved?.repos.length ? saved.repos : null),
+      user: live.user ?? saved?.user ?? null,
     }
     // Nothing at all arrived: let a later open try again rather than caching
     // the failure for the rest of the visit.

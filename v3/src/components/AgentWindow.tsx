@@ -195,18 +195,21 @@ export default function AgentWindow() {
    * Sending a question scrolls it into view (with "thinking" under it). Then,
    * as the reply streams, every frame the stream reports how far it has got
    * (`StreamProgress`) and the log scrolls just enough to keep that line above
-   * the bottom fade - always down, never back up.
+   * the bottom fade - always down, never back up - so it ends at the bottom of
+   * the answer.
    *
-   * It stops following when the question reaches the top of the log. A reply
-   * longer than the window - the project list, the GitHub calendar - then
-   * goes on streaming below, and the reader takes it from the top of their
-   * own answer instead of being carried past it. It also stops the moment the
-   * reader scrolls, swipes or keys through the log themselves: following is a
-   * convenience, and it never fights a hand on the wheel. The next question
+   * It used to stop once the question reached the top of the log, so a long
+   * reply would be read from its start. On a phone the log is ~270px tall and
+   * almost every reply is longer than that, so in practice the follow gave up
+   * a third of the way down - and the GitHub reply, whose data lands seconds
+   * later, was never followed at all. It now follows to the end, like every
+   * chat client, and the one thing that stops it is the reader: a wheel, a
+   * swipe or a key in the log, and it never fights them. The next question
    * starts it again.
    *
-   * Under reduced motion there is no stream: the whole reply is there at once,
-   * and the log jumps straight to the question.
+   * Under reduced motion there is no stream: the reply appears whole, and the
+   * log jumps to its bottom whenever the log's content changes while
+   * following - including the GitHub data arriving late.
    */
   const following = useRef<number | null>(null)
   /* The follow's scroll target and its frame loop. `released` is set when the
@@ -214,8 +217,8 @@ export default function AgentWindow() {
   const glide = useRef({ target: 0, raf: 0, released: false })
   const lastId = turns[turns.length - 1]?.id
 
-  /** How far the log may scroll for this turn: its question at the top. */
-  const ceilingOf = (log: HTMLElement, id: number) => {
+  /** Where this turn's question sits at the top of the log. */
+  const questionTop = (log: HTMLElement, id: number) => {
     const el = log.querySelector<HTMLElement>(`[data-turn="${id}"]`)
     return el ? el.offsetTop - 12 : null
   }
@@ -223,35 +226,44 @@ export default function AgentWindow() {
   useEffect(() => {
     const log = logRef.current
     if (!log || lastId === undefined || lastId === 0) return
-    const ceiling = ceilingOf(log, lastId)
-    if (ceiling === null) return
-    if (reduced) {
-      log.scrollTo({ top: ceiling })
-      return
-    }
+    const top = questionTop(log, lastId)
+    if (top === null) return
     following.current = lastId
     cancelAnimationFrame(glide.current.raf)
     glide.current = { target: 0, raf: 0, released: false }
+    if (reduced) {
+      log.scrollTo({ top: log.scrollHeight })
+      return
+    }
     /* The browser clamps this to what there is to scroll: with only the
        question and "thinking" below the old content, it lands with both in
        view, and the stream takes it from there. */
-    log.scrollTo({ top: ceiling, behavior: 'smooth' })
+    log.scrollTo({ top, behavior: 'smooth' })
   }, [lastId, reduced])
+
+  /* Reduced motion: no stream reports progress, so watch the log itself. */
+  useEffect(() => {
+    const log = logRef.current
+    if (!log || !reduced) return
+    const mo = new MutationObserver(() => {
+      if (following.current !== null) log.scrollTop = log.scrollHeight
+    })
+    mo.observe(log, { childList: true, subtree: true })
+    return () => mo.disconnect()
+  }, [reduced])
 
   const followStream = useCallback((frontier: Element) => {
     const log = logRef.current
-    const id = following.current
-    if (!log || id === null) return
-    const ceiling = ceilingOf(log, id)
-    if (ceiling === null) return
+    if (!log || following.current === null) return
     /* The frontier's bottom in the log's scroll coordinates, kept clear of
-       the 16-unit fade at the bottom edge with a line's room to spare. */
+       the 16-unit fade at the bottom edge with a line's room to spare - and
+       never past what the log can scroll, or the glide below would chase a
+       target the browser keeps clamping and never finish. */
     const bottom = frontier.getBoundingClientRect().bottom - log.getBoundingClientRect().top + log.scrollTop
-    const want = Math.min(ceiling, bottom + 40 - log.clientHeight)
+    const want = Math.min(log.scrollHeight - log.clientHeight, bottom + 40 - log.clientHeight)
     /* Only ever down: past both the last target and where the log is now. */
     if (want <= Math.max(glide.current.target, log.scrollTop + 1)) return
     glide.current.target = want
-    if (want >= ceiling) following.current = null
     /*
      * Glide there rather than jump. The stream reveals a whole row - a project
      * card, a list item - in one step, so the target moves in 50-odd pixel

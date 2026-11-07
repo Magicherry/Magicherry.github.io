@@ -1052,6 +1052,11 @@ a.projRow:hover .projAction {
 }
 
 .qr img {
+  /* Block and centred: the global reset makes images block-level, which
+     `text-align` no longer centres - on one column the code sat at the left
+     of a full-width white slab. */
+  display: block;
+  margin-inline: auto;
   width: calc(var(--u) * 112);
   height: calc(var(--u) * 112);
 }
@@ -1191,6 +1196,13 @@ a.projRow:hover .projAction {
 @container (max-width: 440px) {
   .contact {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Under the list, the card keeps its own size instead of stretching to the
+     column, and lines up with the rows' inset. */
+  .qr {
+    justify-self: start;
+    margin-inline-start: calc(var(--u) * 8);
   }
 
   .stackList > div {

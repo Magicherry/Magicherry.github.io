@@ -6,6 +6,7 @@
   "homepage": "https://Magicherry.github.io/",
   "scripts": {
     "dev": "vite --port 3003",
+    "prebuild": "node scripts/github-snapshot.mjs",
     "build": "tsc -b && vite build",
     "preview": "vite preview --port 3003",
     "typecheck": "tsc -b --noEmit"
