@@ -1,25 +1,39 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties, type PointerEvent } from 'react'
 import { FaGithub } from 'react-icons/fa6'
-import { LuMenu, LuX } from 'react-icons/lu'
+import { LuBriefcaseBusiness, LuFolderCode, LuLayers, LuMenu, LuSend, LuUserRound, LuX } from 'react-icons/lu'
 import { useLocale } from '@/lib/i18n'
 import { ui } from '@/content/copy'
 import { site } from '@/content/site'
 import { profile } from '@/content/profile'
 import LocaleToggle from './LocaleToggle'
 import CvDownload from './CvDownload'
+import { LensFilter, useLensCondense, useLensMap } from './LensFilter'
 import styles from './Header.module.css'
 
-/** In-page destinations, in page order. Ids match the `<section id>`s in App. */
+/**
+ * In-page destinations, in page order. Ids match the `<section id>`s in App.
+ *
+ * The icons are for the phone menu only. There each destination is a full-width
+ * row of large type, and a glyph in front gives the eye a column to run down;
+ * in the desktop bar the five words sit in one short line and an icon apiece
+ * would only crowd it.
+ */
 export const NAV = [
-  { id: 'about', label: ui.nav.about },
-  { id: 'work', label: ui.nav.work },
-  { id: 'projects', label: ui.nav.projects },
-  { id: 'stack', label: ui.nav.stack },
-  { id: 'contact', label: ui.nav.contact },
+  { id: 'about', label: ui.nav.about, icon: LuUserRound },
+  { id: 'work', label: ui.nav.work, icon: LuBriefcaseBusiness },
+  { id: 'projects', label: ui.nav.projects, icon: LuFolderCode },
+  { id: 'stack', label: ui.nav.stack, icon: LuLayers },
+  { id: 'contact', label: ui.nav.contact, icon: LuSend },
 ] as const
 
 /** Past this many pixels the header leaves the hero and becomes a pill. */
 const SCROLL_THRESHOLD = 80
+
+/** The pill's lens. A 16px bevel on a 41px bar leaves the middle 9px - the
+    x-height of the nav type - optically flat; the rest bends, up to 28px of
+    throw at the rim. Tuned against body text scrolling underneath: half this
+    throw read as plain frosted glass. */
+const LENS = { bevel: 16, falloff: 2, scale: 56, dispersion: 0.12 }
 
 /**
  * The header has two states and moves between them as one object.
@@ -39,6 +53,32 @@ export default function Header() {
   const { t, locale } = useLocale()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [bar, setBar] = useState<HTMLDivElement | null>(null)
+  const lens = useLensMap(bar, LENS)
+  useLensCondense('header-lens', scrolled, !!lens)
+
+  /*
+   * The hover droplet: one small glass pill behind the nav links that slides
+   * to whichever link the pointer is over, with the same liquid figure as the
+   * language toggle and the project filter - leading edge first, trailing edge
+   * following on a springier curve, so it stretches across both links
+   * mid-move. `live` is false when the pointer has just entered the nav: then
+   * the droplet appears where it is needed (fading and swelling in) rather than
+   * sliding over from wherever it was last left.
+   *
+   * Edges are `offsetLeft` against the <nav>, which is the links' offset
+   * parent; the <ul> is deliberately left unpositioned.
+   */
+  const [drop, setDrop] = useState<{ l: number; r: number; dir: 'left' | 'right'; live: boolean } | null>(null)
+  const [dropShown, setDropShown] = useState(false)
+  const moveDrop = (e: PointerEvent<HTMLAnchorElement>) => {
+    if (e.pointerType !== 'mouse') return
+    const a = e.currentTarget
+    const l = a.offsetLeft
+    const r = l + a.offsetWidth
+    setDrop((prev) => ({ l, r, dir: prev && l < prev.l ? 'left' : 'right', live: dropShown && !!prev }))
+    setDropShown(true)
+  }
 
   /* A boolean, not a scroll position in state: the header re-renders when it
      crosses the threshold, not on every scroll frame. */
@@ -68,7 +108,13 @@ export default function Header() {
   return (
     <>
       <header className={styles['wrapper']}>
-        <div className={styles['bar']} data-scrolled={scrolled || undefined}>
+        {lens ? <LensFilter id="header-lens" href={lens} scale={LENS.scale} dispersion={LENS.dispersion} /> : null}
+        <div
+          ref={setBar}
+          className={styles['bar']}
+          data-scrolled={scrolled || undefined}
+          data-lens={lens ? '' : undefined}
+        >
           <div className={styles['start']}>
             <a className={styles['brand']} href="#top" aria-label={t(ui.actions.backToTop)}>
               <img className={styles['avatar']} src={profile.avatar} alt="" width={28} height={28} />
@@ -77,10 +123,20 @@ export default function Header() {
           </div>
 
           <nav className={styles['nav']} aria-label="Primary">
-            <ul className={styles['links']}>
+            {drop ? (
+              <span
+                className={styles['drop']}
+                data-shown={dropShown || undefined}
+                data-live={drop.live || undefined}
+                data-dir={drop.dir}
+                style={{ '--nh-l': `${drop.l}px`, '--nh-r': `${drop.r}px` } as CSSProperties}
+                aria-hidden="true"
+              />
+            ) : null}
+            <ul className={styles['links']} onPointerLeave={() => setDropShown(false)}>
               {NAV.map(({ id, label }) => (
                 <li key={id}>
-                  <a className={styles['link']} href={`#${id}`}>
+                  <a className={styles['link']} href={`#${id}`} onPointerEnter={moveDrop}>
                     {t(label)}
                   </a>
                 </li>
@@ -141,8 +197,9 @@ export default function Header() {
           </button>
         </div>
         <nav className={styles['menuBody']} aria-label="Primary" key={locale}>
-          {NAV.map(({ id, label }) => (
+          {NAV.map(({ id, label, icon: Icon }) => (
             <a key={id} className={styles['menuItem']} href={`#${id}`} onClick={() => setMenuOpen(false)}>
+              <Icon className={styles['menuIcon']} aria-hidden="true" />
               {t(label)}
             </a>
           ))}

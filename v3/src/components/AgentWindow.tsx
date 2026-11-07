@@ -18,7 +18,7 @@ import { site } from '@/content/site'
 import { profile } from '@/content/profile'
 import { agent, routeTopic, type Topic } from '@/content/agent'
 import { Chips, Reply } from './agent/Replies'
-import Stream from './agent/Stream'
+import Stream, { StreamProgress } from './agent/Stream'
 import styles from './AgentWindow.module.css'
 
 /**
@@ -31,7 +31,8 @@ import styles from './AgentWindow.module.css'
  *   - every sidebar entry opens a topic in a fresh thread - the projects, the
  *     experience, the GitHub activity (a live contribution calendar and recent
  *     repositories), the NIO role, the CAIT research;
- *   - suggestion chips under a reply ask a follow-up in the same thread;
+ *   - suggestion chips pinned above the composer ask a follow-up in the same
+ *     thread;
  *   - the composer takes a typed question and routes it by keyword
  *     (content/agent.ts). It is not a model and does not pretend to be one -
  *     anything it cannot place gets an honest "try these instead".
@@ -45,7 +46,7 @@ import styles from './AgentWindow.module.css'
  *
  * Sized in `--u`, a scale unit, so the whole window shrinks as one object;
  * below ~720px of its own width the sidebar is dropped (container query), and
- * the chips under each reply carry the navigation instead.
+ * the pinned chips carry the navigation instead.
  */
 
 const still = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -189,18 +190,112 @@ export default function AgentWindow() {
   }
 
   /*
-   * A new follow-up scrolls its question to the top of the log. Run again
-   * when the reply lands (`pending` clears): while the agent is still
-   * "thinking" there is too little below the question for the log to scroll
-   * that far, so the first pass can only get partway.
+   * The log follows a reply as it streams, the way a chat client does.
+   *
+   * Sending a question scrolls it into view (with "thinking" under it). Then,
+   * as the reply streams, every frame the stream reports how far it has got
+   * (`StreamProgress`) and the log scrolls just enough to keep that line above
+   * the bottom fade - always down, never back up.
+   *
+   * It stops following when the question reaches the top of the log. A reply
+   * longer than the window - the project list, the GitHub calendar - then
+   * goes on streaming below, and the reader takes it from the top of their
+   * own answer instead of being carried past it. It also stops the moment the
+   * reader scrolls, swipes or keys through the log themselves: following is a
+   * convenience, and it never fights a hand on the wheel. The next question
+   * starts it again.
+   *
+   * Under reduced motion there is no stream: the whole reply is there at once,
+   * and the log jumps straight to the question.
    */
+  const following = useRef<number | null>(null)
+  /* The follow's scroll target and its frame loop. `released` is set when the
+     reader takes over, which stops a glide still in flight. */
+  const glide = useRef({ target: 0, raf: 0, released: false })
   const lastId = turns[turns.length - 1]?.id
+
+  /** How far the log may scroll for this turn: its question at the top. */
+  const ceilingOf = (log: HTMLElement, id: number) => {
+    const el = log.querySelector<HTMLElement>(`[data-turn="${id}"]`)
+    return el ? el.offsetTop - 12 : null
+  }
+
   useEffect(() => {
     const log = logRef.current
-    if (!log || lastId === undefined || turns.length < 2) return
-    const el = log.querySelector<HTMLElement>(`[data-turn="${lastId}"]`)
-    if (el) log.scrollTo({ top: el.offsetTop - 12, behavior: reduced ? 'auto' : 'smooth' })
-  }, [lastId, turns.length, pending, reduced])
+    if (!log || lastId === undefined || lastId === 0) return
+    const ceiling = ceilingOf(log, lastId)
+    if (ceiling === null) return
+    if (reduced) {
+      log.scrollTo({ top: ceiling })
+      return
+    }
+    following.current = lastId
+    cancelAnimationFrame(glide.current.raf)
+    glide.current = { target: 0, raf: 0, released: false }
+    /* The browser clamps this to what there is to scroll: with only the
+       question and "thinking" below the old content, it lands with both in
+       view, and the stream takes it from there. */
+    log.scrollTo({ top: ceiling, behavior: 'smooth' })
+  }, [lastId, reduced])
+
+  const followStream = useCallback((frontier: Element) => {
+    const log = logRef.current
+    const id = following.current
+    if (!log || id === null) return
+    const ceiling = ceilingOf(log, id)
+    if (ceiling === null) return
+    /* The frontier's bottom in the log's scroll coordinates, kept clear of
+       the 16-unit fade at the bottom edge with a line's room to spare. */
+    const bottom = frontier.getBoundingClientRect().bottom - log.getBoundingClientRect().top + log.scrollTop
+    const want = Math.min(ceiling, bottom + 40 - log.clientHeight)
+    /* Only ever down: past both the last target and where the log is now. */
+    if (want <= Math.max(glide.current.target, log.scrollTop + 1)) return
+    glide.current.target = want
+    if (want >= ceiling) following.current = null
+    /*
+     * Glide there rather than jump. The stream reveals a whole row - a project
+     * card, a list item - in one step, so the target moves in 50-odd pixel
+     * leaps; a quarter of the remaining distance per frame turns each leap
+     * into a short ease-out, and catches up within ~150ms of the stream
+     * pausing. A hand on the log cancels the glide with the follow.
+     */
+    if (glide.current.raf) return
+    const step = () => {
+      const g = glide.current
+      const d = g.target - log.scrollTop
+      if (following.current === null && g.released) {
+        g.raf = 0
+        return
+      }
+      if (d < 0.5) {
+        if (d > 0) log.scrollTop = g.target
+        g.raf = 0
+        return
+      }
+      log.scrollTop += Math.max(1, d * 0.25)
+      g.raf = requestAnimationFrame(step)
+    }
+    glide.current.raf = requestAnimationFrame(step)
+  }, [])
+
+  /* A hand on the log ends the follow. Input events, not `scroll` - the log
+     scrolls itself while following, and must not take that as the reader. */
+  useEffect(() => {
+    const log = logRef.current
+    if (!log) return
+    const release = () => {
+      following.current = null
+      glide.current.released = true
+    }
+    log.addEventListener('wheel', release, { passive: true })
+    log.addEventListener('touchstart', release, { passive: true })
+    log.addEventListener('keydown', release)
+    return () => {
+      log.removeEventListener('wheel', release)
+      log.removeEventListener('touchstart', release)
+      log.removeEventListener('keydown', release)
+    }
+  }, [])
 
   const title =
     active === 'new'
@@ -292,11 +387,11 @@ export default function AgentWindow() {
           </div>
 
           <div ref={logRef} className={styles['conversation']} role="log" aria-live="polite">
+            <StreamProgress.Provider value={followStream}>
             <div className={styles['transcript']}>
               {turns.length === 0 ? (
                 <div className={`${styles['assistant']} ${styles['enter']}`}>
                   <p className={styles['lead']}>{t(agent.greeting)}</p>
-                  <Chips onPick={(topic) => ask(topic)} />
                 </div>
               ) : null}
 
@@ -330,7 +425,7 @@ export default function AgentWindow() {
                           <div className={styles['assistant']}>
                             {turn.topic === 'intro' ? <IntroText shown={intro.shown} locale={locale} /> : null}
                             {turn.topic !== 'intro' || intro.stage === 'done' ? (
-                              <Reply topic={turn.topic} onPick={(topic) => ask(topic)} />
+                              <Reply topic={turn.topic} />
                             ) : null}
                           </div>
                         ) : (
@@ -339,7 +434,7 @@ export default function AgentWindow() {
                              mid-stream restarts it in the new language. */
                           <Stream key={`${turn.id}-${locale}`} className={styles['assistant']}>
                             {turn.topic === 'intro' ? <IntroText shown={BLOCKS} locale={locale} /> : null}
-                            <Reply topic={turn.topic} onPick={(topic) => ask(topic)} />
+                            <Reply topic={turn.topic} />
                           </Stream>
                         )}
                       </>
@@ -348,9 +443,11 @@ export default function AgentWindow() {
                 )
               })}
             </div>
+            </StreamProgress.Provider>
           </div>
 
           <div className={styles['composerDock']}>
+            <Chips className={styles['dockChips']} onPick={(topic) => ask(topic)} />
             <form className={styles['composer']} onSubmit={submit}>
               <label className="visually-hidden" htmlFor="agent-input">
                 {t(agent.inputLabel)}

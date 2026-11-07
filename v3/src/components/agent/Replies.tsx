@@ -3,10 +3,12 @@ import { LuArrowUpRight, LuExternalLink, LuGithub, LuStar } from 'react-icons/lu
 import { useLocale } from '@/lib/i18n'
 import { useGithub, type ContributionDay } from '@/lib/useGithub'
 import { agent, type Topic } from '@/content/agent'
+import { ui } from '@/content/copy'
 import { projects } from '@/content/projects'
 import { education, roles } from '@/content/experience'
 import { profile, socials } from '@/content/profile'
 import { techStack } from '@/content/stacks'
+import RichText from '@/components/RichText'
 import Stream from './Stream'
 import styles from '../AgentWindow.module.css'
 
@@ -21,10 +23,15 @@ const GITHUB_USER = profile.github.replace(/\/+$/, '').split('/').pop() ?? 'Magi
 /** Scrolls the page to a section - the window's links into the page below. */
 const goTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 
-export function Reply({ topic, onPick }: { topic: Topic; onPick: (t: Topic) => void }) {
+export function Reply({ topic }: { topic: Topic }) {
   switch (topic) {
     case 'intro':
-      return <IntroReply onPick={onPick} />
+      /* The intro text itself is rendered by the window (it animates on first
+         load), and the topic chips that used to follow it are pinned above the
+         composer - nothing is left to add here. */
+      return null
+    case 'about':
+      return <AboutReply />
     case 'projects':
       return <ProjectsReply />
     case 'experience':
@@ -40,22 +47,25 @@ export function Reply({ topic, onPick }: { topic: Topic; onPick: (t: Topic) => v
     case 'rail':
       return <RoleReply id="cait" lead={agent.leads.rail} />
     case 'unknown':
-      return <UnknownReply onPick={onPick} />
+      return <UnknownReply />
   }
 }
 
-/** The topic chips, offered under the intro, a new session and a miss. */
-export function Chips({ onPick, exclude }: { onPick: (t: Topic) => void; exclude?: Topic }) {
+/**
+ * The topic chips. Pinned in one row above the composer, the way a chat
+ * client lays out its starter prompts, rather than repeated under the intro,
+ * the greeting and every miss - one fixed place to find them, and a reply
+ * that is only its answer.
+ */
+export function Chips({ onPick, className }: { onPick: (t: Topic) => void; className?: string }) {
   const { t } = useLocale()
   return (
-    <div className={styles['chips']}>
-      {agent.chips
-        .filter((c) => c.topic !== exclude)
-        .map((c) => (
-          <button key={c.topic} type="button" className={styles['chipBtn']} onClick={() => onPick(c.topic)}>
-            {t(c.label)}
-          </button>
-        ))}
+    <div className={className ? `${styles['chips']} ${className}` : styles['chips']}>
+      {agent.chips.map((c) => (
+        <button key={c.topic} type="button" className={styles['chipBtn']} onClick={() => onPick(c.topic)}>
+          {t(c.label)}
+        </button>
+      ))}
     </div>
   )
 }
@@ -74,22 +84,31 @@ function PageLink({ id, children }: { id: string; children: ReactNode }) {
 }
 
 /* ------------------------------------------------------------------ unknown */
-/** Honest about being a demo: no guessing, just the topics it does know. */
-function UnknownReply({ onPick }: { onPick: (t: Topic) => void }) {
+/** Honest about being a demo: no guessing - it points at the topics it does
+    know, which are the chips pinned just below. */
+function UnknownReply() {
+  const { t } = useLocale()
+  return <Lead>{t(agent.leads.unknown)}</Lead>
+}
+
+/* -------------------------------------------------------------------- about */
+/**
+ * v2's About, word for word - the three paragraphs from the shared copy file,
+ * with their emphasis and links. v3's About section on the page tells the same
+ * story through cards; in the chat it is told as prose, the way an answer is.
+ */
+function AboutReply() {
   const { t } = useLocale()
   return (
     <>
-      <Lead>{t(agent.leads.unknown)}</Lead>
-      <Chips onPick={onPick} />
+      {t(ui.about.paragraphs).map((paragraph, i) => (
+        <p key={i} className={styles['prose']}>
+          <RichText>{paragraph}</RichText>
+        </p>
+      ))}
+      <PageLink id="about">{t(agent.seeAbout)}</PageLink>
     </>
   )
-}
-
-/* -------------------------------------------------------------------- intro */
-/** The intro text itself is rendered by the window (it animates on first
- *  load); this is what follows it once it is complete. */
-function IntroReply({ onPick }: { onPick: (t: Topic) => void }) {
-  return <Chips onPick={onPick} />
 }
 
 /* ------------------------------------------------------------------ projects */

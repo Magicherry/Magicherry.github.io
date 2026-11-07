@@ -39,74 +39,10 @@
   opacity: 0.7;
 }
 
-/* ------------------------------------------------------------------- qr */
-.qr {
-  position: relative;
-}
-
-.qrTrigger {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
+/* Secondary, not the description grey of the copyright beside it: the motto
+   is the line meant to be read, the licence the line that has to be there. */
+.motto {
   color: var(--text-secondary);
-  cursor: default;
-  transition: color var(--dur-fast);
-}
-
-.qrTrigger svg {
-  width: 18px;
-  height: 18px;
-}
-
-.qr:hover .qrTrigger,
-.qrTrigger:focus-visible {
-  color: var(--text-primary);
-}
-
-.qrPanel {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  z-index: 20;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
-  width: 180px;
-  margin-bottom: var(--space-3);
-  padding: var(--space-3);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-panel);
-  background: var(--overlay);
-  box-shadow:
-    0 0 1px rgba(0, 0, 0, 0.2),
-    0 12px 32px rgba(0, 0, 0, 0.4);
-  color: var(--text-secondary);
-  opacity: 0;
-  visibility: hidden;
-  translate: -50% 6px;
-  transition:
-    opacity var(--dur-fast) ease,
-    translate var(--dur-fast) ease,
-    visibility 0s var(--dur-fast);
-}
-
-.qrPanel img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1;
-  border-radius: var(--radius-media);
-}
-
-.qr:hover .qrPanel,
-.qr:focus-within .qrPanel {
-  opacity: 1;
-  visibility: visible;
-  translate: -50% 0;
-  transition:
-    opacity var(--dur-fast) ease,
-    translate var(--dur-fast) ease,
-    visibility 0s;
 }
 
 @media (max-width: 1023px) {
@@ -118,9 +54,5 @@
   .start,
   .end {
     justify-self: center;
-  }
-
-  .qrPanel {
-    left: 50%;
   }
 }

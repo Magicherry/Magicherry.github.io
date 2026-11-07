@@ -24,6 +24,22 @@
 .backdrop {
   position: fixed;
   inset: 0;
+  /*
+   * Taller than the visible viewport, on phones. iOS Safari lays a fixed
+   * `inset: 0` box over the *small* viewport - the one with the toolbars
+   * showing - and since Safari 26 those toolbars float over the page, so the
+   * strip behind them was the bare root canvas: a band cut across the bottom
+   * of the field. `100lvh` is the viewport with the toolbars collapsed, which
+   * reaches under them; the safe-area insets cover the status bar and home
+   * indicator on top of that. Overshooting costs nothing - the box clips its
+   * own overflow and is out of flow.
+   */
+  top: calc(-1 * env(safe-area-inset-top, 0px));
+  bottom: auto;
+  /* The fallback matters: without it an engine that drops the `lvh` line is
+     left with `bottom: auto` and no height - a backdrop zero pixels tall. */
+  height: 100vh;
+  height: calc(100lvh + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px));
   z-index: var(--z-canvas);
   pointer-events: none;
   overflow: hidden;

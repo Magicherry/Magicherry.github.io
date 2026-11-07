@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, type ReactNode } from 'react'
+import { createContext, useContext, useLayoutEffect, useRef, type ReactNode } from 'react'
 
 /**
  * Reveals its children the way a model's answer streams in: the text appears
@@ -32,6 +32,16 @@ import { useLayoutEffect, useRef, type ReactNode } from 'react'
  * Reduced motion: no stream; the reply is simply there.
  */
 
+/**
+ * Where the stream has got to, for whoever wants to keep it in view - the
+ * window's log, which scrolls to follow a reply the way a chat client does.
+ * Called at most once a frame with the element the stream is writing into
+ * (or the icon or cell it just revealed). A context rather than a prop so a
+ * nested <Stream> - the GitHub data that streams in after its lead line -
+ * reports to the same listener without the reply passing it down.
+ */
+export const StreamProgress = createContext<((frontier: Element) => void) | null>(null)
+
 const MS_PER_CHAR = 6
 const MIN_MS = 600
 const MAX_MS = 1800
@@ -46,6 +56,11 @@ const ATOMS = new Set(['IMG', 'SVG', 'I', 'svg', 'CANVAS', 'INPUT'])
 
 export default function Stream({ children, className }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
+  const progress = useContext(StreamProgress)
+  /* Read through a ref: the effect runs once per mount, and the listener's
+     identity is not a reason to restart a stream. */
+  const progressRef = useRef(progress)
+  progressRef.current = progress
 
   useLayoutEffect(() => {
     const root = ref.current
@@ -109,15 +124,18 @@ export default function Stream({ children, className }: { children: ReactNode; c
       const target = Math.min(total, ((now - start) / duration) * total)
       let budget = target - spent
       spent = target
+      let frontier: Element | null = null
       while (budget > 0 && i < units.length) {
         const u = units[i]!
         show(u.owners)
         if (u.kind === 'atom') {
           u.el.style.visibility = ''
+          frontier = u.el
           budget -= ATOM_COST
           i++
           continue
         }
+        frontier = u.node.parentElement
         const take = Math.min(u.text.length - written, Math.ceil(budget))
         written += take
         budget -= take
@@ -127,6 +145,7 @@ export default function Stream({ children, className }: { children: ReactNode; c
           written = 0
         }
       }
+      if (frontier) progressRef.current?.(frontier)
       if (i < units.length) raf = requestAnimationFrame(step)
     }
     raf = requestAnimationFrame(step)

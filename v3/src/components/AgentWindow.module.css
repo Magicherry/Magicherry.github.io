@@ -294,7 +294,14 @@
 .composer {
   max-width: calc(var(--u) * 660);
   margin: 0 auto;
-  padding: calc(var(--u) * 14) calc(var(--u) * 14) calc(var(--u) * 10);
+  /*
+   * One inset - 10 - on the left, right and bottom, as on the reference: the
+   * round + and send buttons sit in the two bottom corners at the same distance
+   * from both edges, so each reads as nested in its corner. With the sides at
+   * 14 and the bottom at 10 the buttons floated just off the corners. The
+   * text keeps its old indent through the input's own padding instead.
+   */
+  padding: calc(var(--u) * 14) calc(var(--u) * 10) calc(var(--u) * 10);
   border: 0.5px solid rgba(255, 255, 255, 0.14);
   border-radius: calc(var(--u) * 20);
   background: #1e1f22;
@@ -338,9 +345,12 @@
   color: #c8ccd1;
 }
 
+/* The accent, not the reference's white: the send button is the one control
+   in the window that does something, and on this site that is what cyan
+   marks - the same fill as the back-to-top disc once its gauge is full. */
 .send {
-  background: #fff;
-  color: #111;
+  background: var(--brand);
+  color: var(--brand-contrast);
 }
 
 .chip,
@@ -452,7 +462,7 @@
 
 .send[data-ready] {
   transform: scale(1.08);
-  box-shadow: 0 0 0 calc(var(--u) * 4) rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 calc(var(--u) * 4) rgba(var(--brand-rgb), 0.22);
 }
 
 /* "Thinking" with a light sweeping across the text. */
@@ -563,6 +573,11 @@
   outline-offset: -2px;
 }
 
+/* Outside, not inset: an inset cyan ring on a cyan button is no ring. */
+.send:focus-visible {
+  outline-offset: 2px;
+}
+
 /* ----------------------------------------------------------- composer */
 .composer {
   transition: border-color 0.2s ease;
@@ -576,7 +591,7 @@
   display: block;
   width: 100%;
   margin: 0 0 calc(var(--u) * 12);
-  padding: calc(var(--u) * 2) calc(var(--u) * 4);
+  padding: calc(var(--u) * 2) calc(var(--u) * 8);
   border: 0;
   background: transparent;
   color: #f3f4f6;
@@ -614,6 +629,13 @@
   color: #e8eaed;
 }
 
+/* A reply that is prose rather than a list - "About me". The window's body
+   grey, a step under the lead's white, so the copy's marked phrases (white,
+   one weight up) lift out of it the way they do on the page. */
+.prose {
+  color: #c4c7cc;
+}
+
 .muted {
   color: #8b9097;
 }
@@ -640,6 +662,33 @@
   flex-wrap: wrap;
   gap: calc(var(--u) * 6);
   margin-top: calc(var(--u) * 4);
+}
+
+/*
+ * Pinned above the composer and lined up with it - same width, same centre -
+ * so the row reads as part of the input, the way a chat client's starter
+ * prompts do. One line, never wrapping: on a narrow window it scrolls sideways
+ * rather than growing a second row that would push the composer down and
+ * shrink the conversation. No scrollbar; the cut-off chip at the edge is the
+ * cue that there is more.
+ */
+.dockChips {
+  flex-wrap: nowrap;
+  max-width: calc(var(--u) * 660);
+  margin: 0 auto calc(var(--u) * 6);
+  /* Room on every side for the chips' focus ring, which the scroll box would
+     otherwise clip. */
+  padding: calc(var(--u) * 2);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.dockChips::-webkit-scrollbar {
+  display: none;
+}
+
+.dockChips .chipBtn {
+  flex: none;
 }
 
 .chipBtn {

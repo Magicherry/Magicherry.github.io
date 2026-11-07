@@ -73,34 +73,40 @@
 }
 
 /*
- * The glass. A pseudo-element rather than the bar's own background so it can
- * fade on its own curve while the bar's geometry springs. `visibility` is
- * delayed on the way out so the fade completes before the layer is dropped,
- * and switched immediately on the way in.
+ * The glass: liquid where the engine can refract, frosted where it cannot.
+ * A pseudo-element, fading in on its own 0.4s curve while the bar's geometry
+ * springs; `visibility` is delayed on the way out so the fade completes before
+ * the layer is dropped.
  *
- * The reference's material - white under a 12px blur, a 6% white hairline,
- * nothing else - with one number changed: 15% white, not 25%.
+ * Every browser gets the slab's inner light, which is plain CSS: a bright top
+ * inner edge (light catching the bevel), a fainter one along the bottom (light
+ * that crossed the slab) and a soft inner glow. Nothing is drawn *outside* the
+ * pill - a lit rim ring and a drop shadow were tried and taken out; the edge
+ * is carried by the refraction and the inner light alone.
  *
- * The reference's 25% was tuned for a near-black page, where it mixes down to
- * a neutral smoked grey. Over v2's blue aurora the same 25% lightens *and*
- * desaturates the blue, and the pill read as white mist. 15% keeps the pill
- * about as far above its surroundings as the reference's is above black.
+ * Frosted (Safari, Firefox, and Chromium under reduced transparency): the
+ * reference's material - white under a 12px blur - at 15% white rather than
+ * 25%, which over v2's blue aurora lightened and desaturated the blue into
+ * mist.
  */
 .bar::before {
   content: '';
   position: absolute;
   inset: -1px;
   z-index: -1;
-  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: inherit;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px) saturate(var(--glass-saturate));
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition:
     opacity 0.4s ease-in-out,
     visibility 0s 0.4s;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px) saturate(var(--glass-saturate));
+  box-shadow:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.2),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.06),
+    inset 0 0 14px rgba(255, 255, 255, 0.05);
 }
 
 .bar[data-scrolled]::before {
@@ -109,6 +115,25 @@
   transition:
     opacity 0.4s ease-in-out,
     visibility 0s;
+}
+
+/*
+ * Liquid (Chromium, once the lens map for the bar's size exists). The backdrop
+ * is bent through the SVG lens first - content near the rim drawn inward and
+ * compressed against the edge, split slightly into R, G and B - and only then
+ * softened, by a quarter of the frosted tier's blur: refraction is only
+ * visible if what is refracted still has edges. 5px hid the lens; 2px left
+ * body text under the nav legible enough to compete with the links. The fill drops to 6% for the
+ * same reason, and the clarity it gives up is bought back with brightness and
+ * saturation, which lift the aurora behind the pill instead of fogging it.
+ *
+ * Legibility: the lens is flat across the middle 9px of the bar, where the
+ * type sits, and 3px of blur still turns body text scrolling underneath into
+ * texture rather than words.
+ */
+:global([data-refraction='on']) .bar[data-lens]::before {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: url(#header-lens) blur(3px) saturate(170%) brightness(1.1);
 }
 
 /* ---------------------------------------------------------------- brand */
@@ -150,8 +175,71 @@
 
 /* ------------------------------------------------------------------ nav */
 .nav {
+  position: relative;
   display: flex;
   justify-content: center;
+}
+
+/*
+ * The hover droplet (see Header.tsx). Its own registered edge names, since
+ * `@property` is global and `--l`/`--r`, `--lt-*` and `--tl-*` are taken.
+ *
+ * The same light as the bar's slab - bright top inner edge, faint bottom one,
+ * a soft inner glow - and nothing outside it. No refraction of its own: the
+ * label sits above it, so all a lens here could bend is the bar's smooth glass,
+ * which would cost a filter pass for nothing anyone can see.
+ */
+@property --nh-l {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --nh-r {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+.drop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--nh-l);
+  width: calc(var(--nh-r) - var(--nh-l));
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.28),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.08),
+    inset 0 0 10px rgba(255, 255, 255, 0.06);
+  opacity: 0;
+  scale: 0.8;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    scale 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.drop[data-shown] {
+  opacity: 1;
+  scale: 1;
+}
+
+.drop[data-live][data-dir='right'] {
+  transition:
+    --nh-r 0.28s var(--ease-out),
+    --nh-l 0.5s cubic-bezier(0.34, 1.3, 0.64, 1) 0.04s,
+    opacity 0.2s ease,
+    scale 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.drop[data-live][data-dir='left'] {
+  transition:
+    --nh-l 0.28s var(--ease-out),
+    --nh-r 0.5s cubic-bezier(0.34, 1.3, 0.64, 1) 0.04s,
+    opacity 0.2s ease,
+    scale 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .links {
@@ -161,6 +249,8 @@
 }
 
 .link {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   padding: 5px 12px;
   border-radius: var(--radius-pill);
@@ -178,7 +268,13 @@
   transition: scale 0.08s ease-out;
 }
 
+/* The ground under a hovered link is the droplet, not the link's own. A
+   keyboard user gets the plain ground - the droplet follows the pointer. */
 .link:hover {
+  color: var(--text-primary);
+}
+
+.link:focus-visible {
   color: var(--text-primary);
   background: var(--surface-hover);
 }
@@ -211,13 +307,20 @@
 }
 
 /* ---------------------------------------------------------- mobile menu */
+/*
+ * The same glass as the rest of the chrome, frosted only: the sheet covers the
+ * whole screen, so it has no edge for a lens to bend. Dark and heavily blurred
+ * - large type over a page that is still visible as colour and light, not as
+ * words. Opaque under reduced transparency.
+ */
 .menu {
   position: fixed;
   inset: 0;
   z-index: 60;
   display: flex;
   flex-direction: column;
-  background: var(--bg-page);
+  background: rgba(8, 11, 16, 0.74);
+  backdrop-filter: blur(28px) saturate(var(--glass-saturate));
   opacity: 0;
   visibility: hidden;
   transition:
@@ -262,6 +365,16 @@
   font-size: 18px;
   font-weight: 500;
   color: var(--text-primary);
+  gap: 14px;
+}
+
+/* The label's size and a step quieter than it: the word is what is being
+   chosen, the glyph only marks the row. */
+.menuIcon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  color: var(--text-secondary);
 }
 
 .menuFooter {
@@ -294,7 +407,10 @@
 @media (prefers-reduced-motion: reduce) {
   .bar,
   .bar::before,
-  .start {
+  .start,
+  .drop,
+  .drop[data-live][data-dir='right'],
+  .drop[data-live][data-dir='left'] {
     transition: none;
   }
 }
@@ -302,5 +418,12 @@
 @media (min-width: 901px) {
   .menu {
     display: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .menu {
+    background: var(--bg-page);
+    backdrop-filter: none;
   }
 }

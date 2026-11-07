@@ -270,7 +270,6 @@ export const site = {
   },
 
   footer: {
-    wechat: { en: 'WeChat', zh: '微信' },
     scan: { en: 'Scan to add', zh: '扫码添加' },
     license: { en: 'Open source · MIT', zh: '开源 · MIT' },
     source: { en: 'Source', zh: '源码' },

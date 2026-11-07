@@ -4,9 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <!-- The page colour itself: v3 has no composited backdrop at the edges, so
-         the toolbar can simply match the ground it borders. -->
-    <meta name="theme-color" content="#0a0a0a" />
+    <!--
+      Sampled from the composited backdrop at the viewport edge (v2's value),
+      and the same as --bg-edge, the root canvas colour. Not --bg-page: since
+      v3 took over v2's aurora field, the near-black page colour is never what
+      any edge of the page looks like, and on iPhone Safari it painted solid
+      black bands behind the status bar and the bottom toolbar.
+    -->
+    <meta name="theme-color" content="#0a111b" />
 
     <title>Daniel Zhou | Portfolio</title>
     <meta

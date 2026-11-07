@@ -1,37 +1,28 @@
-import { FaWeixin } from 'react-icons/fa6'
 import { useLocale } from '@/lib/i18n'
 import { site } from '@/content/site'
-import { profile, socials } from '@/content/profile'
+import { ui } from '@/content/copy'
+import { profile } from '@/content/profile'
 import styles from './Footer.module.css'
 
 /**
- * A hairline, then three things on one line: WeChat on the left (its QR rises
- * on hover or focus), the licence and copyright in the middle, and two links on
- * the right.
+ * A hairline, then three things on one line: v2's motto on the left, the
+ * licence and copyright in the middle, and two links on the right.
+ *
+ * The left slot used to be WeChat with its QR rising on hover. It went: the
+ * contact section directly above already offers WeChat with the same QR, and
+ * the last line of the page is a better place to sign off than to repeat a
+ * button. The motto is v2's closing line, carried over so the two versions end
+ * the same way.
  */
 export default function Footer() {
   const { t } = useLocale()
-  const wechat = socials.find((s) => s.id === 'wechat')
   const year = new Date().getFullYear()
 
   return (
     <footer className={`container ${styles['footer']}`}>
       <div className={styles['rule']} />
       <div className={styles['row']}>
-        <div className={styles['start']}>
-          {wechat?.qr ? (
-            <div className={styles['qr']}>
-              <button type="button" className={styles['qrTrigger']} aria-describedby="wechat-qr">
-                <FaWeixin aria-hidden="true" />
-                <span className="text-caption">{t(site.footer.wechat)}</span>
-              </button>
-              <div id="wechat-qr" role="tooltip" className={styles['qrPanel']}>
-                <img src={wechat.qr.image} alt={t(wechat.qr.alt)} width={156} height={156} loading="lazy" />
-                <span className="text-xs">{t(site.footer.scan)}</span>
-              </div>
-            </div>
-          ) : null}
-        </div>
+        <p className={`text-caption ${styles['start']} ${styles['motto']}`}>{t(ui.footer.motto)}</p>
 
         <p className={`text-caption description ${styles['center']}`}>
           {t(site.footer.license)} · © {year} {t(profile.name)}

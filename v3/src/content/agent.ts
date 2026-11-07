@@ -14,6 +14,7 @@ import type { Localized } from './types'
 
 export type Topic =
   | 'intro'
+  | 'about'
   | 'projects'
   | 'experience'
   | 'github'
@@ -50,6 +51,7 @@ export const agent = {
 
   /* What the user "asks" when a topic is opened from the sidebar or a chip. */
   questions: {
+    about: { en: "I'd like to know more about you", zh: '想多了解一些关于你的事' },
     intro: { en: 'Could you introduce yourself?', zh: '可以介绍一下你自己吗？' },
     projects: { en: 'Show me your projects', zh: '看看你做过的项目' },
     experience: { en: 'Walk me through your experience', zh: '介绍一下你的工作经历' },
@@ -73,15 +75,18 @@ export const agent = {
     },
     rail: { en: 'At Rutgers CAIT the research covered:', zh: '在 Rutgers CAIT 的研究主要包括：' },
     unknown: {
-      en: "That's beyond what this demo agent knows. Try asking about:",
-      zh: '这个问题超出了这个演示助手的范围，可以试试问我：',
+      en: "That's beyond what this demo agent knows. Try one of the topics just above the message box.",
+      zh: '这个问题超出了这个演示助手的范围，可以试试输入框上方的这些话题。',
     },
   },
 
   greeting: { en: 'Hi! What would you like to know?', zh: '你好！想了解我的哪方面？' },
 
-  /* Suggestion chips under a reply. */
+  /* Suggestion chips, pinned above the composer. */
   chips: [
+    /* Worded as the visitor's question, like the other chips are its topics:
+       the visitor is the one asking, so it is "about you", not "about me". */
+    { topic: 'about', label: { en: 'About you', zh: '关于你' } },
     { topic: 'projects', label: { en: 'Projects', zh: '项目' } },
     { topic: 'experience', label: { en: 'Experience', zh: '经历' } },
     { topic: 'github', label: { en: 'GitHub activity', zh: 'GitHub 动态' } },
@@ -89,6 +94,7 @@ export const agent = {
     { topic: 'contact', label: { en: 'Contact', zh: '联系方式' } },
   ] satisfies readonly { topic: Topic; label: Localized }[],
 
+  seeAbout: { en: 'More about me on the page', zh: '在页面中查看关于我' },
   seeAllProjects: { en: 'See all on the page', zh: '在页面中查看全部' },
   seeStack: { en: 'Full stack on the page', zh: '在页面中查看完整技术栈' },
   seeExperience: { en: 'Full experience on the page', zh: '在页面中查看完整经历' },
@@ -132,7 +138,10 @@ const ROUTES: readonly [Topic, RegExp][] = [
   ['experience', /经历|经验|工作|实习|履历|简历|experience|\bwork|\bjob|career|\bcv\b|resume|intern/i],
   ['stack', /技术|技能|栈|框架|语言|stack|tech|skill|framework|language/i],
   ['contact', /联系|邮箱|邮件|微信|电话|领英|contact|email|mail|wechat|phone|linkedin|reach/i],
-  ['intro', /介绍|你是谁|你好|hello|\bhi\b|who are you|about you|introduce/i],
+  /* Before `intro`: "about you" asks for the longer self-portrait, not the
+     one-paragraph introduction. */
+  ['about', /关于你|关于我|兴趣|爱好|理念|about you|about me|yourself|interest|hobb/i],
+  ['intro', /介绍|你是谁|你好|hello|\bhi\b|who are you|introduce/i],
 ]
 
 export function routeTopic(text: string): Topic {

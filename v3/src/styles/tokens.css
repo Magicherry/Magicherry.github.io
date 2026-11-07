@@ -15,6 +15,12 @@
 
   /* ------------------------------------------------------------- colour */
   --bg-page: #0a0a0a;
+  /* The root canvas - what shows wherever the fixed backdrop does not reach:
+     behind a phone's status bar and browser toolbar, and in an overscroll
+     bounce. The field's average colour at its edges, so those strips continue
+     the page instead of cutting it off. Kept equal to `theme-color` in
+     index.html. */
+  --bg-edge: #0a111b;
   /* Surfaces are white at low alpha rather than greys, so a panel laid over
      the hero's dot field or a glow lets a little of it through instead of
      punching a flat hole in it. Numbered by role, not by brightness. */

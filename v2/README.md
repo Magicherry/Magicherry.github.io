@@ -85,8 +85,10 @@ src/
 
 ## Deployment
 
-Pushing to `main` triggers `.github/workflows/deploy.yml`, which installs
-dependencies, runs the build and publishes the generated site to GitHub Pages.
+v2 is archived and no longer deployed: the live site is now [`v3/`](../v3/).
+It is kept buildable as a rollback target. To redeploy it, change the three
+`v3` paths in `.github/workflows/deploy.yml` back to `v2`; pushing to `main`
+then builds this folder and publishes it to GitHub Pages.
 
 ## Acknowledgements
 
