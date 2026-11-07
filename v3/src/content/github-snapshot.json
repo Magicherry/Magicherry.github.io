@@ -1,13 +1,22 @@
 {
-  "takenAt": "2026-11-07T11:47:38.690Z",
+  "takenAt": "2026-11-07T18:02:40.374Z",
   "repos": [
     {
       "name": "Magicherry.github.io",
       "description": "A modern React-based personal portfolio featuring smooth animations, glassmorphic design, and an interactive UX.",
       "html_url": "https://github.com/Magicherry/Magicherry.github.io",
-      "language": "CSS",
+      "language": "TypeScript",
       "stargazers_count": 3,
-      "pushed_at": "2026-11-07T10:31:03Z",
+      "pushed_at": "2026-11-07T15:49:43Z",
+      "fork": false
+    },
+    {
+      "name": "Magicherry",
+      "description": "GitHub profile README",
+      "html_url": "https://github.com/Magicherry/Magicherry",
+      "language": null,
+      "stargazers_count": 0,
+      "pushed_at": "2026-11-07T12:30:31Z",
       "fork": false
     },
     {
@@ -26,15 +35,6 @@
       "language": "Swift",
       "stargazers_count": 0,
       "pushed_at": "2026-10-30T18:18:46Z",
-      "fork": false
-    },
-    {
-      "name": "Management_Dashboard",
-      "description": "A full-stack management system built with Spring Boot and Vue.js with administrative capabilities.",
-      "html_url": "https://github.com/Magicherry/Management_Dashboard",
-      "language": "Vue",
-      "stargazers_count": 0,
-      "pushed_at": "2026-10-16T09:26:54Z",
       "fork": false
     }
   ],

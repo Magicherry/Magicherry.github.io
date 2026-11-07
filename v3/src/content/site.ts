@@ -121,16 +121,65 @@ export const site = {
       },
     },
     /* Labels inside the card illustrations. */
-    agentRun: { en: 'Agent run', zh: 'Agent 运行' },
+    /* The agent demo: a request, four steps each with what it found, and the
+       brief they produce. Its 6.8% is the full-stack dashboard's figure, so
+       the two cards tell one story. */
+    agentRun: { en: 'Cost analyst', zh: '成本分析 Agent' },
+    ask: { en: 'Analyse Q3 cost by line and advise on Q4', zh: '分析 Q3 各产线成本，给出 Q4 建议' },
     steps: [
-      { en: 'Retrieve cost documents', zh: '检索成本文档' },
-      { en: 'Query production database', zh: '查询生产数据库' },
-      { en: 'Forecast next-quarter spend', zh: '预测下季度支出' },
-      { en: 'Draft decision brief', zh: '生成决策简报' },
-    ] satisfies readonly Localized[],
+      {
+        label: { en: 'Retrieve cost documents', zh: '检索成本文档' },
+        detail: { en: '8 docs · relevance 0.82', zh: '8 篇文档 · 相关度 0.82' },
+      },
+      {
+        label: { en: 'Query production database', zh: '查询生产数据库' },
+        detail: { en: '1,284 rows · 6 lines', zh: '1,284 行 · 6 条产线' },
+      },
+      {
+        label: { en: 'Forecast next-quarter spend', zh: '预测下季度支出' },
+        detail: { en: 'Q4 −6.8% · MAPE 4.1%', zh: 'Q4 −6.8% · MAPE 4.1%' },
+      },
+      {
+        label: { en: 'Draft decision brief', zh: '生成决策简报' },
+        detail: { en: '3 recommendations', zh: '3 条建议' },
+      },
+    ] satisfies readonly { label: Localized; detail: Localized }[],
+    brief: {
+      summary: { en: '4 steps · 9.1s · 3.2k tokens', zh: '4 步 · 9.1s · 3.2k tokens' },
+      title: { en: 'Q4 decision brief', zh: 'Q4 决策简报' },
+      points: {
+        en: [
+          'Welding energy runs 12% over plan — shift loads off-peak',
+          'Battery-line scrap is down — keep the current process',
+          'Q4 total cost forecast down 6.8%',
+        ],
+        zh: ['焊装线能耗高出计划 12%，建议错峰排产', '电池线物料损耗下降，维持现有方案', '预计 Q4 总成本环比下降 6.8%'],
+      } satisfies Localized<readonly string[]>,
+      sent: { en: 'Sent to the operations team', zh: '已推送至运营团队' },
+    },
     running: { en: 'Running', zh: '运行中' },
     done: { en: 'Done', zh: '已完成' },
-    diffTab: { en: 'Round 1 changes', zh: '第 1 轮改动' },
+    /* The full-stack demo's three tabs - one change carried from the code,
+       through tests and a container rollout, to the page that calls it. */
+    ship: {
+      code: { en: 'Changes', zh: '改动' },
+      terminal: { en: 'Terminal', zh: '终端' },
+      preview: { en: 'Preview', zh: '预览' },
+      chartTitle: { en: 'Q4 cost forecast', zh: 'Q4 成本预测' },
+      chartMeta: { en: 'By production line', zh: '按产线' },
+      delta: { en: 'vs Q3', zh: '环比 Q3' },
+      /* The status pill in the tab bar, one per act. */
+      stages: {
+        editing: { en: 'Editing', zh: '编辑中' },
+        building: { en: 'Building', zh: '构建中' },
+        live: { en: 'Live', zh: '已上线' },
+      },
+      /* The chart's columns: the shops of a car plant. */
+      lines: {
+        en: ['Stamp', 'Weld', 'Paint', 'Assy', 'Pack', 'Drive'],
+        zh: ['冲压', '焊装', '涂装', '总装', '电池', '电驱'],
+      } satisfies Localized<readonly string[]>,
+    },
     labels: { en: 'Predicted labels', zh: '预测标签' },
     /* The pause control each looping illustration carries. */
     pause: { en: 'Pause demo', zh: '暂停演示' },
