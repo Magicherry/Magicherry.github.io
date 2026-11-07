@@ -379,17 +379,28 @@ ol {
   transform: none;
 }
 
-/* The hero's own sequence: label and heading, then copy, then actions, then
-   the window. Runs on load rather than on scroll - it is already in view. */
+/*
+ * The hero's own sequence: label and heading, then copy, then actions, then
+ * the window. Runs on load rather than on scroll - it is already in view - and
+ * again on every change of language (see Hero.tsx), as the reference does.
+ *
+ * The reference's numbers, per block, set from Hero.tsx: how far it rises
+ * (`--enter-y`), how blurred it starts (`--enter-blur`), its duration and its
+ * delay. The two text blocks come out of a blur as well as rising - the type
+ * resolves into focus, which is what makes a language change read as the copy
+ * being rewritten rather than swapped. `filter` is not a compositor property,
+ * but this is two blocks, once, not a grid of them.
+ */
 @keyframes hero-enter {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(var(--enter-y, 16px));
+    filter: blur(var(--enter-blur, 0px));
   }
 }
 
 .hero-enter {
-  animation: hero-enter var(--dur-enter) var(--ease-out) backwards;
+  animation: hero-enter var(--enter-dur, var(--dur-enter)) ease-out backwards;
   animation-delay: var(--enter-delay, 0s);
 }
 

@@ -197,8 +197,14 @@ export default function Header() {
           </button>
         </div>
         <nav className={styles['menuBody']} aria-label="Primary" key={locale}>
-          {NAV.map(({ id, label, icon: Icon }) => (
-            <a key={id} className={styles['menuItem']} href={`#${id}`} onClick={() => setMenuOpen(false)}>
+          {NAV.map(({ id, label, icon: Icon }, i) => (
+            <a
+              key={id}
+              className={styles['menuItem']}
+              href={`#${id}`}
+              onClick={() => setMenuOpen(false)}
+              style={{ '--i': i } as CSSProperties}
+            >
               <Icon className={styles['menuIcon']} aria-hidden="true" />
               {t(label)}
             </a>

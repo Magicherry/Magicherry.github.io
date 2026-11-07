@@ -515,6 +515,62 @@
   );
 }
 
+/*
+ * The empty state. Laid over the log rather than inside the transcript, so it
+ * can sit in the middle of the pane whatever the transcript holds - a little
+ * above true centre, as the composer below weighs the pane down. It fades and
+ * lifts away when the first question is sent.
+ */
+.welcome {
+  position: absolute;
+  inset: 0 0 8% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--u) * 8);
+  padding: 0 calc(var(--u) * 28);
+  text-align: center;
+  pointer-events: none;
+  animation: msg-in 0.5s var(--ease-out) both;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.welcome[data-gone] {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * -8));
+}
+
+.welcome img {
+  width: calc(var(--u) * 44);
+  height: calc(var(--u) * 44);
+  margin-bottom: calc(var(--u) * 6);
+  border-radius: 50%;
+  box-shadow: 0 0 0 calc(var(--u) * 4) rgba(255, 255, 255, 0.05);
+}
+
+.welcomeTitle {
+  color: #f3f4f6;
+  font-size: calc(var(--u) * 20);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.welcomeHint {
+  max-width: calc(var(--u) * 360);
+  color: #8b9097;
+  font-size: calc(var(--u) * 13.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome {
+    animation: none;
+    transition: none;
+  }
+}
+
 .turn {
   display: flex;
   flex-direction: column;

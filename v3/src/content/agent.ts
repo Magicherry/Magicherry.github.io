@@ -81,6 +81,10 @@ export const agent = {
   },
 
   greeting: { en: 'Hi! What would you like to know?', zh: '你好！想了解我的哪方面？' },
+  welcomeHint: {
+    en: 'Ask about my projects, experience or stack - or pick a topic below.',
+    zh: '项目、经历、技术栈都可以问我，或者点下面的话题。',
+  },
 
   /* Suggestion chips, pinned above the composer. */
   chips: [

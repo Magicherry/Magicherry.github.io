@@ -6,9 +6,14 @@ import { site } from '@/content/site'
 import { domainLabels, projects, type ProjectDomain } from '@/content/projects'
 import Reveal from '@/components/Reveal'
 import RichText from '@/components/RichText'
+import { LensFilter, useLensMap } from '@/components/LensFilter'
 import styles from './Projects.module.css'
 
 type Filter = 'all' | ProjectDomain
+
+/** The indicator's lens - a trial: a 10px bevel on a 34px pill, 9px of throw
+    at the rim. Refracts only where the engine can (see lib/refraction.ts). */
+const LENS = { bevel: 10, falloff: 2, scale: 18, dispersion: 0.12 }
 
 /** Domains in the order they first appear, so the filter row follows the
  *  grid's own ordering rather than an alphabet. Empty domains never show. */
@@ -38,6 +43,8 @@ export default function Projects() {
   const buttonRefs = useRef(new Map<Filter, HTMLButtonElement>())
   const [edges, setEdges] = useState<{ l: number; r: number; dir: 'left' | 'right' } | null>(null)
   const [settled, setSettled] = useState(false)
+  const [indicator, setIndicator] = useState<HTMLSpanElement | null>(null)
+  const lens = useLensMap(indicator, LENS)
 
   useLayoutEffect(() => {
     const row = rowRef.current
@@ -82,11 +89,14 @@ export default function Projects() {
           <RichText tone="heading">{t(ui.sections.projects.title)}</RichText>
         </h2>
         <div ref={rowRef} className={styles['filters']} role="group" aria-label={t(ui.sections.projects.filter)}>
+          {lens ? <LensFilter id="filter-lens" href={lens} scale={LENS.scale} dispersion={LENS.dispersion} /> : null}
           {edges ? (
             <span
+              ref={setIndicator}
               className={styles['indicator']}
               data-dir={edges.dir}
               data-settled={settled || undefined}
+              data-lens={lens ? '' : undefined}
               style={{ '--l': `${edges.l}px`, '--r': `${edges.r}px` } as CSSProperties}
               aria-hidden="true"
             />

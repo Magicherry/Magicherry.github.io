@@ -18,8 +18,8 @@ export const site = {
     label: { en: 'NIO · Shanghai', zh: '蔚来 · 上海' },
     headline: { en: "Hi, I'm Daniel Zhou", zh: 'Hi，我是周昱廷' },
     lines: {
-      en: ['Building enterprise agent systems for manufacturing operations — and interfaces that sweat the details.'],
-      zh: ['专注制造运营场景下的企业级 AI Agent 系统研发，同时注重界面设计的细节与交互体验。'],
+      en: ['Building enterprise AI agent systems for manufacturing operations — balancing engineering, interface craft and interaction.'],
+      zh: ['致力于构建面向制造运营的企业级 AI Agent 系统，兼顾技术实现、界面美学与交互体验。'],
     } satisfies Localized<readonly string[]>,
     viewWork: { en: 'View projects', zh: '查看项目' },
   },
@@ -33,47 +33,47 @@ export const site = {
     thinking: { en: 'Thinking', zh: '思考中' },
     intro: {
       en: 'I am Daniel Zhou (Magicherry), Business Analyst Assistant & AI Agent Engineer at NIO, building enterprise agent systems for manufacturing operations.',
-      zh: '我是周昱廷（Magicherry），在蔚来担任业务分析助理兼 AI Agent 工程师，构建面向制造运营的企业级 Agent 系统。',
+      zh: '我是周昱廷（Daniel Zhou），目前在蔚来从事业务分析与 AI Agent 研发，致力于将人工智能融入制造运营场景，构建真正解决业务问题的智能系统。',
     },
-    canHelp: { en: 'What I work on:', zh: '我在做的事：' },
+    canHelp: { en: 'What I work on:', zh: '我关注的方向：' },
     items: [
       {
-        title: { en: 'Enterprise AI agents', zh: '企业级 Agent' },
+        title: { en: 'Enterprise AI agents', zh: 'AI Agent' },
         body: {
           en: 'LLM / RAG systems and workflow automation for manufacturing.',
-          zh: 'LLM / RAG 与流程自动化，服务制造运营。',
+          zh: '基于 LLM / RAG 与流程自动化，构建企业级智能应用。',
         },
       },
       {
-        title: { en: 'Decision support', zh: '决策支持' },
+        title: { en: 'Decision support', zh: '业务分析' },
         body: {
           en: 'Turning multi-source operational data into numbers teams run on.',
-          zh: '把多源运营数据变成团队可用的决策依据。',
+          zh: '整合跨业务域数据，挖掘业务洞察，辅助运营决策。',
         },
       },
       {
         title: { en: 'NLP research', zh: 'NLP 研究' },
         body: {
           en: 'Hierarchical classification on transformers at Rutgers CAIT.',
-          zh: '在 Rutgers CAIT 做基于 Transformer 的层级分类。',
+          zh: '曾在 Rutgers CAIT 开展基于 Transformer 的文本分类研究。',
         },
       },
       {
-        title: { en: 'Full-stack engineering', zh: '全栈工程' },
+        title: { en: 'Full-stack engineering', zh: '全栈开发' },
         body: {
           en: 'From fast, careful interfaces to dependable back-ends.',
-          zh: '从流畅的界面到稳定的后端服务。',
+          zh: '从后端架构到前端交互，打造完整、可靠的应用体验。',
         },
       },
       {
         title: { en: 'Side projects', zh: '个人项目' },
         body: {
           en: 'Desktop apps, recommenders and tools I wanted to exist.',
-          zh: '桌面应用、推荐系统，以及我自己想用的工具。',
+          zh: '探索有趣的技术想法，打磨实用且注重细节的工具。',
         },
       },
     ] satisfies readonly { title: Localized; body: Localized }[],
-    more: { en: 'Scroll on for the rest.', zh: '更多内容，继续往下看。' },
+    more: { en: 'Scroll on for the rest.', zh: '更多故事，欢迎继续探索。' },
     placeholder: {
       en: 'Ask about projects, experience or how to reach me…',
       zh: '问问项目、经历，或者怎么联系我…',
@@ -85,7 +85,7 @@ export const site = {
 
   about: {
     /* Heading of the interests card beside the About prose (v2's wording). */
-    offClock: { en: 'Off the clock', zh: '工作之外' },
+    offClock: { en: 'Off the clock', zh: '工作之余' },
     /* The section's title. v3's own rather than copy.ts's "关于我", which v2
        still uses; `**...**` is the accented part, as in v2's titles. */
     heading: { en: 'My **Engineering & Exploration**', zh: '我的**技术探索与工程实践**' },
@@ -247,14 +247,14 @@ export const site = {
       title: { en: 'Email', zh: '邮件' },
       body: {
         en: 'The fastest way to reach me. I usually reply within a day.',
-        zh: '最快的联系方式，通常一天内回复。',
+        zh: '欢迎交流技术、产品与想法，期待你的来信。',
       },
     },
     github: {
       title: { en: 'Source', zh: '源码' },
       body: {
         en: 'This site is open source. Clone it, read it, borrow from it.',
-        zh: '本站完全开源，欢迎克隆、阅读或借鉴。',
+        zh: '本站代码完全开源，欢迎查看与交流。',
       },
     },
     copy: { en: 'Copy', zh: '复制' },
@@ -262,7 +262,7 @@ export const site = {
   },
 
   cta: {
-    title: { en: "Let's build something", zh: '期待与你交流更多可能' },
+    title: { en: "Let's build something", zh: '一起聊聊你的想法' },
     body: {
       en: 'Open to conversations about AI agents, product and engineering — and anything else worth turning over.',
       zh: '欢迎交流 AI Agent、产品与工程，以及一切值得琢磨的话题。',

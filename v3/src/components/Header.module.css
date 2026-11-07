@@ -323,9 +323,11 @@
   backdrop-filter: blur(28px) saturate(var(--glass-saturate));
   opacity: 0;
   visibility: hidden;
+  /* On close the glass waits for its contents to start leaving, then fades
+     under them (see below). */
   transition:
-    opacity 0.25s ease,
-    visibility 0s 0.25s;
+    opacity 0.25s ease 0.15s,
+    visibility 0s 0.4s;
 }
 
 .menu[data-open] {
@@ -334,6 +336,61 @@
   transition:
     opacity 0.25s ease,
     visibility 0s;
+}
+
+/*
+ * The sheet's contents arrive in order rather than all at once. The glass
+ * fades in; the close button turns in where the menu button was, so the two
+ * read as one control changing shape; the five rows rise 8px into place 40ms
+ * apart (`--i` is each row's index); the footer comes last. The first row is
+ * readable within 0.2s of the tap and the footer settles at about 0.55s -
+ * long enough to read as unfolding, and nobody waits on it: the rows can be
+ * tapped while the later ones are still arriving.
+ *
+ * Closing plays the same figure in reverse, and faster: the footer goes
+ * first, then the rows from the bottom up, each sinking 8px as it fades, 30ms
+ * apart; the close button turns back out; the glass fades last, starting
+ * 0.15s in. About 0.4s in all - quicker than opening, because closing is a
+ * step back to the page and should not hold anyone up.
+ */
+.menu .menuItem,
+.menu .menuFooter {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.2s ease-in,
+    transform 0.25s ease-in;
+  transition-delay: calc((5 - var(--i, 5)) * 30ms);
+}
+
+.menu[data-open] .menuItem,
+.menu[data-open] .menuFooter {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.35s ease-out,
+    transform 0.45s var(--ease-out);
+  transition-delay: calc(60ms + var(--i, 5) * 40ms);
+}
+
+.menu .menuButton[data-always] {
+  opacity: 0;
+  rotate: -90deg;
+  scale: 0.8;
+  transition:
+    opacity 0.2s ease-in,
+    rotate 0.3s ease-in,
+    scale 0.3s ease-in;
+}
+
+.menu[data-open] .menuButton[data-always] {
+  opacity: 1;
+  rotate: 0deg;
+  scale: 1;
+  transition:
+    opacity 0.25s ease-out,
+    rotate 0.45s var(--ease-out),
+    scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .menuHeader {
@@ -401,6 +458,26 @@
      edge to align its glyph with the container. */
   .bar[data-scrolled] .menuButton {
     margin-right: 0;
+  }
+}
+
+/* Reduced motion: the sheet still fades, and its contents with it - no
+   rising rows, no turning button. */
+@media (prefers-reduced-motion: reduce) {
+  .menu .menuItem,
+  .menu .menuFooter,
+  .menu[data-open] .menuItem,
+  .menu[data-open] .menuFooter {
+    transform: none;
+    transition: opacity 0.2s ease;
+    transition-delay: 0s;
+  }
+
+  .menu .menuButton[data-always],
+  .menu[data-open] .menuButton[data-always] {
+    rotate: 0deg;
+    scale: 1;
+    transition: opacity 0.2s ease;
   }
 }
 

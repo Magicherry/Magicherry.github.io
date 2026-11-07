@@ -307,6 +307,9 @@ export default function AgentWindow() {
           : t(agent.nav[active.replace('nav:', '') as keyof typeof agent.nav] ?? agent.newSession)
 
   const typingIntro = intro.stage === 'typing'
+  const onlyIntro = turns.length === 1 && turns[0]!.id === 0
+  const welcome = turns.length === 0 || (onlyIntro && intro.stage !== 'done')
+  const welcomeGone = onlyIntro && intro.stage !== 'idle' && intro.stage !== 'typing'
 
   return (
     <div className={styles['viewport']}>
@@ -387,13 +390,24 @@ export default function AgentWindow() {
           </div>
 
           <div ref={logRef} className={styles['conversation']} role="log" aria-live="polite">
+            {/*
+              * The empty state, as a chat client shows before the first
+              * message: the agent's face, a greeting and a line on what it
+              * can answer, centred in the log. Shown on a new session, and
+              * on load for the moment before the intro question is typed -
+              * which used to be a blank pane. When the intro question is
+              * sent it fades out under it rather than vanishing, and once
+              * the intro has played it is gone for good.
+              */}
+            {welcome ? (
+              <div className={styles['welcome']} data-gone={welcomeGone || undefined}>
+                <img src={profile.avatar} alt="" />
+                <p className={styles['welcomeTitle']}>{t(agent.greeting)}</p>
+                <p className={styles['welcomeHint']}>{t(agent.welcomeHint)}</p>
+              </div>
+            ) : null}
             <StreamProgress.Provider value={followStream}>
             <div className={styles['transcript']}>
-              {turns.length === 0 ? (
-                <div className={`${styles['assistant']} ${styles['enter']}`}>
-                  <p className={styles['lead']}>{t(agent.greeting)}</p>
-                </div>
-              ) : null}
 
               {turns.map((turn) => {
                 const first = turn.id === 0
