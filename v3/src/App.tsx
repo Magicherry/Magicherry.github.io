@@ -1,4 +1,5 @@
 import { useLocale } from '@/lib/i18n'
+import { site } from '@/content/site'
 import Backdrop from '@/components/fx/Backdrop'
 import Header from '@/components/Header'
 import Hero from '@/sections/Hero'
@@ -10,15 +11,13 @@ import Contact from '@/sections/Contact'
 import Footer from '@/sections/Footer'
 import BackToTop from '@/components/BackToTop'
 
-const SKIP = { en: 'Skip to content', zh: '跳到正文' } as const
-
 export default function App() {
   const { t } = useLocale()
 
   return (
     <>
       <a className="skip-link" href="#about">
-        {t(SKIP)}
+        {t(site.a11y.skip)}
       </a>
       <Backdrop />
       <Header />

@@ -28,7 +28,7 @@ export default function Footer() {
           {t(site.footer.license)} · © {year} {t(profile.name)}
         </p>
 
-        <nav className={styles['end']} aria-label="Footer">
+        <nav className={styles['end']} aria-label={t(site.a11y.footerNav)}>
           <a className="text-caption" href={profile.repo} target="_blank" rel="noopener noreferrer">
             {t(site.footer.source)}
           </a>

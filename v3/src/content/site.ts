@@ -281,6 +281,16 @@ export const site = {
     close: { en: 'Close menu', zh: '关闭菜单' },
   },
 
+  /* Names that only assistive tech hears - landmarks and groups. Kept here
+     with the rest of the copy so they switch language with the page. */
+  a11y: {
+    skip: { en: 'Skip to content', zh: '跳到正文' },
+    primaryNav: { en: 'Primary', zh: '主导航' },
+    menuNav: { en: 'Site menu', zh: '站点菜单' },
+    footerNav: { en: 'Footer', zh: '页脚' },
+    language: { en: 'Language', zh: '语言' },
+  },
+
   /* The CV split button: the main half downloads the current language's CV,
      the chevron opens a menu with both. */
   cv: {

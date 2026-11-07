@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type PointerEvent } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
 import { FaGithub } from 'react-icons/fa6'
 import { LuBriefcaseBusiness, LuFolderCode, LuLayers, LuMenu, LuSend, LuUserRound, LuX } from 'react-icons/lu'
 import { useLocale } from '@/lib/i18n'
@@ -82,26 +82,62 @@ export default function Header() {
 
   /* A boolean, not a scroll position in state: the header re-renders when it
      crosses the threshold, not on every scroll frame. */
+  const actionsRef = useRef<HTMLDivElement>(null)
+  /* Whether focus was inside the actions group when the scroll was read -
+     taken *before* React re-renders, since the swap below unmounts whatever
+     held it. */
+  const actionsHadFocus = useRef(false)
   useEffect(() => {
-    const read = () => setScrolled(window.scrollY > SCROLL_THRESHOLD)
+    const read = () => {
+      actionsHadFocus.current = !!actionsRef.current?.contains(document.activeElement)
+      setScrolled(window.scrollY > SCROLL_THRESHOLD)
+    }
     read()
     window.addEventListener('scroll', read, { passive: true })
     return () => window.removeEventListener('scroll', read)
   }, [])
 
+  /* The actions swap (language toggle <-> GitHub and CV) unmounts the focused
+     control when a keyboard user scrolls across the threshold - Home from the
+     CV button, say - and focus would fall to <body>. Hand it to the first
+     control of the group that replaced it instead. */
+  useLayoutEffect(() => {
+    const group = actionsRef.current
+    if (!actionsHadFocus.current || !group || group.contains(document.activeElement)) return
+    actionsHadFocus.current = false
+    group.querySelector<HTMLElement>('a[href], button:not([disabled])')?.focus({ preventScroll: true })
+  }, [scrolled])
+
   /* The open menu covers the page; scrolling what is under it would move
-     content nobody can see. Escape closes it, as any overlay should. */
+     content nobody can see. Escape closes it, as any overlay should.
+
+     It is also modal for focus. Opening it moves focus to its close button,
+     and everything else on the page - the header, <main>, the footer, the
+     skip link: every sibling of the menu - goes `inert`, so Tab stays inside
+     the sheet instead of walking through the page hidden behind it. Closing
+     hands focus back to the button that opened it. */
+  const menuRef = useRef<HTMLDivElement>(null)
+  const openRef = useRef<HTMLButtonElement>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
   useEffect(() => {
-    if (!menuOpen) return
+    const menu = menuRef.current
+    if (!menuOpen || !menu) return
     const { overflow } = document.body.style
     document.body.style.overflow = 'hidden'
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setMenuOpen(false)
     }
     window.addEventListener('keydown', onKey)
+    const others = Array.from(menu.parentElement?.children ?? []).filter(
+      (el): el is HTMLElement => el !== menu && el instanceof HTMLElement && !el.inert,
+    )
+    for (const el of others) el.inert = true
+    closeRef.current?.focus({ preventScroll: true })
     return () => {
       document.body.style.overflow = overflow
       window.removeEventListener('keydown', onKey)
+      for (const el of others) el.inert = false
+      openRef.current?.focus({ preventScroll: true })
     }
   }, [menuOpen])
 
@@ -122,7 +158,7 @@ export default function Header() {
             </a>
           </div>
 
-          <nav className={styles['nav']} aria-label="Primary">
+          <nav className={styles['nav']} aria-label={t(site.a11y.primaryNav)}>
             {drop ? (
               <span
                 className={styles['drop']}
@@ -147,7 +183,7 @@ export default function Header() {
           {/* The swap is immediate, as in the reference: the bar's own motion
               carries the transition, and a cross-fade between two differently
               sized groups would make the right edge of the pill wobble. */}
-          <div className={styles['actions']}>
+          <div ref={actionsRef} className={styles['actions']}>
             {scrolled ? (
               <>
                 <a className="btn btn-secondary btn-xs" href={profile.github} target="_blank" rel="noopener noreferrer">
@@ -162,6 +198,7 @@ export default function Header() {
           </div>
 
           <button
+            ref={openRef}
             type="button"
             className={styles['menuButton']}
             aria-label={t(site.menu.open)}
@@ -176,6 +213,7 @@ export default function Header() {
 
       <div
         id="mobile-menu"
+        ref={menuRef}
         className={styles['menu']}
         data-open={menuOpen || undefined}
         aria-hidden={!menuOpen}
@@ -187,6 +225,7 @@ export default function Header() {
             <span className={styles['handle']}>{profile.handle}</span>
           </a>
           <button
+            ref={closeRef}
             type="button"
             className={styles['menuButton']}
             data-always
@@ -196,7 +235,7 @@ export default function Header() {
             <LuX aria-hidden="true" />
           </button>
         </div>
-        <nav className={styles['menuBody']} aria-label="Primary" key={locale}>
+        <nav className={styles['menuBody']} aria-label={t(site.a11y.menuNav)} key={locale}>
           {NAV.map(({ id, label, icon: Icon }, i) => (
             <a
               key={id}

@@ -30,7 +30,34 @@ import { createContext, useContext, useLayoutEffect, useRef, type ReactNode } fr
  * its second part when it lands.
  *
  * Reduced motion: no stream; the reply is simply there.
+ *
+ * While it runs, the enclosing live region (the window's `role="log"`) is
+ * marked `aria-busy`. Writing a few characters per frame into text nodes is,
+ * to a screen reader, a stream of tiny insertions, and a polite live region
+ * would read the reply out in fragments - twice for the GitHub reply, whose
+ * data streams a second time. Busy, it holds the announcement and reads the
+ * finished reply once. Counted per region, since a nested stream and a
+ * follow-up turn can overlap.
  */
+
+const busy = new Map<Element, number>()
+
+function hold(region: Element | null) {
+  if (!region) return () => {}
+  busy.set(region, (busy.get(region) ?? 0) + 1)
+  region.setAttribute('aria-busy', 'true')
+  let released = false
+  return () => {
+    if (released) return
+    released = true
+    const n = (busy.get(region) ?? 1) - 1
+    if (n > 0) busy.set(region, n)
+    else {
+      busy.delete(region)
+      region.removeAttribute('aria-busy')
+    }
+  }
+}
 
 /**
  * Where the stream has got to, for whoever wants to keep it in view - the
@@ -105,6 +132,7 @@ export default function Stream({ children, className }: { children: ReactNode; c
       }
     }
     walk(root, [])
+    const release = hold(root.closest('[aria-live]'))
 
     const total = units.reduce((n, u) => n + (u.kind === 'text' ? u.text.length : ATOM_COST), 0)
     const duration = Math.min(MAX_MS, Math.max(MIN_MS, total * MS_PER_CHAR))
@@ -147,11 +175,13 @@ export default function Stream({ children, className }: { children: ReactNode; c
       }
       if (frontier) progressRef.current?.(frontier)
       if (i < units.length) raf = requestAnimationFrame(step)
+      else release()
     }
     raf = requestAnimationFrame(step)
 
     return () => {
       cancelAnimationFrame(raf)
+      release()
       for (const u of units) {
         if (u.kind === 'text') u.node.nodeValue = u.text
         else u.el.style.visibility = ''

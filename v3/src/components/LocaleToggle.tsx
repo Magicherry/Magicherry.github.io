@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import { useLocale } from '@/lib/i18n'
 import type { Locale } from '@/content/types'
+import { site } from '@/content/site'
 import styles from './LocaleToggle.module.css'
 
 /**
@@ -22,7 +23,7 @@ const OPTIONS: readonly { value: Locale; label: string }[] = [
 ]
 
 export default function LocaleToggle({ className }: { className?: string }) {
-  const { locale, toggle } = useLocale()
+  const { locale, toggle, t } = useLocale()
   const rowRef = useRef<HTMLDivElement>(null)
   const refs = useRef(new Map<Locale, HTMLButtonElement>())
   const [edges, setEdges] = useState<{ l: number; r: number; dir: 'left' | 'right' } | null>(null)
@@ -56,7 +57,7 @@ export default function LocaleToggle({ className }: { className?: string }) {
       ref={rowRef}
       className={className ? `${styles['toggle']} ${className}` : styles['toggle']}
       role="group"
-      aria-label="Language"
+      aria-label={t(site.a11y.language)}
     >
       {edges ? (
         <span

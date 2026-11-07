@@ -69,42 +69,52 @@ function useIntro(questionLength: number) {
   const [stage, setStage] = useState<Stage>(reduced ? 'done' : 'idle')
   const [typed, setTyped] = useState(0)
   const [shown, setShown] = useState(reduced ? BLOCKS : 0)
-  const cancelled = useRef(false)
+  /* The question's length is read live: a language switch mid-typing must
+     type to the *new* question's end, or the composer stalls short of it
+     (or runs past it) and the send button never lights. */
+  const length = useRef(questionLength)
+  length.current = questionLength
+  /* Two separate stops. `skipped` is the visitor's, and is final. Each run of
+     the effect also has its own local flag: a single shared one would be
+     reset by StrictMode's second run, and the first run's loop - still
+     asleep - would wake up and type alongside it. */
+  const skipped = useRef(false)
 
   useEffect(() => {
     if (reduced) return
-    cancelled.current = false
+    let cancelled = false
+    const stopped = () => cancelled || skipped.current
     void (async () => {
       await sleep(START_MS)
-      if (cancelled.current) return
+      if (stopped()) return
       setStage('typing')
-      for (let i = 1; i <= questionLength; i++) {
+      for (let i = 1; i <= length.current; i++) {
         await sleep(CHAR_MS)
-        if (cancelled.current) return
+        if (stopped()) return
         setTyped(i)
       }
       await sleep(SEND_MS)
-      if (cancelled.current) return
+      if (stopped()) return
       setStage('thinking')
       await sleep(THINK_MS)
-      if (cancelled.current) return
+      if (stopped()) return
       setStage('reply')
       for (let i = 1; i <= BLOCKS; i++) {
         await sleep(BLOCK_MS)
-        if (cancelled.current) return
+        if (stopped()) return
         setShown(i)
       }
       setStage('done')
     })()
     return () => {
-      cancelled.current = true
+      cancelled = true
     }
     // Runs once; a language switch mid-sequence finishes in the new language.
   }, [reduced])
 
   /** The visitor did something first: drop the show and finish at once. */
   const skip = useCallback(() => {
-    cancelled.current = true
+    skipped.current = true
     setStage('done')
     setShown(BLOCKS)
   }, [])
@@ -116,7 +126,9 @@ function useIntro(questionLength: number) {
 interface Turn {
   id: number
   topic: Topic
-  /** What the user's bubble says - a typed question, or the topic's own. */
+  /** What the visitor typed, or '' for a chip, sidebar or intro turn - those
+      bubbles show the topic's own question, translated at render time so a
+      language switch changes them along with the replies under them. */
   question: string
 }
 
@@ -153,7 +165,7 @@ export default function AgentWindow() {
   const makeTurn = (topic: Topic, question?: string): Turn => ({
     id: nextId.current++,
     topic,
-    question: question ?? (topic === 'unknown' ? '' : t(agent.questions[topic])),
+    question: question ?? '',
   })
 
   /** Sidebar: start a fresh thread on this topic. */
@@ -183,6 +195,13 @@ export default function AgentWindow() {
 
   const submit = (e: FormEvent) => {
     e.preventDefault()
+    /* Sending while the intro types itself sends *that* question: finish the
+       show at once, as any other first move does. The button is enabled then,
+       and without this it submitted an empty draft and did nothing. */
+    if (intro.stage === 'typing') {
+      intro.skip()
+      return
+    }
     const text = draft.trim()
     if (!text) return
     ask(routeTopic(text), text)
@@ -427,13 +446,13 @@ export default function AgentWindow() {
                 const sent = !first || intro.stage === 'thinking' || intro.stage === 'reply' || intro.stage === 'done'
                 const thinking = first ? intro.stage === 'thinking' : pending === turn.id
                 const answered = first ? intro.stage === 'reply' || intro.stage === 'done' : pending !== turn.id
+                const asked =
+                  turn.question ||
+                  (first ? introQuestion : turn.topic === 'unknown' ? '' : t(agent.questions[turn.topic]))
                 return (
                   <div key={turn.id} className={styles['turn']} data-turn={turn.id}>
-                    {sent && turn.question ? (
-                      <div className={`${styles['userMessage']} ${styles['enter']}`}>{turn.question}</div>
-                    ) : null}
-                    {first && sent && !turn.question ? (
-                      <div className={`${styles['userMessage']} ${styles['enter']}`}>{introQuestion}</div>
+                    {sent && asked ? (
+                      <div className={`${styles['userMessage']} ${styles['enter']}`}>{asked}</div>
                     ) : null}
                     {thinking ? (
                       <div className={`${styles['thought']} ${styles['thinking']} ${styles['enter']}`}>
