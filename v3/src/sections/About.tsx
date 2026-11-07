@@ -163,8 +163,8 @@ function DemoFrame({ demo, children }: { demo: Demo<HTMLDivElement>; children: R
  *
  *   Run    0 the request is sent, alone; 1 the agent lays out its plan -
  *          all four steps arrive, pending; 2-5 step n runs - its tool lit,
- *          what it found opening beneath, the bar under the title moving on
- *          a quarter - and is ticked off; 6 all four are done
+ *          what it found opening beneath - and is ticked off; 6 all four
+ *          are done
  *   Brief  7 the run folds into one line (steps, time, tokens) and the
  *          brief writes itself out, three findings and then the hand-off
  *
@@ -183,10 +183,6 @@ function AgentRun() {
   const f = demo.frame
   const done = f >= 6
   const act = f < 7 ? 'run' : 'brief'
-  /* Empty until the first step starts, then it fills across each step's own
-     run - a quarter apiece, timed to the step - and is full as the last one
-     ends. */
-  const progress = f < 2 ? 0 : Math.min((f - 1) / 4, 1)
 
   return (
     <DemoFrame demo={demo}>
@@ -197,9 +193,6 @@ function AgentRun() {
             <span className={styles['statusDot']} />
             {t(done ? a.done : a.running)}
           </span>
-          {/* Remounted when the loop starts over, so a new run's line begins at
-              the left edge instead of visibly shrinking back from full. */}
-          <span key={f === 0 ? 'start' : 'run'} className={styles['runProgress']} style={{ transform: `scaleX(${progress})` }} />
         </div>
         <div key={act} className={styles['pane']}>
           {act === 'run' ? <RunPane f={f} /> : <BriefPane />}

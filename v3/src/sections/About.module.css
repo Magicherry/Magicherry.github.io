@@ -299,33 +299,11 @@
 
 /* ------------------------------------------------------------- agent run */
 /*
- * The agent window. A hairline under the title bar fills a quarter per
- * finished step; each step row names its tool and opens a line beneath while
- * it runs, saying what it found.
+ * The agent window. Each step row names its tool and opens a line beneath
+ * while it runs, saying what it found.
  */
 .appBar {
   position: relative;
-}
-
-.runProgress {
-  position: absolute;
-  bottom: -0.5px;
-  left: 0;
-  width: 100%;
-  height: 1.5px;
-  /* One colour, one width: a gradient read as a line thickening toward its
-     head. */
-  background: var(--brand);
-  transform-origin: left;
-  transition: transform 1.35s cubic-bezier(0.45, 0, 0.55, 1);
-}
-
-/* Full, it has said what it had to: it finishes filling, then fades away. */
-.status[data-done] ~ .runProgress {
-  opacity: 0;
-  transition:
-    transform 1.35s cubic-bezier(0.45, 0, 0.55, 1),
-    opacity 0.45s ease 0.5s;
 }
 
 .run {
@@ -526,7 +504,7 @@
   padding: 12px 14px;
   border: 0.5px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .briefHead {
@@ -786,8 +764,8 @@
   color: #7b8088;
 }
 
-/* The image build: a bar that fills while the build runs, a sheen passing
-   through it. */
+/* The image build: a bar that fills while the build runs, in one flat
+   colour. */
 .buildBar {
   position: relative;
   flex: none;
@@ -802,7 +780,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(90deg, rgba(var(--brand-rgb), 0.45), var(--brand));
+  background: var(--brand);
   transform-origin: left;
   animation: fill 1.4s cubic-bezier(0.45, 0, 0.2, 1) both;
 }
@@ -863,7 +841,7 @@
   padding: 12px 14px 8px;
   border: 0.5px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .chartHead {
@@ -915,8 +893,8 @@
   height: 12px;
 }
 
-/* Loading: grey stand-ins with a light passing over them, as a page shows
-   while its request is in flight. */
+/* Loading: flat grey stand-ins that breathe, as a page shows while its
+   request is in flight. */
 .figureSkeleton {
   width: 64px;
   height: 16px;
@@ -925,22 +903,13 @@
 
 .figureSkeleton,
 .chartCard[data-loading] .barFill {
-  background: linear-gradient(
-    100deg,
-    rgba(255, 255, 255, 0.05) 30%,
-    rgba(255, 255, 255, 0.13) 50%,
-    rgba(255, 255, 255, 0.05) 70%
-  );
-  background-size: 300% 100%;
-  animation: shimmer 1.2s linear infinite;
+  background: rgba(255, 255, 255, 0.09);
+  animation: pulse-flat 1s ease-in-out infinite alternate;
 }
 
-@keyframes shimmer {
-  from {
-    background-position: 100% 0;
-  }
+@keyframes pulse-flat {
   to {
-    background-position: 0 0;
+    opacity: 0.45;
   }
 }
 
@@ -974,17 +943,13 @@
 .barFill {
   position: relative;
   border-radius: 4px 4px 1px 1px;
-  background: linear-gradient(180deg, rgba(var(--brand-rgb), 0.42), rgba(var(--brand-rgb), 0.14));
+  background: rgba(var(--brand-rgb), 0.3);
   transition: height 0.75s var(--ease-out);
 }
 
+/* Flat fills throughout the preview: the peak is told apart by colour alone. */
 .barFill[data-peak] {
-  background: linear-gradient(180deg, var(--brand), rgba(var(--brand-rgb), 0.55));
-  box-shadow: 0 0 14px rgba(var(--brand-rgb), 0.35);
-}
-
-.chartCard[data-loading] .barFill {
-  box-shadow: none;
+  background: var(--brand);
 }
 
 .colLabel {
@@ -1256,7 +1221,9 @@
   border: 0.5px solid rgba(255, 255, 255, 0.12);
   border-radius: 18px;
   background: var(--app-card);
-  box-shadow: 0 10px 30px rgba(41, 70, 122, 0.2);
+  /* No drop shadow: the column clips at its sides (it must, to scroll), and
+     a 30px glow cut there showed as a hard seam down both edges. The hairline
+     border already sets each tile off. */
 }
 
 /* Bare mark, no well - as in the stack section: each logo has its own
@@ -1593,7 +1560,6 @@
   .bar span,
   .barFill,
   .tabLine,
-  .runProgress,
   .runDetail,
   .runDetail > span,
   .tab,
