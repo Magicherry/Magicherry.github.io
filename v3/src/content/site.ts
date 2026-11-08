@@ -19,7 +19,7 @@ export const site = {
     label: { en: 'Now at NIO in Shanghai', zh: '现就职于上海蔚来' },
     headline: { en: "Hi, I'm Daniel Zhou", zh: 'Hi，我是周昱廷' },
     lines: {
-      en: ['Building enterprise AI agent systems for manufacturing operations — balancing engineering, interface craft and interaction.'],
+      en: ['I build enterprise AI agent systems for manufacturing operations, with equal care for the engineering, the visual design and the interaction.'],
       zh: ['致力于构建面向制造运营的企业级 AI Agent 系统，兼顾技术实现、界面美学与交互体验。'],
     } satisfies Localized<readonly string[]>,
     viewWork: { en: 'View projects', zh: '查看项目' },
@@ -33,48 +33,48 @@ export const site = {
     thought: { en: 'Thought', zh: '已思考' },
     thinking: { en: 'Thinking', zh: '思考中' },
     intro: {
-      en: 'I am Daniel Zhou (Magicherry), Business Analyst Assistant & AI Agent Engineer at NIO, building enterprise agent systems for manufacturing operations.',
+      en: "I'm Daniel Zhou. I work on business analysis and AI agents at NIO, bringing AI into manufacturing operations and building systems that solve real business problems.",
       zh: '我是周昱廷（Daniel Zhou），目前在蔚来从事业务分析与 AI Agent 研发，致力于将人工智能融入制造运营场景，构建真正解决业务问题的智能系统。',
     },
-    canHelp: { en: 'What I work on:', zh: '我关注的方向：' },
+    canHelp: { en: 'What I focus on:', zh: '我关注的方向：' },
     items: [
       {
-        title: { en: 'Enterprise AI agents', zh: 'AI Agent' },
+        title: { en: 'AI agents', zh: 'AI Agent' },
         body: {
-          en: 'LLM / RAG systems and workflow automation for manufacturing.',
+          en: 'Enterprise AI apps built on LLMs, RAG and workflow automation.',
           zh: '基于 LLM / RAG 与流程自动化，构建企业级智能应用。',
         },
       },
       {
-        title: { en: 'Decision support', zh: '业务分析' },
+        title: { en: 'Business analysis', zh: '业务分析' },
         body: {
-          en: 'Turning multi-source operational data into numbers teams run on.',
+          en: 'Pulling data together across teams to find insights and inform operational decisions.',
           zh: '整合跨业务域数据，挖掘业务洞察，辅助运营决策。',
         },
       },
       {
         title: { en: 'NLP research', zh: 'NLP 研究' },
         body: {
-          en: 'Hierarchical classification on transformers at Rutgers CAIT.',
+          en: 'Transformer-based text classification research at Rutgers CAIT.',
           zh: '曾在 Rutgers CAIT 开展基于 Transformer 的文本分类研究。',
         },
       },
       {
-        title: { en: 'Full-stack engineering', zh: '全栈开发' },
+        title: { en: 'Full-stack development', zh: '全栈开发' },
         body: {
-          en: 'From fast, careful interfaces to dependable back-ends.',
+          en: 'Complete, reliable apps, from back-end architecture to front-end interaction.',
           zh: '从后端架构到前端交互，打造完整、可靠的应用体验。',
         },
       },
       {
         title: { en: 'Side projects', zh: '个人项目' },
         body: {
-          en: 'Desktop apps, recommenders and tools I wanted to exist.',
+          en: 'Chasing ideas I find interesting and turning them into useful, well-crafted tools.',
           zh: '探索有趣的技术想法，打磨实用且注重细节的工具。',
         },
       },
     ] satisfies readonly { title: Localized; body: Localized }[],
-    more: { en: 'Scroll on for the rest.', zh: '更多故事，欢迎继续探索。' },
+    more: { en: "There's more to see - keep exploring.", zh: '更多故事，欢迎继续探索。' },
     placeholder: {
       en: 'Ask about projects, experience or how to reach me…',
       zh: '问问项目、经历，或者怎么联系我…',
@@ -89,33 +89,33 @@ export const site = {
     offClock: { en: 'Off the clock', zh: '工作之余' },
     /* The section's title. v3's own rather than copy.ts's "关于我", which v2
        still uses; `**...**` is the accented part, as in v2's titles. */
-    heading: { en: 'My **Engineering & Exploration**', zh: '我的**技术探索与工程实践**' },
+    heading: { en: 'What I **Build & Explore**', zh: '我的**技术探索与工程实践**' },
     cards: {
       agents: {
         title: { en: 'Enterprise AI agents', zh: '企业级 AI Agent' },
         body: {
-          en: 'Combining LLMs, RAG and workflow automation into enterprise agents for manufacturing operations, bringing AI into real business use.',
+          en: 'Enterprise agents for manufacturing operations, built on LLMs, RAG and workflow automation, putting AI to work on real business problems.',
           zh: '融合 LLM、RAG 与工作流自动化，构建面向制造运营的企业级智能体，推动 AI 能力在真实业务场景中落地。',
         },
       },
       fullstack: {
         title: { en: 'Full-stack engineering', zh: '全栈工程' },
         body: {
-          en: 'Front-end performance and interaction alongside back-end stability and scale, across API design, data processing and containerised deployment.',
+          en: 'Fast, polished front ends and stable, scalable back ends, from API design to data processing and containerised deployment.',
           zh: '兼顾前端性能与交互体验、后端稳定性与可扩展性，覆盖 API 设计、数据处理与容器化部署。',
         },
       },
       research: {
         title: { en: 'NLP & data research', zh: 'NLP 与数据研究' },
         body: {
-          en: 'Hierarchical text classification on DeBERTa over 100k+ railway incident records, exploring constrained inference and model evaluation.',
+          en: 'A hierarchical DeBERTa classifier for more than 100,000 railway incident records, with work on constrained inference and model evaluation.',
           zh: '基于 DeBERTa 构建层级文本分类模型，处理 10 万余条铁路事故记录，探索约束推理与模型评估。',
         },
       },
       stack: {
         title: { en: 'Tech stack', zh: '技术栈' },
         body: {
-          en: 'Spanning AI applications, front- and back-end development, data storage and cloud-native infrastructure.',
+          en: 'Everything from AI applications and front- and back-end development to data storage and cloud-native infrastructure.',
           zh: '覆盖 AI 应用、前后端开发、数据存储与云原生基础设施。',
         },
       },
@@ -124,11 +124,11 @@ export const site = {
     /* The agent demo: a request, four steps each with what it found, and the
        brief they produce. Its 6.8% is the full-stack dashboard's figure, so
        the two cards tell one story. */
-    agentRun: { en: 'Cost analyst', zh: '成本分析 Agent' },
-    ask: { en: 'Analyse Q3 cost by line and advise on Q4', zh: '分析 Q3 各产线成本，给出 Q4 建议' },
+    agentRun: { en: 'Cost analysis agent', zh: '成本分析 Agent' },
+    ask: { en: 'Break down Q3 costs by line and advise on Q4', zh: '分析 Q3 各产线成本，给出 Q4 建议' },
     steps: [
       {
-        label: { en: 'Retrieve cost documents', zh: '检索成本文档' },
+        label: { en: 'Search cost reports', zh: '检索成本文档' },
         detail: { en: '8 docs · relevance 0.82', zh: '8 篇文档 · 相关度 0.82' },
       },
       {
@@ -136,11 +136,11 @@ export const site = {
         detail: { en: '1,284 rows · 6 lines', zh: '1,284 行 · 6 条产线' },
       },
       {
-        label: { en: 'Forecast next-quarter spend', zh: '预测下季度支出' },
+        label: { en: "Forecast next quarter's spend", zh: '预测下季度支出' },
         detail: { en: 'Q4 −6.8% · MAPE 4.1%', zh: 'Q4 −6.8% · MAPE 4.1%' },
       },
       {
-        label: { en: 'Draft decision brief', zh: '生成决策简报' },
+        label: { en: 'Write the decision brief', zh: '生成决策简报' },
         detail: { en: '3 recommendations', zh: '3 条建议' },
       },
     ] satisfies readonly { label: Localized; detail: Localized }[],
@@ -296,14 +296,16 @@ export const site = {
     email: {
       title: { en: 'Email', zh: '邮件' },
       body: {
-        en: 'The fastest way to reach me. I usually reply within a day.',
-        zh: '欢迎交流技术、产品与想法，期待你的来信。',
+        /* Not "欢迎交流…" / "Happy to talk…": the CTA right below opens that
+           way, and the two read as one line said twice. */
+        en: "Whether it's tech, product or a new idea, I'd love to hear from you.",
+        zh: '无论是技术、产品还是新想法，都期待你的来信。',
       },
     },
     github: {
       title: { en: 'Source', zh: '源码' },
       body: {
-        en: 'This site is open source. Clone it, read it, borrow from it.',
+        en: 'This site is fully open source. Feel free to explore the code.',
         zh: '本站代码完全开源，欢迎查看与交流。',
       },
     },
@@ -312,9 +314,9 @@ export const site = {
   },
 
   cta: {
-    title: { en: "Let's build something", zh: '一起聊聊你的想法' },
+    title: { en: "Got an idea? Let's talk", zh: '一起聊聊你的想法' },
     body: {
-      en: 'Open to conversations about AI agents, product and engineering — and anything else worth turning over.',
+      en: 'Happy to talk AI agents, product and engineering — or anything else worth mulling over.',
       zh: '欢迎交流 AI Agent、产品与工程，以及一切值得琢磨的话题。',
     },
   },

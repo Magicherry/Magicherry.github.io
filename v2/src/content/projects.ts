@@ -73,7 +73,7 @@ export const projects: readonly Project[] = [
     image: railway,
     title: { en: 'Intelligent Rail Incident Classifier', zh: '智能铁路事故分类系统' },
     summary: {
-      en: 'A hierarchical NLP system on DeBERTa that classifies real railway incident logs across multiple structured label levels, with a full training and evaluation pipeline behind it.',
+      en: 'A hierarchical NLP system built on DeBERTa that automatically classifies real rail incident logs across multiple label levels, covering data preprocessing, label taxonomy design and evaluation.',
       zh: '基于 DeBERTa 预训练语言模型构建的分层 NLP 系统，对真实轨道交通事件日志进行多层级自动分类，覆盖数据预处理、标签体系组织与评估流程设计。',
     },
     domains: ['ai', 'data'],
@@ -127,7 +127,7 @@ export const projects: readonly Project[] = [
     image: kob,
     title: { en: 'King of Bots — Real-time Battle Platform', zh: 'King of Bots 实时对战平台' },
     summary: {
-      en: 'A real-time strategy game on Spring Boot and Vue 3, with WebSocket match synchronisation and JWT-backed sessions.',
+      en: 'A real-time strategy game with a Spring Boot back end and a Vue 3 front end, covering head-to-head matches, real-time sync and state management.',
       zh: '实时策略游戏项目，后端 Spring Boot、前端 Vue3，涵盖用户对战、实时同步与状态管理等核心能力。',
     },
     domains: ['web'],
@@ -141,7 +141,7 @@ export const projects: readonly Project[] = [
     image: managements,
     title: { en: 'Management Dashboard', zh: '后台管理系统' },
     summary: {
-      en: 'A back-office system on Spring Boot and MyBatis Plus with a clean front/back separation and MD5-secured credentials.',
+      en: 'An admin dashboard built on Spring Boot and MyBatis Plus, with a clean front-end/back-end split and role-based permissions.',
       zh: '基于 Spring Boot 与 MyBatis Plus 的综合管理后台，具备清晰的前后端分层结构与权限相关功能。',
     },
     domains: ['web'],
@@ -155,7 +155,7 @@ export const projects: readonly Project[] = [
     image: cider,
     title: { en: 'Music App UX Design', zh: 'Music App 交互设计' },
     summary: {
-      en: 'A high-fidelity prototype for a music streaming client, built in Axure RP 9 around Apple Music’s information hierarchy.',
+      en: 'A high-fidelity UX prototype for a music streaming app, designed and demoed in Axure RP 9, with a focus on information hierarchy and a smooth playback flow.',
       zh: '音乐流媒体应用的高保真 UX 原型，使用 Axure RP 9 完成设计与交互演示，重点关注信息层级与播放流程的体验衔接。',
     },
     domains: ['design'],

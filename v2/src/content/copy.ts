@@ -55,7 +55,7 @@ export const ui = {
       title: { en: 'Know Who **I Am**', zh: '关于**我**' },
     },
     stack: {
-      title: { en: 'Professional **Skillset**', zh: '我常用的**技术栈**' },
+      title: { en: 'My **Tech Stack**', zh: '我常用的**技术栈**' },
       certifications: { en: 'Certifications', zh: '专业认证' },
       tools: { en: 'Dev Environment & Tools', zh: '开发环境与工具' },
     },
@@ -80,7 +80,7 @@ export const ui = {
     contact: {
       title: { en: 'Get In **Touch**', zh: '联系**我**' },
       body: {
-        en: 'Open to conversations about technology, product, ideas — and anything else worth turning over.',
+        en: 'Happy to talk technology, product and ideas — or anything else worth mulling over.',
         zh: '欢迎交流技术、产品、想法及一切值得琢磨的话题。',
       },
     },
@@ -92,12 +92,12 @@ export const ui = {
   about: {
     paragraphs: {
       en: [
-        'Today I am an **AI Agent Engineer** and **Business Analyst Assistant** at [NIO](https://www.nio.com/), building **enterprise agent systems** for manufacturing operations across **LLMs and RAG**, **workflow automation** and **data-driven decision support**. Before that I researched **NLP and LLMs** at the [Rutgers CAIT Lab](https://cait.rutgers.edu/), and shipped large-scale web applications at a **Tencent × Shanghai Metro** joint venture.',
-        'I work across the stack — from **responsive, detail-obsessed interfaces** to **dependable back-end services**, with real practice in **database design, API design, data pipelines and containerised deployment**.',
-        'What I actually care about is that the result is **fast, maintainable and kind to the person using it**. A system that holds up technically *and* feels natural in the hand is the whole goal.',
+        'I\'m currently an **AI Agent Engineer & Business Planning Assistant Analyst** at [NIO](https://www.nio.com/), where I build and ship **enterprise AI agent systems** for manufacturing operations. My work brings together **LLMs and RAG, business process automation and data-driven decision-making** to put AI to work on real business problems. Before that, I did **NLP and LLM** research at the [Rutgers CAIT Lab](https://cait.rutgers.edu/) and helped build large-scale web applications at a **Tencent × Shanghai Metro** joint venture.',
+        'On the technical side, my background spans **full-stack development and AI engineering**. I care about **front-end performance and user experience** just as much as **back-end stability and scalability**, and I keep sharpening my skills in **database and API design, data pipelines and containerised deployment**.',
+        'I\'m less interested in technical complexity for its own sake than in whether a product actually solves the problem: **fast, maintainable and pleasant to use**. Good work should hold up to technical scrutiny, stay close to what the business really needs, and deliver real value.',
       ],
       zh: [
-        '目前，我在[蔚来](https://www.nio.com/)担任**业务分析助理兼 AI Agent 工程师**，聚焦制造运营场景下的**企业级 AI Agent 系统研发与落地**，结合 **LLM / RAG、业务流程自动化与数据驱动决策**，推动 AI 技术与实际业务的深度融合。此前，我曾在 [Rutgers CAIT Lab](https://cait.rutgers.edu/) 从事 **NLP / LLM** 相关研究，并在**腾讯 × 上海地铁**合资公司参与大型 Web 应用的研发与工程实践。',
+        '目前，我在[蔚来](https://www.nio.com/)担任**AI Agent 工程师 & 业务规划助理分析师**，聚焦制造运营场景下的**企业级 AI Agent 系统研发与落地**，结合 **LLM / RAG、业务流程自动化与数据驱动决策**，推动 AI 技术与实际业务的深度融合。此前，我曾在 [Rutgers CAIT Lab](https://cait.rutgers.edu/) 从事 **NLP / LLM** 相关研究，并在**腾讯 × 上海地铁**合资公司参与大型 Web 应用的研发与工程实践。',
         '技术上，我具备**全栈开发与 AI 应用工程**的复合背景，既关注**前端性能与交互体验**，也重视**后端架构的稳定性与可扩展性**，并持续实践**数据库与 API 设计、数据处理管道及容器化部署**。',
         '相比单纯追求技术复杂度，我更在意产品能否真正解决问题：**性能出色、易于维护、体验友好**。既经得起技术推敲，也能贴近真实业务需求，让技术价值真正落地。',
       ],
@@ -110,9 +110,9 @@ export const ui = {
      * entry the wrong icon, which an index-aligned array would.
      */
     interests: [
-      { id: 'writing', label: { en: 'Tech writing & product teardowns', zh: '技术博客与产品评测' } },
+      { id: 'writing', label: { en: 'Tech blogging & product reviews', zh: '技术博客与产品评测' } },
       { id: 'games', label: { en: 'Games & interaction design', zh: '游戏与交互设计' } },
-      { id: 'f1', label: { en: 'Formula 1 race weekends', zh: 'F1 赛事' } },
+      { id: 'f1', label: { en: 'Formula 1', zh: 'F1 赛事' } },
       { id: 'film', label: { en: 'Film, series & documentaries', zh: '电影、剧集与纪录片' } },
       { id: 'photo', label: { en: 'Photography & video', zh: '摄影与视频创作' } },
     ] satisfies readonly { id: string; label: Localized }[],
@@ -123,7 +123,7 @@ export const ui = {
     quoteAuthor: { en: 'Ayrton Senna', zh: '艾尔顿 · 塞纳' },
   },
   footer: {
-    motto: { en: 'Keep frosty & curious.', zh: '保持好奇，持续探索。' },
+    motto: { en: 'Stay curious, keep exploring.', zh: '保持好奇，持续探索。' },
     rights: { en: 'All rights reserved.', zh: '保留所有权利。' },
     /*
      * The repository behind *this page*, not the profile the contact section

@@ -36,7 +36,7 @@ export const profile = {
        rather than each getting a row of their own. */
     titles: [
       { en: 'AI Agent Engineer', zh: 'AI Agent 工程师' },
-      { en: 'Business Planning Assistant', zh: '业务规划助理' },
+      { en: 'Business Planning Assistant Analyst', zh: '业务规划助理分析师' },
     ] satisfies readonly Localized[],
     /* The registered name, as the CV prints it, now that it has a row to itself
        - "NIO" was a shorthand the old `title @ company` line could not afford to
@@ -74,7 +74,7 @@ export const roles: Localized<readonly string[]> = {
     'AI Agent Engineer',
     'Front-end Developer',
     'Full-stack Developer',
-    'Business Planning Analyst',
+    'Business Planning Assistant Analyst',
     'Machine Learning Engineer',
     'Creative Developer',
   ],
@@ -82,7 +82,7 @@ export const roles: Localized<readonly string[]> = {
     'AI Agent 工程师',
     '前端开发工程师',
     '全栈开发工程师',
-    '业务规划分析师',
+    '业务规划助理分析师',
     '机器学习工程师',
     '创意开发者',
   ],

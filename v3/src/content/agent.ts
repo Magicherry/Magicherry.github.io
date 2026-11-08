@@ -41,11 +41,11 @@ export const agent = {
   sessions: [
     { topic: 'intro', label: { en: 'Meet Magicherry', zh: '认识 Magicherry' } },
     { topic: 'nio', label: { en: 'What I do at NIO', zh: '在蔚来做什么' } },
-    { topic: 'rail', label: { en: 'Railway incident research', zh: '铁路事故分类研究' } },
+    { topic: 'rail', label: { en: 'Classifying rail incidents', zh: '铁路事故分类研究' } },
     { topic: 'github', label: { en: 'Recent code activity', zh: '最近的代码动态' } },
   ] satisfies readonly { topic: Topic; label: Localized }[],
   folders: [
-    { topic: 'nio', label: { en: 'NIO manufacturing ops', zh: '蔚来制造运营' } },
+    { topic: 'nio', label: { en: 'Manufacturing at NIO', zh: '蔚来制造运营' } },
     { topic: 'projects', label: { en: 'Side projects', zh: '个人项目' } },
   ] satisfies readonly { topic: Topic; label: Localized }[],
 
@@ -53,36 +53,36 @@ export const agent = {
   questions: {
     about: { en: 'Tell me more about yourself', zh: '多讲讲你自己吧' },
     intro: { en: 'Could you introduce yourself?', zh: '可以介绍一下你自己吗？' },
-    projects: { en: 'Show me your projects', zh: '看看你做过的项目' },
-    experience: { en: 'Walk me through your experience', zh: '介绍一下你的工作经历' },
+    projects: { en: 'What have you built?', zh: '看看你做过的项目' },
+    experience: { en: 'Where have you worked?', zh: '介绍一下你的工作经历' },
     github: { en: 'What have you been coding lately?', zh: '最近在写什么代码？' },
     contact: { en: 'How can I reach you?', zh: '怎么联系你？' },
-    stack: { en: "What's your stack?", zh: '你常用哪些技术？' },
-    nio: { en: 'What do you do at NIO?', zh: '你在蔚来具体做什么？' },
-    rail: { en: 'Tell me about the railway incident research', zh: '讲讲铁路事故分类的研究' },
+    stack: { en: 'What do you usually build with?', zh: '你常用哪些技术？' },
+    nio: { en: 'What do you actually do at NIO?', zh: '你在蔚来具体做什么？' },
+    rail: { en: 'Tell me about your rail incident research', zh: '讲讲铁路事故分类的研究' },
   } satisfies Record<Exclude<Topic, 'unknown'>, Localized>,
 
   /* The first line of each reply. */
   leads: {
-    projects: { en: "Here's what I've built - open any of them:", zh: '这些是我做过的项目，点开可以看源码：' },
-    experience: { en: 'My experience, newest first:', zh: '我的经历，从最近的开始：' },
-    github: { en: 'My GitHub activity over the past year:', zh: '这是我过去一年在 GitHub 上的动态：' },
-    contact: { en: 'Any of these will reach me:', zh: '这些方式都能找到我：' },
-    stack: { en: 'What I reach for, by area:', zh: '我常用的技术，按方向分：' },
+    projects: { en: "Here's what I've built - click one to see the code:", zh: '这些是我做过的项目，点开可以看源码：' },
+    experience: { en: "Here's where I've worked, most recent first:", zh: '我的经历，从最近的开始：' },
+    github: { en: "Here's what I've been up to on GitHub this past year:", zh: '这是我过去一年在 GitHub 上的动态：' },
+    contact: { en: 'You can reach me any of these ways:', zh: '这些方式都能找到我：' },
+    stack: { en: "Here's what I usually build with:", zh: '我常用的技术，按方向分：' },
     nio: {
-      en: "At NIO I'm a Business Analyst Assistant and AI Agent Engineer. Mainly three things:",
-      zh: '我在蔚来担任业务分析助理兼 AI Agent 工程师，主要做三件事：',
+      en: "At NIO I'm an AI Agent Engineer & Business Planning Assistant Analyst. My work comes down to three things:",
+      zh: '我在蔚来担任 AI Agent 工程师 & 业务规划助理分析师，主要做三件事：',
     },
-    rail: { en: 'At Rutgers CAIT the research covered:', zh: '在 Rutgers CAIT 的研究主要包括：' },
+    rail: { en: 'At Rutgers CAIT, my research focused on:', zh: '在 Rutgers CAIT 的研究主要包括：' },
     unknown: {
-      en: "That's beyond what this demo agent knows. Try one of the topics just above the message box.",
+      en: "That one's outside what this demo can answer. Try one of the topics above the message box.",
       zh: '这个问题超出了这个演示助手的范围，可以试试输入框上方的这些话题。',
     },
   },
 
-  greeting: { en: 'Hi! What would you like to know?', zh: '你好！想了解我的哪方面？' },
+  greeting: { en: 'Hi! What would you like to know about me?', zh: '你好！想了解我的哪方面？' },
   welcomeHint: {
-    en: 'Ask about my projects, experience or stack - or pick a topic below.',
+    en: 'Ask me about my projects, experience or tech stack, or pick a topic below.',
     zh: '项目、经历、技术栈都可以问我，或者点下面的话题。',
   },
 
@@ -91,22 +91,24 @@ export const agent = {
     /* A topic, like its neighbours - not a pronoun. "About you" / "关于你" was
        first, worded as the visitor's question, but a chip reads as a label,
        and a label that says "you" to the visitor sounds like it is about
-       *them*. "个人简介" is the plain name for what the reply is: v2's About. */
-    { topic: 'about', label: { en: 'About', zh: '个人简介' } },
+       *them*. "个人简介" is the plain name for what the reply is: v2's About.
+       In English it is "Bio": what a profile's short self-description is
+       called, and like "个人简介" it has no pronoun to misread. */
+    { topic: 'about', label: { en: 'Bio', zh: '个人简介' } },
     { topic: 'projects', label: { en: 'Projects', zh: '项目' } },
     { topic: 'experience', label: { en: 'Experience', zh: '经历' } },
     { topic: 'github', label: { en: 'GitHub activity', zh: 'GitHub 动态' } },
-    { topic: 'stack', label: { en: 'Stack', zh: '技术栈' } },
+    { topic: 'stack', label: { en: 'Tech stack', zh: '技术栈' } },
     { topic: 'contact', label: { en: 'Contact', zh: '联系方式' } },
   ] satisfies readonly { topic: Topic; label: Localized }[],
 
-  seeAbout: { en: 'More about me on the page', zh: '在页面中查看关于我' },
-  seeAllProjects: { en: 'See all on the page', zh: '在页面中查看全部' },
-  seeStack: { en: 'Full stack on the page', zh: '在页面中查看完整技术栈' },
-  seeExperience: { en: 'Full experience on the page', zh: '在页面中查看完整经历' },
+  seeAbout: { en: 'Read more about me below', zh: '在页面中查看关于我' },
+  seeAllProjects: { en: 'See all projects below', zh: '在页面中查看全部' },
+  seeStack: { en: 'See the full stack below', zh: '在页面中查看完整技术栈' },
+  seeExperience: { en: 'See my full experience below', zh: '在页面中查看完整经历' },
   openGithub: { en: 'Open GitHub profile', zh: '打开 GitHub 主页' },
   source: { en: 'Source', zh: '源码' },
-  internal: { en: 'Internal', zh: '内部项目' },
+  internal: { en: 'Internal project', zh: '内部项目' },
   current: { en: 'Current', zh: '在职' },
   education: { en: 'Education', zh: '教育背景' },
 
@@ -114,18 +116,18 @@ export const agent = {
     total: { en: '{n} contributions in the last year', zh: '过去一年共 {n} 次贡献' },
     less: { en: 'Less', zh: '少' },
     more: { en: 'More', zh: '多' },
-    repos: { en: 'Recently updated', zh: '最近更新的仓库' },
+    repos: { en: 'Recently updated repos', zh: '最近更新的仓库' },
     publicRepos: { en: 'public repos', zh: '个公开仓库' },
     followers: { en: 'followers', zh: '位关注者' },
     loading: { en: 'Reading GitHub…', zh: '正在读取 GitHub…' },
     error: {
-      en: "Couldn't reach GitHub just now - the profile has it all:",
+      en: "Couldn't load GitHub right now - everything's on my profile:",
       zh: '暂时读取不到 GitHub 数据，可以直接去主页看：',
     },
     contributionsOn: { en: '{n} on {date}', zh: '{date}：{n} 次' },
   },
 
-  wechat: { en: 'WeChat - scan to add', zh: '微信扫码添加' },
+  wechat: { en: 'Scan to add me on WeChat', zh: '微信扫码添加' },
   inputLabel: { en: 'Ask Magicherry', zh: '向 Magicherry 提问' },
   send: { en: 'Send', zh: '发送' },
 } as const
