@@ -19,7 +19,7 @@ import { useEffect, useRef } from 'react'
  * screen, at a 30fps cap.
  *
  * It costs nothing when nobody is looking: the loop stops while the hero is
- * off screen or the tab is hidden. Under reduced motion one frame is drawn and
+ * off screen, the tab is hidden, or the page is scrolling. Under reduced motion one frame is drawn and
  * left still. If WebGL is missing, the canvas never shows and the CSS sky
  * behind it (Hero.module.css) stands in.
  */
@@ -150,32 +150,71 @@ export default function HeroSky({ className }: { className?: string }) {
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     let raf = 0
-    let last = 0 // seconds of sky elapsed, in ms - advances only while drawn
+    let timer = 0
+    let last = 0 // ms of sky elapsed - advances only while drawn
     let prev = 0
     let visible = true
+    let scrolling = false
+    let settle = 0
     draw(0)
     canvas.dataset['ready'] = ''
     const ro = new ResizeObserver(() => draw(last / 1000))
     ro.observe(canvas)
 
-    const loop = (now: number) => {
-      raf = requestAnimationFrame(loop)
-      if (now - prev < FRAME_MS) return
+    /*
+     * The clock. A timer waits out the frame interval and only then asks for an
+     * animation frame, so the loop wakes 30 times a second - not on every
+     * display refresh, which on a 240Hz screen was 240 wake-ups a second to
+     * draw 30.
+     */
+    const tick = (now: number) => {
+      raf = 0
       last += Math.min(now - prev, 100)
       prev = now
       draw(last / 1000)
+      schedule()
+    }
+    const schedule = () => {
+      timer = window.setTimeout(() => {
+        timer = 0
+        raf = requestAnimationFrame(tick)
+      }, FRAME_MS)
     }
     const run = () => {
-      if (reduced || raf || !visible || document.hidden) return
+      if (reduced || raf || timer || !visible || scrolling || document.hidden) return
       prev = performance.now()
-      raf = requestAnimationFrame(loop)
+      schedule()
     }
     const stop = () => {
       cancelAnimationFrame(raf)
+      window.clearTimeout(timer)
       raf = 0
+      timer = 0
     }
+
+    /*
+     * Still while the page scrolls, and for 150ms after. Scrolling is when a
+     * dropped frame shows, and every frame the sky changes is also a frame the
+     * header's refracting glass, which sits over it, has to filter again. Mid-
+     * scroll the slow drift of the light is invisible anyway; it picks up
+     * where it stopped.
+     */
+    const onScroll = () => {
+      scrolling = true
+      stop()
+      window.clearTimeout(settle)
+      settle = window.setTimeout(() => {
+        scrolling = false
+        run()
+      }, 150)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+
+    /* `intersectionRatio`, not just `isIntersecting`: Chrome reports a box that
+       merely touches the viewport's edge as intersecting, and with the next
+       section scrolled to the top the sky kept running out of sight. */
     const io = new IntersectionObserver(([e]) => {
-      visible = !!e?.isIntersecting
+      visible = !!e && e.isIntersecting && e.intersectionRatio > 0
       if (visible) run()
       else stop()
     })
@@ -186,6 +225,8 @@ export default function HeroSky({ className }: { className?: string }) {
 
     return () => {
       stop()
+      window.clearTimeout(settle)
+      window.removeEventListener('scroll', onScroll)
       io.disconnect()
       ro.disconnect()
       document.removeEventListener('visibilitychange', onVis)

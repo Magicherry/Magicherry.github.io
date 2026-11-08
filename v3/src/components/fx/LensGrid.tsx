@@ -119,12 +119,13 @@ export default function LensGrid() {
     if (!fieldCtx) return
 
     /*
-     * 1.5, not 2. The canvas is a full-viewport layer that gets blended on every
-     * composite, so its pixel count is a standing cost - and at 2x on a 4K panel
-     * that is 33M pixels for a field of 1px dots under a noise overlay. Half a
-     * step down removes 44% of them and is not visible.
+     * 1x, whatever the screen. The canvas is a full-viewport layer that gets
+     * blended on every composite, so its pixel count is a standing cost. It
+     * was capped at 1.5 (a 4K panel at 2x is 33M pixels for a field of 1px
+     * dots); at 1 a 1.5x laptop screen carries 56% fewer, and dots this faint
+     * under the noise and the aurora read the same either way.
      */
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
+    const dpr = 1
     let width = 0
     let height = 0
     let originX = 0
@@ -154,6 +155,19 @@ export default function LensGrid() {
     let targetPower = 0
     let frame = 0
     let running = false
+    /*
+     * The patch the last frame painted, in CSS pixels, or null for "all of
+     * it". The lens is ~400px across on a full-viewport canvas, so a frame
+     * that cleared and re-blitted the whole field to move it repainted some
+     * twenty times the pixels that changed. Now each frame restores only the
+     * union of where the lens was and where it is.
+     */
+    let painted: { x: number; y: number; w: number; h: number } | null = null
+    /* Set on resize, when the whole canvas must be repainted once. */
+    let full = true
+    /* Everything one lens frame can touch: the radius, the furthest a dot is
+       pushed and swollen, and the bloom around it. */
+    const REACH = LENS_RADIUS + LENS_STRENGTH + LENS_SWELL + LENS_BLOOM * 2
 
     /*
      * One dot, centred on (x, y), added to whatever path is already open.
@@ -200,11 +214,29 @@ export default function LensGrid() {
       // there is nothing to composite on top of it.
       if (!lens) return
 
-      ctx.clearRect(0, 0, width, height)
-      ctx.drawImage(field, 0, 0, width, height)
+      const box =
+        power < POWER_EPSILON
+          ? null
+          : { x: lensX - REACH, y: lensY - REACH, w: REACH * 2, h: REACH * 2 }
+      /* Which part to restore: everything after a resize; otherwise the old
+         patch and the new one together; nothing if neither exists. */
+      type Box = { x: number; y: number; w: number; h: number }
+      const parts: Box[] = full ? [{ x: 0, y: 0, w: width, h: height }] : [painted, box].filter((b): b is Box => !!b)
+      full = false
+      if (parts.length) {
+        const x0 = Math.max(0, Math.floor(Math.min(...parts.map((b) => b.x))))
+        const y0 = Math.max(0, Math.floor(Math.min(...parts.map((b) => b.y))))
+        const x1 = Math.min(width, Math.ceil(Math.max(...parts.map((b) => b.x + b.w))))
+        const y1 = Math.min(height, Math.ceil(Math.max(...parts.map((b) => b.y + b.h))))
+        if (x1 > x0 && y1 > y0) {
+          ctx.clearRect(x0, y0, x1 - x0, y1 - y0)
+          ctx.drawImage(field, x0 * dpr, y0 * dpr, (x1 - x0) * dpr, (y1 - y0) * dpr, x0, y0, x1 - x0, y1 - y0)
+        }
+      }
+      painted = box
 
       // Fully released: the blit above is already the whole picture.
-      if (power < POWER_EPSILON) return
+      if (!box) return
 
       /*
        * Punch the lens area out of the blitted field before drawing the
@@ -352,6 +384,9 @@ export default function LensGrid() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
       renderField()
+      /* A resized canvas is blank: this frame repaints all of it. */
+      full = true
+      painted = null
       draw()
     }
 
