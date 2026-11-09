@@ -1,36 +1,8 @@
-# Repo-level ignores only. Each version owns its own build tooling and keeps its
-# own .gitignore (v1/.gitignore, v2/.gitignore); this file covers what sits
-# above them or would be a mistake anywhere in the tree.
-
-# Dependencies and build output, at any depth.
-node_modules/
-dist/
-build/
-
-# Editor and OS noise
-.idea/
-.vscode/
+node_modules
+dist
+dist-ssr
+*.local
+.vite
 .DS_Store
-# The resource-fork sidecar directory macOS writes into a zip. The Hitmarker
-# package arrives with one; it is a duplicate of the tree beside it and must not
-# be mistaken for part of the font distribution.
-__MACOSX/
-Thumbs.db
-*.swp
-
-# Logs and scratch
 *.log
-*.tmp
-*.bak
-*.orig
-
-# Private resume sources: a separate git repo of its own, so committing it would
-# record an unresolvable gitlink rather than the files. Anchored, because an
-# unanchored `Resume/` would also swallow v1/src/components/Resume/, which is
-# application code and has to stay tracked.
-/v1/Resume/
-
-# Personal documents carrying contact details - not for a public repo. The CV
-# PDFs the site actually serves live in each version's assets and stay tracked.
-/v1/Linkedin.pdf
-/v1/LinkedIn.pdf
+.smoke.mjs

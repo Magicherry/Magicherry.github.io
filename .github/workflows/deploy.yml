@@ -15,11 +15,6 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
-# The site lives in v3/. v2/ and v1/ stay in the repo as archives and are never built.
-defaults:
-  run:
-    working-directory: v3
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,7 +28,6 @@ jobs:
           # Vite 8 requires ^20.19 || >=22.12.
           node-version: 22
           cache: npm
-          cache-dependency-path: v3/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -51,7 +45,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: v3/dist
+          path: dist
 
   deploy:
     needs: build
