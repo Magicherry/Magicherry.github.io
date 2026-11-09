@@ -4,16 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository shape
 
-Each generation of the site lives on its own branch, with its project at the repo root:
+`main` is the live site (v3) and the only long-lived branch; it is the only branch that deploys. Work happens on short-lived `feat/…` / `fix/…` branches merged into `main` and then deleted. Releases are tagged `v3.x.y` on `main`.
 
-- `main` — **the live site, v3.** The only branch that deploys.
-- `v3` — v3's line of development; `main` tracks it.
-- `v2` — the previous site (React 19 · TS · Vite 8 · Motion · Lenis, glassmorphism design system), archived but kept buildable as a rollback target. Its own `CLAUDE.md` documents its glass system, tactical tokens and scroll stack — none of which v3 uses.
-- `v1` — archived predecessor (CRA · React Router · Bootstrap). Never built, never deployed. Do not touch it unless the request is explicitly about v1.
+Earlier generations are **tags**, not branches, each with its project at the repo root:
+
+- `v2.0.0` — the previous site (React 19 · TS · Vite 8 · Motion · Lenis, glassmorphism design system), archived but kept buildable as a rollback target. Its own `CLAUDE.md` documents its glass system, tactical tokens and scroll stack — none of which v3 uses.
+- `v1.0.0` — archived predecessor (CRA · React Router · Bootstrap). Never built, never deployed. Do not touch it unless the request is explicitly about v1.
 
 v3 is a quiet dark product-page design: near-black page, white type at a few opacities, one accent (v2's cyan), pill buttons, 16px hairline panels, mock app-window illustrations. React 19 · TypeScript strict · Vite 8, no animation library, no UI or CSS framework. Everything is hand-written.
 
-`src/content/` (except `site.ts` and `agent.ts`) and `src/assets/` began as **copies** of v2's. A content edit that should reach both sites has to be made on the `v2` branch too. v3-only copy lives in `src/content/site.ts`; the hero agent window's topics and keyword routing in `src/content/agent.ts`.
+`src/content/` (except `site.ts` and `agent.ts`) and `src/assets/` began as **copies** of v2's. v2 is frozen at its tag, so they are no longer kept in step. v3-only copy lives in `src/content/site.ts`; the hero agent window's topics and keyword routing in `src/content/agent.ts`.
 
 ## Commands
 
@@ -29,7 +29,7 @@ npm run preview    # serve the production build on 3003
 
 `prebuild` runs `scripts/github-snapshot.mjs`, which writes `src/content/github-snapshot.json` — the GitHub data the page falls back to when a visitor's IP has spent its anonymous API quota. It uses `GITHUB_TOKEN` when set.
 
-`.github/workflows/deploy.yml` runs `npm ci && npm run build` at the repo root and publishes `dist` to GitHub Pages on every push to `main`. Rolling back to v2 means putting the `v2` branch's tree on `main`.
+`.github/workflows/deploy.yml` runs `npm ci && npm run build` at the repo root and publishes `dist` to GitHub Pages on every push to `main`. Rolling back to v2 means committing the `v2.0.0` tree onto `main` as a new commit (`git rm -rq . && git checkout v2.0.0 -- .`), never force-pushing `main`.
 
 `@/*` resolves to `src/*`, declared in both `vite.config.ts` and `tsconfig.app.json`; they must stay in step.
 

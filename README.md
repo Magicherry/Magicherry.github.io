@@ -84,8 +84,8 @@ Visitor-facing content is kept apart from the UI in `src/content/`:
 - `stacks.ts` — technical skills and tools
 
 `profile.ts`, `copy.ts`, `projects.ts`, `experience.ts`, `stacks.ts` and the
-whole of `src/assets/` began as copies of v2's. A content edit that should reach
-both sites has to be made on the `v2` branch too.
+whole of `src/assets/` began as copies of v2's. v2 is frozen at its tag now, so
+they are no longer kept in step.
 
 Visual styles and assets:
 
@@ -113,17 +113,20 @@ Pushing to `main` triggers
 `npm ci` and `npm run build` at the repo root and publishes `dist` to GitHub
 Pages.
 
-## Branches
+## Versions
 
-Each generation of the site lives on its own branch, with its project at the
-repo root:
+`main` is the live site and the only long-lived branch. Earlier generations are
+kept as tags, each with its project at the repo root:
 
-| Branch | Status   | Description |
-| ------ | -------- | ----------- |
-| `main` | **Live** | v3, the deployed site. The only branch that deploys. |
-| `v3`   | Active   | v3's line of development; `main` tracks it. |
-| `v2`   | Archived | A scroll-driven narrative with a custom glassmorphism design system (React 19 · TypeScript · Vite 8 · Motion · Lenis). Kept buildable as a rollback target. |
-| `v1`   | Archived | The original portfolio (React 19 · React Router · Bootstrap 5), adapted from an open-source template. Never built or deployed. |
+| Tag      | Status   | Description |
+| -------- | -------- | ----------- |
+| `v3.0.0` | **Live** | The current design, first release in this layout. Later v3 releases are tagged `v3.x.y` on `main`. |
+| `v2.0.0` | Archived | A scroll-driven narrative with a custom glassmorphism design system (React 19 · TypeScript · Vite 8 · Motion · Lenis). Kept buildable as a rollback target. |
+| `v1.0.0` | Archived | The original portfolio (React 19 · React Router · Bootstrap 5), adapted from an open-source template. Never built or deployed. |
+
+To look at an old version, `git checkout v2.0.0` (then `npm ci`). Work happens
+on short-lived `feat/…` or `fix/…` branches that merge into `main` and are then
+deleted.
 
 ## Acknowledgements
 
