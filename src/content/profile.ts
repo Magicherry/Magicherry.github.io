@@ -47,7 +47,6 @@ export const profile = {
     } satisfies Localized,
     companyUrl: 'https://www.nio.com/',
   },
-  location: { en: 'Shanghai, China', zh: '中国 · 上海' } satisfies Localized,
   cv: { en: cvEn, zh: cvZh } satisfies Localized,
   /* The saved-as name, not the asset path - the PDFs are copied in from the
      Resume repo and keep their filenames there. */
@@ -67,26 +66,6 @@ export const profile = {
    */
   github: 'https://github.com/Magicherry',
 } as const
-
-/** Strings the typewriter cycles through under the hero name. */
-export const roles: Localized<readonly string[]> = {
-  en: [
-    'AI Agent Engineer',
-    'Front-end Developer',
-    'Full-stack Developer',
-    'Business Planning Assistant Analyst',
-    'Machine Learning Engineer',
-    'Creative Developer',
-  ],
-  zh: [
-    'AI Agent 工程师',
-    '前端开发工程师',
-    '全栈开发工程师',
-    '业务规划助理分析师',
-    '机器学习工程师',
-    '创意开发者',
-  ],
-}
 
 /** Wraps a value that happens to read the same in every locale. */
 const same = (value: string): Localized => ({ en: value, zh: value })
@@ -278,9 +257,3 @@ export const socials: readonly SocialLink[] = [
   },
 ]
 
-/** Headline numbers for the hero's stat strip. */
-export const stats: readonly { value: string; label: Localized }[] = [
-  { value: '2026', label: { en: 'MSc graduate', zh: '届硕士毕业生' } },
-  { value: '10', label: { en: 'Past projects', zh: '个历史项目' } },
-  { value: '2', label: { en: 'Languages spoken', zh: '门工作语言' } },
-]

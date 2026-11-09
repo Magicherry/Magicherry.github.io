@@ -18,7 +18,7 @@ import styles from './Header.module.css'
  * in the desktop bar the five words sit in one short line and an icon apiece
  * would only crowd it.
  */
-export const NAV = [
+const NAV = [
   { id: 'about', label: ui.nav.about, icon: LuUserRound },
   { id: 'work', label: ui.nav.work, icon: LuBriefcaseBusiness },
   { id: 'projects', label: ui.nav.projects, icon: LuFolderCode },

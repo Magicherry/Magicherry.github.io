@@ -19,7 +19,7 @@ function getList(query: string): MediaQueryList | null {
   return list
 }
 
-export function useMediaQuery(query: string, serverFallback = false): boolean {
+function useMediaQuery(query: string, serverFallback = false): boolean {
   return useSyncExternalStore(
     (onChange) => {
       const list = getList(query)
@@ -33,8 +33,8 @@ export function useMediaQuery(query: string, serverFallback = false): boolean {
 }
 
 /**
- * The single most important toggle on this site. Every scroll-linked animation,
- * the canvas field and the smooth-scroll driver all read this and stand down.
+ * The single most important toggle on this site. The canvas field reads it
+ * and stands down.
  */
 export function usePrefersReducedMotion(): boolean {
   return useMediaQuery('(prefers-reduced-motion: reduce)')

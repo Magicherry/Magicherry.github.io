@@ -6,8 +6,9 @@ import styles from './Backdrop.module.css'
 const LensGrid = lazy(() => import('./LensGrid'))
 
 /**
- * v2's backdrop, ported. Backdrop.module.css and LensGrid.tsx are copied from
- * v2 unchanged; only this wrapper differs.
+ * v2's backdrop, ported. Backdrop.module.css and LensGrid.tsx began as copies
+ * of v2's (LensGrid has since learned to redraw only the lens patch); this
+ * wrapper is new.
  *
  * v2 drove the scroll "surge" (the accent glow that gathers at the top and
  * bottom edges during a fast scroll) from Lenis's velocity through Motion's

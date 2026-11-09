@@ -26,8 +26,6 @@
      punching a flat hole in it. Numbered by role, not by brightness. */
   --surface-1: rgba(255, 255, 255, 0.06); /* inputs, code lines, chips */
   --surface-2: rgba(255, 255, 255, 0.04);
-  --surface-3: rgba(255, 255, 255, 0.02); /* panels and cards */
-  --surface-raised: rgba(255, 255, 255, 0.12); /* the header once scrolled */
   --surface-hover: rgba(255, 255, 255, 0.06);
   /* Opaque grounds for the mock application windows. These have to be solid -
      they are pictures of software, and software is not see-through. */
@@ -50,7 +48,6 @@
   --app-bg: #151517;
   --app-sidebar: #23272e;
   --app-card: #212123;
-  --overlay: #262626;
 
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.8);
@@ -67,7 +64,6 @@
    */
   --brand: #03e8f8;
   --brand-soft: #a5f3fc;
-  --brand-strong: #06b6d4;
   --brand-rgb: 3, 232, 248;
   --brand-contrast: #04141a;
 
@@ -75,10 +71,6 @@
   --border-default: rgba(255, 255, 255, 0.06);
   --border-hover: rgba(255, 255, 255, 0.2);
   --border-strong: rgba(255, 255, 255, 0.24);
-  /* The mock windows use half-pixel borders at a slightly higher alpha: on a 2x
-     screen that is a true hairline, on 1x it rounds to 1px and the alpha keeps
-     it from reading as a drawn box. */
-  --border-app: rgba(255, 255, 255, 0.12);
 
   --success: #4ade80;
   --danger: #f87171;
@@ -96,11 +88,8 @@
 
   /* ------------------------------------------------------------- shape */
   --radius-pill: 100px;
-  --radius-card: 24px;
   --radius-panel: 16px;
-  --radius-media: 10px;
   --radius-input: 10px;
-  --radius-sm: 8px;
 
   /* ------------------------------------------------------------- space */
   --space-1: 4px;
@@ -115,7 +104,6 @@
   --space-10: 120px;
   --space-11: 160px;
   --space-12: 200px;
-  --space-13: 240px;
 
   --blur-glass: 12px;
   /* How much colour every frosted surface pulls through from what is behind

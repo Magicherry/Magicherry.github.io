@@ -225,9 +225,9 @@
   /*
    * Belt and braces, and worth the two lines.
    *
-   * The surge is already dark on this path at source: without Lenis there is no
-   * velocity signal and `scroll.tsx` deliberately leaves the value pinned at
-   * zero rather than deriving one, on the grounds that a field which flares
+   * The surge is already dark on this path at source: Backdrop.tsx never starts
+   * its velocity loop under reduced motion, so the opacity stays pinned at zero,
+   * on the grounds that a field which flares
    * whenever you scroll is precisely what someone asking for reduced motion is
    * asking not to have. This states the same conclusion where a reader looking
    * for it would look, and stops a future change at the source from silently

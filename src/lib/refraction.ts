@@ -18,7 +18,7 @@ function isChromium(): boolean {
   return /Chrome|Chromium|Edg\//.test(ua) && !/OPR\//.test(ua)
 }
 
-export function detectRefraction(): RefractionMode {
+function detectRefraction(): RefractionMode {
   if (typeof window === 'undefined' || typeof CSS === 'undefined' || !CSS.supports) return 'off'
   if (!CSS.supports('backdrop-filter', 'blur(1px)')) return 'off'
   if (!CSS.supports('backdrop-filter', 'url("#probe")')) return 'off'

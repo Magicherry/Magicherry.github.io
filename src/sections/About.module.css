@@ -205,29 +205,6 @@
   }
 }
 
-.steps {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 12px 10px 6px;
-}
-
-.step {
-  display: grid;
-  grid-template-columns: 22px 1fr auto;
-  align-items: center;
-  gap: 8px;
-  height: 34px;
-  padding: 0 8px;
-  border-radius: 8px;
-  color: #c4c7cc;
-}
-
-.step[data-state='active'] {
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-}
-
 .stepIcon {
   display: grid;
   place-items: center;
@@ -236,23 +213,9 @@
   border-radius: 50%;
 }
 
-.step[data-state='done'] .stepIcon {
-  background: rgba(74, 222, 128, 0.14);
-  color: var(--success);
-}
-
-.step[data-state='active'] .stepIcon {
-  color: var(--brand);
-}
-
 .stepIcon svg {
   width: 12px;
   height: 12px;
-}
-
-.step[data-state='active'] .stepIcon svg {
-  width: 16px;
-  height: 16px;
 }
 
 .spin {
@@ -263,37 +226,6 @@
   to {
     rotate: 360deg;
   }
-}
-
-.stepTime {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  color: #6f747c;
-}
-
-.toolCall {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 6px 18px 0;
-  padding: 10px 12px;
-  border: 0.5px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  background: #1b1c1f;
-  color: #8b9097;
-}
-
-.toolCall svg {
-  width: 13px;
-  height: 13px;
-  flex: none;
-}
-
-.toolCall code {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: #d4d7db;
-  white-space: nowrap;
 }
 
 
@@ -577,13 +509,6 @@
   color: #82aaff;
 }
 
-.tkStr {
-  color: #c3e88d;
-}
-
-.tkNum {
-  color: #f78c6c;
-}
 
 /* ------------------------------------------------------------------ diff */
 .tabBar {
@@ -1410,30 +1335,11 @@
 }
 
 /* ------------------------------------------------------------- agent run */
-.step {
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
-}
-
-.step[data-state='pending'] {
-  color: #6f747c;
-}
-
 .pending {
   width: 12px;
   height: 12px;
   border: 1.5px solid #4b5058;
   border-radius: 50%;
-}
-
-/* The check arrives with a small pop. */
-.step[data-state='done'] .stepIcon svg {
-  animation: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.stepTime:not(:empty) {
-  animation: fade-in 0.3s ease;
 }
 
 .status {
@@ -1460,10 +1366,6 @@
 .media[data-running] .spin,
 .media[data-running] .statusDot {
   animation-play-state: running;
-}
-
-.toolCall {
-  animation: slide-in 0.35s var(--ease-out);
 }
 
 /* ------------------------------------------------------------------ diff */
@@ -1499,13 +1401,6 @@
 }
 
 /* ----------------------------------------------------------- keyframes */
-@keyframes pop {
-  from {
-    transform: scale(0.4);
-    opacity: 0;
-  }
-}
-
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -1547,11 +1442,8 @@
   .chartCard[data-loading] .barFill,
   .figureSkeleton,
   .tileTrack,
-  .toolCall,
   .record,
-  .stepTime,
   .line[data-kind='add'][data-shown] code,
-  .step[data-state='done'] .stepIcon svg,
   .label[data-on] .score {
     animation: none;
   }
@@ -1564,7 +1456,6 @@
   .runDetail > span,
   .tab,
   .label,
-  .step,
   .status {
     transition: none;
   }
