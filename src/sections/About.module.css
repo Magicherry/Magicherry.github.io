@@ -184,11 +184,26 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 3px 9px;
+  /*
+   * This pill and `.shipStage` in the ship window sit side by side in the
+   * About grid, so they are one object drawn twice: same type, same padding,
+   * and the same 12px from the window's right edge. Their bars differ (18px
+   * padding here, 10px in the tab bar), so each pill gets its own margin to
+   * land on 12 - change one, change the other.
+   *
+   * Why 12 rather than the bar's 18: the title opposite is bare text starting
+   * at 18px, but this is a filled pill, its word a further 9px in, and the
+   * window's 20px top-right corner eats into that side as well - at 18 it read
+   * as sitting off to the left. Not 9 (word on the 18px line) either, which
+   * presses the pill into the corner's curve. The eval window's bar ends in
+   * bare text and keeps the symmetric 18px.
+   */
+  padding: 3px 9px 3px 8px;
+  margin-right: -6px;
   border-radius: var(--radius-pill);
   background: rgba(var(--brand-rgb), 0.12);
   color: var(--brand);
-  font-size: 12px;
+  font-size: 11.5px;
 }
 
 .statusDot {
@@ -573,6 +588,8 @@
   align-self: center;
   gap: 6px;
   margin-left: auto;
+  /* 10px of tab-bar padding + 2 = 12px from the edge, matching `.status`. */
+  margin-right: 2px;
   padding: 3px 9px 3px 8px;
   border-radius: var(--radius-pill);
   font-size: 11.5px;
