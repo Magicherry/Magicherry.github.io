@@ -6,6 +6,7 @@ import { ui } from '@/content/copy'
 import { site } from '@/content/site'
 import { profile } from '@/content/profile'
 import LocaleToggle from './LocaleToggle'
+import ThemeToggle from './ThemeToggle'
 import CvDownload from './CvDownload'
 import { LensFilter, useLensCondense, useLensMap } from './LensFilter'
 import styles from './Header.module.css'
@@ -105,7 +106,11 @@ export default function Header() {
     const group = actionsRef.current
     if (!actionsHadFocus.current || !group || group.contains(document.activeElement)) return
     actionsHadFocus.current = false
-    group.querySelector<HTMLElement>('a[href], button:not([disabled])')?.focus({ preventScroll: true })
+    /* The appearance toggle stays mounted across the swap, so it is skipped:
+       focus goes to the first control that is new. */
+    group
+      .querySelector<HTMLElement>('a[href], button:not([disabled]):not([data-theme-current])')
+      ?.focus({ preventScroll: true })
   }, [scrolled])
 
   /* The open menu covers the page; scrolling what is under it would move
@@ -184,6 +189,8 @@ export default function Header() {
               carries the transition, and a cross-fade between two differently
               sized groups would make the right edge of the pill wobble. */}
           <div ref={actionsRef} className={styles['actions']}>
+            {/* Outside the swap: the appearance is wanted at any scroll. */}
+            <ThemeToggle />
             {scrolled ? (
               <>
                 <a className="btn btn-secondary btn-xs" href={profile.github} target="_blank" rel="noopener noreferrer">
@@ -250,7 +257,10 @@ export default function Header() {
           ))}
         </nav>
         <div className={styles['menuFooter']}>
-          <LocaleToggle />
+          <div className={styles['menuSettings']}>
+            <LocaleToggle />
+            <ThemeToggle />
+          </div>
           {/* At the foot of the screen, so its menu opens upward. */}
           <CvDownload size="sm" placement="top-end" />
         </div>

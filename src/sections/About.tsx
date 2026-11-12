@@ -148,7 +148,9 @@ function DemoFrame({ demo, children }: { demo: Demo<HTMLDivElement>; children: R
           {demo.paused ? <LuPlay aria-hidden="true" /> : <LuPause aria-hidden="true" />}
         </button>
       )}
-      <div className={styles['stage']} aria-hidden="true">
+      {/* Dark whatever the page is: these are pictures of a dark app, and
+          `data-theme` re-declares the dark tokens for everything inside. */}
+      <div className={styles['stage']} data-theme="dark" aria-hidden="true">
         {children}
       </div>
     </div>

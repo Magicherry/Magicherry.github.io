@@ -350,7 +350,7 @@ ol {
 /* A visitor who asked for less transparency gets an opaque card. */
 @media (prefers-reduced-transparency: reduce) {
   .panel {
-    background: #12161d;
+    background: var(--panel-solid);
     backdrop-filter: none;
   }
 }

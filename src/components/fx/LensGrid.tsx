@@ -485,15 +485,25 @@ export default function LensGrid() {
     }
 
     /*
-     * The two colours above are read once and never again.
+     * The two colours above are re-read when the appearance changes.
      *
-     * A `MutationObserver` on `data-theme` used to sit here and re-rasterise the
-     * whole field on a theme switch - the custom properties it reads were being
-     * rewritten under it, and `restColor` especially, since the two themes put
-     * the field on opposite sides of the background it sits on. With one
-     * appearance there is nothing to observe: these values are fixed for the life
-     * of the page.
+     * The custom properties they come from are rewritten under the canvas by a
+     * switch of `data-theme` on <html>, and `restColor` especially matters: the
+     * two appearances put the field on opposite sides of the ground it sits on
+     * (faint white on near-black, faint ink on pale blue). So a switch
+     * re-rasterises the field once and repaints the whole canvas - one frame's
+     * work, on a click, never during a scroll.
      */
+    const themeObserver = new MutationObserver(() => {
+      hotColor = readVar('--accent', '#03e8f8')
+      restColor = readVar('--fg-ghost', 'rgba(255,255,255,0.14)')
+      renderField()
+      full = true
+      painted = null
+      draw()
+    })
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+
     resize()
     window.addEventListener('resize', resize, { passive: true })
     if (lens) {
@@ -511,6 +521,7 @@ export default function LensGrid() {
     }
 
     return () => {
+      themeObserver.disconnect()
       window.removeEventListener('resize', resize)
       window.removeEventListener('pointermove', onPointerMove)
       document.removeEventListener('pointerleave', release)

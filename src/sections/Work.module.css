@@ -57,7 +57,7 @@
 
 [data-kind='edu'] > i,
 .row[data-kind='edu'] .bar {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(var(--ink-rgb), 0.22);
 }
 
 /* ------------------------------------------------------------------ card */
@@ -90,7 +90,7 @@
      with the bars. */
   background:
     linear-gradient(var(--border-strong), var(--border-strong)) top / 1px 6px no-repeat,
-    repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0 3px, transparent 3px 7px) 0 6px / 1px
+    repeating-linear-gradient(180deg, rgba(var(--ink-rgb), 0.09) 0 3px, transparent 3px 7px) 0 6px / 1px
       100% no-repeat;
 }
 

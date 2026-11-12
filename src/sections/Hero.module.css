@@ -40,7 +40,7 @@
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  background: linear-gradient(180deg, #13284a 0%, #0f1f3a 38%, #0b1526 70%, #0a111b 100%);
+  background: var(--sky-ground);
   mask-image: linear-gradient(
     rgba(0, 0, 0, 0.99) 0%,
     rgba(0, 0, 0, 0.9) 10%,
@@ -56,15 +56,15 @@
   inset: -12% -8%;
   background:
     /* top-right: the brightest light, grey-blue */
-    radial-gradient(42% 30% at 90% 6%, rgba(150, 162, 178, 0.55), rgba(150, 162, 178, 0.18) 45%, transparent 75%),
+    radial-gradient(42% 30% at 90% 6%, rgba(var(--sky-hi), 0.55), rgba(var(--sky-hi), 0.18) 45%, transparent 75%),
     /* upper-left: a paler patch */
-    radial-gradient(30% 20% at 26% 14%, rgba(118, 142, 172, 0.42), rgba(118, 142, 172, 0.12) 50%, transparent 78%),
+    radial-gradient(30% 20% at 26% 14%, rgba(var(--sky-pale), 0.42), rgba(var(--sky-pale), 0.12) 50%, transparent 78%),
     /* the blue body of the sky */
-    radial-gradient(85% 55% at 62% 28%, rgba(46, 92, 152, 0.75), rgba(40, 80, 136, 0.35) 45%, transparent 80%),
+    radial-gradient(85% 55% at 62% 28%, rgba(var(--sky-body), 0.75), rgba(var(--sky-body-2), 0.35) 45%, transparent 80%),
     /* a cool glint at the left edge */
-    radial-gradient(9% 22% at 0% 56%, rgba(120, 128, 140, 0.4), transparent 80%),
+    radial-gradient(9% 22% at 0% 56%, rgba(var(--sky-glint), 0.4), transparent 80%),
     /* the shadow lobe that carves it */
-    radial-gradient(28% 34% at 14% 52%, rgba(6, 10, 18, 0.75), rgba(6, 10, 18, 0.3) 50%, transparent 80%);
+    radial-gradient(28% 34% at 14% 52%, rgba(var(--sky-shade), 0.75), rgba(var(--sky-shade), 0.3) 50%, transparent 80%);
   animation: hero-sky 38s ease-in-out infinite alternate;
   will-change: transform;
 }
@@ -160,7 +160,7 @@
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(var(--ink-rgb), 0.72);
 }
 
 /* Han has no mono face - it falls back to PingFang either way - but the space

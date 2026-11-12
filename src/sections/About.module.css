@@ -122,7 +122,7 @@
 
 @media (prefers-reduced-transparency: reduce) {
   .card {
-    background: #12161d;
+    background: var(--panel-solid);
     backdrop-filter: none;
   }
 }
@@ -1199,6 +1199,29 @@
   color: #8b9097;
 }
 
+/*
+ * The tile column is the one demo with no window around it - its tiles sit
+ * straight on the card - so on the light page it follows the page instead of
+ * staying a dark picture: white tiles, ink type, and near-black marks left
+ * uninverted. The stage's `data-theme="dark"` is overridden here, inside it.
+ */
+:global(:root[data-theme='light']) .tiles {
+  --mark-adaptive-filter: none;
+}
+
+:global(:root[data-theme='light']) .tile {
+  border-color: rgba(15, 23, 42, 0.1);
+  background: #ffffff;
+}
+
+:global(:root[data-theme='light']) .tileName {
+  color: #0b0f17;
+}
+
+:global(:root[data-theme='light']) .tileMeta {
+  color: rgba(11, 15, 23, 0.55);
+}
+
 /* ------------------------------------------------------------ breakpoints */
 @media (max-width: 1023px) {
   .grid {
@@ -1321,7 +1344,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  color: #adb2b8;
+  color: var(--text-faint);
   opacity: 0;
   transition:
     opacity 0.15s ease,
@@ -1341,8 +1364,8 @@
 }
 
 .pause:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  background: var(--surface-hover);
 }
 
 @media (hover: none) {

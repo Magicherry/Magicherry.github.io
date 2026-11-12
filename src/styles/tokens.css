@@ -9,8 +9,15 @@
  * only where something is interactive or worth pointing at - links, the prompt
  * sigil, selection, focus. Depth comes from translucent surfaces stacked on a
  * near-black ground, not from shadows or gradients.
+ *
+ * Two appearances. This block is the dark one and the default; the light one
+ * below overrides only the colour tokens. Dark is declared on
+ * `[data-theme='dark']` as well as `:root` so a subtree can opt back into it:
+ * the mock application windows carry that attribute, because they are pictures
+ * of a dark desktop app and stay one whichever way the page is lit.
  */
-:root {
+:root,
+[data-theme='dark'] {
   color-scheme: dark;
 
   /* ------------------------------------------------------------- colour */
@@ -86,6 +93,52 @@
   --btn-secondary-hover: rgba(255, 255, 255, 0.2);
   --btn-secondary-hover-border: rgba(255, 255, 255, 0.6);
 
+  /*
+   * Ink for one-off translucent strokes - dashed guides, an underline, a
+   * neutral bar - written `rgba(var(--ink-rgb), a)`. White on the dark page,
+   * slate on the light one. Glass *highlights* do not use it: light catching a
+   * bevel is white on either ground.
+   */
+  --ink-rgb: 255, 255, 255;
+  /* What an opaque card falls back to under reduced transparency. */
+  --panel-solid: #12161d;
+  /* The one drop shadow small floating objects carry (back-to-top, icons). */
+  --shadow-float: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+  /* Icon wells in the stack list. */
+  --well-bg: #212123;
+  --well-border: rgba(255, 255, 255, 0.08);
+  /* Near-black brand marks (GitHub) would vanish on the dark page. */
+  --mark-adaptive-filter: invert(1) brightness(1.6);
+
+  /*
+   * The droplet: the small glass pill that slides behind the active language,
+   * project filter and hovered nav link. Light inside the pill, nothing drawn
+   * outside it.
+   */
+  --drop-bg: rgba(255, 255, 255, 0.1);
+  --drop-shadow:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.28),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.08),
+    inset 0 0 10px rgba(255, 255, 255, 0.06);
+  --drop-lens-bg: rgba(255, 255, 255, 0.05);
+  /* The header pill's slab, frosted and refracting, and the phone menu sheet. */
+  --bar-glass: rgba(255, 255, 255, 0.15);
+  --bar-glass-lens: rgba(255, 255, 255, 0.06);
+  --bar-glass-shadow:
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.2),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.06),
+    inset 0 0 14px rgba(255, 255, 255, 0.05);
+  --sheet-bg: rgba(8, 11, 16, 0.74);
+
+  /* The split CV button's hover disc and divider - ink of the button's label
+     colour, so they flip with the primary button. */
+  --primary-tint: rgba(10, 10, 10, 0.08);
+  --primary-divider: rgba(10, 10, 10, 0.14);
+}
+
+/* Everything from here down is the same in both appearances, apart from the
+   backdrop's colours, which the light block overrides on the root. */
+:root {
   /* ------------------------------------------------------------- shape */
   --radius-pill: 100px;
   --radius-panel: 16px;
@@ -158,6 +211,14 @@
   --aurora-4: rgba(40, 122, 172, 0.34);
   --aurora-opacity: 1;
   --scan-line: rgba(180, 214, 255, 0.032);
+  /* The hero's CSS sky (the shader's fallback; see Hero.module.css). */
+  --sky-ground: linear-gradient(180deg, #13284a 0%, #0f1f3a 38%, #0b1526 70%, #0a111b 100%);
+  --sky-hi: 150, 162, 178;
+  --sky-pale: 118, 142, 172;
+  --sky-body: 46, 92, 152;
+  --sky-body-2: 40, 80, 136;
+  --sky-glint: 120, 128, 140;
+  --sky-shade: 6, 10, 18;
   --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-slow: 620ms;
   /* -1, not v2's 0: v3's sections are not positioned, so the backdrop has to
@@ -167,6 +228,111 @@
   /* --------------------------------------------------------------- layout */
   --container: min(100% - 48px, 1140px);
   --header-h: 64px;
+}
+
+/*
+ * The light appearance.
+ *
+ * The same system turned over rather than a second design: one page colour, ink
+ * at a handful of opacities, hairlines at 8-12% ink. What does not carry over
+ * literally:
+ *
+ *  - The cyan. #03e8f8 is a light colour - on white it is 1.4:1 and reads as a
+ *    highlighter stroke. The light accent is the same hue taken down to cyan-700,
+ *    which carries text (5.4:1), with the brighter cyan-600 kept for tints and
+ *    glows where it does not have to be read.
+ *  - Glass. White at low alpha over a light page is invisible, so cards are
+ *    white at ~60% under the same blur, which keeps the aurora showing through
+ *    as colour while the panel still reads as a step above the page.
+ *  - The primary button inverts with the page: ink on light, still the one
+ *    inverted object in view.
+ */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg-page: #f5f7fa;
+  --bg-edge: #eaf0f7;
+  --surface-1: rgba(15, 23, 42, 0.05);
+  --surface-2: rgba(15, 23, 42, 0.03);
+  --surface-hover: rgba(15, 23, 42, 0.05);
+  --card-bg:
+    linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
+    rgba(248, 250, 253, 0.3);
+  --card-bg-hover:
+    linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+    rgba(248, 250, 253, 0.35);
+
+  --text-primary: #0b0f17;
+  --text-secondary: rgba(11, 15, 23, 0.8);
+  --text-description: rgba(11, 15, 23, 0.6);
+  --text-faint: rgba(11, 15, 23, 0.52);
+  --text-placeholder: rgba(11, 15, 23, 0.36);
+
+  --brand: #0e7490;
+  --brand-soft: #0891b2;
+  --brand-rgb: 8, 145, 178;
+  --brand-contrast: #ffffff;
+
+  --border-subtle: rgba(15, 23, 42, 0.1);
+  --border-default: rgba(15, 23, 42, 0.08);
+  --border-hover: rgba(15, 23, 42, 0.22);
+  --border-strong: rgba(15, 23, 42, 0.2);
+
+  --success: #15803d;
+  --danger: #dc2626;
+
+  --btn-primary-bg: #0b0f17;
+  --btn-primary-text: #ffffff;
+  --btn-primary-hover: rgba(255, 255, 255, 0.18);
+  --btn-secondary-bg: rgba(255, 255, 255, 0.55);
+  --btn-secondary-text: #0b0f17;
+  --btn-secondary-border: rgba(15, 23, 42, 0.14);
+  --btn-secondary-hover: rgba(15, 23, 42, 0.05);
+  --btn-secondary-hover-border: rgba(15, 23, 42, 0.4);
+
+  --ink-rgb: 15, 23, 42;
+  --panel-solid: #ffffff;
+  --shadow-float: 0 8px 24px -10px rgba(15, 23, 42, 0.22);
+  --well-bg: #ffffff;
+  --well-border: rgba(15, 23, 42, 0.1);
+  --mark-adaptive-filter: none;
+
+  /* On a light slab the droplet is whiter than what it sits on, and needs a
+     hairline of ink to find its edge - white highlights alone vanish. */
+  --drop-bg: rgba(255, 255, 255, 0.75);
+  --drop-shadow:
+    inset 0 0 0 0.5px rgba(15, 23, 42, 0.1),
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(15, 23, 42, 0.06);
+  --drop-lens-bg: rgba(255, 255, 255, 0.45);
+  --bar-glass: rgba(255, 255, 255, 0.6);
+  --bar-glass-lens: rgba(255, 255, 255, 0.4);
+  --bar-glass-shadow:
+    inset 0 0 0 0.5px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.8),
+    0 6px 20px -12px rgba(15, 23, 42, 0.25);
+  --sheet-bg: rgba(245, 247, 250, 0.82);
+
+  --primary-tint: rgba(255, 255, 255, 0.14);
+  --primary-divider: rgba(255, 255, 255, 0.22);
+
+  /* Backdrop: a pale sky, the same four pools in daylight, dots in ink. */
+  --bg-base: #eef2f7;
+  --accent: #0891b2;
+  --fg-ghost: rgba(15, 23, 42, 0.16);
+  --aurora-1: rgba(120, 175, 235, 0.42);
+  --aurora-2: rgba(150, 185, 240, 0.36);
+  --aurora-3: rgba(255, 150, 90, 0.16);
+  --aurora-4: rgba(110, 200, 230, 0.3);
+  --scan-line: rgba(15, 23, 42, 0.022);
+
+  --sky-ground: linear-gradient(180deg, #cfe0f3 0%, #dbe7f5 38%, #e6eef8 70%, #eaf0f7 100%);
+  --sky-hi: 255, 255, 255;
+  --sky-pale: 236, 243, 251;
+  --sky-body: 150, 190, 235;
+  --sky-body-2: 170, 200, 238;
+  --sky-glint: 255, 255, 255;
+  --sky-shade: 180, 198, 222;
 }
 
 @media (min-width: 768px) {

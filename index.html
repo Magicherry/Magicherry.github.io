@@ -12,6 +12,27 @@
       black bands behind the status bar and the bottom toolbar.
     -->
     <meta name="theme-color" content="#0a111b" />
+    <!--
+      The appearance, settled before the first paint. React's ThemeProvider
+      (src/lib/theme.tsx) owns it from mount on; this only stops a light-mode
+      visitor seeing one dark frame first. Same rules: a stored override wins
+      until it expires, otherwise the system's preference, otherwise dark.
+      Wrapped whole, because Safari Lockdown throws on reading localStorage.
+    -->
+    <script>
+      (function () {
+        var theme = 'dark'
+        try {
+          if (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches) theme = 'light'
+          var o = JSON.parse(localStorage.getItem('v3:theme') || 'null')
+          if (o && (o.value === 'light' || o.value === 'dark') && (o.expiresAt === null || o.expiresAt > Date.now()))
+            theme = o.value
+        } catch (e) {}
+        document.documentElement.setAttribute('data-theme', theme)
+        if (theme === 'light')
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#eaf0f7')
+      })()
+    </script>
 
     <title>Daniel Zhou | Portfolio</title>
     <meta

@@ -40,7 +40,7 @@
   border-radius: 50%;
   background: var(--card-bg);
   backdrop-filter: var(--card-blur);
-  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+  box-shadow: var(--shadow-float);
   color: var(--text-primary);
   /* A slight overshoot on the lift - v2's "gel" press and release. */
   transition:
@@ -137,7 +137,7 @@
 
 @media (prefers-reduced-transparency: reduce) {
   .button {
-    background: #12161d;
+    background: var(--panel-solid);
     backdrop-filter: none;
   }
 }

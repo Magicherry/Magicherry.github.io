@@ -16,7 +16,7 @@
   /* The reference's primary-hover tint inside the split: 8% of the label
      colour, lighter than a plain primary button's 20%, because here it also
      has to read on the half that is not being hovered. */
-  --tint: rgba(10, 10, 10, 0.08);
+  --tint: var(--primary-tint);
   position: relative;
   display: inline-flex;
 }
@@ -130,7 +130,7 @@
   top: 25%;
   bottom: 25%;
   left: 0;
-  border-left: 1px solid rgba(10, 10, 10, 0.14);
+  border-left: 1px solid var(--primary-divider);
   pointer-events: none;
 }
 
@@ -161,7 +161,8 @@
 /*
  * White, as on the reference - the one light surface on a dark page, which is
  * what makes it read immediately as a menu sitting *above* everything rather
- * than another panel in the page.
+ * than another panel in the page. On the light page it stays white: there the
+ * shadow, not the fill, is what lifts it, and it is already drawn for that.
  */
 .menu {
   position: absolute;

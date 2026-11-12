@@ -37,6 +37,13 @@ precision mediump float;
 #endif
 uniform vec2 r;
 uniform float t;
+/* The palette, per appearance (see PALETTES below). */
+uniform vec3 cNavy;
+uniform vec3 cDeep;
+uniform vec3 cBlue;
+uniform vec3 cSheen;
+uniform float shade;
+uniform float ambient;
 
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float noise(vec2 p) {
@@ -68,10 +75,10 @@ void main() {
                 fbm(p + 2.4 * q + vec2(8.3, 2.8) - T * 0.5));
   float f = fbm(p + 2.6 * w);
 
-  vec3 navy  = vec3(0.035, 0.058, 0.105);
-  vec3 deep  = vec3(0.090, 0.200, 0.360);
-  vec3 blue  = vec3(0.200, 0.370, 0.590);
-  vec3 sheen = vec3(0.600, 0.650, 0.720);
+  vec3 navy  = cNavy;
+  vec3 deep  = cDeep;
+  vec3 blue  = cBlue;
+  vec3 sheen = cSheen;
 
   /* Light gathers toward the top; the bottom settles to the page. */
   float lift = smoothstep(0.0, 1.0, uv.y);
@@ -82,15 +89,43 @@ void main() {
   float crest = smoothstep(0.5, 0.88, f + 0.5 * (w.x - 0.5));
   col = mix(col, sheen, crest * 0.7 * lift * lift);
   /* Shadow lobes, where the first warp dips. */
-  col *= mix(0.7, 1.0, smoothstep(0.25, 0.6, q.y));
+  col *= mix(shade, 1.0, smoothstep(0.25, 0.6, q.y));
   col = mix(navy, col, 0.45 + 0.55 * lift);
   /* A little ambient light from above, so no turn of the folds leaves the
      header sitting on black. */
-  col += blue * 0.38 * pow(lift, 1.6);
+  col += blue * ambient * pow(lift, 1.6);
 
   gl_FragColor = vec4(col, 1.0);
 }
 `
+
+/*
+ * The sky per appearance. Dark is the original: navy settling to the page,
+ * a blue body, a grey-blue sheen on the crests. Light is the same field in
+ * daylight - the ground is the light page's own pale blue (so the mask still
+ * dissolves into it), the folds a soft cornflower, the crests white - with
+ * shallower shadow lobes and less ambient lift, both of which were tuned to
+ * pull a dark sky up off black and would only wash a light one out.
+ */
+type Palette = { navy: number[]; deep: number[]; blue: number[]; sheen: number[]; shade: number; ambient: number }
+const PALETTES: Record<'dark' | 'light', Palette> = {
+  dark: {
+    navy: [0.035, 0.058, 0.105],
+    deep: [0.09, 0.2, 0.36],
+    blue: [0.2, 0.37, 0.59],
+    sheen: [0.6, 0.65, 0.72],
+    shade: 0.7,
+    ambient: 0.38,
+  },
+  light: {
+    navy: [0.918, 0.941, 0.969],
+    deep: [0.8, 0.866, 0.945],
+    blue: [0.62, 0.75, 0.91],
+    sheen: [1, 1, 1],
+    shade: 0.93,
+    ambient: 0.06,
+  },
+}
 
 const SCALE = 1 / 3
 const FRAME_MS = 1000 / 30
@@ -128,6 +163,24 @@ export default function HeroSky({ className }: { className?: string }) {
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
     const uR = gl.getUniformLocation(prog, 'r')
     const uT = gl.getUniformLocation(prog, 't')
+    const uNavy = gl.getUniformLocation(prog, 'cNavy')
+    const uDeep = gl.getUniformLocation(prog, 'cDeep')
+    const uBlue = gl.getUniformLocation(prog, 'cBlue')
+    const uSheen = gl.getUniformLocation(prog, 'cSheen')
+    const uShade = gl.getUniformLocation(prog, 'shade')
+    const uAmbient = gl.getUniformLocation(prog, 'ambient')
+    /* Uniforms persist on the program, so the palette is only written when
+       the appearance changes - see the observer below. */
+    const setPalette = () => {
+      const p = PALETTES[document.documentElement.dataset['theme'] === 'light' ? 'light' : 'dark']
+      gl.uniform3fv(uNavy, p.navy)
+      gl.uniform3fv(uDeep, p.deep)
+      gl.uniform3fv(uBlue, p.blue)
+      gl.uniform3fv(uSheen, p.sheen)
+      gl.uniform1f(uShade, p.shade)
+      gl.uniform1f(uAmbient, p.ambient)
+    }
+    setPalette()
 
     const resize = () => {
       const w = Math.max(1, Math.round(canvas.clientWidth * SCALE))
@@ -160,6 +213,13 @@ export default function HeroSky({ className }: { className?: string }) {
     canvas.dataset['ready'] = ''
     const ro = new ResizeObserver(() => draw(last / 1000))
     ro.observe(canvas)
+    /* A switch of appearance repaints the current frame in the new palette -
+       which also covers reduced motion, where no later frame would. */
+    const mo = new MutationObserver(() => {
+      setPalette()
+      draw(last / 1000)
+    })
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
 
     /*
      * The clock. A timer waits out the frame interval and only then asks for an
@@ -229,6 +289,7 @@ export default function HeroSky({ className }: { className?: string }) {
       window.removeEventListener('scroll', onScroll)
       io.disconnect()
       ro.disconnect()
+      mo.disconnect()
       document.removeEventListener('visibilitychange', onVis)
       /* Free what this run made, but never `loseContext()`: a canvas hands
          back the same context to every later getContext call, so a lost one

@@ -91,11 +91,8 @@
   width: calc(var(--r) - var(--l));
   z-index: 0;
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow:
-    inset 0 1px 0.5px rgba(255, 255, 255, 0.28),
-    inset 0 -1px 1px rgba(255, 255, 255, 0.08),
-    inset 0 0 10px rgba(255, 255, 255, 0.06);
+  background: var(--drop-bg);
+  box-shadow: var(--drop-shadow);
   pointer-events: none;
 }
 
@@ -106,7 +103,7 @@
  * edges travel it is stretched, which reads as the drop thinning as it pulls.
  */
 :global([data-refraction='on']) .indicator[data-lens] {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--drop-lens-bg);
   backdrop-filter: url(#filter-lens) blur(2px) saturate(170%) brightness(1.15);
 }
 
@@ -184,7 +181,7 @@
   background: var(--surface-1);
   box-shadow:
     inset 0 0 0 1px var(--border-strong),
-    0 8px 24px -10px rgba(0, 0, 0, 0.6);
+    var(--shadow-float);
   transition:
     transform var(--dur-base) var(--ease-out),
     box-shadow var(--dur-base) ease;
@@ -355,7 +352,7 @@
      pill inside it could only refract the row's own (empty) ground, and would
      read as nearly clear. So on a phone it keeps the plain droplet. */
   :global([data-refraction='on']) .indicator[data-lens] {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--drop-bg);
     backdrop-filter: none;
   }
 

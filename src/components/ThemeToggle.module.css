@@ -1,0 +1,52 @@
+/* The language toggle's frame - 32px, the same hairline - so the two read as
+   a pair of settings in the header. */
+.toggle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border: 1px solid var(--border-default);
+  border-radius: 50%;
+  color: var(--text-description);
+  transition:
+    color var(--dur-fast),
+    background-color var(--dur-fast),
+    scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toggle:hover {
+  color: var(--text-primary);
+  background: var(--surface-hover);
+}
+
+.glyph {
+  grid-area: 1 / 1;
+  width: 15px;
+  height: 15px;
+  transition:
+    opacity 0.25s ease,
+    rotate 0.5s var(--ease-out),
+    scale 0.5s var(--ease-out);
+}
+
+/* The glyph that is not showing waits a quarter-turn away, shrunk. */
+.toggle[data-theme-current='dark'] .sun,
+.toggle[data-theme-current='light'] .moon {
+  opacity: 0;
+  rotate: -90deg;
+  scale: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glyph {
+    transition: opacity 0.2s ease;
+  }
+
+  .toggle[data-theme-current='dark'] .sun,
+  .toggle[data-theme-current='light'] .moon {
+    rotate: 0deg;
+    scale: 1;
+  }
+}

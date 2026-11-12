@@ -4,7 +4,9 @@
 }
 
 .icon[data-adaptive] {
-  filter: invert(1) brightness(1.6);
+  /* A token, so it follows the appearance - and the dark mock windows, which
+     re-declare the dark tokens, keep inverting it on a light page. */
+  filter: var(--mark-adaptive-filter);
 }
 
 .icon[data-tile] {

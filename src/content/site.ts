@@ -343,6 +343,12 @@ export const site = {
     language: { en: 'Language', zh: '语言' },
   },
 
+  /* The appearance toggle names what it will do, not what is showing. */
+  theme: {
+    toLight: { en: 'Switch to light mode', zh: '切换到浅色模式' },
+    toDark: { en: 'Switch to dark mode', zh: '切换到深色模式' },
+  },
+
   /* The CV split button: the main half downloads the current language's CV,
      the chevron opens a menu with both. */
   cv: {

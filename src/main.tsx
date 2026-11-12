@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { LocaleProvider } from '@/lib/i18n'
+import { ThemeProvider } from '@/lib/theme'
 import { applyRefractionMode } from '@/lib/refraction'
 import App from './App'
 import './styles/tokens.css'
@@ -15,8 +16,10 @@ applyRefractionMode()
 
 createRoot(root).render(
   <StrictMode>
-    <LocaleProvider>
-      <App />
-    </LocaleProvider>
+    <ThemeProvider>
+      <LocaleProvider>
+        <App />
+      </LocaleProvider>
+    </ThemeProvider>
   </StrictMode>,
 )
