@@ -118,6 +118,7 @@
   /* The same glass as `.panel` in base.css. */
   background: var(--card-bg);
   backdrop-filter: var(--card-blur);
+  box-shadow: var(--card-shadow);
 }
 
 @media (prefers-reduced-transparency: reduce) {

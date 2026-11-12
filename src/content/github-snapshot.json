@@ -1,5 +1,5 @@
 {
-  "takenAt": "2026-11-07T18:25:24.426Z",
+  "takenAt": "2026-11-12T15:48:33.228Z",
   "repos": [
     {
       "name": "Magicherry.github.io",
@@ -7,7 +7,7 @@
       "html_url": "https://github.com/Magicherry/Magicherry.github.io",
       "language": "TypeScript",
       "stargazers_count": 3,
-      "pushed_at": "2026-11-07T18:14:39Z",
+      "pushed_at": "2026-11-09T14:28:36Z",
       "fork": false
     },
     {
@@ -24,7 +24,7 @@
       "description": "A native Windows 11 (WinUI 3) video downloader supporting YouTube, Bilibili, RedNote, Weibo, X (Twitter), and Douyin, powered by yt-dlp.",
       "html_url": "https://github.com/Magicherry/VidFlow",
       "language": "C#",
-      "stargazers_count": 2,
+      "stargazers_count": 3,
       "pushed_at": "2026-11-05T15:19:42Z",
       "fork": false
     },

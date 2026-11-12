@@ -44,6 +44,8 @@
     linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
     rgba(10, 14, 20, 0.35);
   --card-blur: blur(12px) saturate(var(--glass-saturate));
+  /* None on the dark page; the light one lifts its cards (see there). */
+  --card-shadow: none;
   /* Hover: the same glass, a little lighter. */
   --card-bg-hover:
     linear-gradient(rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)),
@@ -290,17 +292,30 @@
   --surface-1: rgba(15, 23, 42, 0.05);
   --surface-2: rgba(15, 23, 42, 0.03);
   --surface-hover: rgba(15, 23, 42, 0.05);
+  /*
+   * Whiter than the first cut (35% white), which left cards and page a shade
+   * apart and the hairline doing all the separating. On a light page a panel
+   * sits *on* the page the way paper does, so it also takes a soft two-part
+   * shadow - a contact line and a wide, faint lift - that the dark page, where
+   * depth comes from translucency, does without.
+   */
   --card-bg:
-    linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
+    linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)),
     rgba(248, 250, 253, 0.3);
   --card-bg-hover:
-    linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+    linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)),
     rgba(248, 250, 253, 0.35);
+  --card-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 10px 30px -14px rgba(15, 23, 42, 0.14);
 
   --text-primary: #0b0f17;
   --text-secondary: rgba(11, 15, 23, 0.8);
-  --text-description: rgba(11, 15, 23, 0.6);
-  --text-faint: rgba(11, 15, 23, 0.52);
+  /* Faint is the floor for small type - the 12px mono labels and dates. 0.6
+     ink over the palest ground (#eef2f7) is ~5:1, clear of AA's 4.5; it was
+     0.52 (~3.9:1) and failed. Description keeps one step above it. */
+  --text-description: rgba(11, 15, 23, 0.66);
+  --text-faint: rgba(11, 15, 23, 0.6);
   --text-placeholder: rgba(11, 15, 23, 0.36);
 
   --brand: #0e7490;

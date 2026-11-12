@@ -72,6 +72,19 @@ ol {
   outline-offset: 2px;
 }
 
+/* ===================================================== theme reveal */
+/*
+ * The appearance switch (lib/theme.tsx) runs as a View Transition whose new
+ * snapshot is revealed by a growing circle. The browser's default cross-fade
+ * is turned off for the root so the only motion is that circle - with it,
+ * the old page would dim while the new one was still being drawn in.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 /* ============================================================ layout */
 .container {
   width: var(--container);
@@ -345,6 +358,7 @@ ol {
   border-radius: var(--radius-panel);
   background: var(--card-bg);
   backdrop-filter: var(--card-blur);
+  box-shadow: var(--card-shadow);
 }
 
 /* A visitor who asked for less transparency gets an opaque card. */

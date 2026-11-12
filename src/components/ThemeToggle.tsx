@@ -12,6 +12,10 @@ import styles from './ThemeToggle.module.css'
  * the current appearance and its label says what pressing it will do. Both
  * glyphs are always mounted and cross over (one turns out as the other turns
  * in), so the change reads as the same object flipping rather than a swap.
+ *
+ * The new appearance spreads out from the button itself (see `toggle` in
+ * lib/theme.tsx), so it hands over its own centre - not the pointer's, which
+ * a keyboard press does not have.
  */
 export default function ThemeToggle({ className }: { className?: string }) {
   const { theme, toggle } = useTheme()
@@ -23,7 +27,10 @@ export default function ThemeToggle({ className }: { className?: string }) {
       type="button"
       className={className ? `${styles['toggle']} ${className}` : styles['toggle']}
       data-theme-current={theme}
-      onClick={toggle}
+      onClick={(e) => {
+        const r = e.currentTarget.getBoundingClientRect()
+        toggle({ x: r.left + r.width / 2, y: r.top + r.height / 2 })
+      }}
       aria-label={label}
       title={label}
     >
