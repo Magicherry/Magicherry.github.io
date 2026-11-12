@@ -29,27 +29,20 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
-const QUERY = '(prefers-color-scheme: light)'
-
-/* Dark unless the system says light: dark is the site's own appearance, and a
-   system that expresses no preference gets it. */
-function getSystemTheme(): Theme {
-  if (typeof window === 'undefined' || !window.matchMedia) return 'dark'
-  return window.matchMedia(QUERY).matches ? 'light' : 'dark'
-}
-
-function subscribeToSystem(onChange: () => void) {
-  if (!window.matchMedia) return undefined
-  const mq = window.matchMedia(QUERY)
-  mq.addEventListener('change', onChange)
-  return () => mq.removeEventListener('change', onChange)
-}
+/*
+ * Dark, always, until the visitor asks otherwise. The system's
+ * `prefers-color-scheme` is deliberately not consulted: dark is the site's own
+ * appearance - the one it was designed in and is meant to be seen in first -
+ * and light is an option offered beside it, not a mode the device picks on the
+ * visitor's behalf.
+ */
+const getDefaultTheme = (): Theme => 'dark'
 
 /**
- * The appearance, on the same timed preference as the language: it follows the
- * system, a manual flip overrides it, and the override lapses after a day - so
- * someone who switched to light to read in the sun is back on their system's
- * choice by the next evening (see useTimedPreference).
+ * The appearance, on the same timed preference as the language: dark by
+ * default, a manual flip overrides it, and the override lapses after a day - so
+ * someone who switched to light to read in the sun is back in the site's own
+ * dark by the next visit (see useTimedPreference).
  *
  * Written to `<html data-theme>`, which is what tokens.css keys on, in a layout
  * effect so a change lands in the same frame as the toggle's own re-render.
@@ -57,9 +50,8 @@ function subscribeToSystem(onChange: () => void) {
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const { value: theme, isAuto, setValue } = useTimedPreference<Theme>({
     storageKey: THEME_STORAGE_KEY,
-    getAutoValue: getSystemTheme,
+    getAutoValue: getDefaultTheme,
     isValid: isTheme,
-    subscribeToAuto: subscribeToSystem,
   })
 
   useLayoutEffect(() => {
