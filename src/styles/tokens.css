@@ -246,7 +246,6 @@
   --aurora-3: rgba(255, 106, 31, 0.16);
   --aurora-4: rgba(40, 122, 172, 0.34);
   --aurora-opacity: 1;
-  --scan-line: rgba(180, 214, 255, 0.032);
   /* The hero's CSS sky (the shader's fallback; see Hero.module.css). */
   --sky-ground: linear-gradient(180deg, #13284a 0%, #0f1f3a 38%, #0b1526 70%, #0a111b 100%);
   --sky-hi: 150, 162, 178;
@@ -361,7 +360,6 @@
   --aurora-2: rgba(150, 185, 240, 0.36);
   --aurora-3: rgba(255, 150, 90, 0.16);
   --aurora-4: rgba(110, 200, 230, 0.3);
-  --scan-line: rgba(15, 23, 42, 0.022);
 
   /* Windows: a light desktop app - white content, a cool grey sidebar, a
      slate ramp for type, and the syntax colours deepened until they hold on

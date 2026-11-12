@@ -94,7 +94,7 @@ export default function Backdrop() {
 
   return (
     <div className={styles['backdrop']} aria-hidden="true">
-      {/* Two counter-drifting fields, four gradients. The grain, scanlines and
+      {/* Two counter-drifting fields, four gradients. The grain and
           vignette are painted onto the wrapper itself. */}
       <div className={styles['aurora']}>
         <span className={`${styles['field']} ${styles['fieldA']}`} />

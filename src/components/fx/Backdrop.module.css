@@ -15,8 +15,12 @@
  */
 
 /*
- * Three paint-time layers on one element, in this order from the top down:
- * grain, scanlines and vignette. None of them takes a compositor layer of its
+ * Two paint-time layers on one element, in this order from the top down:
+ * grain and vignette.
+ *
+ * There used to be a third between them: scanlines, one lit row in four at
+ * ~3%. Taken out - over the whole page they read as ruled lines rather than
+ * as a display, and the grain alone already keeps the gradients from banding. None of them takes a compositor layer of its
  * own - they are `background-image` entries on a wrapper that was already being
  * painted, which is the difference between texture that is free and texture
  * that costs a pass over the viewport every frame.
@@ -56,17 +60,6 @@
      * this dark with no dirt in it reads as vector art.
      */
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
-    /*
-     * Scanlines. One lit row in four, at ~3% - per line that is nothing, and
-     * across a viewport it is the single cheapest thing that says "this is a
-     * display and not a page".
-     *
-     * A 4px period rather than 2 or 3, and it is a compromise with the device
-     * pixel ratio rather than a look: at a 2px period a fractional DPR lands the
-     * dark row on a half-pixel and the whole screen shimmers as it scrolls. Four
-     * survives 1.5x and 2x, and at 1x it is still clearly a line pattern.
-     */
-    repeating-linear-gradient(0deg, var(--scan-line) 0 1px, transparent 1px 4px),
     /* Pulls the eye to the centre column and stops the field fighting the nav. */
     radial-gradient(
       ellipse 120% 80% at 50% 0%,
@@ -77,10 +70,10 @@
    * No survey grid. It was a 104px ruled grid under the vignette, and both axes
    * came out: the verticals read as margins boxing the column in, and the
    * horizontals left on their own read as lined paper. The dot field and the
-   * scanlines already give the field its texture without ruling it.
+   * grain already give the field its texture without ruling it.
    */
-  background-repeat: repeat, repeat, no-repeat;
-  background-size: 160px 160px, auto, 100% 100%;
+  background-repeat: repeat, no-repeat;
+  background-size: 160px 160px, 100% 100%;
 }
 
 /* --------------------------------------------------------------- aurora */
