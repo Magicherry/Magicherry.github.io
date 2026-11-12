@@ -355,6 +355,7 @@ function RoleDetail({ role }: { role: Role }) {
       <img
         className={styles['crest']}
         data-tile={role.logoTile || undefined}
+        data-on-dark={role.logoOnDark || undefined}
         src={role.logo}
         alt=""
         width={48}

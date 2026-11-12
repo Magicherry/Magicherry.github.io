@@ -19,9 +19,9 @@
   /* A 1px light ring instead of a border, so the window's edge sits on the
      page rather than inside its own box, plus one long soft shadow. */
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 24px 72px rgba(0, 0, 0, 0.45);
-  color: #f9fafb;
+    0 0 0 1px rgba(var(--win-line-rgb), 0.12),
+    var(--win-shadow);
+  color: var(--win-t1);
   font-family: var(--font-ui);
   font-size: calc(var(--u) * 14);
   line-height: 1.4;
@@ -29,13 +29,6 @@
   user-select: none;
 }
 
-/* On a light page the white ring disappears and a 45% black shadow reads as a
-   smudge; an ink hairline and a softer, cooler shadow sit the window on it. */
-:global(:root[data-theme='light']) .window {
-  box-shadow:
-    0 0 0 1px rgba(15, 23, 42, 0.12),
-    0 24px 60px -12px rgba(15, 23, 42, 0.32);
-}
 
 .icon {
   width: calc(var(--u) * 16);
@@ -92,8 +85,8 @@
       rgba(143, 137, 184, 0) 68%,
       rgba(143, 137, 184, 0.07)
     ),
-    var(--app-sidebar);
-  box-shadow: inset -0.5px 0 rgba(255, 255, 255, 0.1);
+    var(--win-sidebar);
+  box-shadow: inset -0.5px 0 rgba(var(--win-line-rgb), 0.1);
 }
 
 .windowBar {
@@ -103,7 +96,7 @@
   height: calc(var(--u) * 52);
   padding: 0 calc(var(--u) * 14);
   flex: none;
-  color: #cfd3d6;
+  color: var(--win-t3);
 }
 
 .sidebarBrand {
@@ -128,7 +121,7 @@
   min-height: 0;
   overflow: hidden;
   padding: 0 calc(var(--u) * 8);
-  color: #d7dade;
+  color: var(--win-t3);
 }
 
 .newSession,
@@ -143,7 +136,7 @@
 }
 
 .newSession {
-  color: #fff;
+  color: var(--win-t0);
 }
 
 .workspaceHeader {
@@ -153,11 +146,11 @@
   margin-top: calc(var(--u) * 18);
   padding: 0 calc(var(--u) * 10) calc(var(--u) * 6);
   font-size: calc(var(--u) * 12);
-  color: #9aa0a8;
+  color: var(--win-t6);
 }
 
 .activeFolder {
-  color: #fff;
+  color: var(--win-t0);
 }
 
 .sessions {
@@ -170,7 +163,7 @@
   height: calc(var(--u) * 32);
   padding: 0 calc(var(--u) * 10);
   border-radius: calc(var(--u) * 8);
-  color: #b9bec5;
+  color: var(--win-t5);
   white-space: nowrap;
 }
 
@@ -180,8 +173,8 @@
 }
 
 .sessionRow[data-selected] {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(var(--win-line-rgb), 0.1);
+  color: var(--win-t0);
 }
 
 .account {
@@ -189,8 +182,8 @@
   align-items: center;
   gap: calc(var(--u) * 10);
   padding: calc(var(--u) * 14) calc(var(--u) * 18);
-  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
-  color: #e3e5e8;
+  border-top: 0.5px solid rgba(var(--win-line-rgb), 0.08);
+  color: var(--win-t2);
 }
 
 /* --------------------------------------------------------------------- main */
@@ -202,7 +195,7 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  background: var(--app-bg);
+  background: var(--win-bg);
 }
 
 .mainBar {
@@ -213,7 +206,7 @@
   gap: calc(var(--u) * 6);
   height: calc(var(--u) * 52);
   flex: none;
-  color: #e6e7e9;
+  color: var(--win-t2);
   font-weight: 500;
 }
 
@@ -251,15 +244,15 @@
      fixed length rather than 999px: a question that wraps stays a rounded
      rectangle instead of stretching into a stadium. */
   border-radius: calc(var(--u) * 20);
-  background: #2a2b2e;
-  color: #f3f4f6;
+  background: var(--win-raised);
+  color: var(--win-t1);
 }
 
 .thought {
   display: inline-flex;
   align-items: center;
   gap: calc(var(--u) * 4);
-  color: #8b9097;
+  color: var(--win-t7);
   font-size: calc(var(--u) * 13);
 }
 
@@ -267,7 +260,7 @@
   display: flex;
   flex-direction: column;
   gap: calc(var(--u) * 10);
-  color: #e8eaed;
+  color: var(--win-t2);
   line-height: 1.65;
 }
 
@@ -280,16 +273,16 @@
 }
 
 .assistant li::marker {
-  color: #8b9097;
+  color: var(--win-t7);
 }
 
 .assistant strong {
   font-weight: 600;
-  color: #fff;
+  color: var(--win-t0);
 }
 
 .more {
-  color: #c4c7cc;
+  color: var(--win-t4);
 }
 
 /* ----------------------------------------------------------------- composer */
@@ -309,9 +302,9 @@
    * text keeps its old indent through the input's own padding instead.
    */
   padding: calc(var(--u) * 14) calc(var(--u) * 10) calc(var(--u) * 10);
-  border: 0.5px solid rgba(255, 255, 255, 0.14);
+  border: 0.5px solid rgba(var(--win-line-rgb), 0.14);
   border-radius: calc(var(--u) * 20);
-  background: #1e1f22;
+  background: var(--win-pop);
   box-shadow: 0 calc(var(--u) * 8) calc(var(--u) * 24) rgba(0, 0, 0, 0.25);
 }
 
@@ -340,8 +333,8 @@
 }
 
 .add {
-  border: 0.5px solid rgba(255, 255, 255, 0.16);
-  color: #c8ccd1;
+  border: 0.5px solid rgba(var(--win-line-rgb), 0.16);
+  color: var(--win-t4);
 }
 
 /* The accent, not the reference's white: the send button is the one control
@@ -360,17 +353,17 @@
   height: calc(var(--u) * 28);
   padding: 0 calc(var(--u) * 10);
   border-radius: calc(var(--u) * 14);
-  color: #b4b9bf;
+  color: var(--win-t5);
   font-size: calc(var(--u) * 12.5);
   white-space: nowrap;
 }
 
 .chip {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(var(--win-line-rgb), 0.05);
 }
 
 .effort {
-  color: #7b8088;
+  color: var(--win-t8);
 }
 
 /* ------------------------------------------------------------ narrow window */
@@ -442,7 +435,7 @@
 
 /* "Thinking" with a light sweeping across the text. */
 .thinking span {
-  background: linear-gradient(90deg, #6f747c 0%, #e8eaed 50%, #6f747c 100%) 0 0 / 200% 100%;
+  background: linear-gradient(90deg, var(--win-t9) 0%, var(--win-t2) 50%, var(--win-t9) 100%) 0 0 / 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -478,7 +471,7 @@
   overscroll-behavior: contain;
   user-select: text;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+  scrollbar-color: rgba(var(--win-line-rgb), 0.14) transparent;
   /* Soft edges top and bottom, where the log scrolls under the bars. */
   mask-image: linear-gradient(
     180deg,
@@ -522,11 +515,11 @@
   height: calc(var(--u) * 44);
   margin-bottom: calc(var(--u) * 6);
   border-radius: 50%;
-  box-shadow: 0 0 0 calc(var(--u) * 4) rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 calc(var(--u) * 4) rgba(var(--win-line-rgb), 0.05);
 }
 
 .welcomeTitle {
-  color: #f3f4f6;
+  color: var(--win-t1);
   font-size: calc(var(--u) * 20);
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -534,7 +527,7 @@
 
 .welcomeHint {
   max-width: calc(var(--u) * 360);
-  color: #8b9097;
+  color: var(--win-t7);
   font-size: calc(var(--u) * 13.5);
 }
 
@@ -581,15 +574,15 @@
 .navRow:hover,
 .folderRow:not(.activeFolder):hover,
 .sessionRow:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  background: rgba(var(--win-line-rgb), 0.06);
+  color: var(--win-t0);
 }
 
 .navRow[data-selected],
 .folderRow[data-selected],
 .newSession[aria-current] {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(var(--win-line-rgb), 0.1);
+  color: var(--win-t0);
 }
 
 .newSession:focus-visible,
@@ -624,7 +617,7 @@
   padding: calc(var(--u) * 2) calc(var(--u) * 8);
   border: 0;
   background: transparent;
-  color: #f3f4f6;
+  color: var(--win-t1);
   font: inherit;
   outline: none;
 }
@@ -636,7 +629,7 @@
 }
 
 .input::placeholder {
-  color: #6f747c;
+  color: var(--win-t9);
 }
 
 .send {
@@ -656,18 +649,18 @@
 
 /* --------------------------------------------------------- reply parts */
 .lead {
-  color: #e8eaed;
+  color: var(--win-t2);
 }
 
 /* A reply that is prose rather than a list - "About me". The window's body
    grey, a step under the lead's white, so the copy's marked phrases (white,
    one weight up) lift out of it the way they do on the page. */
 .prose {
-  color: #c4c7cc;
+  color: var(--win-t4);
 }
 
 .muted {
-  color: #8b9097;
+  color: var(--win-t7);
 }
 
 .pulseText {
@@ -684,7 +677,7 @@
   margin-top: calc(var(--u) * 4);
   font-size: calc(var(--u) * 12);
   letter-spacing: 0.04em;
-  color: #8b9097;
+  color: var(--win-t7);
 }
 
 .chips {
@@ -724,9 +717,9 @@
 .chipBtn {
   height: calc(var(--u) * 28);
   padding: 0 calc(var(--u) * 12);
-  border: 0.5px solid rgba(255, 255, 255, 0.16);
+  border: 0.5px solid rgba(var(--win-line-rgb), 0.16);
   border-radius: 999px;
-  color: #d4d7db;
+  color: var(--win-t3);
   font-size: calc(var(--u) * 12.5);
   cursor: pointer;
   transition:
@@ -739,7 +732,7 @@
 .chipBtn:hover {
   border-color: rgba(var(--brand-rgb), 0.55);
   background: rgba(var(--brand-rgb), 0.08);
-  color: #fff;
+  color: var(--win-t0);
 }
 
 .pageLink {
@@ -773,9 +766,9 @@
 .projRow,
 .repoRow {
   display: grid;
-  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border: 0.5px solid rgba(var(--win-line-rgb), 0.08);
   border-radius: calc(var(--u) * 12);
-  background: #1b1c1f;
+  background: var(--win-sunken);
   color: inherit;
   transition:
     border-color 0.15s ease,
@@ -792,7 +785,7 @@
 a.projRow:hover,
 .repoRow:hover {
   border-color: rgba(var(--brand-rgb), 0.4);
-  background: #202125;
+  background: var(--win-sunken-hover);
 }
 
 .projRow img {
@@ -812,7 +805,7 @@ a.projRow:hover,
 .projTitle {
   font-size: calc(var(--u) * 13.5);
   font-weight: 600;
-  color: #f3f4f6;
+  color: var(--win-t1);
 }
 
 .projYear {
@@ -820,7 +813,7 @@ a.projRow:hover,
   font-family: var(--font-mono);
   font-size: calc(var(--u) * 11.5);
   font-weight: 400;
-  color: #7b8088;
+  color: var(--win-t8);
 }
 
 .projSummary {
@@ -828,7 +821,7 @@ a.projRow:hover,
   white-space: nowrap;
   text-overflow: ellipsis;
   font-size: calc(var(--u) * 12.5);
-  color: #9aa0a8;
+  color: var(--win-t6);
 }
 
 .projAction {
@@ -836,7 +829,7 @@ a.projRow:hover,
   align-items: center;
   gap: calc(var(--u) * 4);
   font-size: calc(var(--u) * 12);
-  color: #8b9097;
+  color: var(--win-t7);
   white-space: nowrap;
 }
 
@@ -867,7 +860,7 @@ a.projRow:hover .projAction {
   height: calc(var(--u) * 8);
   margin-top: calc(var(--u) * 7);
   border-radius: 50%;
-  background: #4b5058;
+  background: var(--win-t11);
 }
 
 .roleDot[data-current] {
@@ -884,7 +877,7 @@ a.projRow:hover .projAction {
 .roleTitle {
   font-size: calc(var(--u) * 13.5);
   font-weight: 600;
-  color: #f3f4f6;
+  color: var(--win-t1);
 }
 
 .roleLive {
@@ -900,7 +893,7 @@ a.projRow:hover .projAction {
 
 .roleMeta {
   font-size: calc(var(--u) * 12.5);
-  color: #9aa0a8;
+  color: var(--win-t6);
 }
 
 .eduList {
@@ -937,7 +930,7 @@ a.projRow:hover .projAction {
 }
 
 .bullets li::marker {
-  color: #8b9097;
+  color: var(--win-t7);
 }
 
 /* --------------------------------------------------------------- stack */
@@ -946,7 +939,7 @@ a.projRow:hover .projAction {
   grid-template-columns: calc(var(--u) * 96) minmax(0, 1fr);
   gap: calc(var(--u) * 8);
   padding: calc(var(--u) * 7) 0;
-  border-top: 0.5px solid rgba(255, 255, 255, 0.07);
+  border-top: 0.5px solid rgba(var(--win-line-rgb), 0.07);
 }
 
 .stackList > div:first-child {
@@ -955,7 +948,7 @@ a.projRow:hover .projAction {
 
 .stackList dt {
   font-size: calc(var(--u) * 12.5);
-  color: #9aa0a8;
+  color: var(--win-t6);
 }
 
 .stackList dd {
@@ -967,7 +960,7 @@ a.projRow:hover .projAction {
 .stackItem {
   padding: 0 calc(var(--u) * 8);
   border-radius: calc(var(--u) * 6);
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(var(--win-line-rgb), 0.06);
   font-size: calc(var(--u) * 12);
   line-height: 1.7;
 }
@@ -996,13 +989,13 @@ a.projRow:hover .projAction {
 }
 
 .contactRow:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(var(--win-line-rgb), 0.06);
 }
 
 .contactLabel {
   font-size: calc(var(--u) * 13);
   font-weight: 600;
-  color: #f3f4f6;
+  color: var(--win-t1);
 }
 
 .contactHint {
@@ -1010,7 +1003,7 @@ a.projRow:hover .projAction {
   white-space: nowrap;
   text-overflow: ellipsis;
   font-size: calc(var(--u) * 12.5);
-  color: #9aa0a8;
+  color: var(--win-t6);
 }
 
 .contactRow:hover .contactHint {
@@ -1044,9 +1037,9 @@ a.projRow:hover .projAction {
 /* -------------------------------------------------------------- github */
 .ghCard {
   padding: calc(var(--u) * 12);
-  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  border: 0.5px solid rgba(var(--win-line-rgb), 0.1);
   border-radius: calc(var(--u) * 12);
-  background: #1b1c1f;
+  background: var(--win-sunken);
 }
 
 .ghHead {
@@ -1055,7 +1048,7 @@ a.projRow:hover .projAction {
   justify-content: space-between;
   gap: calc(var(--u) * 4) calc(var(--u) * 12);
   font-size: calc(var(--u) * 12.5);
-  color: #e8eaed;
+  color: var(--win-t2);
 }
 
 .calScroll {
@@ -1080,7 +1073,7 @@ a.projRow:hover .projAction {
   display: block;
   aspect-ratio: 1;
   border-radius: 2px;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(var(--win-line-rgb), 0.07);
 }
 
 .calendar i[data-pad] {
@@ -1113,7 +1106,7 @@ a.projRow:hover .projAction {
   justify-content: flex-end;
   gap: 3px;
   font-size: calc(var(--u) * 11);
-  color: #8b9097;
+  color: var(--win-t7);
 }
 
 .ghLegend i {
@@ -1145,7 +1138,7 @@ a.projRow:hover .projAction {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   font-size: calc(var(--u) * 12.5);
-  color: #9aa0a8;
+  color: var(--win-t6);
 }
 
 .repoMeta {
@@ -1153,7 +1146,7 @@ a.projRow:hover .projAction {
   flex-wrap: wrap;
   gap: calc(var(--u) * 10);
   font-size: calc(var(--u) * 11.5);
-  color: #7b8088;
+  color: var(--win-t8);
 }
 
 .repoMeta span {

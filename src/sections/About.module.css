@@ -147,15 +147,15 @@
   position: absolute;
   inset: 0 0 -40px;
   overflow: hidden;
-  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  border: 0.5px solid rgba(var(--win-line-rgb), 0.18);
   border-radius: 20px 20px 0 0;
-  background: var(--app-bg);
+  background: var(--win-bg);
   box-shadow:
     0 16px 42px rgba(25, 44, 79, 0.3),
     0 2px 8px rgba(0, 0, 0, 0.12);
   font-family: var(--font-ui);
   font-size: 13px;
-  color: #e8eaed;
+  color: var(--win-t2);
   user-select: none;
 }
 
@@ -165,18 +165,18 @@
   justify-content: space-between;
   height: 44px;
   padding: 0 18px;
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 0.5px solid rgba(var(--win-line-rgb), 0.08);
 }
 
 .appTitle {
   font-weight: 500;
-  color: #f3f4f6;
+  color: var(--win-t1);
 }
 
 .mono {
   font-family: var(--font-mono);
   font-size: 12px;
-  color: #7b8088;
+  color: var(--win-t8);
 }
 
 /* ------------------------------------------------------------- agent run */
@@ -271,8 +271,8 @@
   overflow: hidden;
   padding: 6px 11px;
   border-radius: 12px 12px 4px 12px;
-  background: #2a2b2f;
-  color: #e8eaed;
+  background: var(--win-raised);
+  color: var(--win-t2);
   font-size: 12px;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -313,7 +313,7 @@
 }
 
 .runStep[data-state='active'] {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(var(--win-line-rgb), 0.05);
 }
 
 .runRow {
@@ -323,16 +323,16 @@
   gap: 8px;
   height: 30px;
   padding: 0 8px;
-  color: #c4c7cc;
+  color: var(--win-t4);
   transition: color 0.3s ease;
 }
 
 .runStep[data-state='active'] .runRow {
-  color: #fff;
+  color: var(--win-t0);
 }
 
 .runStep[data-state='pending'] .runRow {
-  color: #6f747c;
+  color: var(--win-t9);
 }
 
 .runStep[data-state='done'] .stepIcon {
@@ -359,10 +359,10 @@
 .toolTag {
   padding: 2px 6px;
   border-radius: 5px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(var(--win-line-rgb), 0.05);
   font-family: var(--font-mono);
   font-size: 10.5px;
-  color: #8b9097;
+  color: var(--win-t7);
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
@@ -376,7 +376,7 @@
 .runTook {
   font-family: var(--font-mono);
   font-size: 11px;
-  color: #6f747c;
+  color: var(--win-t9);
   text-align: right;
 }
 
@@ -401,7 +401,7 @@
   padding-left: 38px;
   font-family: var(--font-mono);
   font-size: 11px;
-  color: #7fd3dc;
+  color: var(--win-code-accent);
   white-space: nowrap;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -411,7 +411,7 @@
   flex: none;
   width: 11px;
   height: 11px;
-  color: #5b6068;
+  color: var(--win-t10);
 }
 
 .runStep[data-state='active'] .runDetail {
@@ -438,7 +438,7 @@
   gap: 7px;
   font-family: var(--font-mono);
   font-size: 11.5px;
-  color: #9aa0a8;
+  color: var(--win-t6);
 }
 
 .runSummary svg {
@@ -449,9 +449,9 @@
 
 .briefCard {
   padding: 12px 14px;
-  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  border: 0.5px solid rgba(var(--win-line-rgb), 0.1);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--win-line-rgb), 0.03);
 }
 
 .briefHead {
@@ -459,7 +459,7 @@
   align-items: center;
   gap: 7px;
   font-weight: 500;
-  color: #f3f4f6;
+  color: var(--win-t1);
 }
 
 .briefHead svg {
@@ -482,7 +482,7 @@
   gap: 8px;
   font-size: 12px;
   line-height: 18px;
-  color: #c4c7cc;
+  color: var(--win-t4);
   animation: slide-in 0.4s var(--ease-out) both;
 }
 
@@ -504,7 +504,7 @@
   gap: 6px;
   margin-top: 10px;
   padding-top: 9px;
-  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-top: 0.5px solid rgba(var(--win-line-rgb), 0.08);
   font-size: 11.5px;
   color: var(--success);
   animation: fade-in 0.4s ease both;
@@ -517,11 +517,11 @@
 
 /* ----------------------------------------------------------- code tokens */
 .tkKw {
-  color: #c792ea;
+  color: var(--win-code-keyword);
 }
 
 .tkFn {
-  color: #82aaff;
+  color: var(--win-code-fn);
 }
 
 
@@ -530,7 +530,7 @@
   display: flex;
   height: 40px;
   padding: 0 10px;
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 0.5px solid rgba(var(--win-line-rgb), 0.08);
 }
 
 .tab {
@@ -538,14 +538,14 @@
   align-items: center;
   gap: 7px;
   padding: 0 12px;
-  color: #7b8088;
+  color: var(--win-t8);
   font-size: 12.5px;
   white-space: nowrap;
   transition: color 0.35s ease;
 }
 
 .tab[data-active] {
-  color: #f3f4f6;
+  color: var(--win-t1);
 }
 
 .tab svg {
@@ -606,7 +606,7 @@
 
 .shipStage[data-stage='editing'] {
   background: rgba(251, 191, 36, 0.12);
-  color: #fbbf24;
+  color: var(--win-warn);
 }
 
 .shipStage[data-stage='building'] {
@@ -641,7 +641,7 @@
   font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.3;
-  color: #d4d7db;
+  color: var(--win-t3);
 }
 
 .termBlock {
@@ -672,7 +672,7 @@
   flex: none;
   margin-left: auto;
   padding-left: 8px;
-  color: #5b6068;
+  color: var(--win-t10);
   font-size: 11px;
 }
 
@@ -688,7 +688,7 @@
 }
 
 .termResult[data-kind='ok'] {
-  color: #9be8b4;
+  color: var(--win-code-add);
 }
 
 .prompt {
@@ -703,7 +703,7 @@
 }
 
 .muted {
-  color: #7b8088;
+  color: var(--win-t8);
 }
 
 /* The image build: a bar that fills while the build runs, in one flat
@@ -715,7 +715,7 @@
   height: 5px;
   overflow: hidden;
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--win-line-rgb), 0.08);
 }
 
 .buildBar span {
@@ -758,7 +758,7 @@
 }
 
 .endpoint {
-  color: #d4d7db;
+  color: var(--win-t3);
 }
 
 .response {
@@ -781,9 +781,9 @@
 
 .chartCard {
   padding: 12px 14px 8px;
-  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  border: 0.5px solid rgba(var(--win-line-rgb), 0.1);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--win-line-rgb), 0.03);
 }
 
 .chartHead {
@@ -802,12 +802,12 @@
 
 .chartTitle {
   font-weight: 500;
-  color: #f3f4f6;
+  color: var(--win-t1);
 }
 
 .chartMeta {
   font-size: 11.5px;
-  color: #7b8088;
+  color: var(--win-t8);
 }
 
 .figure {
@@ -818,7 +818,7 @@
   font-family: var(--font-mono);
   font-size: 15px;
   font-variant-numeric: tabular-nums;
-  color: #f3f4f6;
+  color: var(--win-t1);
   animation: slide-in 0.4s var(--ease-out);
 }
 
@@ -845,7 +845,7 @@
 
 .figureSkeleton,
 .chartCard[data-loading] .barFill {
-  background: rgba(255, 255, 255, 0.09);
+  background: rgba(var(--win-line-rgb), 0.09);
   animation: pulse-flat 1s ease-in-out infinite alternate;
 }
 
@@ -866,7 +866,7 @@
   background: repeating-linear-gradient(
     to top,
     transparent 0 calc(25% - 0.5px),
-    rgba(255, 255, 255, 0.05) calc(25% - 0.5px) 25%
+    rgba(var(--win-line-rgb), 0.05) calc(25% - 0.5px) 25%
   );
   background-size: 100% calc(100% - 18px);
   background-repeat: no-repeat;
@@ -898,7 +898,7 @@
   overflow: hidden;
   font-size: 10.5px;
   line-height: 13px;
-  color: #7b8088;
+  color: var(--win-t8);
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -911,8 +911,8 @@
   left: 50%;
   padding: 2px 6px;
   border-radius: 5px;
-  background: #f3f4f6;
-  color: #111317;
+  background: var(--win-t1);
+  color: var(--win-inverse-fg);
   font-family: var(--font-mono);
   font-size: 10.5px;
   white-space: nowrap;
@@ -970,7 +970,7 @@
 .filePath {
   font-family: var(--font-mono);
   font-size: 12px;
-  color: #d4d7db;
+  color: var(--win-t3);
 }
 
 .counts {
@@ -997,7 +997,7 @@
 .hunk {
   padding: 8px 18px;
   background: rgba(var(--brand-rgb), 0.08);
-  color: #7fd3dc;
+  color: var(--win-code-accent);
 }
 
 .line {
@@ -1010,7 +1010,7 @@
     height 0.35s var(--ease-out),
     opacity 0.35s ease;
   padding-left: 8px;
-  color: #d4d7db;
+  color: var(--win-t3);
   white-space: pre;
 }
 
@@ -1028,13 +1028,13 @@
 }
 
 .lineNo {
-  color: #5b6068;
+  color: var(--win-t10);
   text-align: right;
   padding-right: 8px;
 }
 
 .sign {
-  color: #8b9097;
+  color: var(--win-t7);
 }
 
 .line[data-kind='add'] .sign {
@@ -1050,9 +1050,9 @@
   margin: 16px 18px 0;
   padding: 12px 14px;
   border-left: 2px solid rgba(var(--brand-rgb), 0.6);
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--win-line-rgb), 0.03);
   border-radius: 0 8px 8px 0;
-  color: #c4c7cc;
+  color: var(--win-t4);
   font-size: 12.5px;
   line-height: 1.55;
 }
@@ -1062,7 +1062,7 @@
   font-size: 11.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #7b8088;
+  color: var(--win-t8);
 }
 
 .labels {
@@ -1083,23 +1083,23 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: #8b9097;
+  color: var(--win-t7);
   font-size: 12.5px;
 }
 
 .labelPath [data-leaf] {
-  color: #f3f4f6;
+  color: var(--win-t1);
 }
 
 .sep {
   margin: 0 5px;
-  color: #5b6068;
+  color: var(--win-t10);
 }
 
 .bar {
   height: 4px;
   border-radius: 2px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--win-line-rgb), 0.08);
   overflow: hidden;
 }
 
@@ -1113,7 +1113,7 @@
 .score {
   font-family: var(--font-mono);
   font-size: 11.5px;
-  color: #d4d7db;
+  color: var(--win-t3);
   text-align: right;
 }
 
@@ -1160,9 +1160,9 @@
   min-width: 0;
   height: 62px;
   padding: 8px 10px;
-  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  border: 0.5px solid rgba(var(--win-line-rgb), 0.12);
   border-radius: 18px;
-  background: var(--app-card);
+  background: var(--win-card);
   /* No drop shadow: the column clips at its sides (it must, to scroll), and
      a 30px glow cut there showed as a hard seam down both edges. The hairline
      border already sets each tile off. */
@@ -1191,35 +1191,12 @@
   text-overflow: ellipsis;
   font-size: 14px;
   font-weight: 500;
-  color: #f3f4f6;
+  color: var(--win-t1);
 }
 
 .tileMeta {
   font-size: 12px;
-  color: #8b9097;
-}
-
-/*
- * The tile column is the one demo with no window around it - its tiles sit
- * straight on the card - so on the light page it follows the page instead of
- * staying a dark picture: white tiles, ink type, and near-black marks left
- * uninverted. The stage's `data-theme="dark"` is overridden here, inside it.
- */
-:global(:root[data-theme='light']) .tiles {
-  --mark-adaptive-filter: none;
-}
-
-:global(:root[data-theme='light']) .tile {
-  border-color: rgba(15, 23, 42, 0.1);
-  background: #ffffff;
-}
-
-:global(:root[data-theme='light']) .tileName {
-  color: #0b0f17;
-}
-
-:global(:root[data-theme='light']) .tileMeta {
-  color: rgba(11, 15, 23, 0.55);
+  color: var(--win-t7);
 }
 
 /* ------------------------------------------------------------ breakpoints */
@@ -1378,7 +1355,7 @@
 .pending {
   width: 12px;
   height: 12px;
-  border: 1.5px solid #4b5058;
+  border: 1.5px solid var(--win-t11);
   border-radius: 50%;
 }
 

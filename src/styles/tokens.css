@@ -11,13 +11,9 @@
  * near-black ground, not from shadows or gradients.
  *
  * Two appearances. This block is the dark one and the default; the light one
- * below overrides only the colour tokens. Dark is declared on
- * `[data-theme='dark']` as well as `:root` so a subtree can opt back into it:
- * the mock application windows carry that attribute, because they are pictures
- * of a dark desktop app and stay one whichever way the page is lit.
+ * below overrides only the colour tokens.
  */
-:root,
-[data-theme='dark'] {
+:root {
   color-scheme: dark;
 
   /* ------------------------------------------------------------- colour */
@@ -55,6 +51,44 @@
   --app-bg: #151517;
   --app-sidebar: #23272e;
   --app-card: #212123;
+
+  /*
+   * The mock application windows - the hero's agent window and the About
+   * demos. They follow the page: a dark desktop app on the dark page, a light
+   * one on the light page, so a window never reads as a hole cut in its card.
+   *
+   * Their type is a grey ramp of its own rather than the page's opacities -
+   * native UI is set in solid greys - numbered from the strongest (t0) down to
+   * the faintest (t11, which is used for idle dots and rings, not text).
+   */
+  --win-bg: var(--app-bg);
+  --win-sidebar: var(--app-sidebar);
+  --win-card: var(--app-card);
+  --win-raised: #2a2b2e;
+  --win-pop: #1e1f22;
+  --win-sunken: #1b1c1f;
+  --win-sunken-hover: #202125;
+  --win-line-rgb: 255, 255, 255;
+  --win-shadow: 0 24px 72px rgba(0, 0, 0, 0.45);
+  --win-t0: #ffffff;
+  --win-t1: #f3f4f6;
+  --win-t2: #e8eaed;
+  --win-t3: #d4d7db;
+  --win-t4: #c4c7cc;
+  --win-t5: #b4b9bf;
+  --win-t6: #9aa0a8;
+  --win-t7: #8b9097;
+  --win-t8: #7b8088;
+  --win-t9: #6f747c;
+  --win-t10: #5b6068;
+  --win-t11: #4b5058;
+  --win-inverse-fg: #111317;
+  /* Syntax and status colours in the code and terminal demos. */
+  --win-code-keyword: #c792ea;
+  --win-code-fn: #82aaff;
+  --win-code-accent: #7fd3dc;
+  --win-code-add: #9be8b4;
+  --win-warn: #fbbf24;
 
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.8);
@@ -109,6 +143,8 @@
   --well-border: rgba(255, 255, 255, 0.08);
   /* Near-black brand marks (GitHub) would vanish on the dark page. */
   --mark-adaptive-filter: invert(1) brightness(1.6);
+  /* The reverse case: white marks drawn for a dark ground (Work's logos). */
+  --logo-on-dark-filter: none;
 
   /*
    * The droplet: the small glass pill that slides behind the active language,
@@ -296,6 +332,7 @@
   --well-bg: #ffffff;
   --well-border: rgba(15, 23, 42, 0.1);
   --mark-adaptive-filter: none;
+  --logo-on-dark-filter: brightness(0) opacity(0.86);
 
   /* On a light slab the droplet is whiter than what it sits on, and needs a
      hairline of ink to find its edge - white highlights alone vanish. */
@@ -325,6 +362,37 @@
   --aurora-3: rgba(255, 150, 90, 0.16);
   --aurora-4: rgba(110, 200, 230, 0.3);
   --scan-line: rgba(15, 23, 42, 0.022);
+
+  /* Windows: a light desktop app - white content, a cool grey sidebar, a
+     slate ramp for type, and the syntax colours deepened until they hold on
+     white. */
+  --win-bg: #ffffff;
+  --win-sidebar: #f2f4f7;
+  --win-card: #f6f7f9;
+  --win-raised: #eef0f3;
+  --win-pop: #ffffff;
+  --win-sunken: #f7f8fa;
+  --win-sunken-hover: #f0f3f6;
+  --win-line-rgb: 15, 23, 42;
+  --win-shadow: 0 24px 60px -12px rgba(15, 23, 42, 0.3);
+  --win-t0: #0b0f17;
+  --win-t1: #111827;
+  --win-t2: #1f2937;
+  --win-t3: #374151;
+  --win-t4: #4b5563;
+  --win-t5: #586170;
+  --win-t6: #646c78;
+  --win-t7: #6b7280;
+  --win-t8: #7d838d;
+  --win-t9: #9aa0a8;
+  --win-t10: #aab0b8;
+  --win-t11: #c4c8ce;
+  --win-inverse-fg: #ffffff;
+  --win-code-keyword: #8b3fc7;
+  --win-code-fn: #2f5fd0;
+  --win-code-accent: #0e7490;
+  --win-code-add: #15803d;
+  --win-warn: #b45309;
 
   --sky-ground: linear-gradient(180deg, #cfe0f3 0%, #dbe7f5 38%, #e6eef8 70%, #eaf0f7 100%);
   --sky-hi: 255, 255, 255;

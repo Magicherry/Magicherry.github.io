@@ -343,8 +343,7 @@ export default function AgentWindow() {
   const welcomeGone = onlyIntro && intro.stage !== 'idle' && intro.stage !== 'typing'
 
   return (
-    // A dark app on either page: `data-theme` re-declares the dark tokens here.
-    <div className={styles['viewport']} data-theme="dark">
+    <div className={styles['viewport']}>
       <div className={styles['window']} role="region" aria-label={t(agent.a11y)}>
         <aside className={styles['sidebar']}>
           <div className={styles['windowBar']} aria-hidden="true">

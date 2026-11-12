@@ -4,8 +4,8 @@
 }
 
 .icon[data-adaptive] {
-  /* A token, so it follows the appearance - and the dark mock windows, which
-     re-declare the dark tokens, keep inverting it on a light page. */
+  /* A token, so it follows the appearance: inverted on dark, as drawn on
+     light. */
   filter: var(--mark-adaptive-filter);
 }
 

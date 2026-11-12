@@ -11,7 +11,7 @@ Earlier generations are **tags**, not branches, each with its project at the rep
 - `v2.0.0` — the previous site (React 19 · TS · Vite 8 · Motion · Lenis, glassmorphism design system), archived but kept buildable as a rollback target. Its own `CLAUDE.md` documents its glass system, tactical tokens and scroll stack — none of which v3 uses.
 - `v1.0.0` — archived predecessor (CRA · React Router · Bootstrap). Never built, never deployed. Do not touch it unless the request is explicitly about v1.
 
-v3 is a quiet dark product-page design: near-black page, white type at a few opacities, one accent (v2's cyan), pill buttons, 16px hairline panels, mock app-window illustrations. React 19 · TypeScript strict · Vite 8, no animation library, no UI or CSS framework. Everything is hand-written.
+v3 is a quiet product-page design, dark by default with a light appearance: near-black page, white type at a few opacities, one accent (v2's cyan), pill buttons, 16px hairline panels, mock app-window illustrations. React 19 · TypeScript strict · Vite 8, no animation library, no UI or CSS framework. Everything is hand-written.
 
 `src/content/` (except `site.ts` and `agent.ts`) and `src/assets/` began as **copies** of v2's. v2 is frozen at its tag, so they are no longer kept in step. v3-only copy lives in `src/content/site.ts`; the hero agent window's topics and keyword routing in `src/content/agent.ts`.
 
@@ -44,7 +44,7 @@ The locale preference is backed by `useTimedPreference`: ambient value by defaul
 ## Conventions
 
 - CSS Modules per component (`Foo.module.css`), accessed as `styles['name']`; genuinely global rules live in `src/styles/base.css`, and design tokens in `src/styles/tokens.css`.
-- There is one appearance and it is dark; there is one accent hue (cyan). Don't add a theme toggle or a second bright hue without a reason.
+- Two appearances, dark (default) and light, keyed on `<html data-theme>` (`lib/theme.tsx`, plus a pre-paint script in `index.html`). It follows `prefers-color-scheme`; the toggle's override expires like the locale's. Light overrides only colour tokens in `tokens.css` — add any new colour as a token with both values, never a literal. The mock app windows use their own `--win-*` ramp; canvas/WebGL effects re-read colours on a `data-theme` change. One accent hue (cyan, deepened to cyan-700 on light); don't add a second bright hue without a reason.
 - Reduced motion and reduced transparency select *designed* rendering paths, not degraded ones. Keep that invariant when adding effects.
 - Comments in this codebase explain *why* a non-obvious choice was made, often at length. Match that register — when changing such code, update the reasoning rather than deleting it. Read v3's own source and comments before applying a rule carried over from v2.
 - `*.pdf` imports are declared in `src/vite-env.d.ts`; `vite/client` does not cover documents.

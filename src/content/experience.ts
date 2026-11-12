@@ -25,6 +25,9 @@ export interface Role {
   logo?: string
   /** The logo is an app icon with its own background: round its corners. */
   logoTile?: boolean
+  /** The logo is a one-colour white mark drawn for dark grounds; on the light
+   *  page it is turned to ink rather than left white on white. */
+  logoOnDark?: boolean
   bullets: Localized<readonly string[]>
 }
 
@@ -48,6 +51,7 @@ export const roles: readonly Role[] = [
     company: { en: 'Shanghai NIO Automobile Co., Ltd.', zh: '上海蔚来汽车有限公司' },
     companyUrl: 'https://www.nio.com/',
     logo: nioLogo,
+    logoOnDark: true,
     focus: {
       en: 'Enterprise AI Agents · LLM/RAG · Business Planning',
       zh: '企业级 AI Agent · LLM/RAG · 业务规划分析',
