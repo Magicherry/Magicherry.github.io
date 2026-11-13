@@ -187,11 +187,12 @@ export default function Header() {
 
           {/* Remount only the changing controls so their entrance can soften
               the swap while the appearance toggle keeps its state and focus.
+              CSS gives that persistent toggle the same entrance on scroll.
               The new group takes its final width immediately: animating that
               width would fight the bar's own contraction. */}
           <div ref={actionsRef} className={styles['actions']}>
             {/* Outside the swap: the appearance is wanted at any scroll. */}
-            <ThemeToggle />
+            <ThemeToggle secondary={scrolled} />
             <div key={scrolled ? 'links' : 'locale'} className={styles['actionSwap']}>
               {scrolled ? (
                 <>

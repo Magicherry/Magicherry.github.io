@@ -17,7 +17,7 @@ import styles from './ThemeToggle.module.css'
  * lib/theme.tsx), so it hands over its own centre - not the pointer's, which
  * a keyboard press does not have.
  */
-export default function ThemeToggle({ className }: { className?: string }) {
+export default function ThemeToggle({ className, secondary = false }: { className?: string; secondary?: boolean }) {
   const { theme, toggle } = useTheme()
   const { t } = useLocale()
   const label = t(theme === 'dark' ? site.theme.toLight : site.theme.toDark)
@@ -25,7 +25,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
   return (
     <button
       type="button"
-      className={className ? `${styles['toggle']} ${className}` : styles['toggle']}
+      className={`${styles['toggle']}${secondary ? ` btn btn-secondary ${styles['secondary']}` : ''}${className ? ` ${className}` : ''}`}
       data-theme-current={theme}
       onClick={(e) => {
         const r = e.currentTarget.getBoundingClientRect()

@@ -7,8 +7,11 @@
   width: 32px;
   height: 32px;
   flex: none;
-  border: 1px solid var(--border-default);
   border-radius: 50%;
+}
+
+.toggle:not(.secondary) {
+  border: 1px solid var(--border-default);
   color: var(--text-description);
   transition:
     color var(--dur-fast),
@@ -16,9 +19,24 @@
     scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.toggle:hover {
+.toggle:not(.secondary):hover {
   color: var(--text-primary);
   background: var(--surface-hover);
+}
+
+/* Use the same shared secondary button material as GitHub in the glass bar.
+   Higher specificity preserves the overlapping glyph grid after `.btn` loads. */
+.toggle.secondary {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  min-width: 0;
+  padding: 0;
+}
+
+.secondary .glyph {
+  width: 14px;
+  height: 14px;
 }
 
 .glyph {

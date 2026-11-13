@@ -286,7 +286,8 @@
   gap: var(--space-2);
 }
 
-.actionSwap > * {
+.actionSwap > *,
+.bar[data-scrolled] .actions > :global([data-theme-current]) {
   /* Each control springs around its own centre. Moving the whole group made
      the entrance drift against the header's simultaneous contraction.
      Backwards fill leaves no transformed ancestor around the CV menu. */
@@ -306,12 +307,14 @@
 }
 
 /* A keyboard handoff must reveal the newly focused control immediately. */
-.actionSwap:focus-within > * {
+.actionSwap:focus-within > *,
+.bar[data-scrolled] .actions > :global([data-theme-current]):focus-visible {
   animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .actionSwap > * {
+  .actionSwap > *,
+  .bar[data-scrolled] .actions > :global([data-theme-current]) {
     animation: actions-fade 0.16s ease-out backwards;
   }
 }
@@ -489,7 +492,7 @@
 }
 
 /* ---------------------------------------------------------- breakpoints */
-@media (max-width: 900px) {
+@media (max-width: 980px) {
   .nav,
   .actions {
     display: none;
@@ -537,7 +540,7 @@
   }
 }
 
-@media (min-width: 901px) {
+@media (min-width: 981px) {
   .menu {
     display: none;
   }
