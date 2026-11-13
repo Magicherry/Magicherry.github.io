@@ -915,6 +915,10 @@ a.projRow:hover .projAction {
   object-fit: contain;
 }
 
+.eduList img[data-brighten] {
+  filter: var(--crest-brighten-filter);
+}
+
 .eduList .roleMeta {
   margin-left: auto;
   font-family: var(--font-mono);

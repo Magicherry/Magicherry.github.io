@@ -365,6 +365,10 @@
   filter: var(--logo-on-dark-filter);
 }
 
+.crest[data-brighten] {
+  filter: var(--crest-brighten-filter);
+}
+
 /* The detail's text column. A degree puts its crest in a column beside it. */
 .text {
   display: flex;

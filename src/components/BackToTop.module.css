@@ -7,6 +7,10 @@
  */
 .wrap {
   position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   right: max(clamp(1rem, 2.4vw, 1.75rem), env(safe-area-inset-right));
   bottom: max(clamp(1rem, 2.4vw, 1.75rem), env(safe-area-inset-bottom));
   z-index: 40;
@@ -57,6 +61,15 @@
 .button:active {
   transform: scale(0.94);
   transition-duration: 0.1s;
+}
+
+.language {
+  border: 1px solid var(--border-strong);
+}
+
+.languageIcon {
+  width: 20px;
+  height: 20px;
 }
 
 /* The bottom of the page: the gauge is spent, so it becomes the fill. */

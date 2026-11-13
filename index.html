@@ -15,17 +15,18 @@
     <!--
       The appearance, settled before the first paint. React's ThemeProvider
       (src/lib/theme.tsx) owns it from mount on; this only stops a light-mode
-      visitor seeing one dark frame first. Same rules: dark, unless a stored
-      manual choice of light is still within its expiry. The system's colour
-      scheme is not consulted - light is opt-in.
-      Wrapped whole, because Safari Lockdown throws on reading localStorage.
+      visitor seeing one dark frame first. Same rules: follow the system unless
+      a stored manual choice is still within its expiry. The storage read is
+      guarded because Safari Lockdown can throw; the system value still applies.
     -->
     <script>
       (function () {
         var theme = 'dark'
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
+          theme = 'light'
         try {
           var o = JSON.parse(localStorage.getItem('v3:theme') || 'null')
-          if (o && (o.value === 'light' || o.value === 'dark') && (o.expiresAt === null || o.expiresAt > Date.now()))
+          if (o && (o.value === 'light' || o.value === 'dark') && (o.expiresAt === null || (typeof o.expiresAt === 'number' && o.expiresAt > Date.now())))
             theme = o.value
         } catch (e) {}
         document.documentElement.setAttribute('data-theme', theme)
@@ -60,6 +61,11 @@
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fragment+Mono&family=Montserrat:wght@400;500;600&display=swap"
+    />
+    <!-- Quote-only subset: keep in step with ui.about.quote in copy.ts. -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400&amp;family=Ma+Shan+Zheng&amp;display=swap&amp;text=%E2%80%9C%E2%80%9DNo%20matter%20what%20your%20dream%20is%2C%20you%20have%20to%20dedicate%20yourself%20entirely%20to%20it.%E6%97%A0%E8%AE%BA%E4%BD%A0%E7%9A%84%E6%A2%A6%E6%83%B3%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E4%BD%A0%E9%83%BD%E5%BF%85%E9%A1%BB%E5%85%A8%E8%BA%AB%E5%BF%83%E6%8A%95%E5%85%A5%E5%85%B6%E4%B8%AD%E3%80%82"
     />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="preconnect" href="https://cdn.simpleicons.org" crossorigin />

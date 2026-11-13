@@ -29,20 +29,22 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
-/*
- * Dark, always, until the visitor asks otherwise. The system's
- * `prefers-color-scheme` is deliberately not consulted: dark is the site's own
- * appearance - the one it was designed in and is meant to be seen in first -
- * and light is an option offered beside it, not a mode the device picks on the
- * visitor's behalf.
- */
-const getDefaultTheme = (): Theme => 'dark'
+/* Fall back to dark where the environment cannot report a colour scheme. */
+const getSystemTheme = (): Theme =>
+  typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+
+const subscribeToSystemTheme = (onChange: () => void) => {
+  const query = window.matchMedia?.('(prefers-color-scheme: light)')
+  if (!query) return
+  query.addEventListener('change', onChange)
+  return () => query.removeEventListener('change', onChange)
+}
 
 /**
- * The appearance, on the same timed preference as the language: dark by
- * default, a manual flip overrides it, and the override lapses after a day - so
- * someone who switched to light to read in the sun is back in the site's own
- * dark by the next visit (see useTimedPreference).
+ * The appearance follows the system, including changes while the page is open.
+ * A manual flip overrides it for a day, then returns to the current system
+ * appearance (see useTimedPreference). Both paths share the same pre-paint
+ * rules so a light system never opens on a dark frame.
  *
  * Written to `<html data-theme>`, which is what tokens.css keys on, in a layout
  * effect so a change lands in the same frame as the toggle's own re-render.
@@ -50,7 +52,8 @@ const getDefaultTheme = (): Theme => 'dark'
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const { value: theme, isAuto, setValue } = useTimedPreference<Theme>({
     storageKey: THEME_STORAGE_KEY,
-    getAutoValue: getDefaultTheme,
+    getAutoValue: getSystemTheme,
+    subscribeToAuto: subscribeToSystemTheme,
     isValid: isTheme,
   })
 
@@ -92,7 +95,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         .then(() => {
           document.documentElement.animate(
             { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
-            { duration: 560, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', pseudoElement: '::view-transition-new(root)' },
+            { duration: 680, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', pseudoElement: '::view-transition-new(root)' },
           )
         })
         .catch(() => {

@@ -162,6 +162,8 @@ export interface Education {
   duration: string
   /** School crest, bundled rather than hot-linked - see below. */
   crest: string
+  /** Lift a dark coloured crest on the dark page without changing its hue. */
+  crestBrighten?: boolean
   url: string
   /** Month-precise dates, as the CV prints them. `duration` stays the
    *  year-only form the timeline reads. */
@@ -191,6 +193,7 @@ export const education: readonly Education[] = [
     },
     duration: '2024 — 2026',
     crest: rutgersCrest,
+    crestBrighten: true,
     url: 'https://www.cs.rutgers.edu/',
     period: '09/2024 — 06/2026',
     focus: {
@@ -213,6 +216,7 @@ export const education: readonly Education[] = [
     school: { en: 'Shanghai Institute of Technology', zh: '上海应用技术大学' },
     duration: '2020 — 2024',
     crest: sitCrest,
+    crestBrighten: true,
     url: 'https://www.sit.edu.cn/',
     period: '09/2020 — 06/2024',
     focus: { en: 'GPA 3.7 / 4.0 · Top 10%', zh: 'GPA 3.7 / 4.0 · 专业前 10%' },

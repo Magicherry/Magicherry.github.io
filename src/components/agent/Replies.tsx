@@ -187,7 +187,7 @@ function ExperienceReply() {
       <ul className={styles['eduList']}>
         {education.map((e) => (
           <li key={e.url}>
-            <img src={e.crest} alt="" width={22} height={22} loading="lazy" />
+            <img data-brighten={e.crestBrighten || undefined} src={e.crest} alt="" width={22} height={22} loading="lazy" />
             <span>
               {t(e.degree)} · {t(e.school)}
             </span>

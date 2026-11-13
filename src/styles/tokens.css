@@ -72,6 +72,10 @@
   --win-sunken-hover: #202125;
   --win-line-rgb: 255, 255, 255;
   --win-shadow: 0 24px 72px rgba(0, 0, 0, 0.45);
+  /* Embedded demos sit close to their cards; keep their shadows compact. */
+  --demo-shadow:
+    0 6px 18px -6px rgba(0, 0, 0, 0.24),
+    0 1px 3px rgba(0, 0, 0, 0.08);
   --win-t0: #ffffff;
   --win-t1: #f3f4f6;
   --win-t2: #e8eaed;
@@ -147,6 +151,8 @@
   --mark-adaptive-filter: invert(1) brightness(1.6);
   /* The reverse case: white marks drawn for a dark ground (Work's logos). */
   --logo-on-dark-filter: none;
+  /* Dark university crests need a lift to keep their fine details legible. */
+  --crest-brighten-filter: brightness(1.8);
 
   /*
    * The droplet: the small glass pill that slides behind the active language,
@@ -208,6 +214,7 @@
   /* Headings carry Latin in Montserrat; Han in the same line falls through to
      the body stack's system face, which is the pairing the reference uses. */
   --font-heading: 'Montserrat', var(--font-body);
+  --font-handwritten: 'Caveat', 'Ma Shan Zheng', 'Kaiti SC', KaiTi, cursive;
   --font-mono: 'Fragment Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, 'PingFang SC',
     'Microsoft YaHei', monospace;
   /* The face the mock application windows are set in: a native UI stack, since
@@ -347,6 +354,7 @@
   --well-border: rgba(15, 23, 42, 0.1);
   --mark-adaptive-filter: none;
   --logo-on-dark-filter: brightness(0) opacity(0.86);
+  --crest-brighten-filter: none;
 
   /* On a light slab the droplet is whiter than what it sits on, and needs a
      hairline of ink to find its edge - white highlights alone vanish. */
@@ -388,6 +396,9 @@
   --win-sunken-hover: #f0f3f6;
   --win-line-rgb: 15, 23, 42;
   --win-shadow: 0 24px 60px -12px rgba(15, 23, 42, 0.3);
+  --demo-shadow:
+    0 6px 18px -6px rgba(15, 23, 42, 0.1),
+    0 1px 3px rgba(15, 23, 42, 0.04);
   --win-t0: #0b0f17;
   --win-t1: #111827;
   --win-t2: #1f2937;

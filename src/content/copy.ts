@@ -26,6 +26,7 @@ export const ui = {
     scroll: { en: 'Scroll', zh: '向下滚动' },
     close: { en: 'Close', zh: '关闭' },
     backToTop: { en: 'Back to top', zh: '回到顶部' },
+    switchLanguage: { en: 'Switch to Chinese', zh: '切换到英文' },
     copied: { en: 'Copied', zh: '已复制' },
     /* Names the destination rather than the act - "GitHub" alone would be the
        fourth unlabelled glyph in a bar where every other control says where it
@@ -114,6 +115,10 @@ export const ui = {
       zh: '无论你的梦想是什么，你都必须全身心投入其中。',
     },
     quoteAuthor: { en: 'Ayrton Senna', zh: '艾尔顿 · 塞纳' },
+    signatureCredit: {
+      en: 'Ayrton Senna signature · SVG by Cookieman1.1.1 · CC BY-SA 4.0 · View source and license',
+      zh: '艾尔顿·塞纳签名 · SVG 作者 Cookieman1.1.1 · CC BY-SA 4.0 · 查看来源与授权',
+    },
   },
   footer: {
     motto: { en: 'Stay curious, keep exploring.', zh: '保持好奇，持续探索。' },

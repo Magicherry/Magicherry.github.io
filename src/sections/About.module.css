@@ -72,8 +72,8 @@
 }
 
 /* ----------------------------------------------------------------- quote */
-/* Quiet: body size, muted, set off by a hairline rule - a sign-off, not a
-   statement competing with the section title. */
+/* A handwritten sign-off, still muted and set off by a hairline rule. The
+   larger size keeps the loose strokes legible without giving it headline weight. */
 .quote {
   margin: 0;
   padding-left: var(--space-6);
@@ -81,18 +81,41 @@
 }
 
 .quote blockquote {
-  font-size: 15px;
+  font-family: var(--font-handwritten);
+  font-size: 22px;
+  font-weight: 400;
   line-height: 1.7;
   color: var(--text-description);
   text-wrap: pretty;
 }
 
+.quote blockquote:lang(zh) {
+  font-size: 18px;
+}
+
+/* The Latin opening quote sits tight against the first handwritten Han glyph.
+   Give only that boundary optical spacing, without changing the prose rhythm. */
+.quote blockquote:lang(zh) .openingQuote {
+  margin-inline-end: 0.15em;
+}
+
 .quote figcaption {
   margin-top: var(--space-2);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  color: var(--text-faint);
+}
+
+.signature {
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* Keep the original SVG intact; adapt its black ink to either page theme. */
+.signature img {
+  display: block;
+  width: 144px;
+  max-width: 100%;
+  height: auto;
+  filter: var(--mark-adaptive-filter);
+  opacity: 0.7;
 }
 
 .grid {
@@ -151,9 +174,7 @@
   border: 0.5px solid rgba(var(--win-line-rgb), 0.18);
   border-radius: 20px 20px 0 0;
   background: var(--win-bg);
-  box-shadow:
-    0 16px 42px rgba(25, 44, 79, 0.3),
-    0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--demo-shadow);
   font-family: var(--font-ui);
   font-size: 13px;
   color: var(--win-t2);

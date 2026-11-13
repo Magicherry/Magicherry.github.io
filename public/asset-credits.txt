@@ -1,0 +1,11 @@
+Ayrton Senna signature.svg
+SVG author: Cookieman1.1.1 (as credited by Wikimedia Commons).
+File history also credits Viiticus for the upload and border correction.
+Source: https://commons.wikimedia.org/wiki/File:Ayrton_Senna_signature.svg
+Original: https://upload.wikimedia.org/wikipedia/commons/8/81/Ayrton_Senna_signature.svg
+License: Creative Commons Attribution-ShareAlike 4.0 International
+https://creativecommons.org/licenses/by-sa/4.0/
+
+The SVG is bundled unchanged at src/assets/about/senna-signature.svg.
+CSS scales it, adjusts display opacity, and inverts its black strokes for the
+dark appearance. This asset retains its own license, separate from site code.

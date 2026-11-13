@@ -373,7 +373,15 @@ function EduDetail({ edu }: { edu: Education }) {
   const { t } = useLocale()
   return (
     <div className={styles['withCrest']}>
-      <img className={styles['crest']} src={edu.crest} alt="" width={48} height={48} loading="lazy" />
+      <img
+        className={styles['crest']}
+        data-brighten={edu.crestBrighten || undefined}
+        src={edu.crest}
+        alt=""
+        width={48}
+        height={48}
+        loading="lazy"
+      />
       <div className={styles['text']}>
         <div className={styles['titleRow']}>
           <h3 className={styles['role']}>{t(edu.degree)}</h3>

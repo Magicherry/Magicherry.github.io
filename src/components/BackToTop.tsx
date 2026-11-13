@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { LuArrowUp } from 'react-icons/lu'
+import { LuArrowUp, LuLanguages } from 'react-icons/lu'
 import { useLocale } from '@/lib/i18n'
 import { ui } from '@/content/copy'
 import styles from './BackToTop.module.css'
 
-/** Past this many pixels the button appears - v2's threshold. */
+/** Past this many pixels the floating controls appear - v2's threshold. */
 const APPEAR_AT = 340
 
 /**
@@ -17,11 +17,12 @@ const APPEAR_AT = 340
  * ring's dash offset directly, every animation frame at most, and touches
  * React state only when `visible` or `complete` actually flips.
  *
- * Hidden means unreachable, not merely invisible - no pointer events and out
- * of the tab order - so a transparent button never swallows a click or a Tab.
+ * The language shortcut shares the same wrapper, so both controls enter and
+ * leave together. Hidden means unreachable, not merely invisible - no pointer
+ * events and out of the tab order - so neither swallows a click or a Tab.
  */
 export default function BackToTop() {
-  const { t } = useLocale()
+  const { t, toggle } = useLocale()
   const [visible, setVisible] = useState(false)
   const [complete, setComplete] = useState(false)
   const barRef = useRef<SVGCircleElement>(null)
@@ -57,7 +58,17 @@ export default function BackToTop() {
   }
 
   return (
-    <div className={styles['wrap']} data-visible={visible || undefined}>
+    <div className={styles['wrap']} data-visible={visible || undefined} inert={!visible} aria-hidden={!visible}>
+      <button
+        type="button"
+        className={`${styles['button']} ${styles['language']}`}
+        onClick={toggle}
+        aria-label={t(ui.actions.switchLanguage)}
+        title={t(ui.actions.switchLanguage)}
+        tabIndex={visible ? 0 : -1}
+      >
+        <LuLanguages className={styles['languageIcon']} aria-hidden="true" />
+      </button>
       <button
         type="button"
         className={styles['button']}

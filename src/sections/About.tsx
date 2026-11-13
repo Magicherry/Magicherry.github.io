@@ -26,6 +26,7 @@ import { techStack, type StackItem } from '@/content/stacks'
 import RichText from '@/components/RichText'
 import Reveal from '@/components/Reveal'
 import TechIcon from '@/components/TechIcon'
+import sennaSignature from '@/assets/about/senna-signature.svg'
 import styles from './About.module.css'
 
 /**
@@ -97,8 +98,18 @@ export default function About() {
         </div>
 
         <figure className={styles['quote']}>
-          <blockquote>“{t(ui.about.quote)}”</blockquote>
-          <figcaption>— {t(ui.about.quoteAuthor)}</figcaption>
+          <blockquote><span className={styles['openingQuote']}>“</span>{t(ui.about.quote)}”</blockquote>
+          <figcaption>
+            <a
+              className={styles['signature']}
+              href="https://commons.wikimedia.org/wiki/File:Ayrton_Senna_signature.svg"
+              target="_blank"
+              rel="noopener noreferrer"
+              title={t(ui.about.signatureCredit)}
+            >
+              <img src={sennaSignature} alt={t(ui.about.quoteAuthor)} width={144} height={51} loading="lazy" />
+            </a>
+          </figcaption>
         </figure>
       </Reveal>
     </section>
