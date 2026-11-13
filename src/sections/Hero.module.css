@@ -3,7 +3,10 @@
   display: flex;
   align-items: center;
   width: 100%;
-  overflow: hidden;
+  /* The preview's soft shadow extends past the 48px bottom padding on phones.
+     Clipping the section cuts it into a horizontal band above About. The sky
+     already clips itself in .field; page-wide overflow is handled by body. */
+  overflow: visible;
 }
 
 /*

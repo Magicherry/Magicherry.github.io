@@ -280,6 +280,51 @@
   gap: var(--space-2);
 }
 
+.actionSwap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.actionSwap > * {
+  /* Each control springs around its own centre. Moving the whole group made
+     the entrance drift against the header's simultaneous contraction.
+     Backwards fill leaves no transformed ancestor around the CV menu. */
+  transform-origin: center;
+  animation:
+    actions-fade 0.18s ease-out backwards,
+    actions-pop 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+@keyframes actions-pop {
+  from {
+    transform: scale(0.9);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* A keyboard handoff must reveal the newly focused control immediately. */
+.actionSwap:focus-within > * {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .actionSwap > * {
+    animation: actions-fade 0.16s ease-out backwards;
+  }
+}
+
+@keyframes actions-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Third track, like the actions it replaces on narrow screens. 40px of hit
    area in a 32px content box: the extra spills harmlessly into the bar's own
    padding, and the glyph stays aligned with the container edge. */

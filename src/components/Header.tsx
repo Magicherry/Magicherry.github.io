@@ -185,23 +185,26 @@ export default function Header() {
             </ul>
           </nav>
 
-          {/* The swap is immediate, as in the reference: the bar's own motion
-              carries the transition, and a cross-fade between two differently
-              sized groups would make the right edge of the pill wobble. */}
+          {/* Remount only the changing controls so their entrance can soften
+              the swap while the appearance toggle keeps its state and focus.
+              The new group takes its final width immediately: animating that
+              width would fight the bar's own contraction. */}
           <div ref={actionsRef} className={styles['actions']}>
             {/* Outside the swap: the appearance is wanted at any scroll. */}
             <ThemeToggle />
-            {scrolled ? (
-              <>
-                <a className="btn btn-secondary btn-xs" href={profile.github} target="_blank" rel="noopener noreferrer">
-                  <FaGithub aria-hidden="true" />
-                  GitHub
-                </a>
-                <CvDownload size="xs" placement="bottom-end" />
-              </>
-            ) : (
-              <LocaleToggle />
-            )}
+            <div key={scrolled ? 'links' : 'locale'} className={styles['actionSwap']}>
+              {scrolled ? (
+                <>
+                  <a className="btn btn-secondary btn-xs" href={profile.github} target="_blank" rel="noopener noreferrer">
+                    <FaGithub aria-hidden="true" />
+                    GitHub
+                  </a>
+                  <CvDownload size="xs" placement="bottom-end" />
+                </>
+              ) : (
+                <LocaleToggle />
+              )}
+            </div>
           </div>
 
           <button
