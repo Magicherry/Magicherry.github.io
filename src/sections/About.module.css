@@ -101,6 +101,7 @@
 
 .quote figcaption {
   margin-top: var(--space-2);
+  text-align: right;
 }
 
 .signature {
